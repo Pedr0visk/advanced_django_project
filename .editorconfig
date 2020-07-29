@@ -1,0 +1,16 @@
+[*.py]
+indent_style = space
+indent_size = 2
+
+[*.html]
+indent_style = space
+indent_size = 2
+
+[*.rb]
+indent_style = space
+indent_size = 2
+
+tab_width
+end_of_line
+insert_final_newline
+trim_trailing_whitespace
