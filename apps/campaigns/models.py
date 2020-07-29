@@ -1,4 +1,5 @@
 from django.db import models
+from apps.bops.models import Bop
 from django.utils.translation import gettext_lazy as _
 
 class Campaign(models.Model):
@@ -10,10 +11,10 @@ class Campaign(models.Model):
     RED     = 4, _('Red')
 
   name = models.CharField(max_length=100)
-  # bop_id = models.ForeignKey(Bop, on_delete=models.PROTECT)
+  bop = models.ForeignKey(Bop, on_delete=models.PROTECT)
   active = models.BooleanField(default=True)
   rig_name = models.CharField(max_length=100, null=True)
-  description = models.TextField(null=True)
+  description = models.TextField(blank=True, null=True)
 
   status = models.CharField(
     max_length=1,
