@@ -9,24 +9,20 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('bops', '0001_initial'),
+        ('campaigns', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Campaign',
+            name='Event',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('active', models.BooleanField(default=True)),
-                ('rig_name', models.CharField(max_length=100, null=True)),
+                ('name', models.CharField(max_length=255)),
                 ('description', models.TextField(blank=True, null=True)),
-                ('status', models.CharField(choices=[('Green', 'Green'), ('Yellow', 'Yellow'), ('Orange', 'Orange'), ('Red', 'Red')], default='Green', max_length=6)),
-                ('start_date', models.DateField()),
-                ('end_date', models.DateField()),
+                ('type', models.CharField(choices=[('RIR', 'Repair'), ('RCE', 'Replace'), ('WAW', 'Withdraw'), ('RLL', 'Reinstall'), ('CIL', 'Failure in Component'), ('FIL', 'Failure in Failure Mode'), ('SIL', 'Failure in Subsystem')], default='RIR', max_length=3)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('bop', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='bops.Bop')),
+                ('campaign', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='campaigns.Campaign')),
             ],
         ),
     ]

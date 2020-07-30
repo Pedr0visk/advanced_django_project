@@ -1,14 +1,13 @@
 from django.db import models
 from apps.bops.models import Bop
-from django.utils.translation import gettext_lazy as _
 
 class Campaign(models.Model):
 
   class StatusCampaign(models.TextChoices):
-    GREEN   = 1, _('Green')
-    YELLOW  = 2, _('Yellow')
-    ORANGE  = 3, _('Orange')
-    RED     = 4, _('Red')
+    GREEN   = 'Green'
+    YELLOW  = 'Yellow'
+    ORANGE  = 'Orange'
+    RED     = 'Red'
 
   name = models.CharField(max_length=100)
   bop = models.ForeignKey(Bop, on_delete=models.PROTECT)
@@ -17,13 +16,13 @@ class Campaign(models.Model):
   description = models.TextField(blank=True, null=True)
 
   status = models.CharField(
-    max_length=1,
+    max_length=6,
     choices=StatusCampaign.choices,
     default=StatusCampaign.GREEN
   )
 
-  start_date = models.DateTimeField()
-  end_date = models.DateTimeField()
+  start_date  = models.DateField()
+  end_date = models.DateField()
 
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
