@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+<a href="#">Home</a>
+<span class="fa fa-chevron-right"></span>
+<a href="#">Users list</a>
+<span class="fa fa-chevron-right"></span>
+<span class="current-page">Create new User </span>
+{% endblock %}
+
+
+{% block main %}
+<form action="" method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save</button>
+</form>
+<!-- main -->
+<!-- <div class="main">
+  <div class="section bg-white">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-10">
+          <form>
+            <div class="form-group row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Username</label>
+              <div class="col-sm-5">
+                <input type="text" class="form-control form-control-sm" id="username" />
+                <small class="form-text text-muted">
+                  Required. 100 characters or fewer. Letters, digits and
+                  @/./+/-/_ only.
+                </small>
+              </div>
+            </div>
+            <hr />
+
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label col-form-label-sm">Email</label>
+              <div class="col-sm-5">
+                <input type="email" class="form-control form-control-sm" id="inputEmail3" />
+                <small class="form-text text-muted">
+                  Required. Only valid email.
+                </small>
+              </div>
+            </div>
+            <hr />
+
+            <div class="form-group row">
+              <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+              <div class="col-sm-5">
+                <input type="password" class="form-control form-control-sm" id="inputPassword3" />
+                <small class="form-text text-muted">
+                  Optional. If blank an email will be sent to this email
+                  with a random generated password.
+                </small>
+              </div>
+            </div>
+            <hr />
+
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label col-form-label-sm">Group</label>
+              <div class="col-sm-5">
+                <select id="inputStateGroup" class="form-control form-control-sm">
+                  <option selected> --</option>
+                  <option> Admin </option>
+                  <option> Operator </option>
+                </select>
+                <small class="form-text text-muted">
+                  Required. Group field defines permissions for each kind of
+                  user.
+                </small>
+              </div>
+            </div>
+            <hr />
+
+            <div class="form-group row">
+              <div class="col-sm-2">SuperUser</div>
+              <div class="col-sm-10">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="isSuperUser" />
+                </div>
+                <br />
+                <small class="form-text text-muted">
+                  Designates that this user has all permissions without
+                  explicity assigning them.
+                </small>
+              </div>
+            </div>
+            <hr />
+
+            <div class="form-group row">
+              <div class="col-sm-2">Business Unit</div>
+              <div class="col-sm-10">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" />
+                  <label class="form-check-label" for="inlineCheckbox1">BC</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
+                  <label class="form-check-label" for="inlineCheckbox2">ES</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
+                  <label class="form-check-label" for="inlineCheckbox2">RNCE</label>
+                </div>
+                <small class="form-text text-muted">
+                  Required. You can select on or more business units.
+                </small>
+              </div>
+            </div>
+            <hr />
+
+            <div class="p-3 bg-light text-right">
+              <a href="#" class="btn btn-default">
+                Cancel
+              </a>
+              <button type="submit" class="px-4 btn btn-secondary">
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+<!-- main -->
+{% endblock %}
