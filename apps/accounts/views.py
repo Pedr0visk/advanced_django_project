@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.forms import inlineformset_factory
-from django.contrib.auth.models import User 
-
 from django.contrib.auth import authenticate, login, logout 
+from django.contrib.auth.models import User 
+from django.contrib.auth.decorators import login_required
+
 from django.contrib import messages
 
 from .forms import CreateUserForm
@@ -49,10 +50,12 @@ def logoutUser(request):
   return redirect('login')
 
 
+@login_required(login_url='login')
 def dashboard(request):
   return render(request, 'accounts/dashboard.html')
 
 
+@login_required(login_url='login')
 @allowed_users(allowed_roles=['Admin'])
 def usersList(request):
   users = User.objects.all()
