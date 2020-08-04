@@ -92,10 +92,13 @@
             <div class="form-group row">
               <label class="col-sm-2 col-form-label col-form-label-sm">Group</label>
               <div class="col-sm-5">
-                <select id="inputStateGroup" class="form-control form-control-sm">
+                <select name="group" id="inputStateGroup" class="form-control form-control-sm">
                   <option selected> --</option>
-                  <option> Admin </option>
-                  <option> Operator </option>
+
+                  {% for group in groups %}
+                  <option value="{{group.id}}"> {{group.name}} </option>
+                  {% endfor %}
+
                 </select>
                 <small class="form-text text-muted">
                   Required. Group field defines permissions for each kind of
