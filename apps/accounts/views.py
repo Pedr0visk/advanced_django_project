@@ -17,6 +17,7 @@ def registerPage(request):
   groups = Group.objects.all()
 
   if request.method == 'POST':
+    # extends the UserCreateForm
     form = CreateUserForm(request.POST)
     if form.is_valid():
       group = Group.objects.get(pk=request.POST['group'])
