@@ -11,7 +11,7 @@ from .forms import CreateUserForm
 from .models import Employer
 from .decorators import unauthenticated_user, allowed_users
 
-def registerPage(request):
+def register_page(request):
 
   form = CreateUserForm()
   groups = Group.objects.all()
@@ -35,7 +35,7 @@ def registerPage(request):
 
 
 @unauthenticated_user
-def loginPage(request):
+def login_page(request):
 
   if request.method == 'POST':
     username = request.POST.get('username')
@@ -53,7 +53,7 @@ def loginPage(request):
   return render(request, 'accounts/login.html', context)
 
 
-def logoutUser(request):
+def logout_user(request):
   logout(request)
   return redirect('login')
 
@@ -65,7 +65,7 @@ def dashboard(request):
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['Admin'])
-def usersList(request):
+def users_list(request):
   users = User.objects.all()
   context = {'users': users}
   return render(request, 'accounts/users-list.html', context)
