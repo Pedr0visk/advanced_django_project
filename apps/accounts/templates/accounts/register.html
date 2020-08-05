@@ -96,28 +96,13 @@
                   <option selected> --</option>
 
                   {% for group in groups %}
-                  <option value="{{group.id}}"> {{group.name}} </option>
+                  <option value="{{group.name}}"> {{group.name}} </option>
                   {% endfor %}
 
                 </select>
                 <small class="form-text text-muted">
                   Required. Group field defines permissions for each kind of
                   user.
-                </small>
-              </div>
-            </div>
-            <hr />
-
-            <!-- superuser field -->
-            <div class="form-group row">
-              <div class="col-sm-2">SuperUser</div>
-              <div class="col-sm-10">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="isSuperUser" />
-                </div>
-                <small class="form-text text-muted">
-                  Designates that this user has all permissions without
-                  explicity assigning them.
                 </small>
               </div>
             </div>

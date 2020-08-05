@@ -11,6 +11,8 @@ from .forms import CreateUserForm
 from .models import Employer
 from .decorators import unauthenticated_user, allowed_users
 
+
+@allowed_users(allowed_roles=['Admin'])
 def register_page(request):
 
   form = CreateUserForm()
@@ -20,14 +22,17 @@ def register_page(request):
     # extends the UserCreateForm
     form = CreateUserForm(request.POST)
     if form.is_valid():
-      group = Group.objects.get(pk=request.POST['group'])
-
+      group = Group.objects.get(name=request.POST['group'])
+      # create user on database
       user = form.save()
       user.groups.add(group)
+
       Employer.objects.create(user=user,)
 
+      # create message of success
       username = form.cleaned_data.get('username')
       messages.success(request, 'Account created Successfully for: ' + username)
+
       return redirect('register')
 
   context = {'form': form, 'groups': groups}

@@ -79,19 +79,41 @@ class AccountViewTest(TestCase):
     self.assertEquals(response.status_code, 302)
 
   
-  def test_register_POST_can_create_user(self):
+  def test_register_POST_can_create_admin_user(self):
     """
-    Logged users cannot access login page
+    Admin user can create another admin user
     """
-    data = {
+    self.client.force_login(self.user1)
+
+    response = self.client.post('/register/', {
       'username': 'peter',
-      'password': '123456',
-      'group': 1
-    }
+      'email': 'peter@example.com',
+      'password1': 'pass0rdkms',
+      'password2': 'pass0rdkms',
+      'group': 'Admin'
+    })
 
-    request = self.factory.post('/register/', data)
-    request.user = self.user1
 
-    response = register_page(request)
-
+    self.assertEquals(User.objects.count(), 3)
+    self.assertEquals(User.objects.get(username='peter').email, 'peter@example.com')
     self.assertEquals(response.status_code, 302)
+
+
+  def test_register_POST_cannot_create_admin_user(self):
+    """
+    An employer cannot create another user
+    """
+    self.client.force_login(self.user2)
+
+    response = self.client.post('/register/', {
+      'username': 'peter',
+      'email': 'peter@example.com',
+      'password1': 'pass0rdkms',
+      'password2': 'pass0rdkms',
+      'group': 'Admin'
+    })
+
+
+    self.assertEquals(User.objects.count(), 2)
+    self.assertEquals(response.status_code, 302)
+    self.assertRedirects(response, '/')
