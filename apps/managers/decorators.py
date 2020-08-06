@@ -1,7 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
 from django.shortcuts import redirect 
-
 from django.contrib import messages
 
 def unauthenticated_user(view_func):
@@ -25,7 +22,6 @@ def allowed_users(allowed_roles=[]):
       if group in allowed_roles:
         return view_func(request, *args, **kwargs)
       else: 
-        print('got u here')
         messages.info(request, "You are logged as Operator user, try to log in with an Admin account")
         return redirect('%s?next=%s' % ('/manager/login', request.path))
     return wrapper_func

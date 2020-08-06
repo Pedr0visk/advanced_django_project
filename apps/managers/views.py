@@ -49,7 +49,7 @@ def register_page(request):
       return redirect('register')
 
   context = {'form': form, 'groups': groups}
-  return render(request, 'auth/register.html', context)
+  return render(request, 'managers/register.html', context)
   
 
 def login_page(request):

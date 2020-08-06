@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'manager/base.html' %}
 
 {% block breadcrumb %}
 <a href="{% url 'dashboard' %}">Home</a>
@@ -9,18 +9,22 @@
 {% block main %}
 <!-- main -->
 <div class="main">
+  <!-- search bar -->
   <div class="search-bar p-2">
     <div class="container">
-      <nav class="navbar navbar-light bg-white">
-        <form class="form-inline">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-            <i class="fa fa-search"></i> Search
-          </button>
-        </form>
-        <a href="{% url 'register' %}" class=" btn btn-success ml-auto"><i class="fa fa-plus text-white"></i> new
-          user</a>
-      </nav>
+      <div class="card">
+        <nav class="navbar navbar-light">
+          <form class="form-inline">
+            <input class="form-control mr-sm-2 form-control-sm" type="search" placeholder="Search"
+              aria-label="Search" />
+            <button class="btn btn-outline-success my-2 my-sm-0 btn-sm" type="submit">
+              <i class="fa fa-search"></i> Search
+            </button>
+          </form>
+          <a href="{% url 'register' %}" class=" btn btn-success ml-auto btn-sm"><i class="fa fa-plus text-white"></i>
+            new account</a>
+        </nav>
+      </div>
     </div>
   </div>
   <!-- ./ search bar -->
@@ -32,7 +36,7 @@
         <!-- card body -->
         <div class="card-body">
           <div class="table-responsive">
-            <table class="table m-0 table-hover dnv-table" id="campaignsTable">
+            <table class="table table-sm m-0 table-hover dnv-table" id="campaignsTable">
               <thead class="">
                 <tr>
                   <th scope="col" width="3%">#</th>
@@ -59,8 +63,10 @@
                   <td align="center">21-05-2020</td>
                   <!-- edit -->
                   <td align="center">
-                    <a href="" class="btn btn-sm btn-secondary"><i class="fa fa-edit"></i></a>
-                    <a href="" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
+                    <div class="btn-group-actions">
+                      <a href="" class="btn btn-action btn-sm"><i class="fa fa-user-edit"></i></a>
+                      <a href="" class="btn btn-action btn-sm"><i class="fa fa-trash"></i></a>
+                    </div>
                   </td>
                 </tr>
                 {% endfor %}
