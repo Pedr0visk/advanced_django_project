@@ -10493,9 +10493,63 @@ h3 {
   align-items: center;
 }
 
+.dashboard-welcome {
+  position: relative;
+}
+.dashboard-welcome .welcome-header {
+  color: white;
+}
+.dashboard-welcome .welcome-header h4 {
+  font-size: 2.5rem;
+}
+.dashboard-welcome .welcome-header p {
+  font-size: 1rem;
+}
+.dashboard-welcome:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #262626;
+  height: 200px;
+  width: 100%;
+  z-index: -1;
+}
+
+.widget {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.widget-title {
+  color: #262626;
+  font-size: 1.25rem;
+}
+.widget-desc {
+  color: #adb5bd;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.widget-count {
+  font-size: 2rem;
+  font-weight: bold;
+}
+.widget-icon {
+  position: relative;
+  top: 15px;
+}
+.widget-icon i.fa {
+  font-size: 4rem;
+  color: #adb5bd;
+}
+
 body {
   font-family: "Roboto", sans-serif;
   font-size: 14px;
+}
+
+p {
+  margin: 0;
 }
 
 .main {

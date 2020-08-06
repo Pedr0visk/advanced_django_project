@@ -18,6 +18,7 @@
   <!-- header -->
   {% include './partials/_header.html' %}
 
+  {% if '/manager/' != request.path %}
   <!-- breadcrumb -->
   <div class="page-title">
     <div class="container">
@@ -28,6 +29,7 @@
       </div>
     </div>
   </div>
+  {% endif %}
 
   <!-- main -->
   <div class="main">
