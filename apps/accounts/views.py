@@ -1,25 +1,15 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.forms import inlineformset_factory
-from django.contrib.auth.forms import UserCreationForm
-
 from django.contrib.auth import authenticate, login, logout 
+from django.contrib.auth.decorators import login_required
+
 from django.contrib import messages
 
-def registerPage(request):
-  form = UserCreationForm()
-
-  if request.method == 'POST':
-    form = UserCreationForm(request.POST)
-    if form.is_valid():
-      form.save()
-
-  context = {'form': form}
-  return render(request, 'accounts/register.html', context)
+from .decorators import unauthenticated_user
 
 
-def loginPage(request):
-
+@unauthenticated_user
+def login_page(request):
+  
   if request.method == 'POST':
     username = request.POST.get('username')
     password = request.POST.get('password')
@@ -36,10 +26,11 @@ def loginPage(request):
   return render(request, 'accounts/login.html', context)
 
 
-def logoutUser(request):
+def logout_user(request):
   logout(request)
   return redirect('login')
 
 
+@login_required(login_url='login')
 def dashboard(request):
   return render(request, 'accounts/dashboard.html')

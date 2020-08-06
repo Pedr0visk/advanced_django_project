@@ -1,5 +1,5 @@
-from django.http import HttpResponse
 from django.shortcuts import redirect 
+from django.contrib import messages
 
 def unauthenticated_user(view_func):
   def wrapper_func(request, *args, **kwargs):
@@ -22,7 +22,8 @@ def allowed_users(allowed_roles=[]):
       if group in allowed_roles:
         return view_func(request, *args, **kwargs)
       else: 
-        return redirect('dashboard')
+        messages.info(request, 'Only managers can access this page, you are logged as %s' % request.user.username)
+        return redirect('%s?next=%s' % ('/manager/login', request.path))
     return wrapper_func
   return decorator
   

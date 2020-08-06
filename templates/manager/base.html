@@ -16,8 +16,9 @@
 
 <body>
   <!-- header -->
-  {% include 'partials/_header.html' %}
+  {% include './partials/_header.html' %}
 
+  {% if '/manager/' != request.path %}
   <!-- breadcrumb -->
   <div class="page-title">
     <div class="container">
@@ -28,6 +29,7 @@
       </div>
     </div>
   </div>
+  {% endif %}
 
   <!-- main -->
   <div class="main">
@@ -35,7 +37,7 @@
   </div>
 
   <!-- footer -->
-  {% include 'partials/_footer.html' %}
+  {% include './partials/_footer.html' %}
 
   <!-- scripts -->
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

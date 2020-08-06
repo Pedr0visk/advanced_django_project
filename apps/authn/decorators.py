@@ -1,5 +1,8 @@
 from django.http import HttpResponse
+from django.urls import reverse
 from django.shortcuts import redirect 
+
+from django.contrib import messages
 
 def unauthenticated_user(view_func):
   def wrapper_func(request, *args, **kwargs):
@@ -10,11 +13,9 @@ def unauthenticated_user(view_func):
       
   return wrapper_func
 
-
 def allowed_users(allowed_roles=[]):
   def decorator(view_func):
     def wrapper_func(request, *args, **kwargs):
-      
       group = None 
       if request.user.groups.exists():
         group = request.user.groups.all()[0].name 
@@ -22,7 +23,8 @@ def allowed_users(allowed_roles=[]):
       if group in allowed_roles:
         return view_func(request, *args, **kwargs)
       else: 
-        return redirect('dashboard')
+        messages.info(request, "You are logged but you are not Admin, try to log in with another account")
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     return wrapper_func
   return decorator
   

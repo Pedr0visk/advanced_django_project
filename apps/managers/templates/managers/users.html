@@ -1,0 +1,84 @@
+{% extends 'manager/base.html' %}
+
+{% block breadcrumb %}
+<a href="{% url 'dashboard' %}">Home</a>
+<span class="fa fa-chevron-right"></span>
+<span class="current-page">Users </span>
+{% endblock %}
+
+{% block main %}
+<!-- main -->
+<div class="main">
+  <!-- search bar -->
+  <div class="search-bar p-2">
+    <div class="container">
+      <div class="card">
+        <nav class="navbar navbar-light">
+          <form class="form-inline">
+            <input class="form-control mr-sm-2 form-control-sm" type="search" placeholder="Search"
+              aria-label="Search" />
+            <button class="btn btn-outline-success my-2 my-sm-0 btn-sm" type="submit">
+              <i class="fa fa-search"></i> Search
+            </button>
+          </form>
+          <a href="{% url 'register' %}" class=" btn btn-success ml-auto btn-sm"><i class="fa fa-plus text-white"></i>
+            new account</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <!-- ./ search bar -->
+
+  <!-- users list -->
+  <div id="users-list">
+    <div class="container">
+      <div class="card">
+        <!-- card body -->
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-sm m-0 table-hover dnv-table" id="campaignsTable">
+              <thead class="">
+                <tr>
+                  <th scope="col" width="3%">#</th>
+                  <th scope="col">username</th>
+                  <th scope="col">email</th>
+                  <th scope="col">role</th>
+                  <th scope="col" style="text-align: center;">
+                    created_at
+                  </th>
+                  <th scope="col" style="text-align: center;">
+                    updated_at
+                  </th>
+                  <th scope="col" style="text-align: center;">actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for user in users %}
+                <tr>
+                  <td scope="row" align="center">1</td>
+                  <td>{{user.username}}</td>
+                  <td>{{user.email}}</td>
+                  <td>admin</td>
+                  <td align="center">20-03-2020</td>
+                  <td align="center">21-05-2020</td>
+                  <!-- edit -->
+                  <td align="center">
+                    <div class="btn-group-actions">
+                      <a href="" class="btn btn-action btn-sm"><i class="fa fa-user-edit"></i></a>
+                      <a href="" class="btn btn-action btn-sm"><i class="fa fa-trash"></i></a>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- main -->
+{% endblock %}

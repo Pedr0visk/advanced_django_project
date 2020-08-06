@@ -1,0 +1,84 @@
+{% extends 'manager/base.html' %}
+
+{% block breadcrumb %}
+<span> Home </span>
+{% endblock %}
+
+{% block main %}
+
+<div class="dashboard-welcome">
+  <div class="container">
+    <div class="welcome-header section">
+      <h4>Welcome, Pedro</h4>
+      <p>It's always a pleasure</p>
+    </div>
+    <div class="welcome-content">
+      <div class="row">
+        <!-- start widgets -->
+        <div class="col-sm-4 col-12">
+          <div class="card box-shadow">
+            <div class="card-body">
+              <div class="widget">
+                <div class="widget-content-left">
+                  <p class="widget-title">Users</p>
+                  <p class="widget-desc">TOTAL</p>
+                  <p class="widget-count text-primary">30</p>
+                  <a href="#" class="btn btn-sm btn-primary">click here</a>
+                </div>
+                <div class="widget-content-right">
+                  <div class="widget-icon">
+                    <i class="fa fa-hard-hat"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- widget -->
+        <div class="col-sm-4 col-12">
+          <div class="card box-shadow">
+            <div class="card-body">
+              <div class="widget">
+                <div class="widget-content-left">
+                  <p class="widget-title">Safety Functions</p>
+                  <p class="widget-desc">TOTAL</p>
+                  <p class="widget-count text-success">12</p>
+                  <a href="#" class="btn btn-sm btn-success">click here</a>
+                </div>
+                <div class="widget-content-right">
+                  <div class="widget-icon">
+                    <i class="fa fa-users"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- widget -->
+        <div class="col-sm-4 col-12">
+          <div class="card box-shadow">
+            <div class="card-body">
+              <div class="widget">
+                <div class="widget-content-left">
+                  <p class="widget-title">Failures</p>
+                  <p class="widget-desc">TOTAL</p>
+                  <p class="widget-count text-danger">2</p>
+                  <a href="#" class="btn btn-sm btn-danger">click here</a>
+                </div>
+                <div class="widget-content-right">
+                  <div class="widget-icon">
+                    <i class="fa fa-bug"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ./ widgets -->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
