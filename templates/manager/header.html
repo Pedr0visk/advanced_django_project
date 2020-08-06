@@ -12,6 +12,10 @@
               <i class="fa fa-user"></i> {{ request.user }}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <!-- {% ifequal user.groups.all.0 'Guest' %} -->
+              <!-- {% endifequal %} -->
+              <a class="dropdown-item" href="{% url 'register' %}"><i class=" fa fa-user-plus"></i> Register User</a>
+              <a class="dropdown-item" href="{% url 'list_users' %}"><i class=" fa fa-users"></i> List User</a>
               <a class="dropdown-item" href="{% url 'logout' %}"><i class=" fa fa-sign-out-alt"></i> Logout</a>
             </div>
           </li>
@@ -37,7 +41,7 @@
       <nav class="navbar navbar-expand-lg">
         <!-- logo -->
         <a href="{% url 'dashboard' %}" class="navbar-brand text-white">
-          myBarrier
+          Admin
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu"
           aria-expanded="false" aria-label="Toggle navigation">
@@ -55,33 +59,24 @@
             <li class="nav-item">
               <a href="" class="nav-link">
                 <i class="fa fa-route"></i>
-                Campaigns</a>
+                Hierarchy Database</a>
             </li>
             <li class="nav-item">
               <a href="" class="nav-link">
                 <i class="fas fa-folder-open"></i>
-                Summary of Results</a>
+                Safety Functions Model</a>
             </li>
             <li class="nav-item">
               <a href="" class="nav-link">
                 <i class="fa fa-poll"></i>
-                Detailed Results</a>
+                Failure Rate Database</a>
             </li>
             <li class="nav-item">
               <a href="" class="nav-link">
-                <i class="fa fa-sitemap"></i>
-                Hierarchy</a>
+                <i class="fa fa-users"></i>
+                Users</a>
             </li>
-            <li class="nav-item">
-              <a href="" class="nav-link">
-                <i class="fa fa-clipboard-list"></i>
-                EventLogger</a>
-            </li>
-            <li class="nav-item">
-              <a href="" class="nav-link">
-                <i class="fa fa-vial"></i>
-                TestPlanner</a>
-            </li>
+
           </ul>
           <div class="d-block d-sm-none bg-black">
             <a href="" class="text-white btn btn-info">

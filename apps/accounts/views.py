@@ -12,7 +12,7 @@ from .models import Employer
 from .decorators import unauthenticated_user, allowed_users
 
 
-@allowed_users(allowed_roles=['Admin'])
+@allowed_users(allowed_roles=['Admin', 'Guest'])
 def register_page(request):
 
   form = CreateUserForm()
@@ -41,7 +41,7 @@ def register_page(request):
 
 @unauthenticated_user
 def login_page(request):
-
+  print('accounts')
   if request.method == 'POST':
     username = request.POST.get('username')
     password = request.POST.get('password')
@@ -69,7 +69,7 @@ def dashboard(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Admin'])
+@allowed_users(allowed_roles=['Admin', 'Guest'])
 def users_list(request):
   users = User.objects.all()
   context = {'users': users}

@@ -1,7 +1,8 @@
 
 from django.test import TestCase, Client, RequestFactory
 from django.urls import reverse
-from django.contrib.auth.models import Group, User 
+from django.contrib.auth.models import Group, User, Permission 
+from django.contrib.contenttypes.models import ContentType
 
 from apps.accounts.views import users_list, login_page, register_page
 
@@ -11,14 +12,36 @@ class AccountViewTest(TestCase):
     self.client = Client() 
     self.factory = RequestFactory()
 
+    # for the tests puporse will be needed 3 types of groups
     adminGroup = Group.objects.create(name='Admin')
+    guestGroup = Group.objects.create(name='Guest')
     operatorGroup = Group.objects.create(name='Operator')
 
+    content_type = ContentType.objects.get_for_model(User)
+    user_permissions = Permission.objects.filter(content_type=content_type)
+
+    # add all the permissions of user to adminGroup
+    for p in user_permissions:
+      adminGroup.permissions.add(p)
+
+    # add just view_user permission to guestGroup
+    guestGroup.permissions.add(user_permissions[0])
+
+    """
+      Create 3 users to test in this order: Admin > Operator > Guest.
+      All the tests are based on this 3 users, take care when refactoring this tests, 
+      changing the number of users create for this tests can cause errors.
+    """
     self.user1 = User.objects.create_user(username='admin', password='farcryw023')
     self.user2 = User.objects.create_user(username='jonhdoe', password='farcryw023')
+    self.user3 = User.objects.create_user(username='luccas', password='farcryw023')
 
+    # assign groups to the users
     self.user1.groups.add(adminGroup)
     self.user2.groups.add(operatorGroup)
+    self.user3.groups.add(guestGroup)
+
+   
 
 
   def test_users_list_GET_can_view(self):
@@ -94,7 +117,7 @@ class AccountViewTest(TestCase):
     })
 
 
-    self.assertEquals(User.objects.count(), 3)
+    self.assertEquals(User.objects.count(), 4)
     self.assertEquals(User.objects.get(username='peter').email, 'peter@example.com')
     self.assertEquals(response.status_code, 302)
 
@@ -114,6 +137,6 @@ class AccountViewTest(TestCase):
     })
 
 
-    self.assertEquals(User.objects.count(), 2)
+    self.assertEquals(User.objects.count(), 3)
     self.assertEquals(response.status_code, 302)
     self.assertRedirects(response, '/')
