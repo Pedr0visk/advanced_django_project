@@ -9,9 +9,11 @@
         </div>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item mr-4">
+            {% if user.groups.all.0.name != "Operator" %}
             <a class="nav-link btn-tertiary text-white" href="{% url 'manager' %}">
               <i class="fa fa-cog"></i> Go to Manager Dashboard
             </a>
+            {% endif %}
           </li>
 
           <li class="nav-item dropdown mr-4 d-none d-sm-block">

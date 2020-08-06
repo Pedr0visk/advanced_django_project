@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib.auth.models import Group, User, Permission 
 from django.contrib.contenttypes.models import ContentType
 
-from apps.accounts.views import accounts_list, login_page, register_page
+from apps.managers.views import accounts_list, login_page, register_page
 
 class AccountViewTest(TestCase):
   
@@ -45,7 +45,7 @@ class AccountViewTest(TestCase):
   def test_accounts_list_GET_can_view(self):
     """
     A logged user that belongs to admin group 
-    can access /list-users page
+    can access /manager/accounts page
     """
     request = self.factory.get('/users-list/')
     request.user = self.user1
@@ -57,13 +57,11 @@ class AccountViewTest(TestCase):
 
   def test_accounts_list_GET_restricted(self):
     """
-    users list page is restricted to users 
-    that belongs to operator grouè
+    operator users cannot access accounts list page
     """
-    request = self.factory.get('/users-list/')
-    request.user = self.user2
+    self.client.force_login(self.user2)
 
-    response = accounts_list(request)
+    response = self.client.get('/manager/register/')
 
     self.assertEquals(response.status_code, 302)
 
@@ -75,7 +73,7 @@ class AccountViewTest(TestCase):
     """
     response = self.client.get(reverse('list_accounts'))
 
-    self.assertRedirects(response, '/login/?next=/users-list/')
+    self.assertRedirects(response, '/login/?next=/manager/accounts/')
 
   
   def test_dashboard_GET_redirected(self):
@@ -94,7 +92,7 @@ class AccountViewTest(TestCase):
     """
     self.client.force_login(self.user1)
 
-    response = self.client.post('/register/', {
+    response = self.client.post('/manager/register/', {
       'username': 'peter',
       'email': 'peter@example.com',
       'password1': 'pass0rdkms',
@@ -110,11 +108,11 @@ class AccountViewTest(TestCase):
 
   def test_register_POST_cannot_create_admin_account(self):
     """
-    An employer cannot create another user
+    An operator user cannot register an account
     """
     self.client.force_login(self.user2)
 
-    response = self.client.post('/register/', {
+    response = self.client.post('/manager/register/', {
       'username': 'peter',
       'email': 'peter@example.com',
       'password1': 'pass0rdkms',
@@ -122,7 +120,5 @@ class AccountViewTest(TestCase):
       'group': 'Admin'
     })
 
-
     self.assertEquals(User.objects.count(), 3)
     self.assertEquals(response.status_code, 302)
-    self.assertRedirects(response, '/')

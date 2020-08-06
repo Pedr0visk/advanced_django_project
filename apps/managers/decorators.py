@@ -22,7 +22,7 @@ def allowed_users(allowed_roles=[]):
       if group in allowed_roles:
         return view_func(request, *args, **kwargs)
       else: 
-        messages.info(request, "You are logged as Operator user, try to log in with an Admin account")
+        messages.info(request, 'Only managers can access this page, you are logged as %s' % request.user.username)
         return redirect('%s?next=%s' % ('/manager/login', request.path))
     return wrapper_func
   return decorator

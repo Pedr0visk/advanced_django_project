@@ -20,8 +20,6 @@
               <i class="fa fa-user"></i> {{ request.user }}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <!-- {% ifequal user.groups.all.0 'Guest' %} -->
-              <!-- {% endifequal %} -->
               <a class="dropdown-item" href="{% url 'register' %}"><i class=" fa fa-user-plus"></i> Register User</a>
               <a class="dropdown-item" href="{% url 'list_accounts' %}"><i class=" fa fa-users"></i> List User</a>
               <a class="dropdown-item" href="{% url 'logout_manager' %}"><i class=" fa fa-sign-out-alt"></i> Logout</a>
@@ -66,21 +64,21 @@
             </li>
             <li class="nav-item">
               <a href="" class="nav-link">
-                <i class="fa fa-route"></i>
-                Hierarchy Database</a>
+                <i class="fa fa-sitemap"></i>
+                Hierarchy</a>
             </li>
             <li class="nav-item">
               <a href="" class="nav-link">
-                <i class="fas fa-folder-open"></i>
-                Safety Functions Model</a>
+                <i class="fas fa-hard-hat"></i>
+                Safety Functions</a>
             </li>
             <li class="nav-item">
               <a href="" class="nav-link">
-                <i class="fa fa-poll"></i>
-                Failure Rate Database</a>
+                <i class="fa fa-file-signature"></i>
+                Failure Rate</a>
             </li>
             <li class="nav-item">
-              <a href="" class="nav-link">
+              <a href="{% url 'list_accounts' %}" class=" nav-link">
                 <i class="fa fa-users"></i>
                 Users</a>
             </li>
