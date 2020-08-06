@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib.auth.models import Group, User, Permission 
 from django.contrib.contenttypes.models import ContentType
 
-from apps.accounts.views import users_list, login_page, register_page
+from apps.accounts.views import accounts_list, login_page, register_page
 
 class AccountViewTest(TestCase):
   
@@ -24,7 +24,7 @@ class AccountViewTest(TestCase):
     for p in user_permissions:
       adminGroup.permissions.add(p)
 
-    # add just view_user permission to guestGroup
+    # add just view_account permission to guestGroup
     guestGroup.permissions.add(user_permissions[0])
 
     """
@@ -41,10 +41,8 @@ class AccountViewTest(TestCase):
     self.user2.groups.add(operatorGroup)
     self.user3.groups.add(guestGroup)
 
-   
 
-
-  def test_users_list_GET_can_view(self):
+  def test_accounts_list_GET_can_view(self):
     """
     A logged user that belongs to admin group 
     can access /list-users page
@@ -52,12 +50,12 @@ class AccountViewTest(TestCase):
     request = self.factory.get('/users-list/')
     request.user = self.user1
 
-    response = users_list(request)
+    response = accounts_list(request)
 
     self.assertEquals(response.status_code, 200)
 
 
-  def test_users_list_GET_restricted(self):
+  def test_accounts_list_GET_restricted(self):
     """
     users list page is restricted to users 
     that belongs to operator grouè
@@ -65,17 +63,17 @@ class AccountViewTest(TestCase):
     request = self.factory.get('/users-list/')
     request.user = self.user2
 
-    response = users_list(request)
+    response = accounts_list(request)
 
     self.assertEquals(response.status_code, 302)
 
 
-  def test_users_list_GET_redirected(self):
+  def test_accounts_list_GET_redirected(self):
     """
-    Unlogged users cannot access list_users url
+    Unlogged users cannot access list_accounts url
     instead, they get redirected to the login page
     """
-    response = self.client.get(reverse('list_users'))
+    response = self.client.get(reverse('list_accounts'))
 
     self.assertRedirects(response, '/login/?next=/users-list/')
 
@@ -89,20 +87,8 @@ class AccountViewTest(TestCase):
 
     self.assertRedirects(response, '/login/?next=/')
 
-
-  def test_login_GET_restricted(self):
-    """
-    Logged users cannot access login page
-    """
-    request = self.factory.get('/login/')
-    request.user = self.user1
-
-    response = login_page(request)
-
-    self.assertEquals(response.status_code, 302)
-
   
-  def test_register_POST_can_create_admin_user(self):
+  def test_register_POST_can_create_admin_account(self):
     """
     Admin user can create another admin user
     """
@@ -122,7 +108,7 @@ class AccountViewTest(TestCase):
     self.assertEquals(response.status_code, 302)
 
 
-  def test_register_POST_cannot_create_admin_user(self):
+  def test_register_POST_cannot_create_admin_account(self):
     """
     An employer cannot create another user
     """
