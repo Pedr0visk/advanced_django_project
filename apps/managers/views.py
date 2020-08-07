@@ -8,6 +8,7 @@ from django.contrib import messages
 
 from .forms import CreateUserForm
 from .decorators import allowed_users, unauthenticated_user
+from django.contrib.auth.decorators import permission_required
 
 from apps.accounts.models import Employer
 
@@ -21,11 +22,11 @@ def dashboard(request):
 @allowed_users(allowed_roles=['Admin', 'Guest'])
 def accounts_list(request):
   users = User.objects.all()
-  context = {'users': users}
+  context = {'users': users,}
   return render(request, 'managers/users.html', context)
 
 
-@allowed_users(allowed_roles=['Admin', 'Guest'])
+@allowed_users(allowed_roles=['Admin'])
 def register_page(request):
 
   form = CreateUserForm()
@@ -48,7 +49,7 @@ def register_page(request):
 
       return redirect('register')
 
-  context = {'form': form, 'groups': groups}
+  context = {'form': form, 'groups': groups,}
   return render(request, 'managers/register.html', context)
   
 
@@ -85,3 +86,8 @@ def login_page(request):
 def logout_user(request):
   logout(request)
   return render(request, 'auth/logout.html')
+
+
+def unauthorized_page(request):
+  print(request.GET['next'])
+  return render(request, 'auth/unauthorized.html')
