@@ -15,7 +15,7 @@
   <div class="section">
     <h2>Delete {{ user.username }}?</h2>
     <p class="mb-3">Are you sure you want to delete "{{ user.username }}"</p>
-    <form action="POST">
+    <form method="POST">
       {% csrf_token %}
       <button type="submit" class="btn btn-info">Yes</button>
       <a href="{% url 'list_accounts' %}" class="btn btn-danger">Cancel</a>

@@ -87,7 +87,10 @@ def account_delete(request, pk):
     user = get_object_or_404(User, pk=pk)
 
     if request.method == 'POST':
+        username = user.username
         user.delete()
+
+        messages.success(request, 'User %s deleted with success!' % username)
         return redirect('list_accounts')
 
     context = {'user': user}
