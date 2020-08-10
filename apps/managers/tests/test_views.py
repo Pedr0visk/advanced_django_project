@@ -48,9 +48,9 @@ class AccountViewTest(TestCase):
 
     def test_list_accounts_GET_can_view(self):
         """
-    A logged user that belongs to admin group 
-    can access /manager/accounts page
-    """
+        A logged user that belongs to admin group
+        can access /manager/accounts page
+        """
         self.client.force_login(self.user1)
 
         response = self.client.get(self.accounts_list_url)
@@ -59,8 +59,8 @@ class AccountViewTest(TestCase):
 
     def test_list_accounts_GET_restricted(self):
         """
-    operator users cannot access accounts list page
-    """
+        operator users cannot access accounts list page
+        """
         self.client.force_login(self.user2)
 
         response = self.client.get(reverse('register_account'))
@@ -73,9 +73,9 @@ class AccountViewTest(TestCase):
 
     def test_list_accounts_GET_redirected(self):
         """
-    Not logged users cannot access list_accounts url
-    instead, they get redirected to the login page
-    """
+        Not logged users cannot access list_accounts url
+        instead, they get redirected to the login page
+        """
         response = self.client.get(self.accounts_list_url)
 
         self.assertEquals(response.status_code, 302)
@@ -86,9 +86,9 @@ class AccountViewTest(TestCase):
 
     def test_dashboard_GET_redirected(self):
         """
-    Unlogged users cannot access dashboard page
-    instead, they get redirected to the login page
-    """
+        Unlogged users cannot access dashboard page
+        instead, they get redirected to the login page
+        """
         response = self.client.get(reverse('dashboard'))
 
         self.assertRedirects(response, '/login/?next=/')
@@ -107,8 +107,8 @@ class AccountViewTest(TestCase):
 
     def test_register_POST_cannot_create_admin_account(self):
         """
-    An operator user cannot register an account
-    """
+        An operator user cannot register an account
+        """
         self.client.force_login(self.user2)
 
         response = self.client.post('/manager/register_account/', {
@@ -124,8 +124,8 @@ class AccountViewTest(TestCase):
 
     def test_manager_GET_guest_has_no_access(self):
         """
-    A guest user cannot have access to the manager area
-    """
+        A guest user cannot have access to the manager area
+        """
 
         self.client.force_login(self.user3)
 
@@ -146,6 +146,9 @@ class AccountViewTest(TestCase):
         self.assertEquals(response.status_code, 200)
 
     def test_update_account_GET_404_user_not_found(self):
+        """
+        Should return 404 when user not found
+        """
         self.client.force_login(self.user1)
 
         response = self.client.get('/manager/update_account/%s/' % 13123)
