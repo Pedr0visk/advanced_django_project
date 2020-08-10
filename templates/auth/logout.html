@@ -25,7 +25,7 @@
         <nav class="navbar navbar-expand-lg">
           <!-- logo -->
           <a href="{% url 'manager' %}" class="navbar-brand text-white py-3">
-            myBarrier
+            Bop
           </a>
         </nav>
       </div>
@@ -37,7 +37,7 @@
     <div class="container">
       <div class="page-title-wrapper-2">
         <div class="page-title-heading-2">
-          <a href="#">Home</a>
+          <a href="{% url 'manager' %}">Home</a>
         </div>
       </div>
     </div>
@@ -48,8 +48,8 @@
     <div class="container">
       <div class="section">
         <h2>Logged Out</h2>
-        <p>Thanks for using our system today, do you wanna log in again?</p>
-        <a href="{% url 'manager' %}">Login</a>
+        <p>Thanks for using our system today, do you wanna login again?</p>
+        <a href="{% url 'manager' %}" class="btn btn-success mt-4">Login again</a>
       </div>
     </div>
   </div>
