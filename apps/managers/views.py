@@ -1,106 +1,133 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.contrib.auth import authenticate, login, logout 
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
 
-from .forms import CreateUserForm
-from .decorators import allowed_users, unauthenticated_user
-from django.contrib.auth.decorators import permission_required
+from .forms import UserForm, UserUpdateForm
+from .decorators import allowed_users
 
 from apps.accounts.models import Employer
+
 
 @login_required(login_url='/manager/login/')
 @allowed_users(allowed_roles=['Admin'])
 def dashboard(request):
-  return render(request, 'managers/dashboard.html')
+    return render(request, 'managers/dashboard.html')
 
 
 @login_required(login_url='/manager/login/')
-@allowed_users(allowed_roles=['Admin', 'Guest'])
+@allowed_users(allowed_roles=['Admin'])
 def account_list(request):
-  users = User.objects.all()
-  context = {'users': users,}
-  return render(request, 'managers/users.html', context)
+    users = User.objects.all()
+    context = {'users': users, }
+    return render(request, 'managers/account_list.html', context)
 
 
 @login_required(login_url='/manager/login/')
 @allowed_users(allowed_roles=['Admin'])
 def account_register(request):
+    form = UserForm()
+    groups = Group.objects.all()
 
-  form = CreateUserForm()
-  groups = Group.objects.all()
+    if request.method == 'POST':
+        # extends the UserCreateForm
+        form = UserForm(request.POST)
+        if form.is_valid():
+            group = Group.objects.get(name=request.POST['group'])
+            # create user on database
+            user = form.save()
+            user.groups.add(group)
 
-  if request.method == 'POST':
-    # extends the UserCreateForm
-    form = CreateUserForm(request.POST)
-    if form.is_valid():
-      group = Group.objects.get(name=request.POST['group'])
-      # create user on database
-      user = form.save()
-      user.groups.add(group)
+            Employer.objects.create(user=user, )
 
-      Employer.objects.create(user=user,)
+            # create message of success
+            username = form.cleaned_data.get('username')
+            messages.success(request, 'Account created Successfully for: ' + username)
 
-      # create message of success
-      username = form.cleaned_data.get('username')
-      messages.success(request, 'Account created Successfully for: ' + username)
+            return redirect('list_accounts')
 
-      return redirect('list_accounts')
-
-  context = {'form': form, 'groups': groups,}
-  return render(request, 'managers/account_form.html', context)
+    context = {'form': form, 'groups': groups, }
+    return render(request, 'managers/account_form.html', context)
 
 
 @allowed_users(allowed_roles=['Admin'])
 def account_update(request, pk):
 
-  form = CreateUserForm()
-  groups = Group.objects.all()
+    user = get_object_or_404(User, pk=pk)
+    groups = Group.objects.all()
+    form = UserUpdateForm(instance=user)
 
-  if request.method == 'POST':
-    pass
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=user)
+        if form.is_valid():
+            user.groups.clear()
+            group = Group.objects.get(name=request.POST['group'])
+            user.groups.add(group)
 
-  context = {'form': form, 'groups': groups,}
-  return render(request, 'managers/account_form.html', context)
-  
+            form.save()
+
+            messages.success(request, 'Account updated successfully!')
+            return redirect('list_accounts')
+
+    context = {
+        'user': user,
+        'form': form,
+        'groups': groups
+    }
+
+    return render(request, 'managers/account_form.html', context)
+
+
+@allowed_users(allowed_roles=['Admin'])
+def account_delete(request, pk):
+
+    user = get_object_or_404(User, pk=pk)
+
+    if request.method == 'POST':
+        user.delete()
+        return redirect('list_accounts')
+
+    context = {'user': user}
+    return render(request, 'managers/account_confirm_delete.html', context)
+
 
 def login_page(request):
-  """
-  This login method checks if exists an user set on the request
-  if so, this method log the user out and log in another user
-  """
-  if request.method == 'POST':
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    redirect_url = request.GET.get('next') 
+    """
+    This login method checks if exists an user set on the request
+    if so, this method log the user out and log in another user
+    """
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        redirect_url = request.GET.get('next')
 
-    if request.user is not None:
-      logout(request)
-    
-    user = authenticate(request, username=username, password=password)
+        if request.user is not None:
+            logout(request)
 
-    if user is not None:
-      login(request, user)
+        user = authenticate(request, username=username, password=password)
 
-      # in case of next param in url
-      if redirect_url is not None:
-        return redirect(redirect_url)
-      else:
-        return reverse('dashboard')
-    else:
-      messages.info(request, "username or email is incorrect")
+        if user is not None:
+            login(request, user)
 
-  context = {}
-  return render(request, 'auth/login.html', context)
+            # in case of next param in url
+            if redirect_url is not None:
+                return redirect(redirect_url)
+            else:
+                return reverse('dashboard')
+        else:
+            messages.info(request, "username or email is incorrect")
+
+    context = {}
+    return render(request, 'auth/login.html', context)
 
 
 def logout_user(request):
-  logout(request)
-  return render(request, 'auth/logout.html')
+    logout(request)
+    return render(request, 'auth/logout.html')
 
 
 def unauthorized_page(request):
-  return render(request, 'auth/unauthorized.html')
+    return render(request, 'auth/unauthorized.html')

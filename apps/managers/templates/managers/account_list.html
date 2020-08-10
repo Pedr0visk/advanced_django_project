@@ -12,6 +12,11 @@
   <!-- search bar -->
   <div class="search-bar p-2">
     <div class="container">
+      {% for message in messages %}
+      <div class="col-12 text-center">
+        <p id="messages" class="alert alert-success">{{ message }}</p>
+      </div>
+      {% endfor %}
       <div class="card">
         <nav class="navbar navbar-light">
           <form class="form-inline">
@@ -59,14 +64,14 @@
                   <td scope="row" align="center">1</td>
                   <td>{{user.username}}</td>
                   <td>{{user.email}}</td>
-                  <td>admin</td>
+                  <td>{{ user.groups.all.0 }}</td>
                   <td align="center">20-03-2020</td>
                   <td align="center">21-05-2020</td>
                   <!-- edit -->
                   <td align="center">
                     <div class="btn-group-actions">
-                      <a href="" class="btn btn-action btn-sm"><i class="fa fa-user-edit"></i></a>
-                      <a href="" class="btn btn-action btn-sm"><i class="fa fa-trash"></i></a>
+                      <a href="{% url 'update_account' user.pk %}" class="btn btn-action btn-sm"><i class="fa fa-user-edit"></i></a>
+                      <a href="{% url 'delete_account' user.pk %}" class="btn btn-action btn-sm"><i class="fa fa-trash"></i></a>
                     </div>
                   </td>
                 </tr>
