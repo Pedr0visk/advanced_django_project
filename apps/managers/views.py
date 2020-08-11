@@ -41,8 +41,6 @@ def account_register(request):
             user = form.save()
             user.groups.add(group)
 
-            Employer.objects.create(user=user, )
-
             # create message of success
             username = form.cleaned_data.get('username')
             messages.success(request, 'Account created Successfully for: ' + username)
