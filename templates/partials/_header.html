@@ -22,6 +22,7 @@
               <i class="fa fa-user"></i> {{ request.user }}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="{% url 'update_profile' %}"><i class=" fa fa-user-edit"></i> Profile</a>
               <a class="dropdown-item" href="{% url 'logout' %}"><i class=" fa fa-sign-out-alt"></i> Logout</a>
             </div>
           </li>

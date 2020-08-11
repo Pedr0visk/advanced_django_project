@@ -133,6 +133,7 @@ def unauthorized_page(request):
     return render(request, 'auth/unauthorized.html')
 
 
+@login_required(login_url='/manager/login/')
 @allowed_users(allowed_roles=['Admin'])
 def password_change(request, pk):
     user = get_object_or_404(User, pk=pk)
