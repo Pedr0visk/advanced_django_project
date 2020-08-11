@@ -8,8 +8,9 @@ urlpatterns = [
     path('logout/', views.logout_user, name="logout_manager"),
     path('unauthorized/', views.unauthorized_page, name="unauthorized"),
     # accounts
-    path('list_accounts/', views.account_list, name="list_accounts"),
-    path('register_account/', views.account_register, name="register_account"),
-    path('update_account/<int:pk>/', views.account_update, name="update_account"),
-    path('delete_account/<int:pk>/', views.account_delete, name="delete_account"),
+    path('accounts/', views.account_list, name="list_accounts"),
+    path('accounts/add/', views.account_register, name="register_account"),
+    path('accounts/<int:pk>/change/', views.account_update, name="update_account"),
+    path('accounts/<int:pk>/delete/', views.account_delete, name="delete_account"),
+    path('accounts/<int:pk>/password/', views.password_change, name="change_password"),
 ]

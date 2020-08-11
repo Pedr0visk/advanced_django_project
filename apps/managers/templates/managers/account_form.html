@@ -92,9 +92,11 @@
               <label class="col-sm-2 col-form-label col-form-label-sm">Password</label>
               <div class="col-sm-8">
                 {{form.password}}
-                <small class="form-text text-muted">
-                  {{form.password2.help_text}}
-                </small>
+                <a href="{% url 'change_password'  user.pk %}">
+                  <small class="form-text text-primary">
+                   Change Password
+                  </small>
+                </a>
               </div>
             </div>
             <hr />

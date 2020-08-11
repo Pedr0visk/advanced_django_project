@@ -65,7 +65,7 @@ class AccountViewTest(TestCase):
 
         self.assertEquals(response.status_code, 302)
         self.assertRedirects(response,
-                             '/manager/unauthorized/?next=/manager/register_account/',
+                             '/manager/unauthorized/?next=/manager/accounts/add/',
                              status_code=302,
                              target_status_code=200)
 
@@ -78,7 +78,7 @@ class AccountViewTest(TestCase):
 
         self.assertEquals(response.status_code, 302)
         self.assertRedirects(response,
-                             '/manager/login/?next=/manager/list_accounts/',
+                             '/manager/login/?next=/manager/accounts/',
                              status_code=302,
                              target_status_code=200)
 
@@ -109,7 +109,7 @@ class AccountViewTest(TestCase):
         """
         self.client.force_login(self.user2)
 
-        response = self.client.post('/manager/register_account/', {
+        response = self.client.post(self.register_account_url, {
             'username': 'peter',
             'email': 'peter@example.com',
             'password1': 'pass0rdkms',
@@ -139,7 +139,7 @@ class AccountViewTest(TestCase):
 
         self.client.force_login(self.user1)
 
-        response = self.client.get('/manager/update_account/%s/' % self.user2.pk)
+        response = self.client.get('/manager/accounts/%s/change/' % self.user2.pk)
 
         self.assertEquals(response.status_code, 200)
 
@@ -149,7 +149,7 @@ class AccountViewTest(TestCase):
         """
         self.client.force_login(self.user1)
 
-        response = self.client.get('/manager/update_account/%s/' % 13123)
+        response = self.client.get('/manager/accounts/%s/change/' % 13123)
 
         self.assertEquals(response.status_code, 404)
 
@@ -160,7 +160,7 @@ class AccountViewTest(TestCase):
 
         self.client.force_login(self.user1)
 
-        response = self.client.post('/manager/update_account/%s/' % self.user2.pk, {
+        response = self.client.post('/manager/accounts/%s/change/' % self.user2.pk, {
           'username': 'pedro',
           'email': 'pedro357bm@gmail.com',
           'group': 'Admin'
@@ -180,7 +180,7 @@ class AccountViewTest(TestCase):
 
         self.client.force_login(self.user1)
 
-        response = self.client.get('/manager/delete_account/%s/' % self.user2.pk)
+        response = self.client.get('/manager/accounts/%s/delete/' % self.user2.pk)
 
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'managers/account_confirm_delete.html')
@@ -192,11 +192,27 @@ class AccountViewTest(TestCase):
 
         self.client.force_login(self.user1)
 
-        response = self.client.post('/manager/delete_account/%s/' % self.user2.pk)
+        response = self.client.post('/manager/accounts/%s/delete/' % self.user2.pk)
 
         self.assertRedirects(response, self.accounts_list_url)
         self.assertEquals(response.status_code, 302)
         self.assertEquals(User.objects.count(), 2)
+
+    def test_change_password_POST_can_change(self):
+        """
+        Admin can change account password
+        """
+
+        self.client.force_login(self.user1)
+
+        new_password = 'newsecurepassword1231'
+
+        data = {'password1': new_password, 'password2': new_password}
+        response = self.client.post('/manager/accounts/%s/password/' % self.user2.pk, data)
+
+        self.user2 = User.objects.get(pk=self.user2.pk)
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(self.user2.check_password(new_password), True)
 
     @staticmethod
     def user_data():
