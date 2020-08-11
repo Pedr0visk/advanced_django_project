@@ -3,8 +3,6 @@ from django.urls import reverse
 from django.contrib.auth.models import Group, User, Permission
 from django.contrib.contenttypes.models import ContentType
 
-from apps.managers.forms import UserForm
-
 
 class AccountViewTest(TestCase):
 
