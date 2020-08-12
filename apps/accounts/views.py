@@ -45,7 +45,7 @@ def password_change(request):
 
 
 def password_reset(request):
-    return render(request, 'accounts/password_reset_form.html')
+    return render(request, 'accounts/password_reset.html')
 
 
 @unauthenticated_user
