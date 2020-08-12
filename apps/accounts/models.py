@@ -22,7 +22,6 @@ def create_employer(sender, instance, created, **kwargs):
     if created:
         Employer.objects.create(user=instance)
         send_mail_registration(user=instance)
-        print('Employer created')
 
 
 # Mail Service

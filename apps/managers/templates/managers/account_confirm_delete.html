@@ -13,12 +13,12 @@
 {% block main %}
 <div class="container">
   <div class="section">
-    <h2>Delete {{ user.username }}?</h2>
+    <h2>Are you sure?</h2>
     <p class="mb-3">Are you sure you want to delete "{{ user.username }}"</p>
     <form method="POST">
       {% csrf_token %}
-      <button type="submit" class="btn btn-info">Yes</button>
-      <a href="{% url 'list_accounts' %}" class="btn btn-danger">Cancel</a>
+      <button type="submit" class="btn btn-danger">Yes, I'm </button>
+      <a href="{% url 'list_accounts' %}" class="btn btn-info">No, take me back</a>
     </form>
   </div>
 </div>

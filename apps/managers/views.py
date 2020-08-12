@@ -6,10 +6,8 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
 
-from .forms import UserForm, UserUpdateForm
+from .forms import UserForm, UserUpdateForm, UpdatePasswordForm
 from .decorators import allowed_users
-
-from apps.accounts.models import Employer
 
 
 @login_required(login_url='/manager/login/')
@@ -132,3 +130,25 @@ def logout_user(request):
 
 def unauthorized_page(request):
     return render(request, 'auth/unauthorized.html')
+
+
+@login_required(login_url='/manager/login/')
+@allowed_users(allowed_roles=['Admin'])
+def password_change(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    form = UpdatePasswordForm(user=user)
+
+    if request.method == 'POST':
+        form = UpdatePasswordForm(data=request.POST, user=user)
+        if form.is_valid():
+            form.save()
+
+            messages.success(request, 'Password changed successfully')
+            return redirect('list_accounts')
+
+    context = {
+        'user': user,
+        'form': form
+    }
+
+    return render(request, 'managers/password_form.html', context)

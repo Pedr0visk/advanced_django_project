@@ -1,16 +1,12 @@
-{% extends 'manager/base.html' %}
+{% extends 'base.html' %}
 
 {% block breadcrumb %}
 <a href="{% url 'dashboard' %}">Home</a>
 <span class="fa fa-chevron-right"></span>
-<a href="{% url 'list_accounts' %}">Users list</a>
-<span class=" fa fa-chevron-right"></span>
-<span class="current-page">Create new User </span>
+<span class="current-page"> Profile </span>
 {% endblock %}
 
-
 {% block main %}
-
 <div class="section bg-white">
   <div class="container">
     <div class="row">
@@ -56,7 +52,7 @@
           </div>
           <hr />
 
-          {% if request.path == '/manager/register_account/' %}
+          {% if request.path != '/profile/change/' %}
             <!-- password1 field -->
             <div class="form-group row">
               <label class="col-sm-2 col-form-label col-form-label-sm">Password</label>
@@ -92,7 +88,7 @@
               <label class="col-sm-2 col-form-label col-form-label-sm">Password</label>
               <div class="col-sm-8">
                 {{form.password}}
-                <a href="{% url 'change_password'  user.pk %}">
+                <a href="{% url 'password_change' %}">
                   <small class="form-text text-primary">
                    Change Password
                   </small>
@@ -101,30 +97,6 @@
             </div>
             <hr />
           {% endif %}
-
-          <!-- group field -->
-          <div class="form-group row">
-            <label class="col-sm-2 col-form-label col-form-label-sm">Group</label>
-            <div class="col-sm-5">
-              <select name="group" id="inputStateGroup" class="form-control form-control-sm">
-                <option selected> -- </option>
-
-                {% for group in groups %}
-                  {% if user.groups.all.0.name == group.name %}
-                  <option value="{{group.name}}" selected> {{group.name}} </option>
-                  {% else %}
-                  <option value="{{group.name}}"> {{group.name}} </option>
-                  {% endif %} 
-                {% endfor %}
-
-              </select>
-              <small class="form-text text-muted">
-                Required. Group field defines permissions for each kind of
-                user.
-              </small>
-            </div>
-          </div>
-          <hr />
 
           <div class="p-3 bg-light text-right">
             <a href="{% url 'manager' %}" class=" btn btn-default">
