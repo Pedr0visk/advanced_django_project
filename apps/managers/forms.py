@@ -14,7 +14,7 @@ class UserUpdateForm(UserChangeForm):
         fields = ['username', 'email', 'password']
 
 
-class PasswordUpdateForm(AdminPasswordChangeForm):
+class UpdatePasswordForm(AdminPasswordChangeForm):
     class Meta:
         model = User
         fields = ['password1', 'password2']

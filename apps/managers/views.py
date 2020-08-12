@@ -1,4 +1,3 @@
-from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
@@ -7,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
 
-from .forms import UserForm, UserUpdateForm, PasswordUpdateForm
+from .forms import UserForm, UserUpdateForm, UpdatePasswordForm
 from .decorators import allowed_users
 
 
@@ -137,10 +136,10 @@ def unauthorized_page(request):
 @allowed_users(allowed_roles=['Admin'])
 def password_change(request, pk):
     user = get_object_or_404(User, pk=pk)
-    form = PasswordUpdateForm(user=user)
+    form = UpdatePasswordForm(user=user)
 
     if request.method == 'POST':
-        form = PasswordUpdateForm(data=request.POST, user=user)
+        form = UpdatePasswordForm(data=request.POST, user=user)
         if form.is_valid():
             form.save()
 

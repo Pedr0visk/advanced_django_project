@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
 from .decorators import unauthenticated_user
-from .forms import UpdateProfileForm
+from .forms import UpdateProfileForm, UpdatePasswordForm
 
 
 @login_required(login_url='/login/')
@@ -23,6 +23,25 @@ def profile_update(request):
             return redirect('update_profile')
 
     return render(request, 'accounts/profile_form.html', context)
+
+
+@login_required(login_url='/login/')
+def password_change(request):
+    user = request.user
+    form = UpdatePasswordForm(user=user)
+
+    if request.method == 'POST':
+        form = UpdatePasswordForm(data=request.POST, user=user)
+
+        if form.is_valid():
+            updated_user = form.save()
+            login(request, updated_user)
+            messages.success(request, 'Password updated with success')
+
+            return redirect('update_profile')
+
+    context = {'form': form}
+    return render(request, 'accounts/password_form.html', context)
 
 
 @unauthenticated_user
