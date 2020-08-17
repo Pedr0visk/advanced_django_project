@@ -8,6 +8,7 @@ from django.contrib import messages
 
 from .forms import UserForm, UserUpdateForm, UpdatePasswordForm
 from .decorators import allowed_users
+from .filters import account_filter, AccountFilter
 
 
 @login_required(login_url='/manager/login/')
@@ -19,8 +20,10 @@ def dashboard(request):
 @login_required(login_url='/manager/login/')
 @allowed_users(allowed_roles=['Admin'])
 def account_list(request):
-    users = User.objects.all()
-    context = {'users': users, }
+
+    accounts = account_filter(request.GET)
+
+    context = {'accounts': accounts, }
     return render(request, 'managers/account_list.html', context)
 
 
