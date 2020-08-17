@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'apps.events',
     'apps.wells',
     'apps.certifications',
+
+    'django_filters'
 ]
 
 MIDDLEWARE = [
