@@ -21,8 +21,8 @@ class Campaign(models.Model):
         default=StatusCampaign.GREEN
     )
 
-    start_date = models.DateField()
-    end_date = models.DateField()
+    start_date = models.DateField(auto_now=True)
+    end_date = models.DateField(auto_now=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
