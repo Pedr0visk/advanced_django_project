@@ -13,4 +13,6 @@ urlpatterns = [
     path('accounts/<int:pk>/change/', views.account_update, name="update_account"),
     path('accounts/<int:pk>/delete/', views.account_delete, name="delete_account"),
     path('accounts/<int:pk>/password/', views.password_change, name="change_password"),
+
+    path('bops/', include('apps.bops.urls')),
 ]
