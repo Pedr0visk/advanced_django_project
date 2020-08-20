@@ -10,7 +10,7 @@ class Campaign(models.Model):
         RED = 'Red'
 
     name = models.CharField(max_length=100)
-    bop = models.ForeignKey(Bop, on_delete=models.PROTECT)
+    bop = models.ForeignKey(Bop, on_delete=models.PROTECT, related_name='campaigns')
     active = models.BooleanField(default=True)
     rig_name = models.CharField(max_length=100, null=True)
     description = models.TextField(blank=True, null=True)
@@ -29,3 +29,6 @@ class Campaign(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['-active', '-start_date']

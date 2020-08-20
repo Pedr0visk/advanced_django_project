@@ -14,3 +14,10 @@ def upload(request):
     return render(request, 'bops/bop_form.html', context)
 
 
+def campaigns_list(request, pk):
+    bop = Bop.objects.get(pk=pk)
+    campaigns = bop.campaigns.all()
+
+    context = {'bop': bop, 'campaigns': campaigns}
+    return render(request, 'bops/campaign_list.html', context)
+

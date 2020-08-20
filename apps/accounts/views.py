@@ -6,6 +6,8 @@ from django.contrib import messages
 from .decorators import unauthenticated_user
 from .forms import UpdateProfileForm, UpdatePasswordForm
 
+from apps.bops.models import Bop
+
 
 @login_required(login_url='/login/')
 def profile_update(request):
@@ -73,4 +75,7 @@ def logout_user(request):
 
 @login_required(login_url='login')
 def dashboard(request):
-    return render(request, 'accounts/dashboard.html')
+    bops = Bop.objects.all()
+
+    context = {'bops': bops}
+    return render(request, 'accounts/dashboard.html', context)

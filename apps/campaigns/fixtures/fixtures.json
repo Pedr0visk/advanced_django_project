@@ -15,7 +15,7 @@
     "pk": 1,
     "fields": {
       "name": "campaign 1",
-      "active": true,
+      "active": false,
       "bop": 1,
       "rig_name": "jupter",
       "description": "this is a short description",
@@ -47,7 +47,7 @@
     "pk": 3,
     "fields": {
       "name": "campaign 3",
-      "active": false,
+      "active": true,
       "bop": 1,
       "rig_name": "earth",
       "description": "this is a short description",
@@ -58,5 +58,4 @@
       "updated_at": "2020-06-01 00:00:00"
     }
   }
-
 ]
