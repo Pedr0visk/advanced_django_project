@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load manager_extras %}
+
+{% block breadcrumb %}
+<a href="{% url 'dashboard' %}">Home</a>
+<span class="fa fa-chevron-right"></span>
+  <a href="{% url 'dashboard' %}">Bop Name</a>
+<span class="fa fa-chevron-right"></span>
+<span class="current-page">Campaigns</span>
+{% endblock %}
+
+{% block main %}
+
+  <!-- main -->
+  <div class="main">
+  {% include './navbar.html' %}
+    <!-- management campaign -->
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <!-- table list of campaigns -->
+          <div class="col-12">
+            <div class="card">
+              <!-- card header -->
+              <div class="card-header">
+                <div class="d-flex">
+                  <h4 class="">
+                    Campaign History
+                  </h4>
+                  <div class="ml-auto">
+                    <a href="bop_campaign_form.html" class="btn btn-sm btn-success">
+                      <i class="fa fa-plus"></i> new campaign
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- card body -->
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table
+                    class="table m-0 table-hover dnv-table"
+                    id="campaignsTable"
+                  >
+                    <thead class="">
+                      <tr>
+                        <th scope="col" width="3%">order</th>
+                        <th scope="col" style="text-align: center;">
+                          status
+                        </th>
+                        <th scope="col" style="text-align: center;">campaign period</th>
+                        <th scope="col" style="text-align: center;">
+                          operation days
+                        </th>
+                        <th scope="col" style="text-align: center;">
+                          downtime days
+                        </th>
+                        <th scope="col" style="text-align: center;">
+                          actions
+                        </th>
+                    </thead>
+                    <tbody>
+                    {% for campaign in campaigns %}
+                    <tr>
+                      <!-- order -->
+                      <td scope="row" align="center"></td>
+                      <!-- status -->
+                      <td align="center">
+                        {% if campaign.active %}
+                          <div class="status-pointer status-active"></div>
+                        {% else %}
+                          <div class="status-pointer status-inactive"></div>
+                        {% endif %}
+                      </td>
+                      <!-- period -->
+                      <td align="center">
+                        {{ campaign.start_date }} <b>to</b>
+                        {% if campaign.active %}
+                          current date
+                        {% else %}
+                          {{ campaign.end_date }}
+                        {% endif %}
+                      </td>
+
+                      <!-- operation days -->
+                      <td align="center">
+                        53
+                      </td>
+                      <!-- downtime days -->
+                      <td align="center">
+                        2
+                        <p class="text-danger">
+                          20%
+                        </p>
+                      </td>
+                      <!-- edit -->
+                      <td align="center">
+                        <a href="" class="btn btn-sm btn-danger"
+                          >events
+                          <span class="badge badge-light">4</span></a
+                        >
+                        <a href="" class="btn btn-sm btn-secondary"
+                          ><i class="fa fa-edit"></i
+                        > edit</a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- card footer -->
+              <div class="card-footer">
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination m-0">
+                    <li class="page-item disabled">
+                      <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                    <li class="page-item active">
+                      <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- main -->
+
+  <!-- scripts -->
+  <script
+    src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"
+  ></script>
+
+{% endblock %}
