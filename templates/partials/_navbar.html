@@ -59,17 +59,17 @@
                 Bop</a>
             </li>
             {% if user.groups.all.0.name != "Operator" %}
-           <li class="nav-item">
-              <a href="" class="nav-link">
-                <i class="fa fa-cog"></i>
-                Admin</a>
+            <li class="nav-item">
+              <a href="{% url 'manager' %}" class="nav-link">
+              <i class="fa fa-cog"></i>
+              Admin</a>
             </li>
             {% endif %}
           </ul>
           <form class="form-inline my-2 my-lg-0">
             <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search bop"
               aria-label="Search">
-            <button class="btn btn-sm btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <button class="btn btn-sm btn-primary my-2 my-sm-0" type="submit">Search</button>
           </form>
           <div class="d-block d-sm-none bg-black">
             <a href="" class="text-white btn btn-info">

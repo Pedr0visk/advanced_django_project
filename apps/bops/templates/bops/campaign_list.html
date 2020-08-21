@@ -13,7 +13,7 @@
 
   <!-- main -->
   <div class="main">
-  {% include './navbar.html' %}
+    {% include './operator_subnav.html' %}
     <!-- management campaign -->
     <div class="section">
       <div class="container">
@@ -22,9 +22,9 @@
           <div class="col-12">
             <div class="card">
               <!-- card header -->
-              <div class="card-header">
-                <div class="d-flex">
-                  <h4 class="">
+              <div class="card-header bg-quinary">
+                <div class="d-flex align-items-center">
+                  <h4 class="text-white m-0">
                     Campaign History
                   </h4>
                   <div class="ml-auto">
@@ -95,13 +95,13 @@
                       </td>
                       <!-- edit -->
                       <td align="center">
-                        <a href="" class="btn btn-sm btn-danger"
+                        <a href="" class="btn btn-sm btn-info"
                           >events
                           <span class="badge badge-light">4</span></a
                         >
-                        <a href="" class="btn btn-sm btn-secondary"
-                          ><i class="fa fa-edit"></i
-                        > edit</a>
+                        <a href="" class="btn btn-sm btn-warning">
+                          <i class="fa fa-edit"></i> edit
+                        </a>
                       </td>
                     </tr>
                     {% endfor %}
