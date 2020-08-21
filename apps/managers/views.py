@@ -10,17 +10,21 @@ from .forms import UserForm, UserUpdateForm, UpdatePasswordForm
 from .decorators import allowed_users
 from .filters import account_filter, AccountFilter
 
+from apps.bops.models import Bop
+
 
 @login_required(login_url='/manager/login/')
 @allowed_users(allowed_roles=['Admin'])
 def dashboard(request):
-    return render(request, 'managers/dashboard.html')
+    bops = Bop.objects.all()
+
+    context = {'bops': bops}
+    return render(request, 'managers/dashboard.html', context)
 
 
 @login_required(login_url='/manager/login/')
 @allowed_users(allowed_roles=['Admin'])
 def account_list(request):
-
     accounts = account_filter(request.GET)
 
     context = {'accounts': accounts, }

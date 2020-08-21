@@ -9,11 +9,15 @@
 <div class="section" id="home">
   <div class="container">
     <div class="row">
+
+      <!-- BOP's table list -->
       <div class="col-sm-8 col-12">
-        <!-- BOP's table list -->
         <div class="card">
+          <div class="card-header bg-quinary">
+            <h4 class="text-white m-0">Bop Resume</h4>
+          </div>
           <div class="card-body">
-            <table class="table dnv-table">
+            <table class="table bop-table">
               <thead class="">
                 <tr>
                   <th scope="col">#</th>
@@ -24,36 +28,62 @@
                 </tr>
               </thead>
               <tbody>
+              {% for bop in bops %}
                 <tr>
-                  <td scope="row">1</td>
-                  <td>Buzz</td>
-                  <td>Ao infinito e além</td>
-                  <td>F9820B</td>
+                  <td scope="row">{{ bop.id }}</td>
+                  <td>{{ bop.name }}</td>
+                  <td class="description" width="40%">{{ bop.description }}</td>
+                  <td>{{ bop.code }}</td>
                   <td align="center">
-                    <a href="" class="btn btn-sm btn-icon"><i class="fa fa-edit"></i></a>
-                    <a href="" class="btn btn-sm btn-icon">show campaigns</a>
-                    <a href="" class="btn btn-sm btn-icon">show results
-                      <span class="badge badge-light">4</span></a>
+                    <a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
+                    <a href="{% url 'list_bop__campaigns' bop.id %}" class="btn btn-sm btn-danger">campaigns</a>
                   </td>
                 </tr>
-
-                <tr>
-                  <td scope="row">1</td>
-                  <td>Blit</td>
-                  <td>Ao infinito e além</td>
-                  <td>F9820B</td>
-                  <td align="center">
-                    <a href="" class="btn btn-sm btn-icon"><i class="fa fa-edit"></i></a>
-                    <a href="" class="btn btn-sm btn-icon">show campaigns</a>
-                    <a href="" class="btn btn-sm btn-icon">show results
-                      <span class="badge badge-light">4</span></a>
-                  </td>
-                </tr>
+              {% endfor %}
               </tbody>
             </table>
           </div>
         </div>
       </div>
+
+      <!-- Active Campaigns list -->
+      <div class="col-sm-4 col-12">
+        <div class="card">
+          <div class="card-header bg-quinary">
+            <h4 class="text-white m-0">Active Campaigns</h4>
+          </div>
+          <div class="card-body">
+            <table class="table">
+              <thead class="">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">End Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td scope="row">1</td>
+                  <td><a href="">Júpter Collapse</a></td>
+                  <td>31/08/2020</td>
+                </tr>
+                <tr>
+                  <td scope="row">2</td>
+                  <td><a href="">Júpter Collapse</a></td>
+                  <td>31/08/2020</td>
+                </tr>
+                <tr>
+                  <td scope="row">3</td>
+                  <td><a href="">Júpter Collapse</a></td>
+                  <td>31/08/2020</td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
   <!-- ./ container -->

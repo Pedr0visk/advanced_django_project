@@ -6,79 +6,88 @@
 
 {% block main %}
 
-<div class="dashboard-welcome">
+<!-- section bop list -->
+<div class="section" id="home">
   <div class="container">
-    <div class="welcome-header section">
-      <h4>Welcome, Pedro</h4>
-      <p>It's always a pleasure</p>
-    </div>
-    <div class="welcome-content">
-      <div class="row">
-        <!-- start widgets -->
-        <div class="col-sm-4 col-12">
-          <div class="card box-shadow">
-            <div class="card-body">
-              <div class="widget">
-                <div class="widget-content-left">
-                  <p class="widget-title">Users</p>
-                  <p class="widget-desc">TOTAL</p>
-                  <p class="widget-count text-primary">30</p>
-                  <a href="#" class="btn btn-sm btn-primary">click here</a>
-                </div>
-                <div class="widget-content-right">
-                  <div class="widget-icon">
-                    <i class="fa fa-hard-hat"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div class="row">
 
-        <!-- widget -->
-        <div class="col-sm-4 col-12">
-          <div class="card box-shadow">
-            <div class="card-body">
-              <div class="widget">
-                <div class="widget-content-left">
-                  <p class="widget-title">Safety Functions</p>
-                  <p class="widget-desc">TOTAL</p>
-                  <p class="widget-count text-success">12</p>
-                  <a href="#" class="btn btn-sm btn-success">click here</a>
-                </div>
-                <div class="widget-content-right">
-                  <div class="widget-icon">
-                    <i class="fa fa-users"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
+      <!-- BOP's table list -->
+      <div class="col-sm-8 col-12">
+        <div class="card">
+          <div class="card-header bg-quinary">
+            <h4 class="text-white m-0">Bop Resume</h4>
+          </div>
+          <div class="card-body">
+            <table class="table bop-table">
+              <thead class="">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Code</th>
+                  <th style="text-align: center;">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for bop in bops %}
+                <tr>
+                  <td scope="row">{{ bop.id }}</td>
+                  <td>{{ bop.name }}</td>
+                  <td class="description" width="40%">{{ bop.description }}</td>
+                  <td>{{ bop.code }}</td>
+                  <td align="center">
+                    <a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
+                    <a href="{% url 'list_bop__campaigns' bop.id %}" class="btn btn-sm btn-danger">campaigns</a>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
           </div>
         </div>
-
-        <!-- widget -->
-        <div class="col-sm-4 col-12">
-          <div class="card box-shadow">
-            <div class="card-body">
-              <div class="widget">
-                <div class="widget-content-left">
-                  <p class="widget-title">Failures</p>
-                  <p class="widget-desc">TOTAL</p>
-                  <p class="widget-count text-danger">2</p>
-                  <a href="#" class="btn btn-sm btn-danger">click here</a>
-                </div>
-                <div class="widget-content-right">
-                  <div class="widget-icon">
-                    <i class="fa fa-bug"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- ./ widgets -->
       </div>
+
+      <!-- Active Campaigns list -->
+      <div class="col-sm-4 col-12">
+        <div class="card">
+          <div class="card-header bg-quinary">
+            <h4 class="text-white m-0">Active Campaigns</h4>
+          </div>
+          <div class="card-body">
+            <table class="table">
+              <thead class="">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">End Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td scope="row">1</td>
+                  <td><a href="">Júpter Collapse</a></td>
+                  <td>31/08/2020</td>
+                </tr>
+                <tr>
+                  <td scope="row">2</td>
+                  <td><a href="">Júpter Collapse</a></td>
+                  <td>31/08/2020</td>
+                </tr>
+                <tr>
+                  <td scope="row">3</td>
+                  <td><a href="">Júpter Collapse</a></td>
+                  <td>31/08/2020</td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
+  <!-- ./ container -->
 </div>
+<!-- ./ section -->
 {% endblock %}
