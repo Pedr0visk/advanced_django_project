@@ -145,3 +145,5 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
 SITE_EMAIL = 'bop@example.com'
+
+LOGIN_URL='/login/'

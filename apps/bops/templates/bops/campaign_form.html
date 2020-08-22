@@ -4,12 +4,13 @@
 {% block breadcrumb %}
   <a href="{% url 'dashboard' %}">Home</a>
   <span class="fa fa-chevron-right"></span>
-  <a href="{% url 'dashboard' %}">Bop Name</a>
+  <a href="{% url 'list_bop__campaigns' pk=bop.pk %}">Bop: {{ bop.name }}</a>
   <span class="fa fa-chevron-right"></span>
-  <span class="current-page">Campaigns</span>
+  <span class="current-page">Add new campaign</span>
 {% endblock %}
 
 {% block main %}
+  {% include './operator_subnav.html' %}
   <div class="section bg-white">
     <div class="container">
       <div class="row">
@@ -54,7 +55,7 @@
               <div class="col-sm-5">
                 {{ form.description }}
                 <small class="form-text text-muted">
-                  Required.
+                  Optional.
                 </small>
               </div>
             </div>

@@ -46,10 +46,6 @@ def password_change(request):
     return render(request, 'accounts/password_form.html', context)
 
 
-def password_reset(request):
-    return render(request, 'accounts/password_reset.html')
-
-
 @unauthenticated_user
 def login_page(request):
     if request.method == 'POST':

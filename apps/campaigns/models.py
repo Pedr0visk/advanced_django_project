@@ -12,8 +12,8 @@ class Campaign(models.Model):
     name = models.CharField(max_length=100)
     bop = models.ForeignKey(Bop, on_delete=models.PROTECT, related_name='campaigns')
     active = models.BooleanField(default=True)
-    rig_name = models.CharField(max_length=100, null=True)
-    well_name = models.CharField(max_length=100, null=True)
+    rig_name = models.CharField(max_length=100)
+    well_name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
 
     status = models.CharField(
