@@ -4,7 +4,7 @@
 {% block breadcrumb %}
 <a href="{% url 'dashboard' %}">Home</a>
 <span class="fa fa-chevron-right"></span>
-  <a href="{% url 'dashboard' %}">Bop Name</a>
+  <a href="{% url 'list_bop__campaigns' pk=bop.pk %}">Bop: {{ bop.name }}</a>
 <span class="fa fa-chevron-right"></span>
 <span class="current-page">Campaigns</span>
 {% endblock %}
@@ -17,6 +17,11 @@
     <!-- management campaign -->
     <div class="section">
       <div class="container">
+      {% for message in messages %}
+      <div class="col-12 text-center">
+        <p id="messages" class="alert alert-success">{{ message }}</p>
+      </div>
+      {% endfor %}
         <div class="row">
           <!-- table list of campaigns -->
           <div class="col-12">
@@ -28,7 +33,7 @@
                     Campaign History
                   </h4>
                   <div class="ml-auto">
-                    <a href="bop_campaign_form.html" class="btn btn-sm btn-success">
+                    <a href="{% url 'create_campaign' bop.id %}" class="btn btn-sm btn-success">
                       <i class="fa fa-plus"></i> new campaign
                     </a>
                   </div>
@@ -143,22 +148,5 @@
     </div>
   </div>
   <!-- main -->
-
-  <!-- scripts -->
-  <script
-    src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"
-  ></script>
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"
-  ></script>
-  <script
-    src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"
-  ></script>
 
 {% endblock %}

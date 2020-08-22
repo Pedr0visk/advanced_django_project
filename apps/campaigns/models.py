@@ -12,7 +12,8 @@ class Campaign(models.Model):
     name = models.CharField(max_length=100)
     bop = models.ForeignKey(Bop, on_delete=models.PROTECT, related_name='campaigns')
     active = models.BooleanField(default=True)
-    rig_name = models.CharField(max_length=100, null=True)
+    rig_name = models.CharField(max_length=100)
+    well_name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
 
     status = models.CharField(
@@ -21,8 +22,8 @@ class Campaign(models.Model):
         default=StatusCampaign.GREEN
     )
 
-    start_date = models.DateField(auto_now=True)
-    end_date = models.DateField(auto_now=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

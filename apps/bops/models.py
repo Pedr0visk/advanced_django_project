@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Bop(models.Model):
-    code = models.CharField(max_length=8)
+    code = models.CharField(max_length=8, unique=True)
     name = models.CharField(max_length=100)
     description = models.TextField(null=True)
 
