@@ -1,14 +1,42 @@
-FROM python:3.7.9
+# Base Image
+FROM python:3.8
 
-WORKDIR /zezinho
-COPY apps /zezinho/apps
-COPY bop /zezinho/bop
-COPY static /zezinho/static
-COPY templates /zezinho/templates
-COPY manage.py /zezinho
+# create and set working directory
+RUN mkdir /app
+WORKDIR /app
 
-COPY requirements.txt /zezinho
+# Add current directory code to working directory
+ADD . /app/
 
-RUN pip install -r requirements.txt
+# set default environment variables
+ENV PYTHONUNBUFFERED 1
+ENV LANG C.UTF-8
+ENV DEBIAN_FRONTEND=noninteractive
 
-CMD [ "/usr/local/bin/python", "manage.py", "runserver" ]
+# set project environment variables
+# grab these via Python's os.environ
+# these are 100% optional here
+ENV PORT=8888
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  tzdata \
+  python3-setuptools \
+  python3-pip \
+  python3-dev \
+  python3-venv \
+  git \
+  && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
+
+# install environment dependencies
+RUN pip3 install --upgrade pip
+RUN pip3 install pipenv
+
+# Install project dependencies
+RUN pipenv install --skip-lock --system --dev
+
+EXPOSE 8888
+CMD gunicorn bop.wsgi:application --bind 0.0.0.0:$PORT
