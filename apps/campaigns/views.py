@@ -21,5 +21,5 @@ def campaign_update(request, bop_pk, campaign_pk):
         messages.success(request, 'Campaign updated successfully!')
         return redirect('list_bop__campaigns', pk=bop_pk)
 
-    context = {'form': form, 'bop': bop}
+    context = {'form': form, 'bop': bop, 'campaign': campaign}
     return render(request, 'campaigns/campaign_form.html', context)

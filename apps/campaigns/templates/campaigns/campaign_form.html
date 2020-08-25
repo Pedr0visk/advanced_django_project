@@ -6,7 +6,12 @@
   <span class="fa fa-chevron-right"></span>
   <a href="{% url 'list_bop__campaigns' pk=bop.pk %}">Bop: {{ bop.name }}</a>
   <span class="fa fa-chevron-right"></span>
-  <span class="current-page">Add new campaign</span>
+  {% if campaign %}
+    <span class="current-page">{{ campaign.name }}</span>
+  {% else %}
+    <span class="current-page">Add new campaign</span>
+  {% endif %}
+
 {% endblock %}
 
 {% block main %}
@@ -62,20 +67,9 @@
             <hr/>
 
             <div class="form-group row">
-              <label class="col-sm-2 col-form-label col-form-label-sm">Status:</label>
-              <div class="col-sm-3">
-                {{ form.status }}
-                <small class="form-text text-muted">
-                  Required.
-                </small>
-              </div>
-            </div>
-            <hr/>
-
-            <div class="form-group row">
               <label class="col-sm-2 col-form-label col-form-label-sm">Active:</label>
               <div class="col-sm-5">
-                <input type="checkbox" name="active" id="id_active" class="">
+                {{ form.active }}
                 <small class="form-text text-muted">
                   Required.
                 </small>

@@ -32,10 +32,10 @@ class Component(models.Model):
 
 
 class FailureMode(models.Model):
+    name = models.CharField(max_length=255)
     code = models.CharField(max_length=50, unique=True)
     component = models.ForeignKey(Component, on_delete=models.CASCADE, related_name='failures_mode')
     failure_mode = models.ForeignKey('self', on_delete=models.PROTECT, related_name='failure_children')
-    name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
@@ -52,4 +52,3 @@ class SafetyFunction(models.Model):
 class Cut(models.Model):
     safety_function = models.ForeignKey(SafetyFunction, on_delete=models.CASCADE)
     failures_mode = models.TextField()
-

@@ -10,7 +10,6 @@ class CampaignForm(ModelForm):
                   'active',
                   'rig_name',
                   'well_name',
-                  'status',
                   'start_date',
                   'end_date']
         widgets = {

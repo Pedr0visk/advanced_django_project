@@ -87,7 +87,6 @@ class CampaignViewTest(TestCase):
 
         data = self.campaign_data()
         data['name'] = 'Campaign 1 edited'
-        data['status'] = 'Orange'
         data['start_date'] = '2020-08-31'
 
         response = self.client.post('/bops/1/campaigns/{}/change/'.format(self.campaign.pk), data)
@@ -98,7 +97,6 @@ class CampaignViewTest(TestCase):
 
         self.assertEquals(updated_campaign.name, data['name'])
         self.assertEquals(updated_campaign.active, False)
-        self.assertEquals(updated_campaign.status, data['status'])
         self.assertEquals(updated_campaign.start_date.isoformat(), data['start_date'])
 
     @staticmethod
@@ -109,7 +107,6 @@ class CampaignViewTest(TestCase):
         return {
             'name': 'first campaign',
             'description': 'some short description',
-            'status': 'Green',
             'well_name': 'well 1',
             'rig_name': 'rig 1',
             'active': False,
