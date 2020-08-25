@@ -1,10 +1,16 @@
 from django.db import models
 
 
+class Rig(models.Model):
+    name = models.CharField(max_length=100)
+
+
 class Bop(models.Model):
     code = models.CharField(max_length=8, unique=True)
     name = models.CharField(max_length=100)
-    description = models.TextField(null=True)
+    rig = models.ForeignKey(Rig,
+                            on_delete=models.PROTECT,
+                            null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -13,19 +19,32 @@ class Bop(models.Model):
         return self.name
 
 
+class Certification(models.Model):
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    bop = models.ForeignKey(Bop,
+                            on_delete=models.CASCADE,
+                            related_name="certifications")
+
+    def __str__(self):
+        return '{} {} certification'.format(self.pk, self.bop.name)
+
+
 class Subsystem(models.Model):
-    code = models.CharField(max_length=50, unique=True)
-    bop = models.ForeignKey(Bop, on_delete=models.CASCADE, related_name='subsystems')
     name = models.CharField(max_length=255)
+    code = models.CharField(max_length=50, unique=True)
+    bop = models.ForeignKey(Bop,
+                            on_delete=models.CASCADE,
+                            related_name='subsystems')
 
     def __str__(self):
         return self.name
 
 
 class Component(models.Model):
+    name = models.CharField(max_length=255)
     code = models.CharField(max_length=50, unique=True)
     subsystem = models.ForeignKey(Subsystem, on_delete=models.CASCADE, related_name='components')
-    name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name

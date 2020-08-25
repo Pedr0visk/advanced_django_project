@@ -10,10 +10,6 @@ from apps.campaigns.forms import CampaignForm
 
 def upload(request):
     form = BopForm()
-
-    if request.method == 'POST':
-        file = request.POST['file']
-
     context = {'form': form}
     return render(request, 'bops/bop_form.html', context)
 
