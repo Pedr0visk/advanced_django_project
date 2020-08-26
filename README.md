@@ -1,2 +1,7 @@
-reader user
+distribution = {
+    "type": "weibull",
+    "form": "1.4",
+    "scale": "250000",
+    "time_unit": "hours"
+}
 

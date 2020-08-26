@@ -5,4 +5,4 @@ from .models import Bop
 class BopForm(ModelForm):
     class Meta:
         model = Bop
-        fields = '__all__'
+        fields = ['name', 'rig']

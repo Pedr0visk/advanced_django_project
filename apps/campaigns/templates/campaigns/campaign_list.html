@@ -1,16 +1,40 @@
 {% extends 'base.html' %}
 {% load manager_extras %}
 
-{% block breadcrumb %}
-<a href="{% url 'dashboard' %}">Home</a>
-<span class="fa fa-chevron-right"></span>
-  <a href="{% url 'list_bop__campaigns' pk=bop.pk %}">Bop: {{ bop.name }}</a>
-<span class="fa fa-chevron-right"></span>
-<span class="current-page">Campaigns</span>
+{% block nav_bop %}
+  <li class="nav-item active">
+    <a href="{% url 'list_campaigns' bop_pk=bop.pk %}" class="nav-link">
+      <i class="fa fa-chess-rook"></i>
+      Campaings <span class="sr-only">(current)</span></a>
+  </li>
+  <li class="nav-item">
+    <a href="" class="nav-link">
+      <i class="fas fa-folder-open"></i>
+      Summary of Results</a>
+  </li>
+  <li class="nav-item">
+    <a href="" class="nav-link">
+      <i class="fa fa-poll"></i>
+      Detailed Results</a>
+  </li>
+  <li class="nav-item">
+    <a href="" class="nav-link">
+      <i class="fa fa-sitemap"></i>
+      Hierarchy</a>
+  </li>
+  <li class="nav-item">
+    <a href="" class="nav-link">
+      <i class="fa fa-clipboard-list"></i>
+      Event Logger</a>
+  </li>
+  <li class="nav-item">
+    <a href="" class="nav-link">
+      <i class="fa fa-vial"></i>
+      Test Planner</a>
+  </li>
 {% endblock %}
 
 {% block main %}
-
   <!-- main -->
   <div class="main">
     {% include './operator_subnav.html' %}
