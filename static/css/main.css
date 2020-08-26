@@ -10537,7 +10537,7 @@ h3 {
 */
 #headerTopbar {
   background-color: #262626;
-  font-size: 13px;
+  font-size: 12px;
 }
 #headerTopbar nav.navbar {
   padding: 0;
@@ -10572,10 +10572,10 @@ h3 {
 }
 .main-header .navbar .navbar-nav .nav-item.active .nav-link, .main-header .navbar .navbar-nav .nav-item:hover .nav-link {
   transition: ease-in 0.1s;
-  color: #315a84;
+  color: seagreen;
 }
 .main-header .navbar .navbar-nav .nav-item .nav-link {
-  color: #495057;
+  color: #343a40;
 }
 
 .main-header-2 .navbar .navbar-nav .nav-item.active .nav-link, .main-header-2 .navbar .navbar-nav .nav-item:hover .nav-link {
@@ -10597,13 +10597,13 @@ h3 {
 .page-title {
   background-color: #343a40;
   border-bottom: 1px solid #e6e6e6;
-  padding: 0.75rem 0;
+  padding: 0.5rem 0;
   box-shadow: 0px 2px 6px rgba(164, 213, 236, 0.2);
 }
 .page-title .page-title-wrapper-2 {
   display: flex;
   justify-content: flex-start;
-  font-size: 15px;
+  font-size: 14px;
   color: #6c757d;
 }
 .page-title .page-title-wrapper-2 .page-title-heading-2 .current-page {
@@ -10784,3 +10784,4 @@ table td {
   background-color: #315a84;
 }
 
+/*# sourceMappingURL=main.css.map */
