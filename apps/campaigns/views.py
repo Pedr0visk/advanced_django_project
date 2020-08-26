@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
@@ -22,4 +23,31 @@ def campaign_update(request, bop_pk, campaign_pk):
         return redirect('list_bop__campaigns', pk=bop_pk)
 
     context = {'form': form, 'bop': bop, 'campaign': campaign}
+    return render(request, 'campaigns/campaign_form.html', context)
+
+
+@login_required
+def campaign_list(request, bop_pk):
+    bop = Bop.objects.get(pk=bop_pk)
+    campaigns = bop.campaigns.all()
+
+    context = {'bop': bop, 'campaigns': campaigns}
+    return render(request, 'campaigns/campaign_list.html', context)
+
+
+@login_required
+def campaign_create(request, bop_pk):
+    form = CampaignForm()
+    bop = Bop.objects.get(pk=bop_pk)
+
+    if request.method == 'POST':
+        form = CampaignForm(request.POST)
+        campaign = form.save(commit=False)
+        campaign.bop = bop
+        campaign.save()
+
+        messages.success(request, 'Campaign created successfully')
+        return redirect('list_bop__campaigns', pk=bop_pk)
+
+    context = {'form': form, 'bop': bop}
     return render(request, 'campaigns/campaign_form.html', context)

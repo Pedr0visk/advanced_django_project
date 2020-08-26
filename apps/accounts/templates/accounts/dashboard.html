@@ -1,9 +1,5 @@
 {% extends 'base.html' %}
 
-{% block breadcrumb %}
-<span> Home </span>
-{% endblock %}
-
 {% block main %}
 <!-- section bop list -->
 <div class="section" id="home">
@@ -36,7 +32,7 @@
                   <td>{{ bop.code }}</td>
                   <td align="center">
                     <a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
-                    <a href="{% url 'list_bop__campaigns' bop.id %}" class="btn btn-sm btn-danger">campaigns</a>
+                    <a href="{% url 'list_campaigns' bop.id %}" class="btn btn-sm btn-danger">campaigns</a>
                   </td>
                 </tr>
               {% endfor %}
