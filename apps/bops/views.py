@@ -11,6 +11,7 @@ from apps.campaigns.forms import CampaignForm
 def upload(request):
     form = BopForm()
     context = {'form': form}
+
     return render(request, 'bops/bop_form.html', context)
 
 
