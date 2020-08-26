@@ -27,14 +27,13 @@
               class="form-control mr-sm-2 form-control-sm"
               name="username"
               type="search"
-              value="{{ request.GET.username }}"
               placeholder="Search"
               aria-label="Search" />
             <button class="btn btn-info my-2 my-sm-0 btn-sm" type="submit">
               <i class="fa fa-search"></i> Search
             </button>
           </form>
-          <a href="{% url 'register_account' %}" class=" btn btn-success ml-auto btn-sm"><i
+          <a href="" class=" btn btn-success ml-auto btn-sm"><i
               class="fa fa-plus text-white"></i>
             new account</a>
           </div>
@@ -46,9 +45,9 @@
               <thead class="">
                 <tr>
                   <th scope="col" width="3%">#</th>
-                  <th scope="col">username</th>
-                  <th scope="col">email</th>
-                  <th scope="col">role</th>
+                  <th scope="col">name</th>
+                  <th scope="col">rig name</th>
+                  <th scope="col">well name</th>
                   <th scope="col" style="text-align: center;">
                     created_at
                   </th>
@@ -59,19 +58,19 @@
                 </tr>
               </thead>
               <tbody>
-                {% for account in accounts %}
+                {% for bop in bops %}
                 <tr>
                   <td scope="row" align="center">1</td>
-                  <td>{{account.username}}</td>
-                  <td>{{account.email}}</td>
-                  <td>{{ account.groups.all.0 }}</td>
-                  <td align="center">20-03-2020</td>
-                  <td align="center">21-05-2020</td>
+                  <td>{{bop.name}}</td>
+                  <td></td>
+                  <td></td>
+                  <td align="center">{{ bop.created_at }}</td>
+                  <td align="center">{{ bop.updated_at }}</td>
                   <!-- edit -->
                   <td align="center">
                     <div class="btn-group-actions">
-                      <a href="{% url 'update_account' account.pk %}" class="btn btn-action btn-sm"><i class="fa fa-user-edit"></i></a>
-                      <a href="{% url 'delete_account' account.pk %}" class="btn btn-action btn-sm"><i class="fa fa-trash"></i></a>
+                      <a href="" class="btn btn-action btn-sm"><i class="fa fa-user-edit"></i></a>
+                      <a href="" class="btn btn-action btn-sm"><i class="fa fa-trash"></i></a>
                     </div>
                   </td>
                 </tr>
