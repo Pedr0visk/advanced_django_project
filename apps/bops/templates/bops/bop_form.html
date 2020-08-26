@@ -1,12 +1,22 @@
 {% extends 'manager/base.html' %}
 
 {% block breadcrumb %}
-  <a href="{% url 'dashboard' %}">Home</a>
-  <span class="fa fa-chevron-right"></span>
-  <a href="{% url 'list_accounts' %}">Bop list</a>
-  <span class=" fa fa-chevron-right"></span>
-  <span class="current-page">Create new Bop </span>
+  <!-- breadcrumb -->
+  <div class="page-title">
+    <div class="container">
+      <div class="page-title-wrapper-2">
+        <div class="page-title-heading-2">
+          <a href="{% url 'dashboard' %}">Home</a>
+          <span class="fa fa-chevron-right"></span>
+          <a href="{% url 'list_accounts' %}">Users list</a>
+          <span class=" fa fa-chevron-right"></span>
+          <span class="current-page">Create new User </span>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
+
 
 
 {% block main %}
@@ -42,14 +52,18 @@
             <!-- description field -->
             <div class="form-group row">
               <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Rig</label>
-              <div class="col-sm-5">
+              <div class="col-sm-3">
 
                 {{ form.rig }}
                 <small class="form-text text-muted">
                   Required.
                 </small>
-                <small class="form-text text-danger">
-                </small>
+              </div>
+              <div class="col-sm-2">
+                <div class="">
+                  <a href="" class="btn btn-sm btn-info"><i class="fa fa-plus"></i></a>
+                  <a href="" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                </div>
               </div>
             </div>
             <hr/>
@@ -91,6 +105,13 @@
       // customization of form fields
       for (var field in form_fields) {
           if (form_fields[field].type == 'file') continue
+          form_fields[field].className += 'form-control form-control-sm'
+      }
+
+      // Query all selects fields
+      var form_fields = document.getElementsByTagName('select')
+      // customization of form fields
+      for (var field in form_fields) {
           form_fields[field].className += 'form-control form-control-sm'
       }
   </script>
