@@ -34,8 +34,8 @@ class Certification(models.Model):
 
 
 class Subsystem(models.Model):
+    code = models.CharField(max_length=255, primary_key=True)
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=255, unique=True)
     bop = models.ForeignKey(Bop,
                             on_delete=models.CASCADE,
                             related_name='subsystems')
@@ -45,8 +45,8 @@ class Subsystem(models.Model):
 
 
 class Component(models.Model):
+    code = models.CharField(max_length=255, primary_key=True)
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=255, unique=True)
     subsystem = models.ForeignKey(Subsystem, on_delete=models.CASCADE, related_name='components')
 
     def __str__(self):
@@ -84,8 +84,8 @@ class TestGroup(models.Model):
 
 
 class FailureMode(models.Model):
+    code = models.CharField(max_length=50, primary_key=True)
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=50, unique=True)
     group = models.ForeignKey(TestGroup,
                               on_delete=models.DO_NOTHING,
                               blank=True,
