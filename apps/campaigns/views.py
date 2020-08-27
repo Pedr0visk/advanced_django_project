@@ -20,7 +20,7 @@ def campaign_update(request, bop_pk, campaign_pk):
         campaign.save()
 
         messages.success(request, 'Campaign updated successfully!')
-        return redirect('list_bop__campaigns', pk=bop_pk)
+        return redirect('list_campaigns', bop_pk=bop_pk)
 
     context = {'form': form, 'bop': bop, 'campaign': campaign}
     return render(request, 'campaigns/campaign_form.html', context)
@@ -47,7 +47,7 @@ def campaign_create(request, bop_pk):
         campaign.save()
 
         messages.success(request, 'Campaign created successfully')
-        return redirect('list_bop__campaigns', pk=bop_pk)
+        return redirect('list_campaigns', bop_pk=bop_pk)
 
     context = {'form': form, 'bop': bop}
     return render(request, 'campaigns/campaign_form.html', context)

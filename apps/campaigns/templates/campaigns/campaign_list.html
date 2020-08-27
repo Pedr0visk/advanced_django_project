@@ -34,6 +34,26 @@
   </li>
 {% endblock %}
 
+{% block breadcrumb %}
+  <div class="page-title">
+    <div class="container">
+      <div class="page-title-wrapper-2">
+        <div class="page-title-heading-2">
+          <a href="{% url 'dashboard' %}">Home</a>
+          <span class="fa fa-chevron-right"></span>
+          <a href="{% url 'list_campaigns' bop.pk %}">Bop: {{ bop.name }}</a>
+          <span class="fa fa-chevron-right"></span>
+          {% if campaign %}
+            <span class="current-page">{{ campaign.name }}</span>
+          {% else %}
+            <span class="current-page">Add new campaign</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
 {% block main %}
   <!-- main -->
   <div class="main">

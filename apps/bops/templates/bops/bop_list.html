@@ -77,7 +77,7 @@
                 {% for bop in bops %}
                   <tr>
                     <td scope="row" align="center">{{ bop.pk }}</td>
-                    <td><a href="">{{ bop.name }}</a></td>
+                    <td><a href="{% url 'update_bop' pk=bop.pk %}">{{ bop.name }}</a></td>
                     <td></td>
                     <td></td>
                     <td align="center">{{ bop.created_at }}</td>

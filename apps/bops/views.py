@@ -38,6 +38,10 @@ def bop_list(request):
     return render(request, 'bops/bop_list.html', context)
 
 
+@allowed_users(allowed_roles=['Admin'])
 def bop_update(request, pk):
-    fm = FailureMode.objects.get(pk=1430)
-    return HttpResponse(fm.distribution['cycle']['limit'])
+    bop = Bop.objects.get(pk=pk)
+    form = BopForm(instance=bop)
+    context = {'form': form}
+
+    return render(request, 'bops/bop_form.html', context)
