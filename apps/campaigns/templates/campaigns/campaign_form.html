@@ -76,17 +76,6 @@
           <form method="POST">
             {% csrf_token %}
             <div class="form-group row">
-              <label class="col-sm-2 col-form-label col-form-label-sm">Rig Name:</label>
-              <div class="col-sm-5">
-                {{ form.rig_name }}
-                <small class="form-text text-muted">
-                  Required
-                </small>
-              </div>
-            </div>
-            <hr/>
-
-            <div class="form-group row">
               <label class="col-sm-2 col-form-label col-form-label-sm">Well Name:</label>
               <div class="col-sm-5">
                 {{ form.well_name }}

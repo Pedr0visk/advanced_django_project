@@ -108,7 +108,6 @@ class CampaignViewTest(TestCase):
             'name': 'first campaign',
             'description': 'some short description',
             'well_name': 'well 1',
-            'rig_name': 'rig 1',
             'active': False,
             'start_date': '2020-08-01',
             'end_date': '2020-12-31',
