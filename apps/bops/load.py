@@ -81,6 +81,9 @@ class Loader:
                 bulk_mgr.add(Test(interval=get_column(row, 11), coverage=get_column(row, 16)))
                 bulk_mgr.add(Test(interval=get_column(row, 12), coverage=get_column(row, 17)))
 
+            # save final partial chunk
+            bulk_mgr.done()
+
 
 class BulkCreateManager(object):
     """
