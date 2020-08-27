@@ -2,7 +2,8 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.bop_list, name="list_bops"),
-    path('upload/', views.upload, name="upload_bop"),
+    path('', views.bop_list, name='list_bops'),
+    path('upload/', views.upload, name='upload_bop'),
+    path('<int:pk>/change/', views.bop_update, name='update_bop'),
     path('<int:bop_pk>/campaigns/', include('apps.campaigns.urls'))
 ]

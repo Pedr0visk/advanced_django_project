@@ -1,11 +1,14 @@
 import csv
 from django.contrib import messages
+from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
-from apps.managers.decorators import allowed_users
 
 from .models import Bop, Subsystem, Component, FailureMode, Test
 from .forms import BopForm
+from .load import Loader
+
 from apps.csvs.models import Csv
+from apps.managers.decorators import allowed_users
 
 
 @allowed_users(allowed_roles=['Admin'])
@@ -20,26 +23,7 @@ def upload(request):
         # remove file from database
         bopfile = Csv.objects.create(file_name=request.FILES['file'], bop=bop)
 
-        # Loop through bopfile.txt and save in chunks
-        with open(bopfile.file_name.path) as csvfile:
-
-            # read file from line 1
-            infile = csv.reader(csvfile, delimiter=',')
-            rows = [line for line in infile][1:]
-
-            for row in rows:
-                print(row[22])
-                s, created = Subsystem.objects.get_or_create(code=row[2], name=row[1], bop=bop)
-                c, created = Component.objects.get_or_create(code=row[4], name=row[3], subsystem=s)
-                f, created = FailureMode.objects.get_or_create(code=row[7],
-                                                               name=row[5],
-                                                               distribution=get_distribution(row),
-                                                               diagnostic_coverage=get_column(row, 11),
-                                                               component=c)
-                t1, created = Test.objects.get_or_create(interval=get_column(row, 9), coverage=get_column(row, 14))
-                t2, created = Test.objects.get_or_create(interval=get_column(row, 10), coverage=get_column(row, 15))
-                t3, created = Test.objects.get_or_create(interval=get_column(row, 11), coverage=get_column(row, 16))
-                t4, created = Test.objects.get_or_create(interval=get_column(row, 12), coverage=get_column(row, 17))
+        Loader(bopfile.file_name.path, bop).run()
 
         messages.success(request, 'Bop created successfully')
         return redirect('list_bops')
@@ -52,6 +36,11 @@ def bop_list(request):
     bop_queryset = Bop.objects.all()
     context = {'bops': bop_queryset}
     return render(request, 'bops/bop_list.html', context)
+
+
+def bop_update(request, pk):
+    fm = FailureMode.objects.get(pk=1430)
+    return HttpResponse(fm.distribution['cycle']['limit'])
 
 
 def get_distribution(row):
@@ -70,9 +59,11 @@ def get_distribution(row):
     elif row[22] == 'Step':
         distribution['cycle'] = {}
         distribution['inital_failure_rate'] = row[26]
-        distribution['cycle']['value'] = int(row[27])/100
+        distribution['cycle']['value'] = int(row[27]) / 100
         distribution['cycle']['limit'] = row[28]
         distribution['cycle']['size'] = row[29]
+
+    return distribution
 
 
 def get_column(row, index):
