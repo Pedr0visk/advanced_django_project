@@ -60,12 +60,16 @@ class Loader:
             bulk_mgr = BulkCreateManager(chunk_size=50)
             for row in rows:
                 # add subsystem to bulk
-                s, created = Subsystem.objects.get_or_create(code=row[2], name=row[1], bop=self.bop)
+                s = Subsystem(code=row[2],
+                              name=row[1],
+                              bop=self.bop)
+                bulk_mgr.add(s)
 
                 # add component to bulk
-                c, created = Component.objects.get_or_create(code=row[4],
+                c = Component(code=row[4],
                               name=row[3],
                               subsystem=s)
+                bulk_mgr.add(c)
 
                 # add failuremode to bulk
                 fm = FailureMode(code=row[7],
@@ -80,6 +84,8 @@ class Loader:
                 bulk_mgr.add(Test(interval=get_column(row, 10), coverage=get_column(row, 15)))
                 bulk_mgr.add(Test(interval=get_column(row, 11), coverage=get_column(row, 16)))
                 bulk_mgr.add(Test(interval=get_column(row, 12), coverage=get_column(row, 17)))
+
+            bulk_mgr.done()
 
 
 class BulkCreateManager(object):
