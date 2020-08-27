@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Bop
+from .models import Bop, FailureMode
 
 
 class BopAdmin(admin.ModelAdmin):
@@ -10,3 +10,12 @@ class BopAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Bop, BopAdmin)
+
+
+class FailureModeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'code', 'distribution',)
+    list_display_links = ('id', 'name', 'code',)
+    list_per_page = 25
+
+
+admin.site.register(FailureMode, FailureModeAdmin)

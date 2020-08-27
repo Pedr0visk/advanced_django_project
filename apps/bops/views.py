@@ -28,10 +28,12 @@ def upload(request):
             rows = [line for line in infile][1:]
 
             for row in rows:
+                print(row[22])
                 s, created = Subsystem.objects.get_or_create(code=row[2], name=row[1], bop=bop)
                 c, created = Component.objects.get_or_create(code=row[4], name=row[3], subsystem=s)
                 f, created = FailureMode.objects.get_or_create(code=row[7],
                                                                name=row[5],
+                                                               distribution=get_distribution(row),
                                                                diagnostic_coverage=get_column(row, 11),
                                                                component=c)
                 t1, created = Test.objects.get_or_create(interval=get_column(row, 9), coverage=get_column(row, 14))
@@ -50,6 +52,27 @@ def bop_list(request):
     bop_queryset = Bop.objects.all()
     context = {'bops': bop_queryset}
     return render(request, 'bops/bop_list.html', context)
+
+
+def get_distribution(row):
+    distribution = {'type': row[22]}
+
+    if row[22] == 'Exponential':
+        distribution['exponential_failure_rate'] = row[23]
+
+    elif row[22] == 'Probability':
+        distribution['probability'] = get_column(row, 23)
+
+    elif row[22] == 'Weibull':
+        distribution['scale'] = row[24]
+        distribution['form'] = row[25]
+
+    elif row[22] == 'Step':
+        distribution['cycle'] = {}
+        distribution['inital_failure_rate'] = row[26]
+        distribution['cycle']['value'] = int(row[27])/100
+        distribution['cycle']['limit'] = row[28]
+        distribution['cycle']['size'] = row[29]
 
 
 def get_column(row, index):
