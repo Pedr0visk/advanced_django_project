@@ -4,12 +4,12 @@
 {% block breadcrumb %}
   <!-- breadcrumb -->
   <div class="page-title">
-    <div class="container">
+    <div class="container-fluix px-5">
       <div class="page-title-wrapper-2">
         <div class="page-title-heading-2">
-          <a href="{% url 'dashboard' %}">Home</a>
+          <a href="{% url 'manager' %}">Home</a>
           <span class="fa fa-chevron-right"></span>
-          <span class="current-page">Users List </span>
+          <span class="current-page">Users </span>
         </div>
       </div>
     </div>
@@ -17,143 +17,120 @@
 {% endblock %}
 
 {% block main %}
+  {% for message in messages %}
+    <ul class="messagelist">
+      <li class="success">{{ message }}</li>
+    </ul>
+  {% endfor %}
   <!-- main -->
   <div class="main">
-    <!-- search bar -->
-    <div class="search-bar p-2">
-      <div class="container">
-        {% for message in messages %}
-          <div class="col-12 text-center">
-            <p id="messages" class="alert alert-success">{{ message }}</p>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-    <!-- ./ search bar -->
+    <!-- section bop list -->
+    <div class="section" id="home">
+      <div class="container-fluid px-5">
+        <div class="section-title mb-3">
+          <p>Select user to change</p>
+          <a href="{% url 'register_account' %}" class="btn btn-sm btn-success"><small>ADD USER <i
+              class="fa fa-plus"></i></small> </a>
+        </div>
 
-    <!-- users list -->
-    <div id="users-list" class="section">
-      <div class="container">
-        <div class="card">
-          <div class="card-header bg-quinary">
-            <div class="d-flex align-items-center">
-              <form class="form-inline" method="get">
-                <input
-                    class="form-control mr-sm-2 form-control-sm"
-                    name="username"
-                    type="search"
-                    value="{{ request.GET.username }}"
-                    placeholder="Search"
-                    aria-label="Search"/>
-                <button class="btn btn-info my-2 my-sm-0 btn-sm" type="submit">
-                  <i class="fa fa-search"></i> Search
-                </button>
-              </form>
-              <a href="{% url 'register_account' %}" class=" btn btn-success ml-auto btn-sm"><i
-                  class="fa fa-plus text-white"></i>
-                new account</a>
+        <div class="row">
+          <div class="col-sm-12 col-12">
+            <div class="toolbar ml-auto px-3 py-2 mb-3">
+              <div class="search-bar">
+                <form class="form-inline my-2 my-lg-0" method="get">
+                  <label for="" class="mr-2"><i class="fa fa-search"></i></label>
+                  <input name="username" class="form-control form-control-sm mr-sm-2" type="search"
+                         value="{{ request.params.username }}">
+                  <button class="" type="submit">
+                    Search
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
-          <!-- card body -->
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-sm m-0 table-hover dnv-table" id="campaignsTable">
-                <thead class="">
+        </div>
+
+        <div class="row">
+          <!-- BOP's table list -->
+          <div class="col-sm-12 col-12">
+            <div class="">
+              <table class="table dnv-table">
+                <thead class="bg-white-50">
                 <tr>
-                  <th scope="col" width="3%">#</th>
+                  <th scope="col">#</th>
                   <th scope="col">username</th>
-                  <th scope="col">email</th>
+                  <th scope="col">email address</th>
                   <th scope="col">role</th>
-                  <th scope="col" style="text-align: center;">
-                    created_at
-                  </th>
-                  <th scope="col" style="text-align: center;">
-                    updated_at
-                  </th>
-                  <th scope="col" style="text-align: center;">actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for account in accounts %}
                   <tr>
-                    <td scope="row" align="center">1</td>
-                    <td>{{ account.username }}</td>
-                    <td>{{ account.email }}</td>
+                    <td scope="row" width="4%">{{ account.id }}</td>
+                    <td><a href="{% url 'update_account' account.pk %}">{{ account.username }}</a></td>
+                    <td><a href="{% url 'update_account' account.pk %}">{{ account.email }}</a></td>
                     <td>{{ account.groups.all.0 }}</td>
-                    <td align="center">20-03-2020</td>
-                    <td align="center">21-05-2020</td>
-                    <!-- edit -->
-                    <td align="center">
-                      <div class="btn-group-actions">
-                        <a href="{% url 'update_account' account.pk %}" class="btn btn-action btn-sm"><i
-                            class="fa fa-user-edit"></i></a>
-                        <a href="{% url 'delete_account' account.pk %}" class="btn btn-action btn-sm"><i
-                            class="fa fa-trash"></i></a>
-                      </div>
-                    </td>
                   </tr>
                 {% endfor %}
                 </tbody>
               </table>
             </div>
           </div>
-
-          <!-- card footer -->
-          <div class="card-footer">
-            <nav aria-label="Page navigation example">
-              {% if accounts.has_other_pages %}
-                <ul class="pagination m-0">
-                  {% if accounts.has_previous %}
-                    <li class="page-item">
-                      <a
-                          class="page-link"
-                          href="{% my_url accounts.previous_page_number 'page' request.GET.urlencode %}"
-                          aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                      </a>
-                    </li>
-                  {% else %}
-                    <li class="page-item disabled">
-                      <a class="page-link" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                      </a>
-                    </li>
-                  {% endif %}
-
-                  {% for i in accounts.paginator.page_range %}
-                    {% if accounts.number == i %}
-                      <li class="page-item active">
-                        <a class="page-link">{{ i }}</a>
-                      </li>
-                    {% else %}
-                      <li class="page-item">
-                        <a class="page-link" href="{% my_url i 'page' request.GET.urlencode %}">{{ i }}</a>
-                      </li>
-                    {% endif %}
-                  {% endfor %}
-
-                  {% if accounts.has_next %}
-                    <li class="page-item">
-                      <a class="page-link" href="{% my_url accounts.next_page_number 'page' request.GET.urlencode %}"
-                         aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                      </a>
-                    </li>
-                  {% else %}
-                    <li class="page-item disabled">
-                      <a class="page-link" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                      </a>
-                    </li>
-                  {% endif %}
-                </ul>
-              {% endif %}
-            </nav>
-          </div>
-
+          <!-- end cols -->
         </div>
       </div>
+      <!-- ./ container -->
     </div>
+    <!-- ./ section -->
   </div>
-  <!-- main -->
 {% endblock %}
+
+<nav aria-label="Page navigation example">
+  {% if accounts.has_other_pages %}
+    <ul class="pagination m-0">
+      {% if accounts.has_previous %}
+        <li class="page-item">
+          <a
+              class="page-link"
+              href="{% my_url accounts.previous_page_number 'page' request.GET.urlencode %}"
+              aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+      {% endif %}
+
+      {% for i in accounts.paginator.page_range %}
+        {% if accounts.number == i %}
+          <li class="page-item active">
+            <a class="page-link">{{ i }}</a>
+          </li>
+        {% else %}
+          <li class="page-item">
+            <a class="page-link" href="{% my_url i 'page' request.GET.urlencode %}">{{ i }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      {% if accounts.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="{% my_url accounts.next_page_number 'page' request.GET.urlencode %}"
+             aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+  {% endif %}
+</nav>

@@ -3,14 +3,14 @@
 {% block breadcrumb %}
   <!-- breadcrumb -->
   <div class="page-title">
-    <div class="container">
+    <div class="container-fluix px-5">
       <div class="page-title-wrapper-2">
         <div class="page-title-heading-2">
-          <a href="{% url 'dashboard' %}">Home</a>
+          <a href="{% url 'manager' %}">Home</a>
           <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'list_accounts' %}">Users list</a>
-          <span class=" fa fa-chevron-right"></span>
-          <span class="current-page">Create new User </span>
+          <a href="{% url 'list_accounts' %}">Users</a>
+          <span class="fa fa-chevron-right"></span>
+          <span class="current-page">Add user </span>
         </div>
       </div>
     </div>
@@ -20,30 +20,26 @@
 {% block main %}
 
   <div class="section bg-white">
-    <div class="container">
-      <div class="row">
-        {% for message in messages %}
-          <div class="col-12 text-center">
-            <p id="messages" class="alert alert-success">{{ message }}</p>
-          </div>
-        {% endfor %}
+    <div class="container-fluid px-5">
+      <div class="section-title mb-4 d-flex">
+        <p clas>Add User</p>
+      </div>
 
-        <div class="col-sm-10">
+      <div class="row">
+        <div class="col-sm-12">
           <form method="POST">
             {% csrf_token %}
 
             <!-- username field -->
             <div class="form-group row">
-              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Username</label>
-              <div class="col-sm-5">
-
+              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Username:</label>
+              <div class="col-sm-3">
                 {{ form.username }}
+              </div>
+              <div class="col-sm-10 offset-2">
                 <small class="form-text text-muted">
-                  {{ form.username.help_text }}
-                </small>
-                <small class="form-text text-danger">
-                  {{ form.username.errors }}
-                </small>
+                {{ form.username.help_text }}
+              </small>
               </div>
             </div>
             <hr/>
@@ -51,15 +47,8 @@
             <!-- email field -->
             <div class="form-group row">
               <label class="col-sm-2 col-form-label col-form-label-sm">Email</label>
-              <div class="col-sm-5">
-
+              <div class="col-sm-3">
                 {{ form.email }}
-                <small class="form-text text-muted">
-                  Required.
-                </small>
-                <small class="form-text text-danger">
-                  {{ form.email.errors }}
-                </small>
               </div>
             </div>
             <hr/>
@@ -68,7 +57,7 @@
               <!-- password1 field -->
               <div class="form-group row">
                 <label class="col-sm-2 col-form-label col-form-label-sm">Password</label>
-                <div class="col-sm-5">
+                <div class="col-sm-3">
                   {{ form.password1 }}
                   <small class="form-text text-muted">
                     {{ form.password1.help_text }}
@@ -83,7 +72,7 @@
               <!-- password2 field -->
               <div class="form-group row">
                 <label class="col-sm-2 col-form-label col-form-label-sm">Confirm Password</label>
-                <div class="col-sm-5">
+                <div class="col-sm-3">
                   {{ form.password2 }}
                   <small class="form-text text-muted">
                     {{ form.password2.help_text }}
@@ -98,7 +87,7 @@
               <!-- password2 field -->
               <div class="form-group row">
                 <label class="col-sm-2 col-form-label col-form-label-sm">Password</label>
-                <div class="col-sm-8">
+                <div class="col-sm-5">
                   {{ form.password }}
                   <a href="{% url 'change_password'  user.pk %}">
                     <small class="form-text text-primary">
@@ -113,7 +102,7 @@
             <!-- group field -->
             <div class="form-group row">
               <label class="col-sm-2 col-form-label col-form-label-sm">Group</label>
-              <div class="col-sm-5">
+              <div class="col-sm-1">
                 <select name="group" id="inputStateGroup" class="form-control form-control-sm">
                   <option selected> --</option>
 
@@ -126,11 +115,14 @@
                   {% endfor %}
 
                 </select>
+
+              </div>
+              <div class="col-sm-10 offset-2">
                 <small class="form-text text-muted">
                   Required. Group field defines permissions for each kind of
                   user.
                 </small>
-              </div>
+
             </div>
             <hr/>
 
@@ -138,7 +130,7 @@
               <a href="{% url 'manager' %}" class=" btn btn-default">
                 Cancel
               </a>
-              <button type="submit" class="px-4 btn btn-secondary">
+              <button type="submit" class="px-4 btn btn-primary">
                 Save
               </button>
             </div>

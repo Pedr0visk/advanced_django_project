@@ -1,57 +1,52 @@
 {% extends 'manager/base.html' %}
 
 {% block main %}
+  {% for error in form.errors %}
+    <ul class="messagelist">
+      <li class="error">{{ error }}</li>
+    </ul>
+  {% endfor %}
+  
+  <!-- main -->
+  <div class="main">
+    <!-- section 2 -->
+    <div class="section">
+      <div class="container-fluid px-5">
+        <!-- section title -->
+        <div class="section-title mb-3">
+          <p>Manager Dashboard
+          </p>
+        </div>
 
-  <div class="dashboard-welcome section">
-    <div class="container">
-
-      <div class="welcome-content">
-        <div class="row mb-4">
-          <!-- start widgets -->
-          <div class="col-sm-4 col-12">
-            <div class="card">
-              <div class="card-body">
-                <div class="widget">
-                  <div class="widget-content-left">
-                    <p class="widget-title">Bops</p>
-                    <p class="widget-desc">TOTAL</p>
-                    <p class="widget-count text-primary">2</p>
-                    <a href="#" class="btn btn-sm btn-primary">more info</a>
-                  </div>
-                  <div class="widget-content-right">
-                    <div class="widget-icon">
-                      <i class="fa fa-hard-hat"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <!-- section content -->
+        <div class="row">
+          <div class="col-sm-5 col-12">
+            <table class="table dnv-table dnv-table-admin">
+              <thead>
+              <th>Management</th>
+              <th></th>
+              <th></th>
+              </thead>
+              <tbody>
+              <tr>
+                <td><a href="#">Bops</a></td>
+                <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
+                <td width="12%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
+              </tr>
+              <tr>
+                <td><a href="#">Users</a></td>
+                <td width="12%" align="center">
+                  <a href="{% url 'register_account' %}"><i class="fa fa-plus"></i> Add</a>
+                </td>
+                <td width="12%" align="center"><a href="{% url 'list_accounts' %}"><i class="fa fa-pencil-alt"></i> Edit</a></td>
+              </tr>
+              </tbody>
+            </table>
           </div>
-
-          <!-- widget -->
-          <div class="col-sm-4 col-12">
-            <div class="card ">
-              <div class="card-body">
-                <div class="widget">
-                  <div class="widget-content-left">
-                    <p class="widget-title">Users</p>
-                    <p class="widget-desc">TOTAL</p>
-                    <p class="widget-count text-success">12</p>
-                    <a href="#" class="btn btn-sm btn-success">more info</a>
-                  </div>
-                  <div class="widget-content-right">
-                    <div class="widget-icon">
-                      <i class="fa fa-users"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
         </div>
 
       </div>
     </div>
+
   </div>
 {% endblock %}
