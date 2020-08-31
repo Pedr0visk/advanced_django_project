@@ -10926,4 +10926,13 @@ hr {
   border-color: #17a2b8;
 }
 
+.filter-helper {
+  color: #417690;
+}
+
+.text-highlight {
+  border: 1px solid #CC0000;
+  background-color: rgba(204, 0, 0, 0.2);
+}
+
 /*# sourceMappingURL=main.css.map */

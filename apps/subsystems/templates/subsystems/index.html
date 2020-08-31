@@ -1,7 +1,7 @@
 {% extends 'manager/base.html' %}
 
 {% block breadcrumb %}
-<!-- breadcrumb -->
+  <!-- breadcrumb -->
   <div class="page-title">
     <div class="container-fluix px-5">
       <div class="page-title-wrapper-2">
@@ -10,7 +10,11 @@
           <span class="fa fa-chevron-right"></span>
           <a href="{% url 'list_bops' %}">Bops</a>
           <span class="fa fa-chevron-right"></span>
-          <span class="current-page">{{ bop.name }}</span>
+          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
+          <span class="fa fa-chevron-right"></span>
+          <a href="{% url 'list_subsystems' bop.pk %}">Subsystems</a>
+          <span class="fa fa-chevron-right"></span>
+          <span class="current-page">{{ subsystem.name }}</span>
         </div>
       </div>
     </div>
@@ -18,7 +22,7 @@
 {% endblock %}
 
 {% block main %}
- <!-- main -->
+  <!-- main -->
   <div class="main">
 
     <!-- section 2 -->
@@ -29,9 +33,9 @@
           <p>Dashboard for Subsystem</p>
           <div>
             <a href="" class="btn btn-sm btn-warning mr-2"><small>EDIT SUBSYSTEM <i
-                  class="fa fa-pencil-alt"></i></small>
+                class="fa fa-pencil-alt"></i></small>
               <a href="bop_campaign_form.html" class="btn btn-sm btn-danger"><small>DELETE SUBSYSTEM <i
-                    class="fa fa-times"></i></small>
+                  class="fa fa-times"></i></small>
               </a>
           </div>
         </div>
@@ -41,21 +45,21 @@
           <div class="col-sm-5 col-12">
             <table class="table dnv-table dnv-table-admin">
               <thead>
-                <th>{{ subsystem.name }}</th>
-                <th></th>
-                <th></th>
+              <th>{{ subsystem.name }}</th>
+              <th></th>
+              <th></th>
               </thead>
               <tbody>
-                <tr>
-                  <td><a href="{% url 'list_components' bop.pk %}">Components</a></td>
-                  <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                  <td width="12%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
-                </tr>
-                <tr>
-                  <td><a href="#">Failure Modes</a></td>
-                  <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                  <td width="12%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
-                </tr>
+              <tr>
+                <td><a href="{% url 'list_components' bop.pk  %}?subsystem={{ subsystem.pk }}">Components</a></td>
+                <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
+                <td width="12%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
+              </tr>
+              <tr>
+                <td><a href="#">Failure Modes</a></td>
+                <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
+                <td width="12%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
+              </tr>
               </tbody>
             </table>
           </div>

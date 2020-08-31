@@ -12,6 +12,12 @@
           <a href="{% url 'list_bops' %}">Bops</a>
           <span class="fa fa-chevron-right"></span>
           <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
+          {% if request.GET.subsystem %}
+            <span class="fa fa-chevron-right"></span>
+            <a href="{% url 'list_subsystems' bop.pk %}">Subsystems</a>
+            <span class="fa fa-chevron-right"></span>
+            <a href="{% url 'index_subsystem' bop.pk components.0.subsystem.slug %}">{{ components.0.subsystem.name }}</a>
+          {% endif %}
           <span class="fa fa-chevron-right"></span>
           <span class="current-page">components</span>
         </div>
@@ -32,6 +38,11 @@
     <!-- section bop list -->
     <div class="section" id="home">
       <div class="container-fluid px-5">
+        {% if request.GET.subsystem %}
+          <div class="filter-helper mb-2">
+            <p>FILTERED COMPONENTS FOR <span class="text-highlight"><b>{{ components.0.subsystem.name }}</b></span> SUBSYSTEM</p>
+          </div>
+        {% endif %}
         <div class="section-title mb-3">
           <p>Select component to manage</p>
           <a href="{% url 'register_account' %}" class="btn btn-sm btn-success"><small>ADD COMPONENT <i
