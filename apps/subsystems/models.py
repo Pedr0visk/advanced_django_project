@@ -9,5 +9,8 @@ class Subsystem(models.Model):
                             on_delete=models.CASCADE,
                             related_name='subsystems')
 
+    class Meta:
+        ordering = ('code', 'name',)
+
     def __str__(self):
         return self.name

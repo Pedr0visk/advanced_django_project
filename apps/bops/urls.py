@@ -6,5 +6,6 @@ urlpatterns = [
     path('upload/', views.upload, name='upload_bop'),
     path('<int:pk>/', views.index, name='index_bop'),
     path('<int:pk>/change/', views.bop_update, name='update_bop'),
-    path('<int:bop_pk>/campaigns/', include('apps.campaigns.urls'))
+    path('<int:bop_pk>/campaigns/', include('apps.campaigns.urls')),
+    path('<int:bop_pk>/subsystems/', include('apps.subsystems.urls')),
 ]

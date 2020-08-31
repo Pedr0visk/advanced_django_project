@@ -4,17 +4,22 @@
 {% block breadcrumb %}
   <!-- breadcrumb -->
   <div class="page-title">
-    <div class="container-fluix px-5">
+    <div class="container-fluid px-5">
       <div class="page-title-wrapper-2">
         <div class="page-title-heading-2">
           <a href="{% url 'manager' %}">Home</a>
           <span class="fa fa-chevron-right"></span>
-          <span class="current-page">Users </span>
+          <a href="{% url 'list_bops' %}">Bops</a>
+          <span class="fa fa-chevron-right"></span>
+          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
+          <span class="fa fa-chevron-right"></span>
+          <span class="current-page">Subsystems</span>
         </div>
       </div>
     </div>
   </div>
 {% endblock %}
+
 
 {% block main %}
   {% for message in messages %}
@@ -28,8 +33,8 @@
     <div class="section" id="home">
       <div class="container-fluid px-5">
         <div class="section-title mb-3">
-          <p>Select user to change</p>
-          <a href="{% url 'register_account' %}" class="btn btn-sm btn-success"><small>ADD USER <i
+          <p>Select subsystem to manage</p>
+          <a href="{% url 'register_account' %}" class="btn btn-sm btn-success"><small>ADD BOP <i
               class="fa fa-plus"></i></small> </a>
         </div>
 
@@ -39,8 +44,12 @@
               <div class="search-bar">
                 <form class="form-inline my-2 my-lg-0" method="get">
                   <label for="" class="mr-2"><i class="fa fa-search"></i></label>
-                  <input name="username" class="form-control form-control-sm mr-sm-2" type="search"
-                         value="{{ request.params.username }}">
+                  <input
+                      name="q"
+                      class="form-control form-control-sm mr-sm-2"
+                      type="search"
+                      value="{{ request.GET.q }}"
+                  >
                   <button class="" type="submit">
                     Search
                   </button>
@@ -57,19 +66,17 @@
               <table class="table dnv-table m-0">
                 <thead class="bg-white-50">
                 <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">username</th>
-                  <th scope="col">email address</th>
-                  <th scope="col">role</th>
+                  <th scope="col">CODE</th>
+                  <th scope="col">name</th>
+                  <th scope="col">created_at</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for account in accounts %}
+                {% for s in subsystems %}
                   <tr>
-                    <td scope="row" width="4%">{{ account.id }}</td>
-                    <td><a href="{% url 'update_account' account.pk %}">{{ account.username }}</a></td>
-                    <td><a href="{% url 'update_account' account.pk %}">{{ account.email }}</a></td>
-                    <td>{{ account.groups.all.0 }}</td>
+                    <td scope="row" width="4%">{{ s.pk }}</td>
+                    <td><a href="{% url 'index_bop' bop.pk %}">{{ s.name }}</a></td>
+                    <td><a href="">{{ bop.created_at }}</a></td>
                   </tr>
                 {% endfor %}
                 </tbody>
@@ -77,13 +84,13 @@
               <div class="paginator p-3">
                 <div class="d-flex align-items-center">
                   <nav class="mr-3">
-                    {% if accounts.has_other_pages %}
+                    {% if subsystems.has_other_pages %}
                       <ul class="pagination m-0">
-                        {% if accounts.has_previous %}
+                        {% if subsystems.has_previous %}
                           <li class="page-item">
                             <a
                                 class="page-link"
-                                href="{% my_url accounts.previous_page_number 'page' request.GET.urlencode %}"
+                                href="{% my_url subsystems.previous_page_number 'page' request.GET.urlencode %}"
                                 aria-label="Previous">
                               <span aria-hidden="true">&laquo;</span>
                             </a>
@@ -96,8 +103,8 @@
                           </li>
                         {% endif %}
 
-                        {% for i in accounts.paginator.page_range %}
-                          {% if accounts.number == i %}
+                        {% for i in subsystems.paginator.page_range %}
+                          {% if subsystems.number == i %}
                             <li class="page-item active">
                               <a class="page-link">{{ i }}</a>
                             </li>
@@ -108,10 +115,10 @@
                           {% endif %}
                         {% endfor %}
 
-                        {% if accounts.has_next %}
+                        {% if subsystems.has_next %}
                           <li class="page-item">
                             <a class="page-link"
-                               href="{% my_url accounts.next_page_number 'page' request.GET.urlencode %}"
+                               href="{% my_url subsystems.next_page_number 'page' request.GET.urlencode %}"
                                aria-label="Next">
                               <span aria-hidden="true">&raquo;</span>
                             </a>
@@ -127,7 +134,7 @@
                     {% endif %}
                   </nav>
                   <small class="counter">
-                    12 Campaigns
+                    {{ subsystems.count }} Campaigns
                   </small>
                 </div>
 
@@ -142,4 +149,3 @@
     <!-- ./ section -->
   </div>
 {% endblock %}
-
