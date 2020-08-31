@@ -10,7 +10,7 @@ def subsystem_filter(query_params={}):
     else:
         queryset = Subsystem.objects.all()
 
-    paginator = Paginator(queryset, 10)
+    paginator = Paginator(queryset, 15)
     page = query_params.get('page')
     paged_listings = paginator.get_page(page)
 

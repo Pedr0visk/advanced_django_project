@@ -8,4 +8,5 @@ urlpatterns = [
     path('<int:pk>/change/', views.bop_update, name='update_bop'),
     path('<int:bop_pk>/campaigns/', include('apps.campaigns.urls')),
     path('<int:bop_pk>/subsystems/', include('apps.subsystems.urls')),
+    path('<int:bop_pk>/components/', include('apps.components.urls')),
 ]

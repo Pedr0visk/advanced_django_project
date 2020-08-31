@@ -13,7 +13,7 @@
           <span class="fa fa-chevron-right"></span>
           <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
           <span class="fa fa-chevron-right"></span>
-          <span class="current-page">Subsystems</span>
+          <span class="current-page">components</span>
         </div>
       </div>
     </div>
@@ -33,8 +33,8 @@
     <div class="section" id="home">
       <div class="container-fluid px-5">
         <div class="section-title mb-3">
-          <p>Select subsystem to manage</p>
-          <a href="{% url 'register_account' %}" class="btn btn-sm btn-success"><small>ADD BOP <i
+          <p>Select component to manage</p>
+          <a href="{% url 'register_account' %}" class="btn btn-sm btn-success"><small>ADD COMPONENT <i
               class="fa fa-plus"></i></small> </a>
         </div>
 
@@ -66,17 +66,17 @@
               <table class="table dnv-table m-0">
                 <thead class="bg-white-50">
                 <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">code</th>
+                  <th scope="col">CODE</th>
                   <th scope="col">name</th>
+                  <th scope="col">subsystem</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for s in subsystems %}
+                {% for c in components %}
                   <tr>
-                    <td scope="row" width="4%">{{ s.pk }}</td>
-                    <td scope="row" width="4%">{{ s.code }}</td>
-                    <td><a href="{% url 'index_subsystem' bop.pk s.slug %}">{{ s.name }}</a></td>
+                    <td scope="row" width="4%">{{ c.pk }}</td>
+                    <td><a href="{% url 'index_bop' bop.pk %}">{{ c.name }}</a></td>
+                    <td><a href="">{{ c.subsystem.name }}</a></td>
                   </tr>
                 {% endfor %}
                 </tbody>
@@ -84,13 +84,13 @@
               <div class="paginator p-3">
                 <div class="d-flex align-items-center">
                   <nav class="mr-3">
-                    {% if subsystems.has_other_pages %}
+                    {% if components.has_other_pages %}
                       <ul class="pagination m-0">
-                        {% if subsystems.has_previous %}
+                        {% if components.has_previous %}
                           <li class="page-item">
                             <a
                                 class="page-link"
-                                href="{% my_url subsystems.previous_page_number 'page' request.GET.urlencode %}"
+                                href="{% my_url components.previous_page_number 'page' request.GET.urlencode %}"
                                 aria-label="Previous">
                               <span aria-hidden="true">&laquo;</span>
                             </a>
@@ -103,8 +103,8 @@
                           </li>
                         {% endif %}
 
-                        {% for i in subsystems.paginator.page_range %}
-                          {% if subsystems.number == i %}
+                        {% for i in components.paginator.page_range %}
+                          {% if components.number == i %}
                             <li class="page-item active">
                               <a class="page-link">{{ i }}</a>
                             </li>
@@ -115,10 +115,10 @@
                           {% endif %}
                         {% endfor %}
 
-                        {% if subsystems.has_next %}
+                        {% if components.has_next %}
                           <li class="page-item">
                             <a class="page-link"
-                               href="{% my_url subsystems.next_page_number 'page' request.GET.urlencode %}"
+                               href="{% my_url components.next_page_number 'page' request.GET.urlencode %}"
                                aria-label="Next">
                               <span aria-hidden="true">&raquo;</span>
                             </a>
@@ -134,7 +134,7 @@
                     {% endif %}
                   </nav>
                   <small class="counter">
-                    {{ subsystems.count }} Campaigns
+                    {{ components.count }} Components
                   </small>
                 </div>
 
