@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.postgres.fields import JSONField
 
 
 class Rig(models.Model):
@@ -33,26 +32,6 @@ class Certification(models.Model):
         return '{0} {1} certification'.format(self.pk, self.bop.name)
 
 
-class Subsystem(models.Model):
-    code = models.CharField(max_length=255, primary_key=True)
-    name = models.CharField(max_length=255)
-    bop = models.ForeignKey(Bop,
-                            on_delete=models.CASCADE,
-                            related_name='subsystems')
-
-    def __str__(self):
-        return self.name
-
-
-class Component(models.Model):
-    code = models.CharField(max_length=255, primary_key=True)
-    name = models.CharField(max_length=255)
-    subsystem = models.ForeignKey(Subsystem, on_delete=models.CASCADE, related_name='components')
-
-    def __str__(self):
-        return self.name
-
-
 class SafetyFunction(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
@@ -78,28 +57,6 @@ class TestGroup(models.Model):
     end_date = models.DateField(blank=True, null=True)
 
     tests = models.ManyToManyField(Test, related_name='groups')
-
-    def __str__(self):
-        return self.name
-
-
-class FailureMode(models.Model):
-    code = models.CharField(max_length=50, primary_key=True)
-    name = models.CharField(max_length=255)
-    group = models.ForeignKey(TestGroup,
-                              on_delete=models.DO_NOTHING,
-                              blank=True,
-                              null=True)
-    component = models.ForeignKey(Component,
-                                  on_delete=models.CASCADE,
-                                  related_name='failures_mode')
-    failure_mode = models.ForeignKey('self',
-                                     on_delete=models.PROTECT,
-                                     related_name='failure_children',
-                                     blank=True,
-                                     null=True)
-    distribution = JSONField(blank=True, null=True)
-    diagnostic_coverage = models.FloatField()
 
     def __str__(self):
         return self.name

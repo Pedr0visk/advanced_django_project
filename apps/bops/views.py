@@ -1,9 +1,9 @@
 import csv
 from django.contrib import messages
-from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 
-from .models import Bop, Subsystem, Component, FailureMode, Test
+
+from .models import Bop, Test
 from .forms import BopForm
 from .load import Loader
 
@@ -45,3 +45,10 @@ def bop_update(request, pk):
     context = {'form': form}
 
     return render(request, 'bops/bop_form.html', context)
+
+
+def index(request, pk):
+    bop = Bop.objects.get(pk=pk)
+
+    context = {'bop': bop}
+    return render(request, 'bops/index.html', context)

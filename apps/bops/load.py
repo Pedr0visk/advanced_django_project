@@ -2,7 +2,10 @@ from collections import defaultdict
 from django.apps import apps
 import csv
 
-from .models import Bop, Subsystem, Component, FailureMode, Test
+from .models import Test
+from apps.subsystems.models import Subsystem
+from apps.components.models import Component
+from apps.failuremodes.models import FailureMode
 
 
 def get_column(row, index):
