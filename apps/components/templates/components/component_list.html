@@ -86,8 +86,8 @@
                 {% for c in components %}
                   <tr>
                     <td scope="row" width="4%">{{ c.pk }}</td>
-                    <td><a href="{% url 'index_bop' bop.pk %}">{{ c.name }}</a></td>
-                    <td><a href="">{{ c.subsystem.name }}</a></td>
+                    <td><a href="{% url 'index_component' bop.pk c.slug %}">{{ c.name }}</a></td>
+                    <td>{{ c.subsystem.name }}</td>
                   </tr>
                 {% endfor %}
                 </tbody>

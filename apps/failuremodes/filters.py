@@ -13,6 +13,10 @@ def failuremode_filter(query_params={}):
         query = query_params['subsystem']
         queryset = queryset.filter(component__subsystem=query, )
 
+    elif 'component' in query_params:
+        query = query_params['component']
+        queryset = queryset.filter(component=query, )
+
     paginator = Paginator(queryset, 15)
     page = query_params.get('page')
     paged_listings = paginator.get_page(page)
