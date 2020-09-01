@@ -9,4 +9,5 @@ urlpatterns = [
     path('<int:bop_pk>/campaigns/', include('apps.campaigns.urls')),
     path('<int:bop_pk>/subsystems/', include('apps.subsystems.urls')),
     path('<int:bop_pk>/components/', include('apps.components.urls')),
+    path('<int:bop_pk>/failuremodes/', include('apps.failuremodes.urls')),
 ]

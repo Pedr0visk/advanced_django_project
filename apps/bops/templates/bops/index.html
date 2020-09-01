@@ -54,7 +54,7 @@
                 <tr>
                   <td><a href="{% url 'list_subsystems' bop.pk %}">Safety Functions</a></td>
                   <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                  <td width="12%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
+                  <td width="12%" align="center"><a href="{% url 'list_subsystems' bop.pk %}"><i class="fa fa-pencil-alt"></i> Edit</a></td>
                 </tr>
                 <tr>
                   <td><a href="#">Failure Rate</a></td>
@@ -64,17 +64,17 @@
                 <tr>
                   <td><a href="{% url 'list_subsystems' bop.pk %}">Subsystems</a></td>
                   <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                  <td width="12%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
+                  <td width="12%" align="center"><a href="{% url 'list_subsystems' bop.pk %}"><i class="fa fa-pencil-alt"></i> Edit</a></td>
                 </tr>
                 <tr>
                   <td><a href="{% url 'list_components' bop.pk %}">Components</a></td>
                   <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                  <td width="12%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
+                  <td width="12%" align="center"><a href="{% url 'list_components' bop.pk %}"><i class="fa fa-pencil-alt"></i> Edit</a></td>
                 </tr>
                 <tr>
-                  <td><a href="#">Failure Modes</a></td>
+                  <td><a href="{% url 'list_failuremodes' bop.pk %}">Failure Modes</a></td>
                   <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                  <td width="12%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
+                  <td width="12%" align="center"><a href="{% url 'list_failuremodes' bop.pk %}"><i class="fa fa-pencil-alt"></i> Edit</a></td>
                 </tr>
               </tbody>
             </table>

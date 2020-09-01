@@ -6,7 +6,7 @@ from apps.bops.models import TestGroup
 
 # Create your models here.
 class FailureMode(models.Model):
-    code = models.CharField(max_length=50, primary_key=True)
+    code = models.CharField(max_length=50)
     name = models.CharField(max_length=255)
     group = models.ForeignKey(TestGroup,
                               on_delete=models.DO_NOTHING,
@@ -22,6 +22,11 @@ class FailureMode(models.Model):
                                      null=True)
     distribution = JSONField(blank=True, null=True)
     diagnostic_coverage = models.FloatField()
+    slug = models.SlugField(max_length=255, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = self.code.lower().replace('_', '-')
+        super(Component, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
