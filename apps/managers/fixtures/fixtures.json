@@ -1,0 +1,23 @@
+[
+  {
+    "model": "django.contrib.auth.models.Group",
+    "pk": 1,
+    "fields": {
+      "name": "Admin"
+    }
+  },
+  {
+    "model": "django.contrib.auth.models.Group",
+    "pk": 1,
+    "fields": {
+      "name": "Operator"
+    }
+  },
+  {
+    "model": "bops.Rig",
+    "pk": 1,
+    "fields": {
+      "name": "frist rig"
+    }
+  }
+]

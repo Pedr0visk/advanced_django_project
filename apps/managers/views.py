@@ -8,7 +8,7 @@ from django.contrib import messages
 
 from .forms import UserForm, UserUpdateForm, UpdatePasswordForm
 from .decorators import allowed_users
-from .filters import account_filter, AccountFilter
+from .filters import account_filter
 
 from apps.bops.models import Bop
 

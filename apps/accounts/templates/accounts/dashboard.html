@@ -1,88 +1,69 @@
 {% extends 'base.html' %}
 
 {% block main %}
-<!-- section bop list -->
-<div class="section" id="home">
-  <div class="container">
-    <div class="row">
+  <!-- main -->
+  <div class="main">
+    <!-- section bop list -->
+    <div class="section" id="home">
+      <div class="container-fluid px-5">
+        <div class="section-title mb-2 d-flex">
+          <p>Select Bop to manage</p>
+        </div>
 
-      <!-- BOP's table list -->
-      <div class="col-sm-8 col-12">
-        <div class="card">
-          <div class="card-header bg-quinary">
-            <h4 class="text-white m-0">Bop Resume</h4>
+        <div class="row">
+          <div class="col-12">
+            <div class="toolbar ml-auto px-3 py-2 mb-3">
+              <div class="search-bar">
+                <form class="form-inline my-2 my-lg-0">
+                  <label for="" class="mr-2"><i class="fa fa-search"></i></label>
+                  <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search bop"
+                         aria-label="Search">
+                  <button class="" type="submit">
+                    Search
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
-          <div class="card-body">
-            <table class="table bop-table">
-              <thead class="">
+        </div>
+
+        <div class="row">
+          <!-- BOP's table list -->
+          <div class="col-12">
+            <div class="list">
+              <div class="list-actions">
+                <span>4 bops</span>
+              </div>
+              <table class="table dnv-table">
+                <thead class="bg-white-50">
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">Name</th>
-                  <th scope="col">Description</th>
-                  <th scope="col">Code</th>
-                  <th style="text-align: center;">Actions</th>
+                  <th scope="col">Rig</th>
+                  <th scope="col">Active campaign</th>
                 </tr>
-              </thead>
-              <tbody>
-              {% for bop in bops %}
-                <tr>
-                  <td scope="row">{{ bop.id }}</td>
-                  <td>{{ bop.name }}</td>
-                  <td class="description" width="40%">{{ bop.description }}</td>
-                  <td>{{ bop.code }}</td>
-                  <td align="center">
-                    <a href="" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
-                    <a href="{% url 'list_campaigns' bop.id %}" class="btn btn-sm btn-danger">campaigns</a>
-                  </td>
-                </tr>
-              {% endfor %}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                {% for bop in bops %}
+                  <tr>
+                    <td scope="row">1</td>
+                    <td><a href="{% url 'list_campaigns' bop.pk %}">{{ bop.name }}</a></td>
+                    <td><a href="bop.html">Deepstar 2</a></td>
+                    <td><a href="bop.html">First campaign</a></td>
+
+                  </tr>
+                {% endfor %}
+
+                </tbody>
+              </table>
+            </div>
           </div>
+          <!-- end cols -->
         </div>
       </div>
-
-      <!-- Active Campaigns list -->
-      <div class="col-sm-4 col-12">
-        <div class="card">
-          <div class="card-header bg-quinary">
-            <h4 class="text-white m-0">Active Campaigns</h4>
-          </div>
-          <div class="card-body">
-            <table class="table">
-              <thead class="">
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">End Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td scope="row">1</td>
-                  <td><a href="">Júpter Collapse</a></td>
-                  <td>31/08/2020</td>
-                </tr>
-                <tr>
-                  <td scope="row">2</td>
-                  <td><a href="">Júpter Collapse</a></td>
-                  <td>31/08/2020</td>
-                </tr>
-                <tr>
-                  <td scope="row">3</td>
-                  <td><a href="">Júpter Collapse</a></td>
-                  <td>31/08/2020</td>
-                </tr>
-
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
+      <!-- ./ container -->
     </div>
+    <!-- ./ section -->
   </div>
-  <!-- ./ container -->
-</div>
-<!-- ./ section -->
+  <!-- main -->
 {% endblock %}

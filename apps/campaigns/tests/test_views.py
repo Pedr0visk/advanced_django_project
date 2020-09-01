@@ -18,7 +18,7 @@ class CampaignViewTest(TestCase):
         self.user.groups.add(operator_group)
 
         # pk was applied cause the test was creating two bops and getting the test to red
-        self.bop = Bop.objects.create(pk=1, code='XRL2020S', name='first bop')
+        self.bop = Bop.objects.create(pk=1, name='first bop')
         self.campaign = Campaign.objects.create(pk=6, bop=self.bop, name='first campaign')
 
     def test_campaign_can_be_created_by_operator(self):
@@ -108,7 +108,6 @@ class CampaignViewTest(TestCase):
             'name': 'first campaign',
             'description': 'some short description',
             'well_name': 'well 1',
-            'rig_name': 'rig 1',
             'active': False,
             'start_date': '2020-08-01',
             'end_date': '2020-12-31',

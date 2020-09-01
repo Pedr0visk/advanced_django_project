@@ -1,0 +1,173 @@
+{% extends 'manager/base.html' %}
+{% load manager_extras %}
+
+{% block breadcrumb %}
+  <!-- breadcrumb -->
+  <div class="page-title">
+    <div class="container-fluid px-5">
+      <div class="page-title-wrapper-2">
+        <div class="page-title-heading-2">
+          <a href="{% url 'manager' %}">Home</a>
+          <span class="fa fa-chevron-right"></span>
+          <a href="{% url 'list_bops' %}">Bops</a>
+          <span class="fa fa-chevron-right"></span>
+          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
+          {% if request.GET.subsystem %}
+            <span class="fa fa-chevron-right"></span>
+            <a href="{% url 'list_subsystems' bop.pk %}">Subsystems</a>
+            <span class="fa fa-chevron-right"></span>
+            <a href="{% url 'index_subsystem' bop.pk failuremodes.0.component.subsystem.slug %}">
+              {{ failuremodes.0.component.subsystem.name }}
+            </a>
+          {% endif %}
+          <span class="fa fa-chevron-right"></span>
+          <span class="current-page">failuremodes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block main %}
+  {% for message in messages %}
+    <ul class="messagelist">
+      <li class="success">{{ message }}</li>
+    </ul>
+  {% endfor %}
+  <!-- main -->
+  <div class="main">
+    <!-- section bop list -->
+    <div class="section" id="home">
+      <div class="container-fluid px-5">
+        {% if request.GET.subsystem %}
+          <div class="filter-helper mb-2">
+            <p>
+              FILTERED COMPONENTS FOR
+              <span class="text-highlight">
+              <b>{{ failuremodes.0.component.subsystem.name }}</b></span>
+              SUBSYSTEM
+            </p>
+          </div>
+        {% endif %}
+        <div class="section-title mb-3">
+          <p>Select failure mode to manage</p>
+          <a href="{% url 'register_account' %}" class="btn btn-sm btn-success"><small>ADD FAILURE MODE <i
+              class="fa fa-plus"></i></small> </a>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12 col-12">
+            <div class="toolbar ml-auto px-3 py-2 mb-3">
+              <div class="search-bar">
+                <form class="form-inline my-2 my-lg-0" method="get">
+                  <label for="" class="mr-2"><i class="fa fa-search"></i></label>
+                  <input
+                      name="q"
+                      class="form-control form-control-sm mr-sm-2"
+                      type="search"
+                      value="{{ request.GET.q }}"
+                  >
+                  <button class="" type="submit">
+                    Search
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- BOP's table list -->
+          <div class="col-sm-12 col-12">
+            <div class="results">
+              <table class="table dnv-table m-0">
+                <thead class="bg-white-50">
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">code</th>
+                  <th scope="col">name</th>
+                  <th scope="col">component</th>
+                  <th scope="col">subsystem</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for fm in failuremodes %}
+                  <tr>
+                    <td scope="row" width="4%">{{ fm.pk }}</td>
+                    <td scope="row" width="4%">{{ fm.code }}</td>
+                    <td><a href="{% url 'index_failuremode' bop.pk fm.slug %}">{{ fm.name }}</a></td>
+                    <td>{{ fm.component.name }}</td>
+                    <td>{{ fm.component.subsystem.name }}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+              <div class="paginator p-3">
+                <div class="d-flex align-items-center">
+                  <nav class="mr-3">
+                    {% if failuremodes.has_other_pages %}
+                      <ul class="pagination m-0">
+                        {% if failuremodes.has_previous %}
+                          <li class="page-item">
+                            <a
+                                class="page-link"
+                                href="{% my_url failuremodes.previous_page_number 'page' request.GET.urlencode %}"
+                                aria-label="Previous">
+                              <span aria-hidden="true">&laquo;</span>
+                            </a>
+                          </li>
+                        {% else %}
+                          <li class="page-item disabled">
+                            <a class="page-link" aria-label="Previous">
+                              <span aria-hidden="true">&laquo;</span>
+                            </a>
+                          </li>
+                        {% endif %}
+
+                        {% for i in failuremodes.paginator.page_range %}
+                          {% if failuremodes.number == i %}
+                            <li class="page-item active">
+                              <a class="page-link">{{ i }}</a>
+                            </li>
+                          {% else %}
+                            <li class="page-item">
+                              <a class="page-link" href="{% my_url i 'page' request.GET.urlencode %}">{{ i }}</a>
+                            </li>
+                          {% endif %}
+                        {% endfor %}
+
+                        {% if failuremodes.has_next %}
+                          <li class="page-item">
+                            <a class="page-link"
+                               href="{% my_url failuremodes.next_page_number 'page' request.GET.urlencode %}"
+                               aria-label="Next">
+                              <span aria-hidden="true">&raquo;</span>
+                            </a>
+                          </li>
+                        {% else %}
+                          <li class="page-item disabled">
+                            <a class="page-link" aria-label="Next">
+                              <span aria-hidden="true">&raquo;</span>
+                            </a>
+                          </li>
+                        {% endif %}
+                      </ul>
+                    {% endif %}
+                  </nav>
+                  <small class="counter">
+                    {{ failuremodes.count }} Failure Modes
+                  </small>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <!-- end cols -->
+        </div>
+      </div>
+      <!-- ./ container -->
+    </div>
+    <!-- ./ section -->
+  </div>
+{% endblock %}

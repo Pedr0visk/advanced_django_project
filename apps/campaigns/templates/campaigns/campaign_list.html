@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load manager_extras %}
 
 {% block nav_bop %}
@@ -34,143 +35,139 @@
   </li>
 {% endblock %}
 
+{% block breadcrumb %}
+  <!-- breadcrumb -->
+  <div class="page-title">
+    <div class="container-fluix px-5">
+      <div class="page-title-wrapper-2">
+        <div class="page-title-heading-2">
+          <a href="{% url 'dashboard' %}">Home</a>
+          <span class="fa fa-chevron-right"></span>
+          <span class="current-page">{{ bop.name }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
 {% block main %}
+  {% for message in messages %}
+    <ul class="messagelist">
+      <li class="success">{{ message }}</li>
+    </ul>
+  {% endfor %}
   <!-- main -->
   <div class="main">
-    {% include './operator_subnav.html' %}
-    <!-- management campaign -->
+
+    <!-- section 2 -->
     <div class="section">
-      <div class="container">
-      {% for message in messages %}
-      <div class="col-12 text-center">
-        <p id="messages" class="alert alert-success">{{ message }}</p>
-      </div>
-      {% endfor %}
+      <div class="container-fluid px-5">
+        <div class="section-title mb-3">
+          <p clas>Bop name:
+            <span class="text-monospace">{{ bop.name }}</span>
+          </p>
+          <div class="bop-tools">
+            <a href="" class="active">
+              <i class="fa fa-chess-rook"></i>
+              Campaigns</a> /
+
+            <a href="">
+              <i class="fas fa-folder-open"></i>
+              Summary of Results</a> /
+
+            <a href="">
+              <i class="fa fa-poll"></i>
+              Detailed Results</a> /
+
+            <a href="">
+              <i class="fa fa-sitemap"></i>
+              Hierarchy</a> /
+
+            <a href="">
+              <i class="fa fa-clipboard-list"></i>
+              EventLogger</a> /
+
+            <a href="">
+              <i class="fa fa-vial"></i>
+              TestPlanner</a> /
+          </div>
+
+          <a href="{% url 'create_campaign' bop.pk %}" class="btn btn-sm btn-success"><small>ADD CAMPAIGN <i
+              class="fa fa-plus"></i></small> </a>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="toolbar ml-auto px-3 py-2 mb-3">
+              <div class="search-bar">
+                <form class="form-inline my-2 my-lg-0">
+                  <label for="" class="mr-2"><i class="fa fa-search"></i></label>
+                  <input class="form-control form-control-sm mr-sm-2" type="search" aria-label="Search">
+                  <button class="" type="submit">
+                    Search
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="row">
           <!-- table list of campaigns -->
           <div class="col-12">
-            <div class="card">
-              <!-- card header -->
-              <div class="card-header bg-quinary">
-                <div class="d-flex align-items-center">
-                  <h4 class="text-white m-0">
-                    Campaign History
-                  </h4>
-                  <div class="ml-auto">
-                    <a href="{% url 'create_campaign' bop.id %}" class="btn btn-sm btn-success">
-                      <i class="fa fa-plus"></i> new campaign
-                    </a>
-                  </div>
-                </div>
-              </div>
+            <div class="list">
+              <div class="table-responsive">
+                <table class="table m-0 table-hover dnv-table" id="campaignsTable">
+                  <thead class="">
+                  <tr>
+                    <th scope="col" width="3%">ID</th>
+                    <th scope="col">name</th>
+                    <th scope="col" style="text-align: center;">
+                      active
+                    </th>
+                    <th scope="col" style="text-align: center;">campaign period</th>
+                    <th scope="col" style="text-align: center;">
+                      operation days
+                    </th>
+                    <th scope="col" style="text-align: center;">
+                      downtime days
+                    </th>
 
-              <!-- card body -->
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table
-                    class="table m-0 table-hover dnv-table"
-                    id="campaignsTable"
-                  >
-                    <thead class="">
-                      <tr>
-                        <th scope="col" width="3%">order</th>
-                        <th scope="col" style="text-align: center;">
-                          status
-                        </th>
-                        <th scope="col" style="text-align: center;">campaign period</th>
-                        <th scope="col" style="text-align: center;">
-                          operation days
-                        </th>
-                        <th scope="col" style="text-align: center;">
-                          downtime days
-                        </th>
-                        <th scope="col" style="text-align: center;">
-                          actions
-                        </th>
-                    </thead>
-                    <tbody>
-                    {% for campaign in campaigns %}
+                  </tr>
+                  </thead>
+                  <!-- order -->
+                  <tbody>
+                  {% for campaign in campaigns %}
                     <tr>
-                      <!-- order -->
-                      <td scope="row" align="center"></td>
-                      <!-- status -->
+                      <td scope="row" align="center">{{ campaign.pk }}</td>
+                      <td><a href="{% url 'update_campaign' bop.pk campaign.pk %}">{{ campaign.name }}</a></td>
                       <td align="center">
                         {% if campaign.active %}
-                          <div class="status-pointer status-active"></div>
+                          <img src="{% static 'img/icon-yes.svg' %}"/>
                         {% else %}
-                          <div class="status-pointer status-inactive"></div>
+                          <img src="{% static 'img/icon-no.svg' %}"/>
                         {% endif %}
                       </td>
-                      <!-- period -->
                       <td align="center">
-                        {{ campaign.start_date }} <b>to</b>
-                        {% if campaign.active %}
-                          current date
-                        {% else %}
-                          {{ campaign.end_date }}
-                        {% endif %}
+                        03/08/2020 <b>to</b> current date
                       </td>
-
-                      <!-- operation days -->
                       <td align="center">
                         53
                       </td>
-                      <!-- downtime days -->
                       <td align="center">
                         2
-                        <p class="text-danger">
-                          20%
-                        </p>
-                      </td>
-                      <!-- edit -->
-                      <td align="center">
-                        <a href="" class="btn btn-sm btn-info"
-                          >events
-                          <span class="badge badge-light">4</span></a
-                        >
-                        <a href="{% url 'update_campaign' bop_pk=bop.pk campaign_pk=campaign.pk %}" class="btn btn-sm btn-warning">
-                          <i class="fa fa-edit"></i> edit
-                        </a>
                       </td>
                     </tr>
-                    {% endfor %}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <!-- card footer -->
-              <div class="card-footer">
-                <nav aria-label="Page navigation example">
-                  <ul class="pagination m-0">
-                    <li class="page-item disabled">
-                      <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                      </a>
-                    </li>
-                    <li class="page-item active">
-                      <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="#">3</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                      </a>
-                    </li>
-                  </ul>
-                </nav>
+                  {% endfor %}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
   </div>
-  <!-- main -->
 
 {% endblock %}

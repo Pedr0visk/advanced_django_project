@@ -8,7 +8,6 @@ class CampaignForm(ModelForm):
         fields = ['name',
                   'description',
                   'active',
-                  'rig_name',
                   'well_name',
                   'start_date',
                   'end_date']

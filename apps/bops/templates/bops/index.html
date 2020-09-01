@@ -1,0 +1,89 @@
+{% extends 'manager/base.html' %}
+
+{% block breadcrumb %}
+<!-- breadcrumb -->
+  <div class="page-title">
+    <div class="container-fluix px-5">
+      <div class="page-title-wrapper-2">
+        <div class="page-title-heading-2">
+          <a href="{% url 'manager' %}">Home</a>
+          <span class="fa fa-chevron-right"></span>
+          <a href="{% url 'list_bops' %}">Bops</a>
+          <span class="fa fa-chevron-right"></span>
+          <span class="current-page">{{ bop.name }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block main %}
+ <!-- main -->
+  <div class="main">
+
+    <!-- section 2 -->
+    <div class="section">
+      <div class="container-fluid px-5">
+        <!-- section title -->
+        <div class="section-title mb-3">
+          <p>Dashboard for Bop</p>
+          <div>
+            <a href="{% url 'update_bop' bop.pk %}" class="btn btn-sm btn-warning mr-2"><small>EDIT BOP <i
+                  class="fa fa-pencil-alt"></i></small>
+              <a href="bop_campaign_form.html" class="btn btn-sm btn-danger"><small>DELETE BOP <i
+                    class="fa fa-times"></i></small>
+              </a>
+          </div>
+        </div>
+
+        <!-- section content -->
+        <div class="row">
+          <div class="col-sm-5 col-12">
+            <table class="table dnv-table dnv-table-admin">
+              <thead>
+                <th>{{ bop.name }}</th>
+                <th></th>
+                <th></th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="#">Hierarchy</a></td>
+                  <td width="12%" align="center"></td>
+                  <td width="12%" align="center"><a href=""></td>
+                </tr>
+                <tr>
+                  <td><a href="{% url 'list_subsystems' bop.pk %}">Safety Functions</a></td>
+                  <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
+                  <td width="12%" align="center"><a href="{% url 'list_subsystems' bop.pk %}"><i class="fa fa-pencil-alt"></i> Edit</a></td>
+                </tr>
+                <tr>
+                  <td><a href="#">Failure Rate</a></td>
+                  <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
+                  <td width="12%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
+                </tr>
+                <tr>
+                  <td><a href="{% url 'list_subsystems' bop.pk %}">Subsystems</a></td>
+                  <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
+                  <td width="12%" align="center"><a href="{% url 'list_subsystems' bop.pk %}"><i class="fa fa-pencil-alt"></i> Edit</a></td>
+                </tr>
+                <tr>
+                  <td><a href="{% url 'list_components' bop.pk %}">Components</a></td>
+                  <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
+                  <td width="12%" align="center"><a href="{% url 'list_components' bop.pk %}"><i class="fa fa-pencil-alt"></i> Edit</a></td>
+                </tr>
+                <tr>
+                  <td><a href="{% url 'list_failuremodes' bop.pk %}">Failure Modes</a></td>
+                  <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
+                  <td width="12%" align="center"><a href="{% url 'list_failuremodes' bop.pk %}"><i class="fa fa-pencil-alt"></i> Edit</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <!-- main -->
+{% endblock %}
