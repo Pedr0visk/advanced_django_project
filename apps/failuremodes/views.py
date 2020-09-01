@@ -13,9 +13,9 @@ def failuremode_list(request, bop_pk):
     return render(request, 'failuremodes/failuremode_list.html', context)
 
 
-def index(request, bop_pk, slug):
+def failuremode_update(request, bop_pk, fm_pk):
     bop = Bop.objects.get(pk=bop_pk)
-    failuremode = FailureMode.objects.get(slug=slug)
+    failuremode = FailureMode.objects.get(pk=fm_pk)
 
     context = {'bop': bop, 'failuremode': failuremode}
-    return render(request, 'subsystems/index.html', context)
+    return render(request, 'failuremodes/failuremode_form.html', context)

@@ -16,7 +16,7 @@
             <span class="fa fa-chevron-right"></span>
             <a href="{% url 'list_subsystems' bop.pk %}">Subsystems</a>
             <span class="fa fa-chevron-right"></span>
-            <a href="{% url 'index_subsystem' bop.pk components.0.subsystem.slug %}">{{ components.0.subsystem.name }}</a>
+            <a href="{% url 'index_subsystem' bop.pk components.0.subsystem.pk %}">{{ components.0.subsystem.name }}</a>
           {% endif %}
           <span class="fa fa-chevron-right"></span>
           <span class="current-page">components</span>
@@ -25,7 +25,6 @@
     </div>
   </div>
 {% endblock %}
-
 
 {% block main %}
   {% for message in messages %}
@@ -86,7 +85,7 @@
                 {% for c in components %}
                   <tr>
                     <td scope="row" width="4%">{{ c.pk }}</td>
-                    <td><a href="{% url 'index_component' bop.pk c.slug %}">{{ c.name }}</a></td>
+                    <td><a href="{% url 'index_component' bop.pk c.pk %}">{{ c.name }}</a></td>
                     <td>{{ c.subsystem.name }}</td>
                   </tr>
                 {% endfor %}
