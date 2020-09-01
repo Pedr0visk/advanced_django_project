@@ -20,6 +20,14 @@
               {{ failuremodes.0.component.subsystem.name }}
             </a>
           {% endif %}
+          {% if request.GET.component %}
+            <span class="fa fa-chevron-right"></span>
+            <a href="{% url 'list_components' bop.pk %}">Components</a>
+            <span class="fa fa-chevron-right"></span>
+            <a href="{% url 'index_component' bop.pk failuremodes.0.component.slug %}">
+              {{ failuremodes.0.component.name }}
+            </a>
+          {% endif %}
           <span class="fa fa-chevron-right"></span>
           <span class="current-page">failuremodes</span>
         </div>
@@ -43,10 +51,20 @@
         {% if request.GET.subsystem %}
           <div class="filter-helper mb-2">
             <p>
-              FILTERED COMPONENTS FOR
+              FILTERED FAILURE MODES FOR
               <span class="text-highlight">
               <b>{{ failuremodes.0.component.subsystem.name }}</b></span>
               SUBSYSTEM
+            </p>
+          </div>
+        {% endif %}
+        {% if request.GET.component %}
+          <div class="filter-helper mb-2">
+            <p>
+              FILTERED FAILURE MODES FOR
+              <span class="text-highlight">
+              <b>{{ failuremodes.0.component.name }}</b></span>
+              COMPONENT
             </p>
           </div>
         {% endif %}
