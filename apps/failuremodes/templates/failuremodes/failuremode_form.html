@@ -1,4 +1,5 @@
 {% extends 'manager/base.html' %}
+{% load static %}
 
 {% block breadcrumb %}
   <!-- breadcrumb -->
@@ -12,31 +13,45 @@
           <span class=" fa fa-chevron-right"></span>
           <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
           <span class=" fa fa-chevron-right"></span>
-          <span class="current-page">Create new Bop </span>
+          <a href="{% url 'list_failuremodes' bop.pk %}">Failure Modes</a>
+          <span class=" fa fa-chevron-right"></span>
+          <span class="current-page">{{ failuremode.name }}</span>
         </div>
       </div>
     </div>
   </div>
 {% endblock %}
 
-
-
 {% block main %}
 
+  <ul class="messagelist" id="messageList">
+  </ul>
   <div class="section bg-white">
     <div class="container-fluid px-5">
       <div class="section-title mb-4 d-flex">
-        <p clas>Add Bop</p>
+        <p clas>Change Failure Mode</p>
       </div>
       <div class="row">
         <div class="col-sm-12">
-          <form method="POST" enctype="multipart/form-data">
+          <form method="POST" enctype="multipart/form-data" id="fmForm">
             {% csrf_token %}
 
-            <!-- name field -->
+            <div class="form-group row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Component ID:</label>
+              <div class="col-sm-4">
+                {{ form.component }}
+              </div>
+              <div class="col-sm-10 offset-2">
+                <small class="form-text text-muted">
+                  Required
+                </small>
+              </div>
+            </div>
+            <hr/>
+
             <div class="form-group row">
               <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Name:</label>
-              <div class="col-sm-3">
+              <div class="col-sm-4">
                 {{ form.name }}
               </div>
               <div class="col-sm-10 offset-2">
@@ -47,42 +62,200 @@
             </div>
             <hr/>
 
-            <!-- description field -->
             <div class="form-group row">
-              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Rig:</label>
+              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Diagnostic coverage:</label>
               <div class="col-sm-1">
-                {{ form.rig }}
+                {{ form.diagnostic_coverage }}
               </div>
-              <div class="col-sm-2">
-                <div class="">
-                  <a href="" class="btn btn-sm btn-info"><i class="fa fa-plus"></i></a>
-                  <a href="" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+            </div>
+            <hr/>
+
+            {% if failuremode.distribution.type == 'Probability' %}
+              <fieldset class="form-fieldset">
+                <h4>Distribution</h4>
+                <div class="form-group row px-3">
+                  <label class="col-sm-2 col-form-label col-form-label-sm">Type:</label>
+                  <div class="col-sm-2">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        value="{{ failuremode.distribution.type }}"
+                        name="type"
+                        disabled
+                    />
+
+                  </div>
+                </div>
+                <hr/>
+                <div class="form-group row px-3">
+                  <label class="col-sm-2 col-form-label col-form-label-sm">Probability:</label>
+                  <div class="col-sm-2">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        value="{{ failuremode.distribution.probability }}"
+                        name="probability"
+                    />
+                  </div>
+                </div>
+                <hr/>
+              </fieldset>
+
+            {% elif failuremode.distribution.type == 'Exponential' %}
+              <fieldset class="form-fieldset">
+                <h4>Distribution</h4>
+                <div class="form-group row px-2">
+                  <label class="col-sm-2 col-form-label col-form-label-sm">Type:</label>
+                  <div class="col-sm-2">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        value="{{ failuremode.distribution.type }}"
+                        name="type"
+                        disabled
+                    />
+                  </div>
+                </div>
+                <hr/>
+                <div class="form-group row px-2">
+                  <label class="col-sm-2 col-form-label col-form-label-sm">Exponential failure rate:</label>
+                  <div class="col-sm-2">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        value="{{ failuremode.distribution.exponential_failure_rate }}"
+                        name="exponential_failure_rate"
+                    />
+                  </div>
+                </div>
+                <hr/>
+              </fieldset>
+
+            {% elif failuremode.distribution.type == 'Weibull' %}
+              <fieldset class="form-fieldset">
+                <h4>Distribution</h4>
+                <div class="form-group row px-2">
+                  <label class="col-sm-2 col-form-label col-form-label-sm">Type:</label>
+                  <div class="col-sm-2">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        value="{{ failuremode.distribution.type }}"
+                        name="type"
+                        disabled
+                    />
+                  </div>
+                </div>
+                <hr/>
+                <div class="form-group row px-2">
+                  <label class="col-sm-2 col-form-label col-form-label-sm">Scale:</label>
+                  <div class="col-sm-2">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        value="{{ failuremode.distribution.scale }}"
+                        name="scale"
+                    />
+                    <small class="text-muted">Hours</small>
+                  </div>
+                </div>
+                <hr/>
+                <div class="form-group row px-2">
+                  <label class="col-sm-2 col-form-label col-form-label-sm">Form:</label>
+                  <div class="col-sm-2">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        value="{{ failuremode.distribution.form }}"
+                        name="form"
+                    />
+                  </div>
+                </div>
+                <hr/>
+              </fieldset>
+
+            {% elif failuremode.distribution.type == 'Step' %}
+              <fieldset class="form-fieldset">
+                <h4>Distribution</h4>
+                <div class="form-group row px-2">
+                  <label class="col-sm-2 col-form-label col-form-label-sm">type:</label>
+                  <div class="col-sm-2">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        value="{{ failuremode.distribution.type }}"
+                        name="type"
+                        disabled
+                    />
+                  </div>
+                </div>
+                <hr/>
+                <div class="form-group row px-2">
+                  <label class="col-sm-2 col-form-label col-form-label-sm">Inital failure rate:</label>
+                  <div class="col-sm-2">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        value="{{ failuremode.distribution.inital_failure_rate }}"
+                        name="initial_failure_rate"
+                    />
+                  </div>
+                </div>
+                <hr/>
+                <div class="form-group row px-2">
+                  <label class="col-sm-2 col-form-label col-form-label-sm">Cycle size:</label>
+                  <div class="col-sm-2">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        value="{{ failuremode.distribution.cycle.size }}"
+                        name="cycle_size"
+                    />
+                  </div>
+                </div>
+                <hr/>
+                <div class="form-group row px-2">
+                  <label class="col-sm-2 col-form-label col-form-label-sm">Cycle limit:</label>
+                  <div class="col-sm-2">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        value="{{ failuremode.distribution.cycle.limit }}"
+                        name="cycle_limit"
+                    />
+                  </div>
+                </div>
+                <hr/>
+
+                <div class="form-group row px-2">
+                  <label class="col-sm-2 col-form-label col-form-label-sm">Cycle value:</label>
+                  <div class="col-sm-2">
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        value="{{ failuremode.distribution.cycle.value }}"
+                        name="cycle_value"
+                    />
+                  </div>
+                </div>
+                <hr/>
+              </fieldset>
+            {% endif %}
+
+            <div class="card p-2 bg-light text-right">
+              <div class="d-flex">
+                <button type="submit" class="btn btn-danger">
+                  Delete
+                </button>
+                <div class="ml-auto">
+                  <button type="submit" class="btn btn-secondary">
+                    Save and add another
+                  </button>
+                  <button type="submit" class="btn btn-primary">
+                    SAVE
+                  </button>
                 </div>
               </div>
-            </div>
-            <hr/>
-
-            <!-- description field -->
-            <div class="row">
-              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">File:</label>
-              <div class="col-sm-5">
-                <input name="file" type="file" class="">
-                <small class="form-text text-muted">
-                  Required.
-                </small>
-              </div>
-            </div>
-            <hr/>
-
-            <div class="card">
-              <div class="bg-light text-right p-2">
-              <a href="{% url 'manager' %}" class=" btn btn-default">
-                Cancel
-              </a>
-              <button type="submit" class="px-4 btn btn-secondary">
-                Save
-              </button>
-            </div>
             </div>
           </form>
         </div>
@@ -93,6 +266,57 @@
 
 {% block scripts %}
   <script>
+      document.getElementById("fmForm").onsubmit = function (e) {
+          e.preventDefault();
+
+          const request = new XMLHttpRequest();
+          let formData = new FormData();
+          let distribution = {};
+
+          formData.append('csrfmiddlewaretoken', this.csrfmiddlewaretoken.value)
+          formData.append('name', this.name.value)
+          formData.append('component', this.component.value)
+          formData.append('diagnostic_coverage', this.diagnostic_coverage.value)
+
+          let type = this.type.value
+          distribution.type = type
+
+          switch (type) {
+              case 'Probability':
+                  distribution.probability = this.probability.value
+              case 'Exponential':
+                  distribution.exponential_failure_rate = this.exponential_failure_rate.value
+              case 'Step':
+                  distribution.cycle = {}
+                  distribution.cycle.limit = this.cycle_limit.value
+                  distribution.cycle.size = this.cycle_size.value
+                  distribution.cycle.value = this.cycle_value
+                  distribution.initial_failure_rate = this.initial_failure_rate.value
+              case 'Weibull':
+                  distribution.form = this.form.value
+                  distribution.scale = this.scale.value
+              default:
+                  break;
+          }
+
+          formData.append('distribution', JSON.stringify(distribution))
+
+          request.open("post", "{{ request.path }}")
+          request.send(formData)
+
+          request.onreadystatechange = function () {
+              console.log(this.response)
+              let res = JSON.parse(this.response)
+              if (this.readyState == 4 && this.status == 200) {
+                  let messageList = document.getElementById("messageList")
+                  messageList.innerHTML = `<li class='success'>${res.message}</li>`
+                  window.scrollTo(0, 0);
+              }
+          };
+
+      }
+
+
       // Query all input fields
       var form_fields = document.getElementsByTagName('input')
       // customization of form fields
