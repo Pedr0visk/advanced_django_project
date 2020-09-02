@@ -4,3 +4,4 @@
 venv
 *.pyc
 bop_management/__pycache__/
+media/

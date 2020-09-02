@@ -15,7 +15,6 @@ class Subsystem(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = self.code.lower().replace('_', '-')
-        print(self.code)
         super(Subsystem, self).save(*args, **kwargs)
 
     def __str__(self):

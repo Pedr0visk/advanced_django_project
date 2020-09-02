@@ -10,7 +10,7 @@ class Component(models.Model):
     slug = models.SlugField(max_length=255, blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        self.slug = self.code.lower().replace('_', '-')
+        self.slug = '{0}-{1}'.format(self.subsystem.id, self.code.lower().replace('_', '-'))
         super(Component, self).save(*args, **kwargs)
 
     def __str__(self):

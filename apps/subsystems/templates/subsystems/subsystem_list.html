@@ -76,7 +76,7 @@
                   <tr>
                     <td scope="row" width="4%">{{ s.pk }}</td>
                     <td scope="row" width="4%">{{ s.code }}</td>
-                    <td><a href="{% url 'index_subsystem' bop.pk s.slug %}">{{ s.name }}</a></td>
+                    <td><a href="{% url 'index_subsystem' bop.pk s.pk %}">{{ s.name }}</a></td>
                   </tr>
                 {% endfor %}
                 </tbody>

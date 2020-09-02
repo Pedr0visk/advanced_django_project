@@ -16,7 +16,7 @@
             <span class="fa fa-chevron-right"></span>
             <a href="{% url 'list_subsystems' bop.pk %}">Subsystems</a>
             <span class="fa fa-chevron-right"></span>
-            <a href="{% url 'index_subsystem' bop.pk failuremodes.0.component.subsystem.slug %}">
+            <a href="{% url 'index_subsystem' bop.pk failuremodes.0.component.subsystem.pk %}">
               {{ failuremodes.0.component.subsystem.name }}
             </a>
           {% endif %}
@@ -24,7 +24,7 @@
             <span class="fa fa-chevron-right"></span>
             <a href="{% url 'list_components' bop.pk %}">Components</a>
             <span class="fa fa-chevron-right"></span>
-            <a href="{% url 'index_component' bop.pk failuremodes.0.component.slug %}">
+            <a href="{% url 'index_component' bop.pk failuremodes.0.component.pk %}">
               {{ failuremodes.0.component.name }}
             </a>
           {% endif %}
@@ -107,6 +107,7 @@
                   <th scope="col">name</th>
                   <th scope="col">component</th>
                   <th scope="col">subsystem</th>
+                  <th scope="col">distribution</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -114,9 +115,10 @@
                   <tr>
                     <td scope="row" width="4%">{{ fm.pk }}</td>
                     <td scope="row" width="4%">{{ fm.code }}</td>
-                    <td><a href="{% url 'index_failuremode' bop.pk fm.slug %}">{{ fm.name }}</a></td>
+                    <td><a href="{% url 'update_failuremode' bop.pk fm.pk %}">{{ fm.name }}</a></td>
                     <td>{{ fm.component.name }}</td>
                     <td>{{ fm.component.subsystem.name }}</td>
+                    <td>{{ fm.distribution }}</td>
                   </tr>
                 {% endfor %}
                 </tbody>

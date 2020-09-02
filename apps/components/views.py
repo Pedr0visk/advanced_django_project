@@ -13,9 +13,9 @@ def component_list(request, bop_pk):
     return render(request, 'components/component_list.html', context)
 
 
-def index(request, bop_pk, slug):
+def index(request, bop_pk, c_pk):
     bop = Bop.objects.get(pk=bop_pk)
-    component = Component.objects.get(slug=slug)
+    component = Component.objects.get(pk=c_pk)
 
     context = {'bop': bop, 'component': component}
     return render(request, 'components/index.html', context)

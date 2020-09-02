@@ -6,7 +6,7 @@ from apps.bops.models import TestGroup
 
 # Create your models here.
 class FailureMode(models.Model):
-    code = models.CharField(max_length=50)
+    code = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
     group = models.ForeignKey(TestGroup,
                               on_delete=models.DO_NOTHING,
@@ -26,7 +26,10 @@ class FailureMode(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = self.code.lower().replace('_', '-')
-        super(Component, self).save(*args, **kwargs)
+        super(FailureMode, self).save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['code']
 
     def __str__(self):
         return self.name

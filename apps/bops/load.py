@@ -47,7 +47,7 @@ class Loader:
 
         elif row[22] == 'Step':
             distribution['cycle'] = {}
-            distribution['inital_failure_rate'] = row[26]
+            distribution['initial_failure_rate'] = row[26]
             distribution['cycle']['value'] = int(row[27]) / 100
             distribution['cycle']['limit'] = row[28]
             distribution['cycle']['size'] = row[29]
@@ -73,10 +73,11 @@ class Loader:
                                                      subsystem=s)
 
                 # add failuremode to bulk
-                fm = FailureMode(code=row[7],
+                fm = FailureMode(code=row[6],
                                  name=row[5],
+                                 slug='{0}-{1}'.format(self.bop.id, row[6].lower().replace('_', '-')),
                                  distribution=self.get_distribution_attr(row),
-                                 diagnostic_coverage=get_column(row, 11),
+                                 diagnostic_coverage=get_column(row, 17),
                                  component=c)
                 bulk_mgr.add(fm)
 
