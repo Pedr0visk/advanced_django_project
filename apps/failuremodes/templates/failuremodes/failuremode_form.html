@@ -196,7 +196,7 @@
                     <input
                         type="text"
                         class="form-control form-control-sm"
-                        value="{{ failuremode.distribution.inital_failure_rate }}"
+                        value="{{ failuremode.distribution.initial_failure_rate }}"
                         name="initial_failure_rate"
                     />
                   </div>
@@ -284,17 +284,21 @@
           switch (type) {
               case 'Probability':
                   distribution.probability = this.probability.value
+                  break;
               case 'Exponential':
                   distribution.exponential_failure_rate = this.exponential_failure_rate.value
+                  break;
               case 'Step':
                   distribution.cycle = {}
                   distribution.cycle.limit = this.cycle_limit.value
                   distribution.cycle.size = this.cycle_size.value
                   distribution.cycle.value = this.cycle_value
                   distribution.initial_failure_rate = this.initial_failure_rate.value
+                  break;
               case 'Weibull':
-                  distribution.form = this.form.value
-                  distribution.scale = this.scale.value
+                  distribution.form = this.form.value;
+                  distribution.scale = this.scale.value;
+                  break;
               default:
                   break;
           }

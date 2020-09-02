@@ -11,10 +11,9 @@ def campaign_update(request, bop_pk, campaign_pk):
     bop = Bop.objects.get(pk=bop_pk)
     campaign = Campaign.objects.get(pk=campaign_pk)
 
-    form = CampaignForm(instance=campaign)
+    form = CampaignForm(request.POST or None, instance=campaign)
 
     if request.method == 'POST':
-        form = CampaignForm(request.POST, instance=campaign)
         campaign = form.save(commit=False)
         campaign.bop = bop
         campaign.save()

@@ -23,7 +23,6 @@ def failuremode_update(request, bop_pk, fm_pk):
     failuremode = get_object_or_404(FailureMode, pk=fm_pk)
     form = FailureModeForm(request.POST or None, instance=failuremode)
 
-    print(request.POST)
     if request.method == 'POST':
         if form.is_valid():
             fm = form.save()

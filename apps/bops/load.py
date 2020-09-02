@@ -47,7 +47,7 @@ class Loader:
 
         elif row[22] == 'Step':
             distribution['cycle'] = {}
-            distribution['inital_failure_rate'] = row[26]
+            distribution['initial_failure_rate'] = row[26]
             distribution['cycle']['value'] = int(row[27]) / 100
             distribution['cycle']['limit'] = row[28]
             distribution['cycle']['size'] = row[29]
