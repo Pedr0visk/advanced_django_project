@@ -15,7 +15,7 @@ class Cut(models.Model):
 
     failure_modes = models.ManyToManyField(FailureMode)
 
-    def ge(self, step):
+    def get_probabilities_product(self, step):
         """
         P(C1) = P {1, 2} = P(1)*P(2)
 

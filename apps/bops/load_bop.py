@@ -1,21 +1,12 @@
+import csv
+import names
 from collections import defaultdict
 from django.apps import apps
-import csv
 
-from .models import Test
+from .models import TestGroup, Test
 from apps.subsystems.models import Subsystem
 from apps.components.models import Component
 from apps.failuremodes.models import FailureMode
-
-
-def get_column(row, index):
-    """
-    if column is blank return 1
-    """
-    if row[index] is None or row[index] == '':
-        return 1
-    else:
-        return row[index]
 
 
 class Loader:
@@ -30,16 +21,79 @@ class Loader:
         self.failuremodes = []
         self.tests = []
         self.bop = bop
+        self.row = []
 
-    @staticmethod
-    def get_distribution_attr(row):
+    def run(self):
+        with open(self.filepath) as csvfile:
+            # read file from line 1
+            infile = csv.reader(csvfile, delimiter=',')
+            rows = [line for line in infile][1:]
+
+            bulk_mgr = BulkCreateManager(chunk_size=50)
+            for row in rows:
+                self.row = row
+                # add subsystem to bulk
+                s, created = Subsystem.objects.get_or_create(code=row[2],
+                                                             name=row[1],
+                                                             bop=self.bop)
+
+                # add component to bulk
+                c, created = Component.objects.get_or_create(code=row[4],
+                                                             name=row[3],
+                                                             subsystem=s)
+
+                # Saving Tests and attaching them to group
+                g = self.save_tests(row)
+
+                # add failuremode to bulk
+                fm, created = FailureMode.objects.get_or_create(code=row[6],
+                                                                name=row[5],
+                                                                distribution=self.get_distribution_attr(row),
+                                                                diagnostic_coverage=self.get_column(row, 17),
+                                                                component=c,
+                                                                group=g)
+
+            # save final partial chunk
+            bulk_mgr.done()
+
+    def save_tests(self, row):
+        """
+        this method saves a bunch of tests for a group
+        it checks for existing tests and groups so that we can
+        attach them.
+        """
+        tts = [9, 10, 11, 12]
+        tcs = [14, 15, 16, 17]
+
+        tests = []
+        gpk = self.bop.pk
+        for i in range(0, len(tts)):
+            tt = self.get_column(row, tts[i])
+            tc = self.get_column(row, tcs[i])
+
+            gpk = gpk * float(tc) * int(tt)
+
+            if tt != 1:
+                t, created = Test.objects.get_or_create(interval=tt, coverage=tc)
+                tests.append(t)
+
+        gpk = gpk // 43680
+        g, created = TestGroup.objects.get_or_create(code=gpk)
+
+        for t in tests:
+            g.tests.add(t)
+
+        return g
+
+    def get_distribution_attr(self, row):
+        """"""
         distribution = {'type': row[22]}
 
         if row[22] == 'Exponential':
             distribution['exponential_failure_rate'] = row[23]
 
         elif row[22] == 'Probability':
-            distribution['probability'] = get_column(row, 23)
+            distribution['probability'] = self.get_column(row, 23)
 
         elif row[22] == 'Weibull':
             distribution['scale'] = row[24]
@@ -54,41 +108,15 @@ class Loader:
 
         return distribution
 
-    def run(self):
-        with open(self.filepath) as csvfile:
-            # read file from line 1
-            infile = csv.reader(csvfile, delimiter=',')
-            rows = [line for line in infile][1:]
-
-            bulk_mgr = BulkCreateManager(chunk_size=50)
-            for row in rows:
-                # add subsystem to bulk
-                s, created = Subsystem.objects.get_or_create(code=row[2],
-                                                             name=row[1],
-                                                             bop=self.bop)
-
-                # add component to bulk
-                c, created = Component.objects.get_or_create(code=row[4],
-                                                     name=row[3],
-                                                     subsystem=s)
-
-                # add failuremode to bulk
-                fm = FailureMode(code=row[6],
-                                 name=row[5],
-                                 slug='{0}-{1}'.format(self.bop.id, row[6].lower().replace('_', '-')),
-                                 distribution=self.get_distribution_attr(row),
-                                 diagnostic_coverage=get_column(row, 17),
-                                 component=c)
-                bulk_mgr.add(fm)
-
-                # Saving Tests
-                bulk_mgr.add(Test(interval=get_column(row, 9), coverage=get_column(row, 14)))
-                bulk_mgr.add(Test(interval=get_column(row, 10), coverage=get_column(row, 15)))
-                bulk_mgr.add(Test(interval=get_column(row, 11), coverage=get_column(row, 16)))
-                bulk_mgr.add(Test(interval=get_column(row, 12), coverage=get_column(row, 17)))
-
-            # save final partial chunk
-            bulk_mgr.done()
+    @staticmethod
+    def get_column(row, index):
+        """
+        if column is blank return 1
+        """
+        if row[index] is None or row[index] == '':
+            return 1
+        else:
+            return row[index]
 
 
 class BulkCreateManager(object):

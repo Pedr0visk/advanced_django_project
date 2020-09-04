@@ -79,9 +79,13 @@ class Test(models.Model):
     interval = models.FloatField()
     coverage = models.FloatField()
 
+    def __str__(self):
+        return f'interval: {self.interval!r} - coverage: {self.coverage!r}'
+
 
 class TestGroup(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, blank=True, null=True)
+    code = models.BigIntegerField(unique=True)
 
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
@@ -89,4 +93,4 @@ class TestGroup(models.Model):
     tests = models.ManyToManyField(Test, related_name='groups')
 
     def __str__(self):
-        return self.name
+        return str(self.code)

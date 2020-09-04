@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "572862f0e993bf58a923f3daa2c85b95fcefc3893f85bee1732b938a9a6dab8e"
+            "sha256": "1306be7b63d65a22cbebd458a9cee34eed81386dbbdb161ef92c05fbe570ba7f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -23,6 +23,14 @@
             ],
             "index": "pypi",
             "version": "==3.2.10"
+        },
+        "coolname": {
+            "hashes": [
+                "sha256:410fe6ea9999bf96f2856ef0c726d5f38782bbefb7bb1aca0e91e0dc98ed09e3",
+                "sha256:e6a83a0ac88640f4f3d2070438dbe112fe80cfebc119c93bd402976ec84c0978"
+            ],
+            "index": "pypi",
+            "version": "==1.1.0"
         },
         "django": {
             "hashes": [
@@ -47,6 +55,13 @@
             ],
             "index": "pypi",
             "version": "==20.0.4"
+        },
+        "names": {
+            "hashes": [
+                "sha256:726e46254f2ed03f1ffb5d941dae3bc67c35123941c29becd02d48d0caa2a671"
+            ],
+            "index": "pypi",
+            "version": "==0.3.0"
         },
         "postgres": {
             "hashes": [
