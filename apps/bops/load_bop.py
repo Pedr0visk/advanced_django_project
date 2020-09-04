@@ -29,7 +29,6 @@ class Loader:
             infile = csv.reader(csvfile, delimiter=',')
             rows = [line for line in infile][1:]
 
-            bulk_mgr = BulkCreateManager(chunk_size=50)
             for row in rows:
                 self.row = row
                 # add subsystem to bulk
@@ -43,23 +42,21 @@ class Loader:
                                                              subsystem=s)
 
                 # Saving Tests and attaching them to group
-                g = self.save_tests(row)
+                g = self.save_group_with_tests(row)
 
                 # add failuremode to bulk
-                fm, created = FailureMode.objects.get_or_create(code=row[6],
-                                                                name=row[5],
-                                                                distribution=self.get_distribution_attr(row),
-                                                                diagnostic_coverage=self.get_column(row, 17),
-                                                                component=c,
-                                                                group=g)
+                FailureMode.objects.get_or_create(code=row[6],
+                                                  name=row[5],
+                                                  distribution=self.get_distribution_attr(row),
+                                                  diagnostic_coverage=self.get_column(row, 17),
+                                                  component=c,
+                                                  group=g)
 
-            # save final partial chunk
-            bulk_mgr.done()
-
-    def save_tests(self, row):
+    def save_group_with_tests(self, row):
         """
-        this method saves a bunch of tests for a group
-        it checks for existing tests and groups so that we can
+        This method saves a bunch of tests for a group
+        in a single row.
+        It checks for existing tests and groups so that we can
         attach them.
         """
         tts = [9, 10, 11, 12]
