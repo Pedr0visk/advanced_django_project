@@ -6,6 +6,8 @@ from apps.failuremodes.models import FailureMode
 class Cut(models.Model):
     index = models.BigIntegerField()
     order = models.BigIntegerField()
+    value = models.TextField()
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -15,7 +17,7 @@ class Cut(models.Model):
 
     failure_modes = models.ManyToManyField(FailureMode)
 
-    def get_probabilities_product(self, step):
+    def prob_prod(self, step):
         """
         P(C1) = P {1, 2} = P(1)*P(2)
 

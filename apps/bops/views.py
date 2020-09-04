@@ -60,13 +60,15 @@ def safety_function_upload(request, bop_pk):
 
     if request.method == 'POST':
         form = SafetyFunctionForm(request.POST)
-        sf = form.save()
+        sf = form.save(commit=False)
+        sf.bop = bop
+        sf.save()
 
-        cuts_file = Csv.objects.create(file_name=request.FILES['file'], bop=bop)
-        SafetyFunctionLoader(cuts_file.file_name.path, bop).run()
+        cuts_txt = Csv.objects.create(file_name=request.FILES['file'], bop=bop)
+        SafetyFunctionLoader(cuts_txt.file_name.path, safety_function=sf).run()
 
-        messages.success(request, 'Safety Function created successfully')
-        return redirect('list_safety_functions')
+        messages.success(request, 'Safety Function created successfully!')
+        return redirect('list_safety_functions', bop.pk)
 
     context = {'bop': bop, 'form': form}
     return render(request, 'safety_functions/safety_function_form.html', context)
@@ -74,10 +76,26 @@ def safety_function_upload(request, bop_pk):
 
 def safety_function_list(request, bop_pk):
     bop = Bop.objects.get(pk=bop_pk)
+    sf_set = bop.safety_functions.all()
 
-    context = {'bop': bop}
+    context = {'bop': bop, 'safety_functions': sf_set}
     return render(request, 'safety_functions/safety_function_list.html', context)
 
+
+def safety_function_index(request, bop_pk, sf_pk):
+    bop = Bop.objects.get(pk=bop_pk)
+    sf = SafetyFunction.objects.get(pk=sf_pk)
+
+    context = {'bop': bop, 'safety_function': sf}
+    return render(request, 'safety_functions/index.html', context)
+
+def safety_function_cuts(request, bop_pk, sf_pk):
+    bop = Bop.objects.get(pk=bop_pk)
+    sf = SafetyFunction.objects.get(pk=sf_pk)
+    cut_set = sf.cuts.all()
+
+    context = {'bop': bop, 'safety_function': sf, 'cuts': cut_set}
+    return render(request, 'cuts/cut_list.html', context)
 
 def run(request, pk):
     campaign_period = 30 * 24

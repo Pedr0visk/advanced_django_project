@@ -2,9 +2,10 @@ from collections import defaultdict
 from django.apps import apps
 import csv
 
-from .models import Test
-from apps.subsystems.models import Subsystem
-from apps.components.models import Component
+from django.core.exceptions import ObjectDoesNotExist
+
+from .models import SafetyFunction
+from apps.cuts.models import Cut
 from apps.failuremodes.models import FailureMode
 
 
@@ -30,39 +31,28 @@ class Loader:
 
     def run(self):
         with open(self.filepath) as csvfile:
+
+            infile = csv.reader(csvfile, delimiter='\n')
+
             # read file from line 1
-            infile = csv.reader(csvfile, delimiter=',')
-            rows = [line for line in infile][1:]
+            rows = [line[0].split(',') for line in infile][1:]
 
-            bulk_mgr = BulkCreateManager(chunk_size=50)
             for row in rows:
-                # add subsystem to bulk
-                s, created = Subsystem.objects.get_or_create(code=row[2],
-                                                             name=row[1],
-                                                             bop=self.bop)
+                index = row[0]
+                fm_list = row[1:]
 
-                # add component to bulk
-                c, created = Component.objects.get_or_create(code=row[4],
-                                                     name=row[3],
-                                                     subsystem=s)
+                c = Cut.objects.create(
+                    index=index,
+                    order=len(fm_list),
+                    value=','.join(fm_list),
+                    safety_function=self.sf)
 
-                # add failuremode to bulk
-                fm = FailureMode(code=row[6],
-                                 name=row[5],
-                                 slug='{0}-{1}'.format(self.bop.id, row[6].lower().replace('_', '-')),
-                                 distribution=self.get_distribution_attr(row),
-                                 diagnostic_coverage=get_column(row, 17),
-                                 component=c)
-                bulk_mgr.add(fm)
-
-                # Saving Tests
-                bulk_mgr.add(Test(interval=get_column(row, 9), coverage=get_column(row, 14)))
-                bulk_mgr.add(Test(interval=get_column(row, 10), coverage=get_column(row, 15)))
-                bulk_mgr.add(Test(interval=get_column(row, 11), coverage=get_column(row, 16)))
-                bulk_mgr.add(Test(interval=get_column(row, 12), coverage=get_column(row, 17)))
-
-            # save final partial chunk
-            bulk_mgr.done()
+                for code in fm_list:
+                    try:
+                        fm = FailureMode.objects.get(code=code)
+                        c.failure_modes.add(fm)
+                    except ObjectDoesNotExist:
+                        print("FailureMode {} doesn't exist.".format(code))
 
 
 class BulkCreateManager(object):

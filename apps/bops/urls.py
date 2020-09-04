@@ -18,4 +18,10 @@ urlpatterns = [
     path('<int:bop_pk>/safety-functions/upload/',
          views.safety_function_upload,
          name='upload_safety_function'),
+    path('<int:bop_pk>/safety-functions/<int:sf_pk>/',
+         views.safety_function_index,
+         name='index_safety_function'),
+    path('<int:bop_pk>/safety-functions/<int:sf_pk>/cuts/',
+         views.safety_function_cuts,
+         name='list_safety_function_cuts'),
 ]

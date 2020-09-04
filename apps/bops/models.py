@@ -36,6 +36,9 @@ class Certification(models.Model):
 class SafetyFunction(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
+    bop = models.ForeignKey(Bop,
+                            on_delete=models.CASCADE,
+                            related_name="safety_functions")
 
     def __str__(self):
         return self.name

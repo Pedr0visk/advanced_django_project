@@ -33,7 +33,7 @@
       <div class="container-fluid px-5">
         <div class="section-title mb-3">
           <p>Select safety function to manage</p>
-          <a href="{% url 'upload_safety_function' bop.pk %}" class="btn btn-sm btn-success"><small>ADD SAFETY FUNCTION <i
+          <a href="{% url 'upload_bop' %}" class="btn btn-sm btn-success"><small>ADD SAFETY FUNCTION <i
               class="fa fa-plus"></i></small> </a>
         </div>
 
@@ -61,18 +61,18 @@
                 <thead class="bg-white-50">
                 <tr>
                   <th scope="col">ID</th>
-                  <th scope="col">name</th>
-                  <th scope="col">description</th>
-                  <th scope="col">cuts</th>
+                  <th scope="col">index</th>
+                  <th scope="col">failure modes</th>
+                  <th scope="col">order</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for sf in safety_functions %}
+                {% for cut in cuts %}
                   <tr>
-                    <td scope="row" width="4%">{{ sf.pk }}</td>
-                    <td><a href="{% url 'index_safety_function' bop.pk sf.pk %}">{{ sf.name }}</a></td>
-                    <td>{{ sf.description }}</td>
-                    <td><a href="">{{ sf.cuts.count }}</a></td>
+                    <td scope="row" width="4%">{{ cut.pk }}</td>
+                    <td>{{ cut.index }}</td>
+                    <td>{{ cut.value }}</td>
+                    <td>{{ cut.order }}</td>
                   </tr>
                 {% endfor %}
                 </tbody>
