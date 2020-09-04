@@ -1,3 +1,4 @@
+import re
 from django.db import models
 
 
@@ -39,10 +40,39 @@ class SafetyFunction(models.Model):
     def __str__(self):
         return self.name
 
+    def calculate_probability(self, step):
+        p = 1
+        """
+        P(C1 U C2 ... CN) = 1 - (1 - P(C2))*(1-P(C3))
+        
+        return 1 - reduce(lambda x, y: x*y))
+        
+        """
+        pass
 
-class Cut(models.Model):
-    safety_function = models.ForeignKey(SafetyFunction, on_delete=models.CASCADE)
-    failures_mode = models.TextField()
+    def reduce(self, failed_failure_mode):
+        pass
+        """
+            ### armazenamento
+            ### busca
+            
+            #1. Separar cuts por ordem
+            #2. buscar modulo de falha em cada corte
+            #3. promover corte para um nova ordem 
+            #4. remover cortes que possuam um modulo de falha dos cortes promovidos
+            
+            
+            high_order_cuts = self.cuts.filter(order=1)
+            medium_order_cuts = self.cuts.filter(order=2)
+            lower_order_cuts = self.cuts.filter(order=3)
+
+            promoted_failure_modes = [] # 'AB_CD', 'EF_GH', 'IJ_KL' 
+
+            for cut in medium_order_cuts:
+                failure_mode = cut.upgrade(failed_failure_mode)
+                promoted_failure_modes.append(failure_mode)
+
+        """
 
 
 class Test(models.Model):

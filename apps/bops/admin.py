@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Bop, Rig
+from .models import Bop, Rig, SafetyFunction
 
 
 class BopAdmin(admin.ModelAdmin):
@@ -20,3 +20,12 @@ class RigAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Rig, RigAdmin)
+
+
+class SafetyFunctionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name',)
+    list_display_links = ('id', 'name',)
+    list_per_page = 25
+
+
+admin.site.register(SafetyFunction, SafetyFunctionAdmin)

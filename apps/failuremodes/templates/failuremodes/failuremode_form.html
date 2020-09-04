@@ -176,7 +176,7 @@
 
             {% elif failuremode.distribution.type == 'Step' %}
               <fieldset class="form-fieldset">
-                <h4>Distribution</h4>
+                <h4>Distribution ATSV</h4>
                 <div class="form-group row px-2">
                   <label class="col-sm-2 col-form-label col-form-label-sm">type:</label>
                   <div class="col-sm-2">
@@ -211,6 +211,7 @@
                         value="{{ failuremode.distribution.cycle.size }}"
                         name="cycle_size"
                     />
+                    <small class="text-muted">Cycle hours</small>
                   </div>
                 </div>
                 <hr/>
@@ -236,6 +237,7 @@
                         value="{{ failuremode.distribution.cycle.value }}"
                         name="cycle_value"
                     />
+                    <small class="text-muted">For each test we have this percent of damage on the component</small>
                   </div>
                 </div>
                 <hr/>
@@ -292,7 +294,7 @@
                   distribution.cycle = {}
                   distribution.cycle.limit = this.cycle_limit.value
                   distribution.cycle.size = this.cycle_size.value
-                  distribution.cycle.value = this.cycle_value
+                  distribution.cycle.value = this.cycle_value.value
                   distribution.initial_failure_rate = this.initial_failure_rate.value
                   break;
               case 'Weibull':

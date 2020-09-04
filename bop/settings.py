@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'apps.bops',
     'apps.subsystems',
     'apps.components',
+    'apps.cuts',
     'apps.failuremodes',
     'apps.managers',
     'apps.campaigns',
