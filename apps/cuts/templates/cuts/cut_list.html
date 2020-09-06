@@ -1,5 +1,5 @@
 {% extends 'manager/base.html' %}
-
+{% load manager_extras %}
 {% block breadcrumb %}
   <!-- breadcrumb -->
   <div class="page-title">
@@ -8,11 +8,7 @@
         <div class="page-title-heading-2">
           <a href="{% url 'manager' %}">Home</a>
           <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'list_bops' %}">Bops</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
-          <span class="fa fa-chevron-right"></span>
-          <span class="current-page">Safety Functions</span>
+          <span class="current-page">Cuts</span>
         </div>
       </div>
     </div>
@@ -77,7 +73,64 @@
                 {% endfor %}
                 </tbody>
               </table>
+              <div class="paginator p-3">
+                <div class="d-flex align-items-center">
+                  <nav class="mr-3">
+                    {% if cuts.has_other_pages %}
+                      <ul class="pagination m-0">
+                        {% if cuts.has_previous %}
+                          <li class="page-item">
+                            <a
+                                class="page-link"
+                                href="{% my_url cuts.previous_page_number 'page' request.GET.urlencode %}"
+                                aria-label="Previous">
+                              <span aria-hidden="true">&laquo;</span>
+                            </a>
+                          </li>
+                        {% else %}
+                          <li class="page-item disabled">
+                            <a class="page-link" aria-label="Previous">
+                              <span aria-hidden="true">&laquo;</span>
+                            </a>
+                          </li>
+                        {% endif %}
 
+                        {% for i in cuts.paginator.page_range %}
+                          {% if cuts.number == i %}
+                            <li class="page-item active">
+                              <a class="page-link">{{ i }}</a>
+                            </li>
+                          {% else %}
+                            <li class="page-item">
+                              <a class="page-link" href="{% my_url i 'page' request.GET.urlencode %}">{{ i }}</a>
+                            </li>
+                          {% endif %}
+                        {% endfor %}
+
+                        {% if cuts.has_next %}
+                          <li class="page-item">
+                            <a class="page-link"
+                               href="{% my_url cuts.next_page_number 'page' request.GET.urlencode %}"
+                               aria-label="Next">
+                              <span aria-hidden="true">&raquo;</span>
+                            </a>
+                          </li>
+                        {% else %}
+                          <li class="page-item disabled">
+                            <a class="page-link" aria-label="Next">
+                              <span aria-hidden="true">&raquo;</span>
+                            </a>
+                          </li>
+                        {% endif %}
+                      </ul>
+                    {% endif %}
+                  </nav>
+                  <small class="counter">
+                    {{ cuts.count }} Components
+                  </small>
+                </div>
+
+              </div>
             </div>
           </div>
           <!-- end cols -->
