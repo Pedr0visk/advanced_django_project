@@ -1,4 +1,8 @@
 import csv
+import time
+
+from library import calc
+
 from django.contrib import messages
 from django.db import transaction, IntegrityError
 from django.shortcuts import render, redirect, HttpResponse
@@ -102,15 +106,18 @@ def safety_function_cuts(request, bop_pk, sf_pk):
 
 
 def run(request, pk):
+    start = time.perf_counter()
+
     campaign_period = 30 * 24
-    """
-        s1.reduce
-    """
     sum_total = 0
     results = []
-    for step in range(0, campaign_period, 24):
-        # sum_total += s1.calculate_probability(step)
-        results.append(sum_total)
-        pass
+
+    s1 = SafetyFunction.objects.first()
+
+    s1.failure_probability(24)
+
+    finish = time.perf_counter()
+
+    print(f'Finished in {round(finish-start, 2)} second(s)')
 
     return HttpResponse('ok')

@@ -1,6 +1,7 @@
 from django.db import models
 from apps.bops.models import SafetyFunction
 from apps.failuremodes.models import FailureMode
+from functools import reduce
 
 
 class Cut(models.Model):
@@ -17,18 +18,18 @@ class Cut(models.Model):
 
     failure_modes = models.ManyToManyField(FailureMode)
 
-    def prob_prod(self, step):
+    def calc_pfr(self, step):
         """
         P(C1) = P {1, 2} = P(1)*P(2)
 
         list = self.failure_modes.all() # [fm1, fm2, fm3]
 
+
         return 1 - (1 - reduce(lambda x.calculate_pfd(), y.calculate_pfd(): x*y), list)
         """
-        pass
+        results = []
 
-    def upgrade(self, failed_failure_mode):
-        pass
+        for fm in self.failure_modes.all():
+            results.append(fm.pdf(step))
 
-    def disabled(self, key):
-        pass
+        return 1 - (1 - reduce((lambda x, y: x * y), results))

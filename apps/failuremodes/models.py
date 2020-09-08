@@ -1,7 +1,12 @@
+import os
+
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from apps.components.models import Component
 from apps.bops.models import TestGroup
+
+from library import calc
+from functools import reduce
 
 
 class FailureMode(models.Model):
@@ -12,38 +17,47 @@ class FailureMode(models.Model):
                               blank=True,
                               null=True,
                               related_name='failure_modes')
+
     component = models.ForeignKey(Component,
                                   on_delete=models.CASCADE,
                                   related_name='failure_modes')
+
     failure_mode = models.ForeignKey('self',
                                      on_delete=models.PROTECT,
                                      related_name='failure_children',
                                      blank=True,
                                      null=True)
+
     distribution = JSONField(blank=True, null=True)
     diagnostic_coverage = models.FloatField()
     slug = models.SlugField(max_length=255, blank=True, null=True)
 
-    def pfd(self, step):
-        """
-        This function returns the complement of a test for each
-        for test in tests:
-            sub = 1 - (1 - math.exp((-1) * test.interval * step * (dt) * test.coverage))
-            pols.append(sub)
-        # pols = [0.234523, 0.53244, 0.12345]
-        return 1 - reduce(lambda x, y: x*y), pols)
-        """
+    def pdf(self, step):
         result = 1
         pols = []
+
         for test in self.group.tests.all():
-            r = self.test_result(test, step)
-            print(test)
+            pols.append(self.test_result(test, step))
 
-        return result
+        return 1 - reduce((lambda x, y: x * y), pols)
 
-    @staticmethod
-    def test_result(test, time):
-        return 1
+    def test_result(self, test, time):
+        type = self.distribution['type']
+
+        if type == 'Exponential':
+            return calc.exponential(self.distribution['exponential_failure_rate'], time)
+
+        elif type == 'Probability':
+            return calc.exponential(self.distribution['probability'], time)
+
+        elif type == 'Weibull':
+            return calc.exponential(self.coverage, test.scale, test.form, time)
+
+        elif type == 'Step':
+            return 1
+
+        else:
+            return 1
 
     def save(self, *args, **kwargs):
         self.slug = self.code.lower().replace('_', '-')

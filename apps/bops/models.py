@@ -1,4 +1,6 @@
 import re
+
+from functools import reduce
 from django.db import models
 
 
@@ -43,15 +45,19 @@ class SafetyFunction(models.Model):
     def __str__(self):
         return self.name
 
-    def calculate_probability(self, step):
-        p = 1
+    def failure_probability(self, step):
         """
         P(C1 U C2 ... CN) = 1 - (1 - P(C2))*(1-P(C3))
 
         return 1 - reduce(lambda x, y: x*y))
 
         """
-        pass
+        results = []
+
+        for cut in self.cuts.all():
+            results.append(cut.calc_pfr(step))
+
+        return 1 - reduce((lambda x, y: x * y), results)
 
     def reduce(self, failed_failure_mode):
         pass
