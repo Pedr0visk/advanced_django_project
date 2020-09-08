@@ -1,0 +1,158 @@
+{% extends 'manager/base.html' %}
+
+{% block breadcrumb %}
+  <!-- breadcrumb -->
+  <div class="page-title">
+    <div class="container-fluid px-5">
+      <div class="page-title-wrapper-2">
+        <div class="page-title-heading-2">
+          <a href="{% url 'dashboard' %}">Home</a>
+          <span class="fa fa-chevron-right"></span>
+          <a href="{% url 'list_bops' %}">Bop list</a>
+          <span class=" fa fa-chevron-right"></span>
+          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
+          <span class=" fa fa-chevron-right"></span>
+          <a href="{% url 'list_safety_functions' bop.pk %}">Safety functions</a>
+          <span class=" fa fa-chevron-right"></span>
+          <span class="current-page">Create new Safety function </span>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+
+{% block main %}
+  <ul class="messagelist" id="messageList">
+  </ul>
+  <div class="section bg-white">
+    <div class="container-fluid px-5">
+
+      <div class="section-title mb-4 d-flex">
+        <p clas>Add Safety function</p>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <form method="POST" enctype="multipart/form-data" id="sfForm">
+            {% csrf_token %}
+
+            <!-- name field -->
+            <div class="form-group row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Name:</label>
+              <div class="col-sm-3">
+                {{ form.name }}
+              </div>
+              <div class="col-sm-10 offset-2">
+                <small class="form-text text-muted">
+                  Required
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+            <!-- description field -->
+            <div class="form-group row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Description:</label>
+              <div class="col-sm-1">
+                {{ form.description }}
+              </div>
+            </div>
+            <hr/>
+
+            <!-- file field -->
+            <div class="row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Cuts File:</label>
+              <div class="col-sm-5">
+                <input name="file" type="file" class="">
+                <small class="form-text text-muted">
+                  Required. List of cuts for this safety function.
+                </small>
+              </div>
+              <div class="col-8 offset-2">
+                <div class="progress my-2">
+                  <div id="uploadProgressBar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0%</div>
+                </div>
+              </div>
+            </div>
+            <hr/>
+
+            <div class="card">
+              <div class="bg-light text-right p-2">
+                <a href="{% url 'manager' %}" class=" btn btn-default">
+                  Cancel
+                </a>
+                <button type="submit" class="px-4 btn btn-secondary">
+                  Save
+                </button>
+              </div>
+            </div>
+
+            <div class="fa-2x" id="loader" style="display: none">
+
+              <i class="fas fa-circle-notch fa-spin mr-3"></i>
+              <small>Inserting cuts on database... It can take a few minutes, get a coffe
+              <i class="fa fa-mug-hot"></i></small>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    document.getElementById("sfForm").onsubmit = function (e) {
+      e.preventDefault();
+
+
+      const request = new XMLHttpRequest();
+      const uploadProgressBar = document.getElementById("uploadProgressBar")
+      const loader = document.getElementById("loader")
+
+
+      loader.style.display = 'block';
+
+      request.open("POST", "{{ request.path }}");
+
+      request.upload.addEventListener("progress", e => {
+        const percent = e.lengthComputable ? (e.loaded / e.total) * 100 : 0;
+
+        uploadProgressBar.style.width = percent.toFixed(2) + "%";
+        uploadProgressBar.textContent = percent.toFixed(2) + "%";
+      });
+
+      request.onreadystatechange = function () {
+        console.log(this.response)
+        let res = JSON.parse(this.response)
+        if (this.readyState == 4 && this.status == 200) {
+          let messageList = document.getElementById("messageList")
+          messageList.innerHTML = `<li class='success'>${res.message}</li>`
+          window.scrollTo(0, 0);
+
+          loader.style.display = 'none';
+        }
+      };
+
+
+      request.send(new FormData(this));
+    }
+
+    // Query all input fields
+    var form_fields = document.getElementsByTagName('input')
+    // customization of form fields
+    for (var field in form_fields) {
+        if (form_fields[field].type == 'file') continue
+        form_fields[field].className += 'form-control form-control-sm'
+    }
+
+    // Query all selects fields
+    var form_fields = document.getElementsByTagName('select')
+    // customization of form fields
+    for (var field in form_fields) {
+        form_fields[field].className += 'form-control form-control-sm'
+    }
+  </script>
+{% endblock %}

@@ -23,6 +23,7 @@ class BopViewTest(TestCase):
         Campaign.objects.create(bop=self.bop, name='first campaign')
 
     def test_list_bop_campaigns(self):
+
         """
         Assert 200 for bop campaigns list
         """
@@ -49,6 +50,7 @@ class BopViewTest(TestCase):
 
         self.assertRedirects(response, '/bops/1/campaigns/')
         self.assertEquals(Campaign.objects.count(), 2)
+
 
     def test_campaign_can_be_created_without_description(self):
         """

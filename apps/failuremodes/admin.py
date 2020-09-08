@@ -1,3 +1,12 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import FailureMode
+
+
+class FailureModeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'code', 'name', 'group')
+    list_display_links = ('id', 'code',)
+    list_per_page = 25
+
+
+admin.site.register(FailureMode, FailureModeAdmin)

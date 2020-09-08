@@ -8,7 +8,11 @@
         <div class="page-title-heading-2">
           <a href="{% url 'manager' %}">Home</a>
           <span class="fa fa-chevron-right"></span>
-          <span class="current-page">Bops </span>
+          <a href="{% url 'list_bops' %}">Bops</a>
+          <span class="fa fa-chevron-right"></span>
+          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
+          <span class="fa fa-chevron-right"></span>
+          <span class="current-page">Safety Functions</span>
         </div>
       </div>
     </div>
@@ -28,8 +32,8 @@
     <div class="section" id="home">
       <div class="container-fluid px-5">
         <div class="section-title mb-3">
-          <p>Select bop to manage</p>
-          <a href="{% url 'upload_bop' %}" class="btn btn-sm btn-success"><small>ADD BOP <i
+          <p>Select safety function to manage</p>
+          <a href="{% url 'upload_safety_function' bop.pk %}" class="btn btn-sm btn-success"><small>ADD SAFETY FUNCTION <i
               class="fa fa-plus"></i></small> </a>
         </div>
 
@@ -58,15 +62,17 @@
                 <tr>
                   <th scope="col">ID</th>
                   <th scope="col">name</th>
-                  <th scope="col">created_at</th>
+                  <th scope="col">description</th>
+                  <th scope="col">cuts</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for bop in bops %}
+                {% for sf in safety_functions %}
                   <tr>
-                    <td scope="row" width="4%">{{ bop.pk }}</td>
-                    <td><a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a></td>
-                    <td><a href="">{{ bop.created_at }}</a></td>
+                    <td scope="row" width="4%">{{ sf.pk }}</td>
+                    <td><a href="{% url 'index_safety_function' bop.pk sf.pk %}">{{ sf.name }}</a></td>
+                    <td>{{ sf.description }}</td>
+                    <td><a href="">{{ sf.cuts.count }}</a></td>
                   </tr>
                 {% endfor %}
                 </tbody>
