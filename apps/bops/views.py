@@ -125,8 +125,7 @@ def run(request, pk):
     if cache.get('failuremodes'):
         s1.pfd(step)
     else:
-        data = {}
-        data[step] = {}
+        data = {step: {}}
 
         for fm in FailureMode.objects.all():
             data[step][fm.code] = fm.pfd(step)
