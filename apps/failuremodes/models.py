@@ -32,7 +32,7 @@ class FailureMode(models.Model):
     diagnostic_coverage = models.FloatField()
     slug = models.SlugField(max_length=255, blank=True, null=True)
 
-    def pdf(self, step):
+    def pfd(self, step):
         result = 1
         pols = []
 
@@ -51,7 +51,7 @@ class FailureMode(models.Model):
             return calc.exponential(self.distribution['probability'], time)
 
         elif type == 'Weibull':
-            return calc.exponential(self.coverage, test.scale, test.form, time)
+            return calc.exponential(test.coverage, self.distribution['scale'], self.distribution['probability'], time)
 
         elif type == 'Step':
             return 1

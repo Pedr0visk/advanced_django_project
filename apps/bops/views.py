@@ -3,6 +3,8 @@ import time
 
 from library import calc
 
+from django.core.cache import cache
+
 from django.contrib import messages
 from django.db import transaction, IntegrityError
 from django.shortcuts import render, redirect, HttpResponse
@@ -15,6 +17,7 @@ from .load_safety_function import Loader as SafetyFunctionLoader
 
 from apps.csvs.models import Csv
 from apps.managers.decorators import allowed_users
+from apps.failuremodes.models import FailureMode
 
 
 @allowed_users(allowed_roles=['Admin'])
@@ -108,16 +111,29 @@ def safety_function_cuts(request, bop_pk, sf_pk):
 def run(request, pk):
     start = time.perf_counter()
 
-    campaign_period = 30 * 24
-    sum_total = 0
-    results = []
-
+    b1 = Bop.objects.get(pk=pk)
     s1 = SafetyFunction.objects.first()
+    step = 24
 
-    s1.failure_probability(24)
+    fm_set = FailureMode.objects.all()
+
+    # run all failure modes pfd by step
+    # run cuts pfd for safety function
+
+    cache.delete('failuremodes')
+
+    if cache.get('failuremodes'):
+        s1.pfd(step)
+    else:
+        data = {step: {}}
+
+        for fm in FailureMode.objects.all():
+            data[step][fm.code] = fm.pfd(step)
+
+    s1.pfd(step)
 
     finish = time.perf_counter()
 
     print(f'Finished in {round(finish-start, 2)} second(s)')
 
-    return HttpResponse('ok')
+    return HttpResponse(fm_set.count())

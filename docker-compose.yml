@@ -1,31 +1,38 @@
 version: '3.7'
 
-services: 
+services:
   postgres-container:
     image: postgres:12.2
     environment:
       POSTGRES_DB: bop_database
       POSTGRES_PASSWORD: secret
-    ports: 
+    ports:
       - "5432:5432"
-    volumes: 
+    volumes:
       - .:/docker-entrypoint-initdb.d
-    networks: 
-      - net
-  
-  pgadmin-container:
-    image: dpage/pgadmin4
-    environment: 
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: pwd
-    ports: 
-      - "8002:80"
-    depends_on: 
-      - postgres-container
-    networks: 
+    networks:
       - net
 
-volumes: 
+  pgadmin-container:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: pwd
+    ports:
+      - "8002:80"
+    depends_on:
+      - postgres-container
+    networks:
+      - net
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - net
+
+volumes:
   postgres:
-networks: 
+networks:
   net:

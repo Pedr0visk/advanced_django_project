@@ -3,6 +3,8 @@ from apps.bops.models import SafetyFunction
 from apps.failuremodes.models import FailureMode
 from functools import reduce
 
+from django.core.cache import cache
+
 
 class Cut(models.Model):
     index = models.BigIntegerField()
@@ -18,7 +20,7 @@ class Cut(models.Model):
 
     failure_modes = models.ManyToManyField(FailureMode)
 
-    def calc_pfr(self, step):
+    def pfd(self, step):
         """
         P(C1) = P {1, 2} = P(1)*P(2)
 
@@ -29,7 +31,10 @@ class Cut(models.Model):
         """
         results = []
 
-        for fm in self.failure_modes.all():
-            results.append(fm.pdf(step))
+        if cache.get('failuremodes'):
+            fm_set = cache.get('failuremodes')
 
-        return 1 - (1 - reduce((lambda x, y: x * y), results))
+            for fm in self.failure_modes.all():
+                results.append(fm_set[step][fm.code])
+
+            return 1 - (1 - reduce((lambda x, y: x * y), results))
