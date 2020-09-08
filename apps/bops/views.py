@@ -1,6 +1,8 @@
 import csv
 from django.contrib import messages
+from django.db import transaction, IntegrityError
 from django.shortcuts import render, redirect, HttpResponse
+from django.http.response import JsonResponse
 
 from .models import Bop, SafetyFunction
 from .forms import BopForm, SafetyFunctionForm
@@ -54,21 +56,21 @@ def index(request, pk):
     return render(request, 'bops/index.html', context)
 
 
+@transaction.atomic
 def safety_function_upload(request, bop_pk):
     bop = Bop.objects.get(pk=bop_pk)
-    form = SafetyFunctionForm()
+    form = SafetyFunctionForm(request.POST or None)
 
     if request.method == 'POST':
-        form = SafetyFunctionForm(request.POST)
-        sf = form.save(commit=False)
-        sf.bop = bop
-        sf.save()
+        if form.is_valid():
+            sf = form.save(commit=False)
+            sf.bop = bop
+            sf.save()
 
-        cuts_txt = Csv.objects.create(file_name=request.FILES['file'], bop=bop)
-        SafetyFunctionLoader(cuts_txt.file_name.path, safety_function=sf).run()
+            cuts_txt = Csv.objects.create(file_name=request.FILES['file'], bop=bop)
 
-        messages.success(request, 'Safety Function created successfully!')
-        return redirect('list_safety_functions', bop.pk)
+            SafetyFunctionLoader(cuts_txt.file_name.path, safety_function=sf).run()
+            return JsonResponse({'message': 'successfully created!'})
 
     context = {'bop': bop, 'form': form}
     return render(request, 'safety_functions/safety_function_form.html', context)
@@ -89,6 +91,7 @@ def safety_function_index(request, bop_pk, sf_pk):
     context = {'bop': bop, 'safety_function': sf}
     return render(request, 'safety_functions/index.html', context)
 
+
 def safety_function_cuts(request, bop_pk, sf_pk):
     bop = Bop.objects.get(pk=bop_pk)
     sf = SafetyFunction.objects.get(pk=sf_pk)
@@ -96,6 +99,7 @@ def safety_function_cuts(request, bop_pk, sf_pk):
 
     context = {'bop': bop, 'safety_function': sf, 'cuts': cut_set}
     return render(request, 'cuts/cut_list.html', context)
+
 
 def run(request, pk):
     campaign_period = 30 * 24

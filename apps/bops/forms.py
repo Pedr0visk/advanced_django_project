@@ -11,4 +11,4 @@ class BopForm(ModelForm):
 class SafetyFunctionForm(ModelForm):
     class Meta:
         model = SafetyFunction
-        fields = ['name' , 'description']
+        fields = ['name', 'description']

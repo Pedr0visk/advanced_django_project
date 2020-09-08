@@ -1,6 +1,8 @@
 from collections import defaultdict
 from django.apps import apps
+
 import csv
+import time
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -30,9 +32,13 @@ class Loader:
         self.sf = safety_function
 
     def run(self):
+        # how much longer takes to add a sf.txt file
+        start = time.perf_counter()
+
         with open(self.filepath) as csvfile:
 
             infile = csv.reader(csvfile, delimiter='\n')
+            failuremodes = FailureMode.objects.all()
 
             # read file from line 1
             rows = [line[0].split(',') for line in infile][1:]
@@ -41,18 +47,21 @@ class Loader:
                 index = row[0]
                 fm_list = row[1:]
 
-                c = Cut.objects.create(
-                    index=index,
-                    order=len(fm_list),
-                    value=','.join(fm_list),
-                    safety_function=self.sf)
+                c = Cut.objects.create(index=index,
+                                       order=len(fm_list),
+                                       value=','.join(fm_list),
+                                       safety_function=self.sf)
 
                 for code in fm_list:
                     try:
-                        fm = FailureMode.objects.get(code=code)
+                        fm = failuremodes.filter(code=code).get()
                         c.failure_modes.add(fm)
                     except ObjectDoesNotExist:
                         print("FailureMode {} doesn't exist.".format(code))
+
+        finish = time.perf_counter()
+
+        print(f'Finished in {round(finish-start, 2)} second(s)')
 
 
 class BulkCreateManager(object):
