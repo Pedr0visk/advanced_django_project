@@ -1,14 +1,10 @@
-import csv
 import time
 
-from library import calc
-
-from django.core.cache import cache
-
 from django.contrib import messages
-from django.db import transaction, IntegrityError
+from django.db import transaction
 from django.shortcuts import render, redirect, HttpResponse
 from django.http.response import JsonResponse
+from django.core.cache import cache
 
 from .models import Bop, SafetyFunction
 from .forms import BopForm, SafetyFunctionForm
