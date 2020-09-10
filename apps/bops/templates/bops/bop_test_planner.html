@@ -1,0 +1,399 @@
+{% extends 'manager/base.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+  <!-- breadcrumb -->
+  <div class="page-title">
+    <div class="container-fluid px-5">
+      <div class="page-title-wrapper-2">
+        <div class="page-title-heading-2">
+          <a href="{% url 'dashboard' %}">Home</a>
+          <span class="fa fa-chevron-right"></span>
+          <a href="{% url 'list_bops' %}">Bops</a>
+          <span class="fa fa-chevron-right"></span>
+          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
+          <span class="fa fa-chevron-right"></span>
+          <span class="current-page">Test Planner </span>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block main %}
+  <div class="section container-fluid px-5">
+    <!-- section title -->
+    <div class="section-title mb-3">
+      <p>Test Planner</p>
+      <div>
+        <a href="bop_campaign_form.html" class="btn btn-sm btn-quinary">
+          <small>RUN <i class="fa fa-cogs"></i></small>
+        </a>
+        <a href="{% url 'create_test_group' bop.pk %}" class="btn btn-sm btn-quinary">
+          <small>NEW TEST GROUP <i class="fa fa-plus"></i></small>
+        </a>
+        <a href="{% url 'update_bop' bop.pk %}" class="btn btn-sm btn-success mr-2">
+          <small>SAVE CHANGES <i class="fa fa-pencil-alt"></i></small>
+        </a>
+      </div>
+    </div>
+
+    <div class="section-content">
+      <!--  -->
+      <div class="row">
+        <!-- table list of campaigns -->
+        <div class="col-6">
+          <div class="list">
+            <div class="table-responsive">
+              <table class="table m-0 table-hover dnv-table dnv-table-admin" id="campaignsTable">
+                <thead>
+                <tr>
+                  <th scope="col">TEST GROUP SCHEDULE</th>
+                  <th scope="col" class="text-center"></th>
+                  <th scope="col" class="text-center"></th>
+                  <td></td>
+                  <td></td>
+                </tr>
+                </thead>
+                <!-- order -->
+
+                <tbody>
+                {% for test_group in test_groups %}
+                  <tr>
+                    <td>
+                      <i class="fa fa-calendar-alt"></i> 03/08/2020 - 02/01/2025
+                    </td>
+                    <td>
+                      <a href="javascript:void(0)" data-toggle="modal" data-target="#failureMode">
+                        <i class="fa fa-list"></i> failure modes
+                      </a>
+                    </td>
+                    <td>
+                      <a href="" data-toggle="modal" data-target="#tests">
+                        <i class="fa fa-list"></i> tests
+                      </a>
+                    </td>
+                    <td width="12%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
+                    <td width="14%" align="center"><a href=""><i class="fa fa-times"></i> Remove</a></td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="failureMode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+       aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Failure Modes</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <!-- table list of campaigns -->
+            <div class="col-12">
+              <div class="list">
+                <div class="table-responsive">
+                  <table class="table m-0 table-hover dnv-table" id="campaignsTable">
+                    <thead class="">
+                    <tr>
+                      <th scope="col" width="3%">ID</th>
+                      <th>code</th>
+                      <th scope="col">name</th>
+                    </tr>
+                    </thead>
+                    <!-- order -->
+                    <tbody>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">ABC_123</a></td>
+                      <td>
+                        Upper Anullar Prevents Failure
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="tests" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+       aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Tests</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <!-- table list of campaigns -->
+            <div class="col-12">
+              <div class="list">
+                <div class="table-responsive">
+                  <table class="table m-0 table-hover dnv-table" id="campaignsTable">
+                    <thead class="">
+                    <tr>
+                      <th scope="col" width="3%">ID</th>
+                      <th>interval</th>
+                      <th scope="col">coverage</th>
+                    </tr>
+                    </thead>
+                    <!-- order -->
+                    <tbody>
+                    <tr>
+                      <td scope="row" align="center">1</td>
+                      <td><a href="">186</a></td>
+                      <td>0.2</td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">2</td>
+                      <td><a href="">336</a></td>
+                      <td>0.6</td>
+                    </tr>
+                    <tr>
+                      <td scope="row" align="center">3</td>
+                      <td><a href="">5346</a></td>
+                      <td>1</td>
+                    </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}

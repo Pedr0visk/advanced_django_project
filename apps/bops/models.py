@@ -1,5 +1,3 @@
-import re
-
 from functools import reduce
 from django.db import models
 
@@ -44,62 +42,3 @@ class SafetyFunction(models.Model):
 
     def __str__(self):
         return self.name
-
-    def pfd(self, step):
-        """
-        P(C1 U C2 ... CN) = 1 - (1 - P(C2))*(1-P(C3))
-
-        return 1 - reduce(lambda x, y: x*y))
-
-        """
-        results = []
-
-        for cut in self.cuts.all():
-            results.append(cut.pfd())
-
-        return 1 - reduce((lambda x, y: x * y), results)
-
-    def reduce(self, failed_failure_mode):
-        pass
-        """
-            ### armazenamento
-            ### busca
-
-            #1. Separar cuts por ordem
-            #2. buscar modulo de falha em cada corte
-            #3. promover corte para um nova ordem
-            #4. remover cortes que possuam um modulo de falha dos cortes promovidos
-
-
-            high_order_cuts = self.cuts.filter(order=1)
-            medium_order_cuts = self.cuts.filter(order=2)
-            lower_order_cuts = self.cuts.filter(order=3)
-
-            promoted_failure_modes = [] # 'AB_CD', 'EF_GH', 'IJ_KL'
-
-            for cut in medium_order_cuts:
-                failure_mode = cut.upgrade(failed_failure_mode)
-                promoted_failure_modes.append(failure_mode)
-
-        """
-
-
-class Test(models.Model):
-    interval = models.FloatField()
-    coverage = models.FloatField()
-
-    def __str__(self):
-        return f'interval: {self.interval!r} - coverage: {self.coverage!r}'
-
-
-class TestGroup(models.Model):
-    name = models.CharField(max_length=50, blank=True, null=True)
-    code = models.BigIntegerField(unique=True)
-
-    start_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
-
-    tests = models.ManyToManyField(Test, related_name='groups')
-
-    def __str__(self):
-        return str(self.code)

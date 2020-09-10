@@ -2,7 +2,6 @@ import csv
 from collections import defaultdict
 from django.apps import apps
 
-from .models import TestGroup, Test
 from apps.subsystems.models import Subsystem
 from apps.components.models import Component
 from apps.failuremodes.models import FailureMode
@@ -40,46 +39,12 @@ class Loader:
                                                              name=row[3],
                                                              subsystem=s)
 
-                # Saving Tests and attaching them to group
-                g = self.save_group_with_tests(row)
-
-                # add failuremode to bulk
+                # add failure mode to bulk
                 FailureMode.objects.get_or_create(code=row[6],
                                                   name=row[5],
                                                   distribution=self.get_distribution_attr(row),
                                                   diagnostic_coverage=self.get_column(row, 17),
-                                                  component=c,
-                                                  group=g)
-
-    def save_group_with_tests(self, row):
-        """
-        This method saves a bunch of tests for a group
-        in a single row.
-        It checks for existing tests and groups so that we can
-        attach them.
-        """
-        tts = [9, 10, 11, 12]
-        tcs = [14, 15, 16, 17]
-
-        tests = []
-        gpk = self.bop.pk
-        for i in range(0, len(tts)):
-            tt = self.get_column(row, tts[i])
-            tc = self.get_column(row, tcs[i])
-
-            gpk = gpk * float(tc) * int(tt)
-
-            if tt != 1:
-                t, created = Test.objects.get_or_create(interval=tt, coverage=tc)
-                tests.append(t)
-
-        gpk = gpk // 43680
-        g, created = TestGroup.objects.get_or_create(code=gpk)
-
-        for t in tests:
-            g.tests.add(t)
-
-        return g
+                                                  component=c)
 
     def get_distribution_attr(self, row):
         """"""

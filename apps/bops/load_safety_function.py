@@ -6,7 +6,6 @@ import time
 
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import SafetyFunction
 from apps.cuts.models import Cut
 from apps.failuremodes.models import FailureMode
 
