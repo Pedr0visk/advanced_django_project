@@ -20,8 +20,8 @@
       from_box.setAttribute('name', from_box.getAttribute('name') + '_old');
 
       // buttons
-      let add_link = document.getElementById('selectorAdd');
-      let remove_link = document.getElementById('selectorRemove');
+      let add_link = document.getElementById(`${field_id}_add_link`);
+      let remove_link = document.getElementById(`${field_id}_remove_link`);
 
       // Event handlers for the select box filter interface
       var move_selection = function (e, elem, move_func, from, to) {

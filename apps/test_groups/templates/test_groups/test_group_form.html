@@ -30,7 +30,7 @@
     <div class="section-content bg-white">
       <div class="row">
         <div class="col-sm-12">
-          <form method="POST" enctype="multipart/form-data">
+          <form method="POST" id="testGroup">
             {% csrf_token %}
 
             <!-- name field -->
@@ -48,23 +48,6 @@
             </div>
             <hr/>
 
-            <!-- tests field -->
-            <div class="form-group row">
-              <label for="" class="col-sm-2 col-form-label col-form-label-sm">Tests:</label>
-              <div class="col-sm-10">
-                <!-- selector -->
-                {{ form.tests }}
-
-                <!-- ./ selector -->
-              </div>
-              <div class="col-sm-10 offset-2">
-                <small class="form-text text-muted">
-                  Some explanation. Hold down “Control”, or “Command” on a Mac, to select more than one.
-                </small>
-              </div>
-            </div>
-            <hr/>
-
             <!-- failure modes field -->
             <div class="form-group row">
               <label for="" class="col-sm-2 col-form-label col-form-label-sm">Failure Modes:</label>
@@ -74,12 +57,12 @@
                   <div class="selector-available">
                     <h4>Available Failure Modes</h4>
                     <!-- filter -->
-                    <div class="selector-filter form-inline">
+                    <div class="selector-filter form-inline" >
                       <label for=""><i class="fa fa-search"></i></label>
                       <input type="text" placeholder="Filter" class="form-control form-control-sm">
                     </div>
                     <!-- selector -->
-                    <select name="failure_modes" id="id_failure_modes" multiple class="selectfilter">
+                    <select name="failure_modes" id="id_failure_modes" multiple  class="selectfilter">
                       {% for fm in failure_modes %}
                         <option value="{{ fm.pk }}">{{ fm.name }} | {{ fm.code }} </option>
                       {% endfor %}
@@ -87,10 +70,10 @@
                   </div>
 
                   <div class="selector-chooser">
-                    <a href="" class="selector-add active" id="selectorAdd">
+                    <a href="" class="active" id="id_failure_modes_add_link">
                       <i class="fa fa-arrow-circle-right"></i>
                     </a>
-                    <a href="" class="selector-remove active" id="selectorRemove">
+                    <a href="" class="active" id="id_failure_modes_remove_link">
                       <i class="fa fa-arrow-circle-left"></i>
                     </a>
                   </div>
@@ -103,7 +86,8 @@
                   </div>
 
                   <div class="mx-4">
-                    <a href="/admin/failuremodes/failuremode/add/?_to_field=id&_popup=1"><i class="fa fa-plus text-success"></i></a>
+                    <a href="/admin/failuremodes/failuremode/add/?_to_field=id&_popup=1"><i
+                        class="fa fa-plus text-success"></i></a>
                   </div>
                 </div>
 
@@ -116,6 +100,16 @@
               </div>
             </div>
             <hr/>
+
+            <fieldset class="form-fieldset" id="testsWrapper">
+              <h4>Tests</h4>
+              <button id="addLevelBtn" class="" type="button">add test</button>
+              <hr>
+              <input type="hidden" name="tests">
+
+
+            </fieldset>
+
 
             <div class="card">
               <div class="bg-light text-right p-2">
@@ -137,6 +131,7 @@
 {% block scripts %}
   <script src="{% static 'js/SelectBox.js' %}"></script>
   <script src="{% static 'js/SelectFilter.js' %}"></script>
+  <script src="{% static 'js/FileInput.js' %}"></script>
   <script>
       // Query all input fields
       var form_fields = document.getElementsByTagName('input')

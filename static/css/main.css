@@ -10825,8 +10825,8 @@ hr {
   color: rgba(65, 118, 144, 0.3);
   font-size: 16px;
 }
-.selector .selector-chooser .selector-add.active i.fa,
-.selector .selector-chooser .selector-remove.active i.fa {
+.selector .selector-chooser a.active i.fa,
+.selector .selector-chooser a.active i.fa {
   color: #417690;
 }
 

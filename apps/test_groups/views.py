@@ -18,8 +18,10 @@ def test_group_create(request, bop_pk):
 
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
-            return redirect('list_test_groups', bop_pk)
+            tg = form.save(commit=False)
+            tg.bop = bop
+            tg.save()
+            return redirect('test_planner', bop_pk)
 
     context = {'form': form, 'bop': bop, 'tests': test_set, 'failure_modes': failure_mode_set}
     return render(request, 'test_groups/test_group_form.html', context)
