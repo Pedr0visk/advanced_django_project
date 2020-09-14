@@ -72,6 +72,7 @@ class TestGroupViewTest(TestCase):
         self.client.force_login(self.user)
         self.create_url = f'/bops/{self.b1.pk}/test-groups/add/'
         self.update_url = f'/bops/{self.b1.pk}/test-groups/{self.tg1.pk}/change/'
+        self.delete_url = f'/bops/{self.b1.pk}/test-groups/{self.tg1.pk}/delete/'
 
     def test_create_test_group(self):
         response = self.client.post(self.create_url, self.data())
@@ -93,6 +94,12 @@ class TestGroupViewTest(TestCase):
         self.assertJSONEqual('[{"coverage": 1, "interval": 168}]', tg.tests)
         self.assertEqual('2020-08-31', tg.start_date.__str__())
         self.assertEquals(tg.failure_modes.count(), 3)
+
+    def test_delete_test_group(self):
+        response = self.client.post(self.delete_url, self.data())
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(0, TestGroup.objects.count())
 
     @staticmethod
     def data():

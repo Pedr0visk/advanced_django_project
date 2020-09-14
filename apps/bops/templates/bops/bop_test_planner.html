@@ -53,6 +53,7 @@
               <table class="table m-0 table-hover dnv-table dnv-table-admin" id="campaignsTable">
                 <thead>
                 <tr>
+                  <th>ID</th>
                   <th scope="col">TEST GROUP SCHEDULE</th>
                   <th scope="col" class="text-center"></th>
                   <th scope="col" class="text-center"></th>
@@ -65,6 +66,7 @@
                 <tbody>
                 {% for test_group in test_groups %}
                   <tr>
+                    <td>{{ test_group.id }}</td>
                     <td>
                       <i class="fa fa-calendar-alt"></i> {{ test_group.start_date }}
                     </td>
@@ -81,8 +83,11 @@
                     <td width="12%" align="center"><a href="{% url 'update_test_group' bop.pk test_group.pk %}"><i
                         class="fa
                     fa-pencil-alt"></i>
-                      Edit</a></td>
-                    <td width="14%" align="center"><a href=""><i class="fa fa-times"></i> Remove</a></td>
+                      edit</a></td>
+                    <td width="14%" align="center"><a href="{% url 'delete_test_group' bop.pk test_group.pk %}"><i
+                        class="fa
+                    fa-times"></i>
+                      delete</a></td>
                   </tr>
                 {% endfor %}
                 </tbody>
