@@ -20,7 +20,8 @@
     count: 0,
     init: function () {
       $('input.testcoverage').each(function () {
-        this.addEventListener('blur', e => on_blur(this))
+        console.log('log log')
+        this.addEventListener('blur', e => on_blur(this));
         TestInput.count++
       });
 
@@ -119,7 +120,13 @@
   }
 
   window.addEventListener('load', function (e) {
-    TestInput.init();
+    setTimeout(function() {
+      console.log('iniciado')
+      TestInput.init();
+      $('input.testcoverage').each(function () {
+        console.log('log log')
+      });
+    }, 2000)
 
     // OnSubmit Event Handler
     document.getElementById('testGroup').addEventListener('submit', function (e) {

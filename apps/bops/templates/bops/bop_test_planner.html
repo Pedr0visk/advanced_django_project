@@ -26,15 +26,13 @@
     <div class="section-title mb-3">
       <p>Test Planner</p>
       <div>
-        <a href="bop_campaign_form.html" class="btn btn-sm btn-quinary">
+        <a href="bop_campaign_form.html" class="btn btn-sm btn-secondary">
           <small>RUN <i class="fa fa-cogs"></i></small>
         </a>
-        <a href="{% url 'create_test_group' bop.pk %}" class="btn btn-sm btn-quinary">
+        <a href="{% url 'create_test_group' bop.pk %}" class="btn btn-sm btn-success">
           <small>NEW TEST GROUP <i class="fa fa-plus"></i></small>
         </a>
-        <a href="{% url 'update_bop' bop.pk %}" class="btn btn-sm btn-success mr-2">
-          <small>SAVE CHANGES <i class="fa fa-pencil-alt"></i></small>
-        </a>
+
       </div>
     </div>
 
@@ -73,7 +71,10 @@
                         <i class="fa fa-list"></i> tests
                       </a>
                     </td>
-                    <td width="12%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
+                    <td width="12%" align="center"><a href="{% url 'update_test_group' bop.pk test_group.pk %}"><i
+                        class="fa
+                    fa-pencil-alt"></i>
+                      Edit</a></td>
                     <td width="14%" align="center"><a href=""><i class="fa fa-times"></i> Remove</a></td>
                   </tr>
                 {% endfor %}

@@ -9,6 +9,10 @@
         <div class="page-title-heading-2">
           <a href="{% url 'dashboard' %}">Home</a>
           <span class="fa fa-chevron-right"></span>
+          <a href="{% url 'list_bops' %}">Bops</a>
+          <span class=" fa fa-chevron-right"></span>
+          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
+          <span class=" fa fa-chevron-right"></span>
           <a href="{% url 'test_planner' bop.pk %}">Test Planner</a>
           <span class=" fa fa-chevron-right"></span>
           <span class="current-page">Create new Test Group </span>
@@ -17,7 +21,6 @@
     </div>
   </div>
 {% endblock %}
-
 
 {% block main %}
   {% if form.errors %}
@@ -32,7 +35,6 @@
         <div class="col-sm-12">
           <form method="POST" id="testGroup">
             {% csrf_token %}
-
             <!-- name field -->
             <div class="form-group row">
               <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Start
@@ -48,6 +50,7 @@
             </div>
             <hr/>
 
+
             <!-- failure modes field -->
             <div class="form-group row">
               <label for="" class="col-sm-2 col-form-label col-form-label-sm">Failure Modes:</label>
@@ -57,14 +60,18 @@
                   <div class="selector-available">
                     <h4>Available Failure Modes</h4>
                     <!-- filter -->
-                    <div class="selector-filter form-inline" >
+                    <div class="selector-filter form-inline">
                       <label for=""><i class="fa fa-search"></i></label>
                       <input type="text" placeholder="Filter" class="form-control form-control-sm">
                     </div>
                     <!-- selector -->
-                    <select name="failure_modes" id="id_failure_modes" multiple  class="selectfilter">
+                    <select name="failure_modes" id="id_failure_modes" multiple class="selectfilter">
                       {% for fm in failure_modes %}
-                        <option value="{{ fm.pk }}">{{ fm.name }} | {{ fm.code }} </option>
+                        {% if fm in test_group.failure_modes.all %}
+                          <option value="{{ fm.pk }}" selected>{{ fm.name }} | {{ fm.code }} </option>
+                        {% else %}
+                          <option value="{{ fm.pk }}">{{ fm.name }} | {{ fm.code }} </option>
+                        {% endif %}
                       {% endfor %}
                     </select>
                   </div>
@@ -105,11 +112,28 @@
               <h4>Tests</h4>
               <button id="addLevelBtn" class="" type="button">add test</button>
               <hr>
+              {% for test in test_group.tests %}
+                <div class="form-group row px-3">
+                  <label class="col-sm-2 col-form-label col-form-label-sm">Test level {{ forloop.counter }}:</label>
+
+                  <div class="col-sm-1">
+                    <input type="text" data-level="{{ forloop.counter }}" class="form-control form-control-sm" value="{{ test.interval }}"
+                           name="interval_{{ forloop.counter }}"/>
+                    <small>Interval</small>
+                  </div>
+
+                  <div class="col-sm-1">
+                    <input type="text" data-level="{{ forloop.counter }}" class="testcoverage " value=
+                        "{{ test.coverage }}"
+                           name="coverage_{{ forloop.counter }}"/>
+                    <small>Coverage</small>
+                  </div>
+                </div>
+                <hr/>
+              {% endfor %}
+
               <input type="hidden" name="tests">
-
-
             </fieldset>
-
 
             <div class="card">
               <div class="bg-light text-right p-2">
@@ -131,7 +155,7 @@
 {% block scripts %}
   <script src="{% static 'js/SelectBox.js' %}"></script>
   <script src="{% static 'js/SelectFilter.js' %}"></script>
-  <script src="{% static 'js/FileInput.js' %}"></script>
+  <script src="{% static 'js/TestGroup.js' %}"></script>
   <script>
       // Query all input fields
       var form_fields = document.getElementsByTagName('input')
