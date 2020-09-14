@@ -15,7 +15,11 @@
           <span class=" fa fa-chevron-right"></span>
           <a href="{% url 'test_planner' bop.pk %}">Test Planner</a>
           <span class=" fa fa-chevron-right"></span>
-          <span class="current-page">Create new Test Group </span>
+          {% if test_group %}
+            <span class="current-page">Change Test Group {{ test_group.id }}</span>
+          {% else %}
+            <span class="current-page">Add new Test Group</span>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -28,7 +32,11 @@
   {% endif %}
   <div class="section container-fluid px-5">
     <div class="section-title mb-4 d-flex">
-      <p>Add Test Group </p>
+      {% if test_group %}
+        <p class="current-page">Change Test Group {{ test_group.id }}</p>
+      {% else %}
+        <p class="current-page">Add new Test Group</p>
+      {% endif %}
     </div>
     <div class="section-content bg-white">
       <div class="row">
@@ -117,7 +125,8 @@
                   <label class="col-sm-2 col-form-label col-form-label-sm">Test level {{ forloop.counter }}:</label>
 
                   <div class="col-sm-1">
-                    <input type="text" data-level="{{ forloop.counter }}" class="form-control form-control-sm" value="{{ test.interval }}"
+                    <input type="text" data-level="{{ forloop.counter }}" class="form-control form-control-sm"
+                           value="{{ test.interval }}"
                            name="interval_{{ forloop.counter }}"/>
                     <small>Interval</small>
                   </div>

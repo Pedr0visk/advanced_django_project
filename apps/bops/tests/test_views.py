@@ -19,7 +19,7 @@ class BopViewTest(TestCase):
         self.user.groups.add(operator_group)
 
         # pk was applied cause the test was creating two bops and getting the test to red
-        self.bop = Bop.objects.create(pk=1, code='XRL2020S', name='first bop')
+        self.bop = Bop.objects.create(pk=1, name='first bop')
         Campaign.objects.create(bop=self.bop, name='first campaign')
 
     def test_list_bop_campaigns(self):
