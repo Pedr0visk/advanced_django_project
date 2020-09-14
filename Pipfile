@@ -18,6 +18,7 @@ gunicorn = "*"
 coolname = "*"
 names = "*"
 django-redis = "*"
+model-mommy = "*"
 
 [requires]
 python_version = "3.8"

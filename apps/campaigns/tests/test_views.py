@@ -8,18 +8,19 @@ from apps.campaigns.models import Campaign
 
 class CampaignViewTest(TestCase):
 
-    def setUp(self):
-        self.client = Client()
+    @classmethod
+    def setUpTestData(cls):
+        cls.client = Client()
 
-        # for the tests puporse will be needed 3 types of groups
+        # for the tests purpose will be needed 3 types of groups
         operator_group = Group.objects.create(name='Operator')
 
-        self.user = User.objects.create_user(username='peter', password='passw0rd123')
-        self.user.groups.add(operator_group)
+        cls.user = User.objects.create_user(username='peter', password='passw0rd123')
+        cls.user.groups.add(operator_group)
 
         # pk was applied cause the test was creating two bops and getting the test to red
-        self.bop = Bop.objects.create(pk=1, name='first bop')
-        self.campaign = Campaign.objects.create(pk=6, bop=self.bop, name='first campaign')
+        cls.bop = Bop.objects.create(pk=1, name='first bop')
+        cls.campaign = Campaign.objects.create(bop=cls.bop, name='first campaign')
 
     def test_campaign_can_be_created_by_operator(self):
         """

@@ -1,14 +1,10 @@
-import csv
 import time
 
-from library import calc
-
-from django.core.cache import cache
-
 from django.contrib import messages
-from django.db import transaction, IntegrityError
+from django.db import transaction
 from django.shortcuts import render, redirect, HttpResponse
 from django.http.response import JsonResponse
+from django.core.cache import cache
 
 from .models import Bop, SafetyFunction
 from .forms import BopForm, SafetyFunctionForm
@@ -18,6 +14,7 @@ from .load_safety_function import Loader as SafetyFunctionLoader
 from apps.csvs.models import Csv
 from apps.managers.decorators import allowed_users
 from apps.failuremodes.models import FailureMode
+from ..test_groups.models import TestGroup
 
 
 @allowed_users(allowed_roles=['Admin'])
@@ -108,32 +105,9 @@ def safety_function_cuts(request, bop_pk, sf_pk):
     return render(request, 'cuts/cut_list.html', context)
 
 
-def run(request, pk):
-    start = time.perf_counter()
+def test_planner(request, pk):
+    bop = Bop.objects.get(pk=pk)
+    test_group_set = TestGroup.objects.filter(bop=bop.pk)
 
-    b1 = Bop.objects.get(pk=pk)
-    s1 = SafetyFunction.objects.first()
-    step = 24
-
-    fm_set = FailureMode.objects.all()
-
-    # run all failure modes pfd by step
-    # run cuts pfd for safety function
-
-    cache.delete('failuremodes')
-
-    if cache.get('failuremodes'):
-        s1.pfd(step)
-    else:
-        data = {step: {}}
-
-        for fm in FailureMode.objects.all():
-            data[step][fm.code] = fm.pfd(step)
-
-    s1.pfd(step)
-
-    finish = time.perf_counter()
-
-    print(f'Finished in {round(finish-start, 2)} second(s)')
-
-    return HttpResponse(fm_set.count())
+    context = {'bop': bop, 'test_groups': test_group_set}
+    return render(request, 'bops/bop_test_planner.html', context)

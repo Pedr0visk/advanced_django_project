@@ -1,0 +1,177 @@
+{% extends 'manager/base.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+  <!-- breadcrumb -->
+  <div class="page-title">
+    <div class="container-fluid px-5">
+      <div class="page-title-wrapper-2">
+        <div class="page-title-heading-2">
+          <a href="{% url 'dashboard' %}">Home</a>
+          <span class="fa fa-chevron-right"></span>
+          <a href="{% url 'list_bops' %}">Bops</a>
+          <span class=" fa fa-chevron-right"></span>
+          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
+          <span class=" fa fa-chevron-right"></span>
+          <a href="{% url 'test_planner' bop.pk %}">Test Planner</a>
+          <span class=" fa fa-chevron-right"></span>
+          {% if test_group %}
+            <span class="current-page">Change Test Group {{ test_group.id }}</span>
+          {% else %}
+            <span class="current-page">Add new Test Group</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block main %}
+  {% if form.errors %}
+    {{ form.errors }}
+  {% endif %}
+  <div class="section container-fluid px-5">
+    <div class="section-title mb-4 d-flex">
+      {% if test_group %}
+        <p class="current-page">Change Test Group {{ test_group.id }}</p>
+      {% else %}
+        <p class="current-page">Add new Test Group</p>
+      {% endif %}
+    </div>
+    <div class="section-content bg-white">
+      <div class="row">
+        <div class="col-sm-12">
+          <form method="POST" id="testGroup">
+            {% csrf_token %}
+            <!-- name field -->
+            <div class="form-group row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Start
+                date:</label>
+              <div class="col-sm-2">
+                {{ form.start_date }}
+              </div>
+              <div class="col-sm-10 offset-2">
+                <small class="form-text text-muted">
+                  Required
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+
+            <!-- failure modes field -->
+            <div class="form-group row">
+              <label for="" class="col-sm-2 col-form-label col-form-label-sm">Failure Modes:</label>
+              <div class="col-sm-10">
+                <!-- selector -->
+                <div class="selector">
+                  <div class="selector-available">
+                    <h4>Available Failure Modes</h4>
+                    <!-- filter -->
+                    <div class="selector-filter form-inline">
+                      <label for=""><i class="fa fa-search"></i></label>
+                      <input type="text" placeholder="Filter" class="form-control form-control-sm">
+                    </div>
+                    <!-- selector -->
+                    <select name="failure_modes" id="id_failure_modes" multiple class="selectfilter">
+                      {% for fm in failure_modes %}
+                        {% if fm in test_group.failure_modes.all %}
+                          <option value="{{ fm.pk }}" selected>{{ fm.name }} | {{ fm.code }} </option>
+                        {% else %}
+                          <option value="{{ fm.pk }}">{{ fm.name }} | {{ fm.code }} </option>
+                        {% endif %}
+                      {% endfor %}
+                    </select>
+                  </div>
+
+                  <div class="selector-chooser">
+                    <a href="" class="active" id="id_failure_modes_add_link">
+                      <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                    <a href="" class="active" id="id_failure_modes_remove_link">
+                      <i class="fa fa-arrow-circle-left"></i>
+                    </a>
+                  </div>
+
+                  <div class="selector-chosen">
+                    <h4>Available Tests</h4>
+                    <!-- selector -->
+                    <select name="failure_modes" id="to_box" multiple class="">
+                    </select>
+                  </div>
+
+                  <div class="mx-4">
+                    <a href="/admin/failuremodes/failuremode/add/?_to_field=id&_popup=1"><i
+                        class="fa fa-plus text-success"></i></a>
+                  </div>
+                </div>
+
+                <!-- ./ selector -->
+              </div>
+              <div class="col-sm-10 offset-2">
+                <small class="form-text text-muted">
+                  Some explanation. Hold down “Control”, or “Command” on a Mac, to select more than one.
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+            <fieldset class="form-fieldset" id="testsWrapper">
+              <h4>Tests</h4>
+              <button id="addLevelBtn" class="" type="button">add test</button>
+              <hr>
+              {% for test in test_group.tests %}
+                <div class="form-group row px-3">
+                  <label class="col-sm-2 col-form-label col-form-label-sm">Test level {{ forloop.counter }}:</label>
+
+                  <div class="col-sm-1">
+                    <input type="text" data-level="{{ forloop.counter }}" class="form-control form-control-sm"
+                           value="{{ test.interval }}"
+                           name="interval_{{ forloop.counter }}"/>
+                    <small>Interval</small>
+                  </div>
+
+                  <div class="col-sm-1">
+                    <input type="text" data-level="{{ forloop.counter }}" class="testcoverage " value=
+                        "{{ test.coverage }}"
+                           name="coverage_{{ forloop.counter }}"/>
+                    <small>Coverage</small>
+                  </div>
+                </div>
+                <hr/>
+              {% endfor %}
+
+              <input type="hidden" name="tests">
+            </fieldset>
+
+            <div class="card">
+              <div class="bg-light text-right p-2">
+                <a href="{% url 'manager' %}" class=" btn btn-default">
+                  Cancel
+                </a>
+                <button type="submit" class="px-4 btn btn-secondary">
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/SelectBox.js' %}"></script>
+  <script src="{% static 'js/SelectFilter.js' %}"></script>
+  <script src="{% static 'js/TestGroup.js' %}"></script>
+  <script>
+      // Query all input fields
+      var form_fields = document.getElementsByTagName('input')
+      // customization of form fields
+      for (var field in form_fields) {
+          if (form_fields[field].type == 'file') continue
+          form_fields[field].className += 'form-control form-control-sm'
+      }
+  </script>
+{% endblock %}
