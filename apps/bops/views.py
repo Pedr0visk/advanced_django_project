@@ -1,10 +1,7 @@
-import time
-
 from django.contrib import messages
 from django.db import transaction
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 from django.http.response import JsonResponse
-from django.core.cache import cache
 
 from .models import Bop, SafetyFunction
 from .forms import BopForm, SafetyFunctionForm
@@ -13,7 +10,6 @@ from .load_safety_function import Loader as SafetyFunctionLoader
 
 from apps.csvs.models import Csv
 from apps.managers.decorators import allowed_users
-from apps.failuremodes.models import FailureMode
 from ..test_groups.models import TestGroup
 
 
