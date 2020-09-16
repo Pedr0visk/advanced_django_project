@@ -5,3 +5,5 @@ distribution = {
     "time_unit": "hours"
 }
 
+## alteracoes
+- exibir failure modes no grupo
