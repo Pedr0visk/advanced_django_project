@@ -1,10 +1,8 @@
-import time
-
 from django.contrib import messages
 from django.db import transaction
-from django.shortcuts import render, redirect, HttpResponse
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from django.http.response import JsonResponse
-from django.core.cache import cache
 
 from .models import Bop, SafetyFunction
 from .forms import BopForm, SafetyFunctionForm
@@ -13,8 +11,9 @@ from .load_safety_function import Loader as SafetyFunctionLoader
 
 from apps.csvs.models import Csv
 from apps.managers.decorators import allowed_users
-from apps.failuremodes.models import FailureMode
-from ..test_groups.models import TestGroup
+from ..test_groups.models import TestGroup, TestGroupHistory
+
+from django.core.cache import cache
 
 
 @allowed_users(allowed_roles=['Admin'])
@@ -107,7 +106,12 @@ def safety_function_cuts(request, bop_pk, sf_pk):
 
 def test_planner(request, pk):
     bop = Bop.objects.get(pk=pk)
-    test_group_set = TestGroup.objects.filter(bop=bop.pk)
+    test_group_set = TestGroup.objects.filter(bop=bop.pk, deleted_at__isnull=True).order_by('-updated_at')
+    history = TestGroupHistory.objects.filter(test_group__bop_id__exact=bop.pk).order_by('-created_at')
 
-    context = {'bop': bop, 'test_groups': test_group_set}
+    context = {'bop': bop, 'test_groups': test_group_set, 'history': history}
     return render(request, 'bops/bop_test_planner.html', context)
+
+
+def test_planner_raw(request, pk):
+    pass

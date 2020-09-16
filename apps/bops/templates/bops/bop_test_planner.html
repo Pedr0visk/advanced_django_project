@@ -31,7 +31,7 @@
   <div class="section container-fluid px-5">
     <!-- section title -->
     <div class="section-title mb-3">
-      <p>Test Planner</p>
+      <p>Test Group Scheduler</p>
       <div>
         <a href="bop_campaign_form.html" class="btn btn-sm btn-secondary">
           <small>RUN <i class="fa fa-cogs"></i></small>
@@ -47,16 +47,16 @@
       <!--  -->
       <div class="row">
         <!-- table list of campaigns -->
-        <div class="col-6">
+        <div class="col-8">
           <div class="list">
             <div class="table-responsive">
               <table class="table m-0 table-hover dnv-table dnv-table-admin" id="campaignsTable">
                 <thead>
                 <tr>
-                  <th>ID</th>
-                  <th scope="col">TEST GROUP SCHEDULE</th>
-                  <th scope="col" class="text-center"></th>
-                  <th scope="col" class="text-center"></th>
+                  <th scope="col">ID</th>
+                  <th scope="col">start date</th>
+                  <th scope="col">failure modes</th>
+                  <th scope="col">tests (interval, coverage)</th>
                   <td></td>
                   <td></td>
                 </tr>
@@ -67,33 +67,76 @@
                 {% for test_group in test_groups %}
                   <tr>
                     <td>{{ test_group.id }}</td>
+                    <td>{{ test_group.start_date }}</td>
                     <td>
-                      <i class="fa fa-calendar-alt"></i> {{ test_group.start_date }}
+                      {% for fm in test_group.failure_modes.all %}
+                      {{ fm.pk }},
+                      {% endfor %}
                     </td>
                     <td>
-                      <a href="javascript:void(0)" data-toggle="modal" data-target="#failureMode">
-                        <i class="fa fa-list"></i> failure modes
-                      </a>
+                      {% for test in test_group.tests %}
+                      ({{ test.interval }}, {{ test.coverage }})<b>,</b>
+                      {% endfor %}
                     </td>
-                    <td>
-                      <a href="" data-toggle="modal" data-target="#tests">
-                        <i class="fa fa-list"></i> tests
-                      </a>
                     </td>
                     <td width="12%" align="center"><a href="{% url 'update_test_group' bop.pk test_group.pk %}"><i
                         class="fa
                     fa-pencil-alt"></i>
                       edit</a></td>
-                    <td width="14%" align="center"><a href="{% url 'delete_test_group' bop.pk test_group.pk %}"><i
+                    <td width="13%" align="center"><a href="{% url 'delete_test_group' bop.pk test_group.pk %}"><i
                         class="fa
                     fa-times"></i>
                       delete</a></td>
                   </tr>
                 {% endfor %}
+
                 </tbody>
               </table>
             </div>
           </div>
+          <hr>
+          <div class="list">
+            <div class="table-responsive">
+              <table class="table m-0 table-hover dnv-table dnv-table-admin" id="campaignsTable">
+                <thead>
+                <tr>
+                  <th scope="col">NOT TESTED FAILURE MODES</th>
+                  <th scope="col" class="text-center"></th>
+                  <th scope="col" class="text-center"></th>
+                  <td></td>
+                  <td></td>
+                </tr>
+                </thead>
+                <!-- order -->
+
+                <tbody>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <h5>History</h5>
+          <ul style="list-style-type: square">
+            {% for log in history %}
+              <li>
+                <div class="d-flex justify-content-between">
+                  <div class="left">
+                    <p>Action: {{ log.event }} | Group {{ log.test_group.pk }}</p>
+                    <p><small>failure mode list id: {{ log.failure_modes }}</small></p>
+                    <p>
+                      <smal>tests: {{ log.tests }}</smal>
+                    </p>
+                  </div>
+                  <div class="right">
+                    <a href="{% url 'undo_test_group' bop.pk log.pk %}" class=""><i class="fa fa-undo"></i></a>
+                  </div>
+                </div>
+                <hr>
+              </li>
+            {% endfor %}
+          </ul>
         </div>
       </div>
     </div>

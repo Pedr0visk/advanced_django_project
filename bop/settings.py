@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'apps.components',
     'apps.cuts',
     'apps.failuremodes',
-    'apps.test_groups',
+    'apps.test_groups.apps.TestGroupsConfig',
     'apps.tests',
     'apps.managers',
     'apps.campaigns',
@@ -126,7 +126,6 @@ CACHES = {
         }
     }
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
