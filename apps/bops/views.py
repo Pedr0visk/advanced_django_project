@@ -114,4 +114,5 @@ def test_planner(request, pk):
 
 
 def test_planner_raw(request, pk):
+    print('logged')
     pass
