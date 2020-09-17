@@ -137,7 +137,7 @@ def test_planner_raw(request, pk):
 
     failure_modes_set = FailureMode.objects.filter(component__subsystem__bop__exact=bop,
                                                    testgroupdummy__isnull=True)
-    print(failure_modes_set.count())
+
     context = {'bop': bop, 'test_groups': test_group_set, 'failure_modes': failure_modes_set}
     return render(request, 'bops/bop_test_planner.html', context)
 
