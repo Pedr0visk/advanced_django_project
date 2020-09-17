@@ -33,21 +33,63 @@
     <div class="section-title mb-3">
       <p>Test Group Scheduler</p>
       <div>
-        <a href="bop_campaign_form.html" class="btn btn-sm btn-secondary">
-          <small>RUN <i class="fa fa-cogs"></i></small>
-        </a>
-        <a href="{% url 'create_test_group' bop.pk %}" class="btn btn-sm btn-success">
+        {% if '/raw/' in request.path %}
+          <a href="bop_campaign_form.html" class="btn btn-sm btn-success">
+            <small>RUN (ANALYSIS MODE) <i class="fa fa-cogs"></i></small>
+          </a>
+          <a href="{% url 'test_planner_migrate' bop.pk %}" class="btn btn-sm btn-warning">
+            <small>MIGRATE ANALYSIS TO CURRENT <i class="fa fa-database"></i></small>
+          </a>
+        {% else %}
+          <a href="bop_campaign_form.html" class="btn btn-sm btn-success">
+            <small>RUN<i class="fa fa-cogs"></i></small>
+          </a>
+        {% endif %}
+
+        <a href="{% url 'create_test_group' bop.pk %}" class="btn btn-sm btn-quinary">
           <small>NEW TEST GROUP <i class="fa fa-plus"></i></small>
         </a>
 
       </div>
     </div>
-
+    <hr>
     <div class="section-content">
       <!--  -->
       <div class="row">
-        <!-- table list of campaigns -->
-        <div class="col-8">
+        <!-- failure modes not tested -->
+        <div class="col-12 col-sm-4">
+          <div class="section-title mb-3">
+            <p>Failure Modes Not Tested</p>
+          </div>
+          <div class="list">
+            <div class="table-responsive">
+              <table class="table m-0 table-hover dnv-table dnv-table-admin" id="campaignsTable">
+                <thead>
+                <tr>
+                  <th scope="col">CODE</th>
+                  <th scope="col">name</th>
+                </tr>
+                </thead>
+                <!-- order -->
+
+                <tbody>
+                {% for fm in failure_modes %}
+                  <tr>
+                    <td><small>{{ fm.code }}</small></td>
+                    <td>{{ fm.name }}</td>
+                  </tr>
+                {% endfor %}
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- test group list -->
+        <div class="col-12 col-sm-8">
+          <div class="section-title mb-3">
+            <p>Test Group List</p>
+          </div>
           <div class="list">
             <div class="table-responsive">
               <table class="table m-0 table-hover dnv-table dnv-table-admin" id="campaignsTable">
@@ -68,25 +110,45 @@
                   <tr>
                     <td>{{ test_group.id }}</td>
                     <td>{{ test_group.start_date }}</td>
-                    <td>
+                    <td width="40%">
                       {% for fm in test_group.failure_modes.all %}
-                      {{ fm.pk }},
+                        <small>{{ fm.code }}<b>,</b> </small>
                       {% endfor %}
                     </td>
                     <td>
                       {% for test in test_group.tests %}
-                      ({{ test.interval }}, {{ test.coverage }})<b>,</b>
+                        ({{ test.interval }}, {{ test.coverage }})<b>,</b>
                       {% endfor %}
                     </td>
                     </td>
-                    <td width="12%" align="center"><a href="{% url 'update_test_group' bop.pk test_group.pk %}"><i
-                        class="fa
-                    fa-pencil-alt"></i>
-                      edit</a></td>
-                    <td width="13%" align="center"><a href="{% url 'delete_test_group' bop.pk test_group.pk %}"><i
-                        class="fa
-                    fa-times"></i>
-                      delete</a></td>
+                    {% if '/raw/' in request.path %}
+                      <td width="8%" align="center">
+                        <a href="{% url 'update_test_group' bop.pk test_group.pk %}">
+                          <i class="fa fa-pencil-alt"></i>
+                          edit
+                        </a>
+                      </td>
+                      <td width="9%" align="center">
+                        <a href="{% url 'delete_test_group' bop.pk test_group.pk %}">
+                          <i class="fa fa-times"></i>
+                          delete
+                        </a>
+                      </td>
+                    {% else %}
+                      <td width="8%" align="center">
+                        <a href="{% url 'update_test_group' bop.pk test_group.testgroupdummy.pk %}">
+                          <i class="fa fa-pencil-alt"></i>
+                          edit
+                        </a>
+                      </td>
+                      <td width="9%" align="center">
+                        <a href="{% url 'delete_test_group' bop.pk test_group.testgroupdummy.pk %}">
+                          <i class="fa fa-times"></i>
+                          delete
+                        </a>
+                      </td>
+                    {% endif %}
+
                   </tr>
                 {% endfor %}
 
@@ -94,49 +156,6 @@
               </table>
             </div>
           </div>
-          <hr>
-          <div class="list">
-            <div class="table-responsive">
-              <table class="table m-0 table-hover dnv-table dnv-table-admin" id="campaignsTable">
-                <thead>
-                <tr>
-                  <th scope="col">NOT TESTED FAILURE MODES</th>
-                  <th scope="col" class="text-center"></th>
-                  <th scope="col" class="text-center"></th>
-                  <td></td>
-                  <td></td>
-                </tr>
-                </thead>
-                <!-- order -->
-
-                <tbody>
-
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="col-4">
-          <h5>History</h5>
-          <ul style="list-style-type: square">
-            {% for log in history %}
-              <li>
-                <div class="d-flex justify-content-between">
-                  <div class="left">
-                    <p>Action: {{ log.event }} | Group {{ log.test_group.pk }}</p>
-                    <p><small>failure mode list id: {{ log.failure_modes }}</small></p>
-                    <p>
-                      <smal>tests: {{ log.tests }}</smal>
-                    </p>
-                  </div>
-                  <div class="right">
-                    <a href="{% url 'undo_test_group' bop.pk log.pk %}" class=""><i class="fa fa-undo"></i></a>
-                  </div>
-                </div>
-                <hr>
-              </li>
-            {% endfor %}
-          </ul>
         </div>
       </div>
     </div>

@@ -7,16 +7,23 @@ from apps.tests.models import Test
 from datetime import date
 
 
-class TestGroup(models.Model):
+class CommonInfo(models.Model):
     start_date = models.DateField()
     bop = models.ForeignKey(Bop, on_delete=models.CASCADE)
-    failure_modes = models.ManyToManyField(FailureMode, related_name='groups')
+    failure_modes = models.ManyToManyField(FailureMode,
+                                           related_name="%(class)s",
+                                           related_query_name="%(class)s", )
     tests = JSONField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateField(blank=True, null=True, default=None)
 
+    class Meta:
+        abstract = True
+
+
+class TestGroup(CommonInfo):
     def __str__(self):
         return f'group {self.id}'
 
@@ -28,8 +35,12 @@ class TestGroup(models.Model):
             super().delete(using=None, keep_parents=False)
 
 
-class TestGroupHistory(models.Model):
+class TestGroupDummy(CommonInfo):
+    test_group = models.OneToOneField(TestGroup, on_delete=models.SET_NULL, null=True)
+    pass
 
+
+class TestGroupHistory(models.Model):
     class Actions(models.TextChoices):
         CREATED = 'Created'
         UPDATED = 'Updated'
@@ -44,4 +55,3 @@ class TestGroupHistory(models.Model):
 
     def event_type(self):
         return self.event
-
