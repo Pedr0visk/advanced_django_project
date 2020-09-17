@@ -1,8 +1,8 @@
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .forms import TestGroupForm
-from .models import TestGroup, TestGroupHistory
+from .forms import TestGroupForm, TestGroupDummyForm
+from .models import TestGroup, TestGroupHistory, TestGroupDummy
 from ..bops.models import Bop
 from ..failuremodes.models import FailureMode
 from ..tests.models import Test
@@ -14,7 +14,7 @@ def test_group_list(request):
 
 def test_group_create(request, bop_pk):
     bop = Bop.objects.get(pk=bop_pk)
-    form = TestGroupForm(request.POST or None)
+    form = TestGroupDummyForm(request.POST or None)
     test_set = Test.objects.all()
     failure_mode_set = FailureMode.objects.order_by('name').filter(component__subsystem__bop__exact=bop)
 
@@ -25,7 +25,7 @@ def test_group_create(request, bop_pk):
             tg.save()
             form.save_m2m()
             messages.success(request, 'Test Group created successfully!')
-            return redirect('test_planner', bop_pk)
+            return redirect('test_planner_raw', bop_pk)
 
     context = {'form': form, 'bop': bop, 'tests': test_set, 'failure_modes': failure_mode_set}
     return render(request, 'test_groups/test_group_form.html', context)
@@ -33,32 +33,32 @@ def test_group_create(request, bop_pk):
 
 def test_group_update(request, bop_pk, tg_pk):
     bop = Bop.objects.get(pk=bop_pk)
-    test_group = TestGroup.objects.get(pk=tg_pk)
+    test_group_raw = TestGroupDummy.objects.get(pk=tg_pk)
     failure_mode_set = FailureMode.objects.order_by('name').filter(component__subsystem__bop__exact=bop)
-    form = TestGroupForm(request.POST or None, instance=test_group)
+    form = TestGroupDummyForm(request.POST or None, instance=test_group_raw)
 
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            messages.success(request, f'Test Group "{test_group}" updated successfully!')
-            return redirect('test_planner', bop_pk)
+            messages.success(request, f'Test Group "{test_group_raw}" updated successfully!')
+            return redirect('test_planner_raw', bop_pk)
 
-    context = {'bop': bop, 'test_group': test_group, 'failure_modes': failure_mode_set, 'form': form}
+    context = {'bop': bop, 'test_group': test_group_raw, 'failure_modes': failure_mode_set, 'form': form}
     return render(request, 'test_groups/test_group_form.html', context)
 
 
 def test_group_delete(request, bop_pk, tg_pk):
     bop = Bop.objects.get(pk=bop_pk)
-    test_group = TestGroup.objects.get(pk=tg_pk)
+    test_group_raw = TestGroupDummy.objects.get(pk=tg_pk)
 
     if request.method == 'POST':
-        test_group_id = test_group.id
-        test_group.delete(soft=True)
+        test_group_id = test_group_raw.id
+        test_group_raw.delete()
 
         messages.success(request, f'Test Group "{test_group_id}" deleted successfully!')
-        return redirect('test_planner', bop_pk)
+        return redirect('test_planner_raw', bop_pk)
 
-    context = {'bop': bop, 'test_group': test_group}
+    context = {'bop': bop, 'test_group': test_group_raw}
     return render(request, 'test_groups/test_group_confirm_delete.html', context)
 
 
