@@ -1,5 +1,6 @@
 from django.urls import path, include
 from . import views
+from django.contrib.auth.models import Group, User
 
 urlpatterns = [
     path('', views.bop_list, name='list_bops'),
