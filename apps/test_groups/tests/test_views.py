@@ -1,10 +1,8 @@
-from datetime import date
-
 from django.test import TestCase, Client
 from django.contrib.auth.models import Group, User
 from django.urls import reverse
 
-from ..models import TestGroup
+from ..models import TestGroup, TestGroupDummy
 from apps.bops.models import Bop
 from apps.failuremodes.models import FailureMode
 
@@ -70,36 +68,77 @@ class TestGroupViewTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.client.force_login(self.user)
-        self.create_url = f'/bops/{self.b1.pk}/test-groups/add/'
-        self.update_url = f'/bops/{self.b1.pk}/test-groups/{self.tg1.pk}/change/'
-        self.delete_url = f'/bops/{self.b1.pk}/test-groups/{self.tg1.pk}/delete/'
 
-    def test_create_test_group(self):
-        response = self.client.post(self.create_url, self.data())
+        self.create_url_get = f'/bops/{self.b1.pk}/test-planner/'
+        self.create_url_post = f'/bops/{self.b1.pk}/test-groups/add/'
 
-        tg = TestGroup.objects.get(pk=2)
+        self.client.get(self.create_url_get)
+        self.tgd1 = TestGroupDummy.objects.first()
+
+        self.update_url_post = f'/bops/{self.b1.pk}/test-groups/{self.tgd1.pk}/change/'
+        self.delete_url_post = f'/bops/{self.b1.pk}/test-groups/{self.tgd1.pk}/delete/'
+
+        self.migrate_url_get = f'/bops/{self.b1.pk}/test-planner/raw/migrate/'
+
+    def test_list_test_group(self):
+        """
+        When user access this page, the system should
+        create an mirror of test group table called test_group_dummy table
+        :return:
+        """
+        self.client.get(self.create_url_get)
+
+        self.assertEqual(TestGroupDummy.objects.count(), 1)
+
+    def test_create_test_group_dummy(self):
+        """
+        Create an instance of test_group_dummy instead of test_group
+        :return:
+        """
+        response = self.client.post(self.create_url_post, self.data())
+
+        tgd = TestGroupDummy.objects.get(pk=2)
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual('2020-08-31', tg.start_date.__str__())
-        self.assertEqual(2, TestGroup.objects.count())
-        self.assertJSONEqual('[{"coverage": 1, "interval": 168}]', tg.tests)
+        self.assertEqual('2020-08-31', tgd.start_date.__str__())
+        self.assertEqual(2, TestGroupDummy.objects.count())
+        self.assertEqual(1, TestGroup.objects.count())
+        self.assertJSONEqual('[{"coverage": 1, "interval": 168}]', tgd.tests)
 
-    def test_update_test_group(self):
-        response = self.client.post(self.update_url, self.data())
+    def test_update_test_group_dummy(self):
+        """
+        Update an clone of test_group in test_group_dummy table
+        :return:
+        """
+        response = self.client.post(self.update_url_post, self.data())
 
-        tg = TestGroup.objects.get(pk=self.tg1.pk)
+        tg = TestGroupDummy.objects.get(pk=self.tgd1.pk)
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(1, TestGroup.objects.count())
+        self.assertEqual(1, TestGroupDummy.objects.count())
         self.assertJSONEqual('[{"coverage": 1, "interval": 168}]', tg.tests)
         self.assertEqual('2020-08-31', tg.start_date.__str__())
         self.assertEquals(tg.failure_modes.count(), 3)
 
-    def test_delete_test_group(self):
-        response = self.client.post(self.delete_url, self.data())
+    def test_delete_test_group_dummy(self):
+        """
+        Delete a clone created for a instance of test_group on test_group_dummy table
+        :return:
+        """
+        response = self.client.post(self.delete_url_post)
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(0, TestGroup.objects.count())
+        self.assertEqual(1, TestGroup.objects.count())
+        self.assertEqual(0, TestGroupDummy.objects.count())
+
+    def test_migrate_test_group_dummy(self):
+        self.client.post(self.create_url_post, self.data())
+        self.client.post(self.create_url_post, self.data())
+        self.client.get(self.migrate_url_get)
+
+        self.assertEqual(3, TestGroupDummy.objects.count())
+        self.assertEqual(3, TestGroup.objects.count())
 
     @staticmethod
     def data():

@@ -9,29 +9,34 @@ from .forms import BopForm, SafetyFunctionForm
 from .load_bop import Loader as BopLoader
 from .load_safety_function import Loader as SafetyFunctionLoader
 
+from apps.certifications.forms import CertificationForm
+
 from apps.csvs.models import Csv
 from apps.managers.decorators import allowed_users
 from ..failuremodes.models import FailureMode
 from ..test_groups.models import TestGroup, TestGroupHistory, TestGroupDummy
 
 
+@transaction.atomic
 @allowed_users(allowed_roles=['Admin'])
 def upload(request):
-    form = BopForm()
-    context = {'form': form}
+    form = BopForm(request.POST or None)
+    cert_form = CertificationForm(request.POST or None)
 
     if request.method == 'POST':
-        form = BopForm(request.POST)
         bop = form.save()
+        certification = cert_form.save(commit=False)
+        certification.bop = bop
+        certification.save()
 
         # remove file from database
         bopfile = Csv.objects.create(file_name=request.FILES['file'], bop=bop)
-
         BopLoader(bopfile.file_name.path, bop).run()
 
         messages.success(request, 'Bop created successfully')
         return redirect('list_bops')
 
+    context = {'form': form, 'cert_form': cert_form}
     return render(request, 'bops/bop_form.html', context)
 
 
@@ -108,9 +113,10 @@ def test_planner(request, pk):
     test_group_set = TestGroup.objects.filter(bop=bop.pk, deleted_at__isnull=True).order_by('-updated_at')
     history = TestGroupHistory.objects.filter(test_group__bop_id__exact=bop.pk).order_by('-created_at')
     failure_modes_set = FailureMode.objects.filter(component__subsystem__bop__exact=bop,
-                                                   testgroup__isnull=True)
+                                                   testgroup__isnull=True).order_by('name')
 
     TestGroupDummy.objects.all().delete()
+
     for g in test_group_set:
         obj = TestGroupDummy(test_group=g,
                              start_date=g.start_date,

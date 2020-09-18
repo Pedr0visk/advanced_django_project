@@ -20,7 +20,7 @@
 
 
 {% block main %}
-
+  {{ cert_form.errors }}
   <div class="section bg-white">
     <div class="container-fluid px-5">
       <div class="section-title mb-4 d-flex">
@@ -60,7 +60,7 @@
             </div>
             <hr/>
 
-            <!-- description field -->
+            <!-- File field -->
             <div class="row">
               <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">File:</label>
               <div class="col-sm-5">
@@ -72,15 +72,46 @@
             </div>
             <hr/>
 
+            <!-- certification -->
+            <fieldset class="form-fieldset">
+              <h4>Last Certification</h4>
+
+              <div class="form-group row px-2">
+                <label class="col-sm-2 col-form-label col-form-label-sm">code:</label>
+                <div class="col-sm-2">
+                  {{ cert_form.code }}
+                </div>
+              </div>
+              <hr/>
+
+              <div class="form-group row px-2">
+                <label class="col-sm-2 col-form-label col-form-label-sm">start date:</label>
+                <div class="col-sm-2">
+                  {{ cert_form.start_date }}
+                </div>
+              </div>
+              <hr/>
+
+              <div class="form-group row px-2">
+                <label class="col-sm-2 col-form-label col-form-label-sm">end date:</label>
+                <div class="col-sm-2">
+                  {{ cert_form.end_date }}
+                </div>
+              </div>
+              <hr/>
+
+            </fieldset>
+
+            <!-- actions -->
             <div class="card">
               <div class="bg-light text-right p-2">
-              <a href="{% url 'manager' %}" class=" btn btn-default">
-                Cancel
-              </a>
-              <button type="submit" class="px-4 btn btn-secondary">
-                Save
-              </button>
-            </div>
+                <a href="{% url 'manager' %}" class=" btn btn-default">
+                  Cancel
+                </a>
+                <button type="submit" class="px-4 btn btn-secondary">
+                  Save
+                </button>
+              </div>
             </div>
           </form>
         </div>

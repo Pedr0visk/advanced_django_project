@@ -22,17 +22,6 @@ class Bop(models.Model):
         return self.name
 
 
-class Certification(models.Model):
-    start_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
-    bop = models.ForeignKey(Bop,
-                            on_delete=models.CASCADE,
-                            related_name="certifications")
-
-    def __str__(self):
-        return '{0} {1} certification'.format(self.pk, self.bop.name)
-
-
 class SafetyFunction(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
