@@ -10706,6 +10706,10 @@ table.dnv-table td {
   font-size: 13px;
   padding: 8px;
 }
+table.dnv-table.dnv-table-sm td {
+  padding: 4px;
+  font-size: 12px;
+}
 table.dnv-table tr:nth-of-type(even) {
   background-color: #f9f9f9;
 }
@@ -11037,6 +11041,37 @@ ul.errorlist li {
   background-size: 16px auto;
   font-size: 13px;
   display: block;
+}
+
+.title-1 {
+  color: #6c757d;
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.info h4 {
+  padding: 8px;
+  font-size: 13px;
+  color: white;
+  background-color: #79aec8;
+  margin: 0;
+}
+.info .info-list {
+  color: #495057;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+}
+.info .info-list li {
+  padding: 4px 7px;
+  border-bottom: 1px solid #eee;
+}
+.info .info-list li:nth-of-type(even) {
+  background-color: #f9f9f9;
+}
+
+.font-bold {
+  font-weight: bold;
 }
 
 /*# sourceMappingURL=main.css.map */

@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'apps.components',
     'apps.cuts',
     'apps.failuremodes',
-    'apps.test_groups.apps.TestGroupsConfig',
+    'apps.test_groups',
     'apps.tests',
     'apps.managers',
     'apps.campaigns',
