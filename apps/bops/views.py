@@ -113,7 +113,7 @@ def test_planner(request, pk):
     test_group_set = TestGroup.objects.filter(bop=bop.pk, deleted_at__isnull=True).order_by('-updated_at')
     history = TestGroupHistory.objects.filter(test_group__bop_id__exact=bop.pk).order_by('-created_at')
     failure_modes_set = FailureMode.objects.filter(component__subsystem__bop__exact=bop,
-                                                   testgroup__isnull=True).order_by('name')
+                                                   testgroup__isnull=True).order_by('code')
 
     TestGroupDummy.objects.all().delete()
 
