@@ -1,5 +1,3 @@
-import json
-
 from django.forms.models import model_to_dict
 from django.http.response import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404

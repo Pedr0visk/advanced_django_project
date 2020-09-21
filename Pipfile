@@ -19,6 +19,7 @@ coolname = "*"
 names = "*"
 django-redis = "*"
 model-mommy = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.8"
