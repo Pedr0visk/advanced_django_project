@@ -1,5 +1,5 @@
-from functools import reduce
 from django.db import models
+from django.contrib.admin.utils import NestedObjects
 
 
 class Rig(models.Model):
@@ -20,6 +20,15 @@ class Bop(models.Model):
 
     def __str__(self):
         return self.name
+
+    def last_certification(self):
+        return self.certifications.last()
+
+    def with_counts(self):
+        collector = NestedObjects(using='default')
+        collector.collect([self])
+        model_count = {model._meta.verbose_name_plural: len(objs) for model, objs in collector.model_objs.items()}
+        return model_count.items()
 
 
 class SafetyFunction(models.Model):

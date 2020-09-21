@@ -7,6 +7,7 @@ urlpatterns = [
     path('upload/', views.upload, name='upload_bop'),
     path('<int:pk>/', views.index, name='index_bop'),
     path('<int:pk>/change/', views.bop_update, name='update_bop'),
+    path('<int:pk>/delete/', views.bop_delete, name='delete_bop'),
     path('<int:pk>/test-planner/', views.test_planner, name='test_planner'),
     path('<int:pk>/test-planner/raw/', views.test_planner_raw, name='test_planner_raw'),
     path('<int:pk>/test-planner/raw/migrate/', views.migrate, name='test_planner_migrate'),
@@ -15,6 +16,7 @@ urlpatterns = [
     path('<int:bop_pk>/components/', include('apps.components.urls')),
     path('<int:bop_pk>/failuremodes/', include('apps.failuremodes.urls')),
     path('<int:bop_pk>/test-groups/', include('apps.test_groups.urls')),
+    path('<int:bop_pk>/certifications/', include('apps.certifications.urls')),
 
     path('<int:bop_pk>/safety-functions/',
          views.safety_function_list,

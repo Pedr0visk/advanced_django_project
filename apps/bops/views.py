@@ -24,17 +24,19 @@ def upload(request):
     cert_form = CertificationForm(request.POST or None)
 
     if request.method == 'POST':
-        bop = form.save()
-        certification = cert_form.save(commit=False)
-        certification.bop = bop
-        certification.save()
+        if form.is_valid():
+            bop = form.save()
+            if cert_form.is_valid():
+                certification = cert_form.save(commit=False)
+                certification.bop = bop
+                certification.save()
 
-        # remove file from database
-        bopfile = Csv.objects.create(file_name=request.FILES['file'], bop=bop)
-        BopLoader(bopfile.file_name.path, bop).run()
+            if len(request.FILES) >= 1:
+                bopfile = Csv.objects.create(file_name=request.FILES['attachment'], bop=bop)
+                BopLoader(bopfile.file_name.path, bop).run()
 
-        messages.success(request, 'Bop created successfully')
-        return redirect('list_bops')
+            messages.success(request, 'Bop created successfully')
+            return redirect('list_bops')
 
     context = {'form': form, 'cert_form': cert_form}
     return render(request, 'bops/bop_form.html', context)
@@ -50,15 +52,33 @@ def bop_list(request):
 @allowed_users(allowed_roles=['Admin'])
 def bop_update(request, pk):
     bop = Bop.objects.get(pk=pk)
-    form = BopForm(instance=bop)
-    context = {'form': form}
+    form = BopForm(request.POST or None, instance=bop)
 
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Successfully updated bop "{bop.name}" ')
+            return redirect('index_bop', bop.pk)
+
+    context = {'form': form, 'bop': bop}
     return render(request, 'bops/bop_form.html', context)
+
+
+@allowed_users(allowed_roles=['Admin'])
+def bop_delete(request, pk):
+    bop = Bop.objects.get(pk=pk)
+    context = {'bop': bop}
+
+    if request.method == 'POST':
+        name = bop.name
+        bop.delete()
+        messages.success(request, f'Bop "{name}" successfully deleted')
+        return redirect('list_bops')
+    return render(request, 'bops/bop_confirm_delete.html', context)
 
 
 def index(request, pk):
     bop = Bop.objects.get(pk=pk)
-
     context = {'bop': bop}
     return render(request, 'bops/index.html', context)
 
