@@ -1,5 +1,7 @@
 import csv
 from collections import defaultdict
+from io import StringIO
+
 from django.apps import apps
 
 from apps.subsystems.models import Subsystem
@@ -16,35 +18,37 @@ class Loader:
         self.filepath = filepath
         self.subsystems = []
         self.components = []
-        self.failuremodes = []
         self.tests = []
         self.bop = bop
-        self.row = []
 
     def run(self):
-        with open(self.filepath) as csvfile:
-            # read file from line 1
-            infile = csv.reader(csvfile, delimiter=',')
-            rows = [line for line in infile][1:]
+        """
+        Read built-in bop.text and add bop's subsystems, components and failure modes.
+        :return:
+        """
+        # Read InMemoryUploadedFile
+        file = self.filepath.read().decode('utf-8')
+        infile = csv.reader(StringIO(file), delimiter=',')
+        # read file from line 1
+        rows = [line for line in infile][1:]
 
-            for row in rows:
-                self.row = row
-                # add subsystem to bulk
-                s, created = Subsystem.objects.get_or_create(code=row[2],
-                                                             name=row[1],
-                                                             bop=self.bop)
+        for row in rows:
+            # add subsystem to bulk
+            s, created = Subsystem.objects.get_or_create(code=row[2],
+                                                         name=row[1],
+                                                         bop=self.bop)
 
-                # add component to bulk
-                c, created = Component.objects.get_or_create(code=row[4],
-                                                             name=row[3],
-                                                             subsystem=s)
-
-                # add failure mode to bulk
-                FailureMode.objects.get_or_create(code=row[6],
-                                                  name=row[5],
-                                                  distribution=self.get_distribution_attr(row),
-                                                  diagnostic_coverage=self.get_column(row, 17),
-                                                  component=c)
+            # add component to bulk
+            c, created = Component.objects.get_or_create(code=row[4],
+                                                         name=row[3],
+                                                         subsystem=s)
+            # add failure mode to bulk
+            FailureMode.objects.get_or_create(code=row[6],
+                                              name=row[5],
+                                              distribution=self.get_distribution_attr(row),
+                                              diagnostic_coverage=self.get_column(row, 17),
+                                              component=c)
+        return True
 
     def get_distribution_attr(self, row):
         """"""

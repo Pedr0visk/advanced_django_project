@@ -2,7 +2,6 @@ from django.contrib import messages
 from django.core.exceptions import RequestAborted
 from django.db import transaction
 from django.shortcuts import render, redirect
-from django.http.response import JsonResponse
 
 from .models import Bop, SafetyFunction
 from .forms import BopForm, SafetyFunctionForm
@@ -19,21 +18,30 @@ from ..test_groups.models import TestGroup, TestGroupHistory, TestGroupDummy
 
 @transaction.atomic
 @allowed_users(allowed_roles=['Admin'])
-def upload(request):
-    form = BopForm(request.POST or None)
+def bop_upload(request):
+    """
+    Add a new bop from a built-in bop.text
+    :param request:
+    :return:
+    """
+    form = BopForm(request.POST or None, request.FILES or None)
     cert_form = CertificationForm(request.POST or None)
 
     if request.method == 'POST':
         if form.is_valid():
             bop = form.save()
+
+            try:
+                # load built-in bop
+                BopLoader(request.FILES['file'], bop).run()
+            except:
+                pass
+
+            # add latest certification
             if cert_form.is_valid():
                 certification = cert_form.save(commit=False)
                 certification.bop = bop
                 certification.save()
-
-            if len(request.FILES) >= 1:
-                bopfile = Csv.objects.create(file_name=request.FILES['attachment'], bop=bop)
-                BopLoader(bopfile.file_name.path, bop).run()
 
             messages.success(request, 'Bop created successfully')
             return redirect('list_bops')
@@ -86,7 +94,7 @@ def index(request, pk):
 @transaction.atomic
 def safety_function_upload(request, bop_pk):
     bop = Bop.objects.get(pk=bop_pk)
-    form = SafetyFunctionForm(request.POST or None)
+    form = SafetyFunctionForm(request.POST or None, request.FILES or None)
 
     if request.method == 'POST':
         if form.is_valid():
@@ -94,10 +102,10 @@ def safety_function_upload(request, bop_pk):
             sf.bop = bop
             sf.save()
 
-            cuts_txt = Csv.objects.create(file_name=request.FILES['file'], bop=bop)
+            SafetyFunctionLoader(request.FILES['file'], sf).run()
 
-            SafetyFunctionLoader(cuts_txt.file_name.path, safety_function=sf).run()
-            return JsonResponse({'message': 'successfully created!'})
+            messages.success(request, f'Safety Function "{sf.name}" successfully created!')
+            return redirect('list_safety_functions', bop.pk)
 
     context = {'bop': bop, 'form': form}
     return render(request, 'safety_functions/safety_function_form.html', context)
@@ -115,8 +123,22 @@ def safety_function_index(request, bop_pk, sf_pk):
     bop = Bop.objects.get(pk=bop_pk)
     sf = SafetyFunction.objects.get(pk=sf_pk)
 
-    context = {'bop': bop, 'safety_function': sf}
+    context = {'bop': bop, 'object': sf}
     return render(request, 'safety_functions/index.html', context)
+
+
+def safety_function_delete(request, bop_pk, sf_pk):
+    bop = Bop.objects.get(pk=bop_pk)
+    sf = SafetyFunction.objects.get(pk=sf_pk)
+    print(sf)
+    if request.method == 'POST':
+        sf_name = sf.name
+        sf.delete()
+        messages.success(request, f'Safety Function "{sf_name}" successfully deleted!')
+        return redirect('list_safety_functions', bop_pk)
+
+    context = {'bop': bop, 'object': sf}
+    return render(request, 'safety_functions/safety_function_confirm_delete.html', context)
 
 
 def safety_function_cuts(request, bop_pk, sf_pk):

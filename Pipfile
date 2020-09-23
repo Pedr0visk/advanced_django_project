@@ -20,6 +20,7 @@ names = "*"
 django-redis = "*"
 model-mommy = "*"
 coverage = "*"
+pytest-django = "*"
 
 [requires]
 python_version = "3.8"

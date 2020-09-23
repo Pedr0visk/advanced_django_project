@@ -1,9 +1,11 @@
-from collections import defaultdict
-from django.apps import apps
-
 import csv
 import time
+import concurrent.futures
 
+from collections import defaultdict
+from io import StringIO
+
+from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist
 
 from apps.cuts.models import Cut
@@ -31,37 +33,23 @@ class Loader:
         self.sf = safety_function
 
     def run(self):
-        # how much longer takes to add a sf.txt file
-        start = time.perf_counter()
+        file = self.filepath.read().decode('utf-8')
+        infile = csv.reader(StringIO(file), delimiter='\n')
+        rows = [line[0].split(',') for line in infile][1:]
 
-        with open(self.filepath) as csvfile:
+        bulk_mgr = BulkCreateManager(chunk_size=100)
 
-            infile = csv.reader(csvfile, delimiter='\n')
-            failuremodes = FailureMode.objects.all()
+        for row in rows:
+            index = row[0]
+            fm_list = row[1:]
+            bulk_mgr.add(Cut(index=index,
+                             order=len(fm_list),
+                             failure_modes=','.join(fm_list),
+                             safety_function=self.sf))
 
-            # read file from line 1
-            rows = [line[0].split(',') for line in infile][1:]
+        bulk_mgr.done()
 
-            for row in rows:
-                index = row[0]
-                fm_list = row[1:]
-
-                c = Cut.objects.create(index=index,
-                                       order=len(fm_list),
-                                       value=','.join(fm_list),
-                                       safety_function=self.sf)
-
-                for code in fm_list:
-                    try:
-                        fm = failuremodes.filter(code=code).get()
-                        c.failure_modes.add(fm)
-                    except ObjectDoesNotExist:
-                        print("FailureMode {} doesn't exist.".format(code))
-
-        finish = time.perf_counter()
-
-        print(f'Finished in {round(finish-start, 2)} second(s)')
-
+        return True
 
 class BulkCreateManager(object):
     """

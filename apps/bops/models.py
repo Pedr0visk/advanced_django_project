@@ -40,3 +40,9 @@ class SafetyFunction(models.Model):
 
     def __str__(self):
         return self.name
+
+    def with_counts(self):
+        collector = NestedObjects(using='default')
+        collector.collect([self])
+        model_count = {model._meta.verbose_name_plural: len(objs) for model, objs in collector.model_objs.items()}
+        return model_count.items()

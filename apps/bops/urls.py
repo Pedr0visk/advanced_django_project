@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group, User
 
 urlpatterns = [
     path('', views.bop_list, name='list_bops'),
-    path('upload/', views.upload, name='upload_bop'),
+    path('upload/', views.bop_upload, name='upload_bop'),
     path('<int:pk>/', views.index, name='index_bop'),
     path('<int:pk>/change/', views.bop_update, name='update_bop'),
     path('<int:pk>/delete/', views.bop_delete, name='delete_bop'),
@@ -30,4 +30,7 @@ urlpatterns = [
     path('<int:bop_pk>/safety-functions/<int:sf_pk>/cuts/',
          views.safety_function_cuts,
          name='list_safety_function_cuts'),
+    path('<int:bop_pk>/safety-functions/<int:sf_pk>/delete/',
+         views.safety_function_delete,
+         name='delete_safety_function'),
 ]

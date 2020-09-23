@@ -14,7 +14,7 @@
           <span class="fa fa-chevron-right"></span>
           <a href="{% url 'list_safety_functions' bop.pk %}">Safety Functions</a>
           <span class="fa fa-chevron-right"></span>
-          <span class="current-page">{{ safety_function.name }}</span>
+          <span class="current-page">{{ object.name }}</span>
         </div>
       </div>
     </div>
@@ -32,10 +32,11 @@
         <div class="section-title mb-3">
           <p>Dashboard for Safety Function</p>
           <div>
-            <a href="{% url 'update_bop' bop.pk %}" class="btn btn-sm btn-warning mr-2"><small>EDIT SAFETY FUNCTION <i
-                class="fa fa-pencil-alt"></i></small></a>
-            <a href="bop_campaign_form.html" class="btn btn-sm btn-danger"><small>DELETE SAFETY FUNCTION <i
-                class="fa fa-times"></i></small>
+            <a href="{% url 'update_bop' bop.pk %}" class="btn btn-sm btn-warning mr-2">
+              <small>EDIT SAFETY FUNCTION <i class="fa fa-pencil-alt"></i></small>
+            </a>
+            <a href="{% url 'delete_safety_function' bop.pk object.pk %}" class="btn btn-sm btn-danger">
+              <small>DELETE SAFETY FUNCTION <i class="fa fa-times"></i></small>
             </a>
           </div>
         </div>
@@ -45,13 +46,13 @@
           <div class="col-sm-5 col-12">
             <table class="table dnv-table dnv-table-admin">
               <thead>
-              <th>{{ safety_function.name }}</th>
+              <th>{{ object.name }}</th>
               <th></th>
               <th></th>
               </thead>
               <tbody>
               <tr>
-                <td><a href="{% url 'list_safety_function_cuts' bop.pk safety_function.pk %}">Cuts</a></td>
+                <td><a href="{% url 'list_safety_function_cuts' bop.pk object.pk %}">Cuts</a></td>
                 <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
                 <td width="12%" align="center"><a href="{% url 'list_failuremodes' bop.pk %}"><i
                     class="fa fa-pencil-alt"></i> Edit</a></td>
