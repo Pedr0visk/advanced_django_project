@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.core.exceptions import RequestAborted
 from django.db import transaction
 from django.shortcuts import render, redirect
+from django.core.cache import cache
 
 from .models import Bop, SafetyFunction
 from .forms import BopForm, SafetyFunctionForm
@@ -10,7 +11,6 @@ from .load_safety_function import Loader as SafetyFunctionLoader
 
 from apps.certifications.forms import CertificationForm
 
-from apps.csvs.models import Csv
 from apps.managers.decorators import allowed_users
 from ..failuremodes.models import FailureMode
 from ..test_groups.models import TestGroup, TestGroupHistory, TestGroupDummy
@@ -87,6 +87,8 @@ def bop_delete(request, pk):
 
 def index(request, pk):
     bop = Bop.objects.get(pk=pk)
+    cache.set('bop', bop)
+
     context = {'bop': bop}
     return render(request, 'bops/index.html', context)
 
@@ -130,7 +132,7 @@ def safety_function_index(request, bop_pk, sf_pk):
 def safety_function_delete(request, bop_pk, sf_pk):
     bop = Bop.objects.get(pk=bop_pk)
     sf = SafetyFunction.objects.get(pk=sf_pk)
-    print(sf)
+
     if request.method == 'POST':
         sf_name = sf.name
         sf.delete()

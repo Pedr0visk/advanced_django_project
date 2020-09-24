@@ -10,7 +10,6 @@
           <span class="fa fa-chevron-right"></span>
           <a href="{% url 'manager' %}">Bops</a>
           <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
           <span class="fa fa-chevron-right"></span>
           <span class="current-page">Certifications </span>
         </div>
@@ -51,12 +50,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for certification in certifications %}
+                {% for object in objects %}
                   <tr>
-                  <td>{{ certification.id }}</td>
-                  <td>{{ certification.code }}</td>
-                  <td>{{ certification.start_date }}</td>
-                  <td>{{ certification.end_date }}</td>
+                  <td>{{ object.id }}</td>
+                  <td><a href="{% url 'update_certification' bop.pk object.pk %}">{{ object.code }}</a></td>
+                  <td>{{ object.start_date }}</td>
+                  <td>{{ object.end_date }}</td>
                   </tr>
                 {% endfor %}
 
