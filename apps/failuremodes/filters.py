@@ -1,5 +1,16 @@
+import django_filters
+
 from django.core.paginator import Paginator
 from .models import FailureMode
+
+
+class FailureModeFilter(django_filters.FilterSet):
+    code = django_filters.CharFilter(lookup_expr='icontains')
+    name = django_filters.CharFilter(lookup_expr='icontains')
+
+    class Meta:
+        model = FailureMode
+        fields = ['code', 'name']
 
 
 def failuremode_filter(query_params={}):

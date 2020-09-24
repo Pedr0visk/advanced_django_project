@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group, User, Permission
 from django.contrib.contenttypes.models import ContentType
 
 
-class AccountViewTest(TestCase):
+class ManagerViewTest(TestCase):
 
     def setUp(self):
         self.client = Client()
