@@ -18,7 +18,7 @@
             to_box.id = field_id + '_to';
 
             from_box.setAttribute('name', from_box.getAttribute('name') + '_old');
-
+            from_box.removeAttribute('required');
             // buttons
             let add_link = document.getElementById(`${field_id}_add_link`);
             let remove_link = document.getElementById(`${field_id}_remove_link`);

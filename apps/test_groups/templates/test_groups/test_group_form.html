@@ -74,15 +74,7 @@
                       form-control-sm">
                     </div>
                     <!-- selector -->
-                    <select name="failure_modes" id="id_failure_modes" multiple class="selectfilter">
-                      {% for fm in failure_modes %}
-                        {% if fm in test_group.failure_modes.all %}
-                          <option value="{{ fm.pk }}" selected>{{ fm.name }} | {{ fm.code }} </option>
-                        {% else %}
-                          <option value="{{ fm.pk }}">{{ fm.name }} | {{ fm.code }} </option>
-                        {% endif %}
-                      {% endfor %}
-                    </select>
+                    {{ form.failure_modes }}
                   </div>
 
                   <div class="selector-chooser">
