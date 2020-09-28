@@ -44,6 +44,7 @@ def campaign_create(request, bop_pk):
         campaign = form.save(commit=False)
         campaign.bop = bop
         campaign.save()
+        print(request.POST.getlist['phases'])
 
         messages.success(request, 'Campaign created successfully')
         return redirect('list_campaigns', bop_pk=bop_pk)

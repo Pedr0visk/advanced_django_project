@@ -1,10 +1,9 @@
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .forms import TestGroupForm, TestGroupDummyForm
-from .models import TestGroup, TestGroupHistory, TestGroupDummy
+from .forms import TestGroupDummyForm
+from .models import TestGroupHistory, TestGroupDummy
 from ..bops.models import Bop
-from ..failuremodes.models import FailureMode
 from ..tests.models import Test
 
 
@@ -39,7 +38,7 @@ def test_group_update(request, bop_pk, tg_pk):
         if form.is_valid():
             form.save()
             messages.success(request, f'Test Group "{test_group_raw}" updated successfully!')
-            return redirect('test_planner_raw', bop_pk)
+            return test_group_raw.success_url()
 
     context = {'bop': bop, 'test_group': test_group_raw, 'form': form}
     return render(request, 'test_groups/test_group_form.html', context)

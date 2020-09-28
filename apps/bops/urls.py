@@ -13,6 +13,7 @@ urlpatterns = [
     path('<int:pk>/test-planner/raw/migrate/', views.migrate, name='test_planner_migrate'),
     path('<int:bop_pk>/campaigns/', include('apps.campaigns.urls')),
     path('<int:bop_pk>/subsystems/', include('apps.subsystems.urls')),
+    path('<int:bop_pk>/events/', include('apps.events.urls')),
     path('<int:bop_pk>/components/', include('apps.components.urls')),
     path('<int:bop_pk>/failuremodes/', include('apps.failuremodes.urls')),
     path('<int:bop_pk>/test-groups/', include('apps.test_groups.urls')),

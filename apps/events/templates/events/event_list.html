@@ -12,8 +12,6 @@
           <a href="{% url 'dashboard' %}">Home</a>
           <span class="fa fa-chevron-right"></span>
           <span class="current-page">{{ bop.name }}</span>
-          <span class="fa fa-chevron-right"></span>
-          <span class="current-page">Events</span>
         </div>
       </div>
     </div>
@@ -42,12 +40,12 @@
         <div class="section-content">
           <div class="d-flex">
             <div class="ml-auto">
-              <a href="{% url 'create_campaign' bop.pk %}" class="ml-auto btn btn-sm btn-success"><small>ADD CAMPAIGN <i
+              <a href="{% url 'create_campaign' bop.pk %}" class="btn btn-sm btn-success"><small>ADD CAMPAIGN <i
                   class="fa fa-plus"></i></small> </a>
             </div>
           </div>
 
-          <div class="row mt-4">
+          <div class="row mt-3">
             <div class="col-12">
               <div class="toolbar ml-auto px-3 py-2 mb-3">
                 <div class="search-bar">
@@ -117,7 +115,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
