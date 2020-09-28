@@ -21,6 +21,7 @@ django-redis = "*"
 model-mommy = "*"
 coverage = "*"
 pytest-django = "*"
+djangorestframework = "*"
 
 [requires]
 python_version = "3.8"
