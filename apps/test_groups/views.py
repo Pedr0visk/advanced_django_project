@@ -1,10 +1,9 @@
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .forms import TestGroupForm, TestGroupDummyForm
-from .models import TestGroup, TestGroupHistory, TestGroupDummy
+from .forms import TestGroupDummyForm
+from .models import TestGroupHistory, TestGroupDummy
 from ..bops.models import Bop
-from ..failuremodes.models import FailureMode
 from ..tests.models import Test
 
 
@@ -14,9 +13,8 @@ def test_group_list(request):
 
 def test_group_create(request, bop_pk):
     bop = Bop.objects.get(pk=bop_pk)
-    form = TestGroupDummyForm(request.POST or None)
+    form = TestGroupDummyForm(request.POST or None, bop=bop)
     test_set = Test.objects.all()
-    failure_mode_set = FailureMode.objects.order_by('name').filter(component__subsystem__bop__exact=bop)
 
     if request.method == 'POST':
         if form.is_valid():
@@ -27,23 +25,22 @@ def test_group_create(request, bop_pk):
             messages.success(request, 'Test Group created successfully!')
             return redirect('test_planner_raw', bop_pk)
 
-    context = {'form': form, 'bop': bop, 'tests': test_set, 'failure_modes': failure_mode_set}
+    context = {'form': form, 'bop': bop, 'tests': test_set}
     return render(request, 'test_groups/test_group_form.html', context)
 
 
 def test_group_update(request, bop_pk, tg_pk):
     bop = Bop.objects.get(pk=bop_pk)
     test_group_raw = TestGroupDummy.objects.get(pk=tg_pk)
-    failure_mode_set = FailureMode.objects.order_by('name').filter(component__subsystem__bop__exact=bop)
-    form = TestGroupDummyForm(request.POST or None, instance=test_group_raw)
+    form = TestGroupDummyForm(request.POST or None, instance=test_group_raw, bop=bop)
 
     if request.method == 'POST':
         if form.is_valid():
             form.save()
             messages.success(request, f'Test Group "{test_group_raw}" updated successfully!')
-            return redirect('test_planner_raw', bop_pk)
+            return test_group_raw.success_url()
 
-    context = {'bop': bop, 'test_group': test_group_raw, 'failure_modes': failure_mode_set, 'form': form}
+    context = {'bop': bop, 'test_group': test_group_raw, 'form': form}
     return render(request, 'test_groups/test_group_form.html', context)
 
 

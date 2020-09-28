@@ -32,3 +32,17 @@ class Campaign(models.Model):
 
     class Meta:
         ordering = ['-active', '-start_date']
+
+
+class Phase(models.Model):
+    class Step(models.TextChoices):
+        DESCEND = 1
+        CONNECT = 2
+        DRILLING = 3
+        DISCONNECT = 4
+
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='phases')
+    step = models.IntegerField(choices=Step.choices, default=Step.DESCEND)
+    name = models.CharField(max_length=255)
+    start_date = models.DateTimeField()
+    duration = models.FloatField()

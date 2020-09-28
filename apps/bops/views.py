@@ -13,7 +13,7 @@ from apps.certifications.forms import CertificationForm
 
 from apps.managers.decorators import allowed_users
 from ..failuremodes.models import FailureMode
-from ..test_groups.models import TestGroup, TestGroupHistory, TestGroupDummy
+from ..test_groups.models import TestGroup, TestGroupDummy
 
 
 @transaction.atomic
@@ -155,7 +155,6 @@ def safety_function_cuts(request, bop_pk, sf_pk):
 def test_planner(request, pk):
     bop = Bop.objects.get(pk=pk)
     test_group_set = TestGroup.objects.filter(bop=bop.pk, deleted_at__isnull=True).order_by('-updated_at')
-    history = TestGroupHistory.objects.filter(test_group__bop_id__exact=bop.pk).order_by('-created_at')
     failure_modes_set = FailureMode.objects.filter(component__subsystem__bop__exact=bop,
                                                    testgroup__isnull=True).order_by('code')
 
@@ -172,7 +171,6 @@ def test_planner(request, pk):
     context = {
         'bop': bop,
         'test_groups': test_group_set,
-        'history': history,
         'failure_modes': failure_modes_set
     }
 

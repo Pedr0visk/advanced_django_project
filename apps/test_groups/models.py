@@ -1,5 +1,6 @@
 from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.shortcuts import redirect
 
 from apps.bops.models import Bop
 from apps.failuremodes.models import FailureMode
@@ -37,7 +38,9 @@ class TestGroup(CommonInfo):
 
 class TestGroupDummy(CommonInfo):
     test_group = models.OneToOneField(TestGroup, on_delete=models.SET_NULL, null=True)
-    pass
+
+    def success_url(self):
+        return redirect('test_planner_raw', self.bop.pk)
 
 
 class TestGroupHistory(models.Model):

@@ -1,4 +1,4 @@
-{% extends 'manager/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block breadcrumb %}
@@ -32,31 +32,36 @@
     <!-- section title -->
     <div class="section-title mb-3">
       <p>Test Group Scheduler</p>
-      <div>
-        {% if '/raw/' in request.path %}
-          <a href="bop_campaign_form.html" class="btn btn-sm btn-success">
-            <small>RUN (ANALYSIS MODE) <i class="fa fa-cogs"></i></small>
-          </a>
-          <a href="{% url 'test_planner_migrate' bop.pk %}" class="btn btn-sm btn-warning">
-            <small>MIGRATE ANALYSIS TO CURRENT <i class="fa fa-database"></i></small>
-          </a>
-        {% else %}
-          <a href="bop_campaign_form.html" class="btn btn-sm btn-success">
-            <small>RUN <i class="fa fa-cogs"></i></small>
-          </a>
-          <a href="{% url 'test_planner_migrate' bop.pk %}" class="btn btn-sm btn-warning disabled">
-            <small>MIGRATE ANALYSIS TO CURRENT <i class="fa fa-database"></i></small>
-          </a>
-        {% endif %}
-
-        <a href="{% url 'create_test_group' bop.pk %}" class="btn btn-sm btn-quinary">
-          <small>NEW TEST GROUP <i class="fa fa-plus"></i></small>
-        </a>
-
-      </div>
+      {% include 'common/bop_operator_nav.html' %}
     </div>
+
     <hr>
+
     <div class="section-content">
+      <div class="d-flex">
+        <div class="ml-auto">
+          {% if '/raw/' in request.path %}
+            <a href="bop_campaign_form.html" class="btn btn-sm btn-success">
+              <small>RUN (ANALYSIS MODE) <i class="fa fa-cogs"></i></small>
+            </a>
+            <a href="{% url 'test_planner_migrate' bop.pk %}" class="btn btn-sm btn-warning">
+              <small>MIGRATE ANALYSIS TO CURRENT <i class="fa fa-database"></i></small>
+            </a>
+          {% else %}
+            <a href="bop_campaign_form.html" class="btn btn-sm btn-success">
+              <small>RUN <i class="fa fa-cogs"></i></small>
+            </a>
+            <a href="{% url 'test_planner_migrate' bop.pk %}" class="btn btn-sm btn-warning disabled">
+              <small>MIGRATE ANALYSIS TO CURRENT <i class="fa fa-database"></i></small>
+            </a>
+          {% endif %}
+
+          <a href="{% url 'create_test_group' bop.pk %}" class="btn btn-sm btn-quinary">
+            <small>NEW TEST GROUP <i class="fa fa-plus"></i></small>
+          </a>
+
+        </div>
+      </div>
       <!--  -->
       <div class="row">
         <!-- failure modes not tested -->
@@ -79,7 +84,7 @@
                   <!-- selector -->
                   <select name="failure_modes" id="id_failure_modes" multiple class="selectfilter">
                     {% for fm in failure_modes %}
-                      <option value="{{ fm.pk }}"> <small>{{ fm.code }}</small> - {{ fm.name }}  </option>
+                      <option value="{{ fm.pk }}"><small>{{ fm.code }}</small> - {{ fm.name }}  </option>
                     {% endfor %}
                   </select>
                 </div>
