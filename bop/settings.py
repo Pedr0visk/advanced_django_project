@@ -49,7 +49,9 @@ INSTALLED_APPS = [
     'apps.events',
     'apps.wells',
     'apps.certifications',
-    'apps.csvs'
+    'apps.csvs',
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [

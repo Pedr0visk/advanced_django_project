@@ -3,7 +3,7 @@ from .models import Bop, SafetyFunction
 
 
 class BopForm(ModelForm):
-    file = forms.FileField(required=False)
+    file = forms.FileField(required=True)
 
     class Meta:
         model = Bop

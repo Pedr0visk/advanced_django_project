@@ -10,7 +10,7 @@ class Campaign(models.Model):
         RED = 'Red'
 
     name = models.CharField(max_length=100)
-    bop = models.ForeignKey(Bop, on_delete=models.PROTECT, related_name='campaigns')
+    bop = models.ForeignKey(Bop, on_delete=models.CASCADE, related_name='campaigns')
     active = models.BooleanField(default=True)
     well_name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)

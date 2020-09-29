@@ -109,6 +109,19 @@ class BopViewTest(TestCase):
         self.assertEqual(FailureMode.objects.count(), 163)
         self.assertEqual(Certification.objects.count(), 1)
 
+    def test_load_bop(self):
+        _path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/bopfile.txt')
+
+        for _ in range(2):
+            with open(_path) as file:
+                data = self.bop_data()
+                data['file'] = file
+                self.client.post(self.bop_create_url, data)
+
+        self.assertEqual(Bop.objects.count(), 5)
+        self.assertEqual(Subsystem.objects.count(), 93)
+        self.assertEqual(FailureMode.objects.count(), 321)
+
     def test_create_bop_without_text_file(self):
         """
         In setup data we have 5 components and failure modes created
