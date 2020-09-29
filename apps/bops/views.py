@@ -31,8 +31,11 @@ def bop_upload(request):
         if form.is_valid():
             bop = form.save()
 
-            # load built-in bop
-            BopLoader(bop).save_many(request.FILES['file'])
+            try:
+                # load built-in bop
+                BopLoader(bop).save_many(request.FILES['file'])
+            except:
+                pass
 
             # add latest certification
             if cert_form.is_valid():

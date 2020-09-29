@@ -73,6 +73,7 @@ class BopViewTest(TestCase):
 
         bop_id = self.bop.id
         self.bop_create_url = reverse('upload_bop')
+
         self.bop_index_url = f'/bops/{bop_id}/'
         self.bop_update_url = f'/bops/{bop_id}/change/'
         self.bop_delete_url = f'/bops/{bop_id}/delete/'
@@ -109,7 +110,11 @@ class BopViewTest(TestCase):
         self.assertEqual(FailureMode.objects.count(), 163)
         self.assertEqual(Certification.objects.count(), 1)
 
-    def test_load_bop(self):
+    def test_insertions_of_two_bop_files(self):
+        """
+        Check if after registered one bop the second get registered successfully.
+        :return:
+        """
         _path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets/bopfile.txt')
 
         for _ in range(2):
