@@ -1,3 +1,5 @@
+import apps.bops.metrics as metrics
+
 from django.contrib import messages
 from django.core.exceptions import RequestAborted
 from django.db import transaction
@@ -33,7 +35,7 @@ def bop_upload(request):
 
             try:
                 # load built-in bop
-                BopLoader(request.FILES['file'], bop).run()
+                BopLoader(bop).save_many(request.FILES['file'])
             except:
                 pass
 
@@ -207,3 +209,4 @@ def migrate(request, pk):
 
     messages.success(request, 'Migrate Successfully!')
     return redirect('test_planner', pk)
+

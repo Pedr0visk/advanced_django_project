@@ -45,114 +45,58 @@
 
         <!-- section content -->
         <div class="row">
-          {% if request.user.groups.all.0 == 'Admin' %}
-            <div class="col-sm-5 col-12">
-              <table class="table dnv-table dnv-table-admin">
-                <thead>
-                <th>{{ bop.name }}</th>
-                <th></th>
-                <th></th>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><a href="{% url 'list_certifications' bop.pk %}">Certifications</a></td>
-                    <td width="12%" align="center"></td>
-                    <td width="12%" align="center"><i class="fa fa-shield-alt text-success"></i></td>
-                  </tr>
-                  <tr>
-                    <td><a href="#">Hierarchy</a></td>
-                    <td width="12%" align="center"></td>
-                    <td width="12%" align="center"><i class="fa fa-sitemap text-secondary"></i></td>
-                  </tr>
-                  <tr>
-                    <td><a href="{% url 'test_planner' bop.pk %}">Test Planner</a></td>
-                    <td width="12%" align="center"></td>
-                    <td width="12%" align="center"><i class="fa fa-vials text-secondary"></i></td>
-                  </tr>
-                  <tr>
-                    <td><a href="{% url 'list_safety_functions' bop.pk %}">Safety Functions</a></td>
-                    <td width="12%" align="center"><a href="{% url 'upload_safety_function' bop.pk %}">
-                      <i class="fa fa-plus"></i> Add</a>
-                    </td>
-                    <td width="12%" align="center"><a href="{% url 'list_subsystems' bop.pk %}"><i
-                        class="fa fa-pencil-alt"></i> Edit</a></td>
-                  </tr>
-                  <tr>
-                    <td><a href="#">Failure Rate</a></td>
-                    <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                    <td width="12%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
-                  </tr>
-                  <tr>
-                    <td><a href="{% url 'list_subsystems' bop.pk %}">Subsystems</a></td>
-                    <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                    <td width="12%" align="center"><a href="{% url 'list_subsystems' bop.pk %}"><i
-                        class="fa fa-pencil-alt"></i> Edit</a></td>
-                  </tr>
-                  <tr>
-                    <td><a href="{% url 'list_components' bop.pk %}">Components</a></td>
-                    <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                    <td width="12%" align="center"><a href="{% url 'list_components' bop.pk %}"><i
-                        class="fa fa-pencil-alt"></i> Edit</a></td>
-                  </tr>
-                  <tr>
-                    <td><a href="{% url 'list_failuremodes' bop.pk %}">Failure Modes</a></td>
-                    <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                    <td width="12%" align="center"><a href="{% url 'list_failuremodes' bop.pk %}"><i
-                        class="fa fa-pencil-alt"></i> Edit</a></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          {% else %}
-            <div class="col-sm-5 col-12">
-              <table class="table dnv-table dnv-table-admin">
-                <thead>
-                <th>{{ bop.name }}</th>
-                <th></th>
-                <th></th>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><a href="{% url 'test_planner' bop.pk %}">Test Planner</a></td>
-                    <td width="12%" align="center"></td>
-                    <td width="12%" align="center"><i class="fa fa-vials text-secondary"></i></td>
-                  </tr>
-                  <tr>
-                    <td><a href="">Event Logger</a></td>
-                    <td width="12%" align="center"></td>
-                    <td width="12%" align="center"><i class="fa fa-shield-alt text-success"></i></td>
-                  </tr>
-                  <tr>
-                    <td><a href="#">Summary of Results</a></td>
-                    <td width="12%" align="center"></td>
-                    <td width="12%" align="center"><i class="fa fa-sitemap text-secondary"></i></td>
-                  </tr>
-                  <tr>
-                    <td><a href="#">Detailed Results</a></td>
-                    <td width="12%" align="center"></td>
-                    <td width="12%" align="center"><i class="fa fa-sitemap text-secondary"></i></td>
-                  </tr>
-                  <tr>
-                    <td><a href="#">Hierarchy</a></td>
-                    <td width="12%" align="center"></td>
-                    <td width="12%" align="center"><i class="fa fa-sitemap text-secondary"></i></td>
-                  </tr>
-                  <tr>
-                    <td><a href="#">Event Logger</a></td>
-                    <td width="12%" align="center"></td>
-                    <td width="12%" align="center"><i class="fa fa-sitemap text-secondary"></i></td>
-                  </tr>
-
-                  <tr>
-                    <td><a href="{% url 'list_subsystems' bop.pk %}">Campaigns</a></td>
-                    <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                    <td width="12%" align="center"><a href="{% url 'list_campaigns' bop.pk %}"><i
-                        class="fa fa-pencil-alt"></i> Edit</a></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          {% endif %}
+          <div class="col-sm-5 col-12">
+            <table class="table dnv-table dnv-table-admin">
+              <thead>
+              <th>{{ bop.name }}</th>
+              <th></th>
+              <th></th>
+              </thead>
+              <tbody>
+              <tr>
+                <td><a href="{% url 'list_certifications' bop.pk %}">Certifications</a></td>
+                <td width="12%" align="center"></td>
+                <td width="12%" align="center"><i class="fa fa-shield-alt text-success"></i></td>
+              </tr>
+              <tr>
+                <td><a href="#">Hierarchy</a></td>
+                <td width="12%" align="center"></td>
+                <td width="12%" align="center"><i class="fa fa-sitemap text-secondary"></i></td>
+              </tr>
+              <tr>
+                <td><a href="{% url 'list_safety_functions' bop.pk %}">Safety Functions</a></td>
+                <td width="12%" align="center"><a href="{% url 'upload_safety_function' bop.pk %}">
+                  <i class="fa fa-plus"></i> Add</a>
+                </td>
+                <td width="12%" align="center"><a href="{% url 'list_subsystems' bop.pk %}"><i
+                    class="fa fa-pencil-alt"></i> Edit</a></td>
+              </tr>
+              <tr>
+                <td><a href="#">Failure Rate</a></td>
+                <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
+                <td width="12%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
+              </tr>
+              <tr>
+                <td><a href="{% url 'list_subsystems' bop.pk %}">Subsystems</a></td>
+                <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
+                <td width="12%" align="center"><a href="{% url 'list_subsystems' bop.pk %}"><i
+                    class="fa fa-pencil-alt"></i> Edit</a></td>
+              </tr>
+              <tr>
+                <td><a href="{% url 'list_components' bop.pk %}">Components</a></td>
+                <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
+                <td width="12%" align="center"><a href="{% url 'list_components' bop.pk %}"><i
+                    class="fa fa-pencil-alt"></i> Edit</a></td>
+              </tr>
+              <tr>
+                <td><a href="{% url 'list_failuremodes' bop.pk %}">Failure Modes</a></td>
+                <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
+                <td width="12%" align="center"><a href="{% url 'list_failuremodes' bop.pk %}"><i
+                    class="fa fa-pencil-alt"></i> Edit</a></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
 
 
           <div class="col-sm-4">

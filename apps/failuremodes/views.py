@@ -2,7 +2,7 @@ from django.forms.models import model_to_dict
 from django.http.response import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import FailureMode
-from .filters import failuremode_filter
+from .filters import failure_mode_filter
 from .forms import FailureModeForm
 
 from apps.bops.models import Bop
@@ -10,9 +10,10 @@ from apps.bops.models import Bop
 
 def failuremode_list(request, bop_pk):
     bop = Bop.objects.get(pk=bop_pk)
-    failuremodes = failuremode_filter(request.GET)
+    failure_modes = FailureMode.objects.filter(component__subsystem__bop__exact=bop)
+    query_set = failure_mode_filter(failure_modes, request.GET)
 
-    context = {'bop': bop, 'failuremodes': failuremodes}
+    context = {'bop': bop, 'failuremodes': query_set}
     return render(request, 'failuremodes/failuremode_list.html', context)
 
 

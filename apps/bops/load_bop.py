@@ -11,38 +11,32 @@ from apps.failuremodes.models import FailureMode
 
 class Loader:
     """
-    This class is in charge of saving multiples records on database
+    This class helps in bop creation reading a built-in bop file.text
+    that contains bop parts the need to be inserted on database.
     """
-
-    def __init__(self, filepath, bop):
-        self.filepath = filepath
-        self.subsystems = []
-        self.components = []
-        self.tests = []
+    def __init__(self, bop):
         self.bop = bop
+        self.cache = {}
 
-    def run(self):
+    def save_many(self, filepath):
         """
-        Read built-in bop.text and add bop's subsystems, components and failure modes.
+        Read the file and split it into a list of subsystem with theirs children
+        inside of it.
         :return:
         """
         # Read InMemoryUploadedFile
-        file = self.filepath.read().decode('utf-8')
+        file = filepath.read().decode('utf-8')
         infile = csv.reader(StringIO(file), delimiter=',')
         # read file from line 1
         rows = [line for line in infile][1:]
 
         for row in rows:
-            # add subsystem to bulk
             s, created = Subsystem.objects.get_or_create(code=row[2],
                                                          name=row[1],
                                                          bop=self.bop)
-
-            # add component to bulk
             c, created = Component.objects.get_or_create(code=row[4],
                                                          name=row[3],
                                                          subsystem=s)
-            # add failure mode to bulk
             FailureMode.objects.get_or_create(code=row[6],
                                               name=row[5],
                                               distribution=self.get_distribution_attr(row),
