@@ -10,7 +10,7 @@ from datetime import date
 
 class CommonInfo(models.Model):
     start_date = models.DateField()
-    bop = models.ForeignKey(Bop, on_delete=models.CASCADE)
+    bop = models.ForeignKey(Bop, on_delete=models.CASCADE, related_name="%(class)s")
     failure_modes = models.ManyToManyField(FailureMode,
                                            related_name="%(class)s",
                                            related_query_name="%(class)s", )

@@ -38,16 +38,11 @@ def campaign_list(request, bop_pk):
 def campaign_create(request, bop_pk):
     form = CampaignForm()
     bop = Bop.objects.get(pk=bop_pk)
+    test_groups = bop.testgroup.all()
 
-    if request.method == 'POST':
-        form = CampaignForm(request.POST)
-        campaign = form.save(commit=False)
-        campaign.bop = bop
-        campaign.save()
-        print(request.POST.getlist['phases'])
-
-        messages.success(request, 'Campaign created successfully')
-        return redirect('list_campaigns', bop_pk=bop_pk)
-
-    context = {'form': form, 'bop': bop}
+    context = {'form': form, 'bop': bop, 'test_groups': test_groups}
     return render(request, 'campaigns/campaign_form.html', context)
+
+
+def run_analysis(request, bop_pk):
+    pass

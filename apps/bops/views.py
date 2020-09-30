@@ -1,3 +1,5 @@
+import apps.bops.metrics as metrics
+
 from django.contrib import messages
 from django.core.exceptions import RequestAborted
 from django.db import transaction
@@ -207,3 +209,4 @@ def migrate(request, pk):
 
     messages.success(request, 'Migrate Successfully!')
     return redirect('test_planner', pk)
+

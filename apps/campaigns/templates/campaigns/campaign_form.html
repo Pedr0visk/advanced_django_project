@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load manager_extras %}
 
 {% block breadcrumb %}
@@ -35,7 +36,7 @@
       <div class="section-content">
         <div class="row">
           <div class="col-sm-12">
-            <form method="POST">
+            <form method="POST" id="campaignForm">
               {% csrf_token %}
               <div class="form-group row">
                 <label class="col-sm-2 col-form-label col-form-label-sm">Well Name:</label>
@@ -103,6 +104,51 @@
               </div>
               <hr/>
 
+              <fieldset class="form-fieldset">
+                <h4>Phases</h4>
+                <table>
+                  <tr id="inputData">
+                    <td>
+                      <input
+                          id="name"
+                          type="text"
+                          placeholder="name"
+                          class="form-control form-control-sm" />
+                    </td>
+                    <td>
+                      <input
+                          id="date"
+                          type="datetime-local"
+                          class="form-control form-control-sm" />
+                    </td>
+                    <td>
+                      <input
+                          id="duration"
+                          type="number"
+                          placeholder="duration"
+                          class="form-control form-control-sm" />
+                    </td>
+                    <td>
+                      <select name="" id="step" class="form-control form-control-sm">
+                        <option value="1">Test</option>
+                        <option value="2">Connect</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select name="" id="testGroup" multiple class="form-control form-control-sm">
+                        <option value="1">group 5</option>
+                        <option value="2">group 4</option>
+                        <option value="2">group 3</option>
+                        <option value="2">group 2</option>
+                      </select>
+                    </td>
+                    <td>
+                      <button class="btn-standard ml-2" id="add">add</button>
+                    </td>
+                  </tr>
+                </table>
+              </fieldset>
+
               <div class="card p-2 bg-light text-right">
                 <div class="d-flex">
 
@@ -125,6 +171,7 @@
 {% endblock %}
 
 {% block scripts %}
+  <script src="{% static 'js/SelectPhase.js' %}"></script>
   <script>
       // Query all input fields
       var form_fields = document.getElementsByTagName('input')

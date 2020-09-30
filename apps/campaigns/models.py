@@ -40,9 +40,12 @@ class Phase(models.Model):
         CONNECT = 2
         DRILLING = 3
         DISCONNECT = 4
+        TEST = 5
 
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='phases')
     step = models.IntegerField(choices=Step.choices, default=Step.DESCEND)
     name = models.CharField(max_length=255)
     start_date = models.DateTimeField()
     duration = models.FloatField()
+
+
