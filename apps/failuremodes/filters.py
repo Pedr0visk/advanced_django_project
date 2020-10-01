@@ -1,23 +1,21 @@
 from django.core.paginator import Paginator
-from .models import FailureMode
+from django.db.models import Q
 
 
-def failuremode_filter(query_params={}):
-    queryset = FailureMode.objects.order_by('-code')
-
+def failure_mode_filter(data_set, query_params={}):
     if 'q' in query_params:
         query = query_params['q']
-        queryset = queryset.filter(name__icontains=query, )
+        data_set = data_set.filter(Q(name__icontains=query) | Q(code__icontains=query))
 
     elif 'subsystem' in query_params:
         query = query_params['subsystem']
-        queryset = queryset.filter(component__subsystem=query, )
+        data_set = data_set.filter(component__subsystem=query, )
 
     elif 'component' in query_params:
         query = query_params['component']
-        queryset = queryset.filter(component=query, )
+        data_set = data_set.filter(component=query, )
 
-    paginator = Paginator(queryset, 15)
+    paginator = Paginator(data_set, 15)
     page = query_params.get('page')
     paged_listings = paginator.get_page(page)
 

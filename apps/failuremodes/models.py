@@ -21,6 +21,9 @@ class FailureMode(models.Model):
     diagnostic_coverage = models.FloatField()
     slug = models.SlugField(max_length=255, blank=True, null=True)
 
+    class Meta:
+        ordering = ['code']
+
     def save(self, *args, **kwargs):
         self.slug = self.code.lower().replace('_', '-')
         super(FailureMode, self).save(*args, **kwargs)

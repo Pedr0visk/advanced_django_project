@@ -1,4 +1,4 @@
-{% extends 'manager/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block breadcrumb %}
@@ -31,32 +31,102 @@
   <div class="section container-fluid px-5">
     <!-- section title -->
     <div class="section-title mb-3">
-      <p>Test Planner</p>
-      <div>
-        <a href="bop_campaign_form.html" class="btn btn-sm btn-secondary">
-          <small>RUN <i class="fa fa-cogs"></i></small>
-        </a>
-        <a href="{% url 'create_test_group' bop.pk %}" class="btn btn-sm btn-success">
-          <small>NEW TEST GROUP <i class="fa fa-plus"></i></small>
-        </a>
-
-      </div>
+      <p>Test Group Scheduler</p>
+      {% include 'common/bop_operator_nav.html' %}
     </div>
 
+    <hr>
+
     <div class="section-content">
+      <div class="d-flex">
+        <div class="ml-auto">
+          {% if '/raw/' in request.path %}
+            <a href="bop_campaign_form.html" class="btn btn-sm btn-success">
+              <small>RUN (ANALYSIS MODE) <i class="fa fa-cogs"></i></small>
+            </a>
+            <a href="{% url 'test_planner_migrate' bop.pk %}" class="btn btn-sm btn-warning">
+              <small>MIGRATE ANALYSIS TO CURRENT <i class="fa fa-database"></i></small>
+            </a>
+          {% else %}
+            <a href="bop_campaign_form.html" class="btn btn-sm btn-success">
+              <small>RUN <i class="fa fa-cogs"></i></small>
+            </a>
+            <a href="{% url 'test_planner_migrate' bop.pk %}" class="btn btn-sm btn-warning disabled">
+              <small>MIGRATE ANALYSIS TO CURRENT <i class="fa fa-database"></i></small>
+            </a>
+          {% endif %}
+
+          <a href="{% url 'create_test_group' bop.pk %}" class="btn btn-sm btn-quinary">
+            <small>NEW TEST GROUP <i class="fa fa-plus"></i></small>
+          </a>
+
+        </div>
+      </div>
       <!--  -->
       <div class="row">
-        <!-- table list of campaigns -->
-        <div class="col-6">
+        <!-- failure modes not tested -->
+        <div class="col-12 col-sm-4">
+          <div class="section-title mb-3">
+            <p>Failure Modes Not Tested</p>
+          </div>
           <div class="list">
-            <div class="table-responsive">
+            <!-- selector -->
+            <form>
+              <div class="selector">
+                <div class="selector-available">
+                  <h4>Available Failure Modes</h4>
+                  <!-- filter -->
+                  <div class="selector-filter form-inline">
+                    <label for=""><i class="fa fa-search"></i></label>
+                    <input id="id_failure_modes_input" type="text" placeholder="Filter" class="form-control
+                      form-control-sm">
+                  </div>
+                  <!-- selector -->
+                  <select name="failure_modes" id="id_failure_modes" multiple class="selectfilter">
+                    {% for fm in failure_modes %}
+                      <option value="{{ fm.pk }}"><small>{{ fm.code }}</small> - {{ fm.name }}  </option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <div class="selector-chooser d-none">
+                  <a href="" class="active" id="id_failure_modes_add_link">
+                    <i class="fa fa-arrow-circle-right"></i>
+                  </a>
+                  <a href="" class="active" id="id_failure_modes_remove_link">
+                    <i class="fa fa-arrow-circle-left"></i>
+                  </a>
+                </div>
+
+                <div class="selector-chosen d-none">
+                  <h4>Available Tests</h4>
+                  <!-- selector -->
+                  <select name="failure_modes" id="to_box" multiple class="">
+                  </select>
+                </div>
+
+                <div class="mx-4 d-none">
+                  <a href="/admin/failuremodes/failuremode/add/?_to_field=id&_popup=1"><i
+                      class="fa fa-plus text-success"></i></a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- test group list -->
+        <div class="col-12 col-sm-8">
+          <div class="section-title mb-3">
+            <p>Test Group List</p>
+          </div>
+          <div class="list">
+            <div class="table-responsive table-scroll">
               <table class="table m-0 table-hover dnv-table dnv-table-admin" id="campaignsTable">
                 <thead>
                 <tr>
-                  <th>ID</th>
-                  <th scope="col">TEST GROUP SCHEDULE</th>
-                  <th scope="col" class="text-center"></th>
-                  <th scope="col" class="text-center"></th>
+                  <th scope="col">ID</th>
+                  <th scope="col">start date</th>
+                  <th scope="col">failure modes</th>
+                  <th scope="col">tests <small>(interval, coverage)</small></th>
                   <td></td>
                   <td></td>
                 </tr>
@@ -66,30 +136,50 @@
                 <tbody>
                 {% for test_group in test_groups %}
                   <tr>
-                    <td>{{ test_group.id }}</td>
-                    <td>
-                      <i class="fa fa-calendar-alt"></i> {{ test_group.start_date }}
+                    <td width="4%">{{ test_group.id }}</td>
+                    <td width="10%">{{ test_group.start_date | date:"m/d/Y" }}</td>
+                    <td width="40%">
+                      {% for fm in test_group.failure_modes.all %}
+                        <small>{{ fm.code }}<b>,</b> </small>
+                      {% endfor %}
                     </td>
-                    <td>
-                      <a href="javascript:void(0)" data-toggle="modal" data-target="#failureMode">
-                        <i class="fa fa-list"></i> failure modes
-                      </a>
+                    <td align="left">
+                      {% for test in test_group.tests %}
+                        level {{ forloop.counter }}: <b>{{ test.interval }}, {{ test.coverage }}</b><br>
+                      {% endfor %}
                     </td>
-                    <td>
-                      <a href="" data-toggle="modal" data-target="#tests">
-                        <i class="fa fa-list"></i> tests
-                      </a>
                     </td>
-                    <td width="12%" align="center"><a href="{% url 'update_test_group' bop.pk test_group.pk %}"><i
-                        class="fa
-                    fa-pencil-alt"></i>
-                      edit</a></td>
-                    <td width="14%" align="center"><a href="{% url 'delete_test_group' bop.pk test_group.pk %}"><i
-                        class="fa
-                    fa-times"></i>
-                      delete</a></td>
+                    {% if '/raw/' in request.path %}
+                      <td width="8%" align="center">
+                        <a href="{% url 'update_test_group' bop.pk test_group.pk %}">
+                          <i class="fa fa-pencil-alt"></i>
+                          edit
+                        </a>
+                      </td>
+                      <td width="9%" align="center">
+                        <a href="{% url 'delete_test_group' bop.pk test_group.pk %}">
+                          <i class="fa fa-times"></i>
+                          delete
+                        </a>
+                      </td>
+                    {% else %}
+                      <td width="8%" align="center">
+                        <a href="{% url 'update_test_group' bop.pk test_group.testgroupdummy.pk %}">
+                          <i class="fa fa-pencil-alt"></i>
+                          edit
+                        </a>
+                      </td>
+                      <td width="9%" align="center">
+                        <a href="{% url 'delete_test_group' bop.pk test_group.testgroupdummy.pk %}">
+                          <i class="fa fa-times"></i>
+                          delete
+                        </a>
+                      </td>
+                    {% endif %}
+
                   </tr>
                 {% endfor %}
+
                 </tbody>
               </table>
             </div>
@@ -98,315 +188,9 @@
       </div>
     </div>
   </div>
+{% endblock %}
 
-  <!-- Modal -->
-  <div class="modal fade" id="failureMode" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-       aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Failure Modes</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <!-- table list of campaigns -->
-            <div class="col-12">
-              <div class="list">
-                <div class="table-responsive">
-                  <table class="table m-0 table-hover dnv-table" id="campaignsTable">
-                    <thead class="">
-                    <tr>
-                      <th scope="col" width="3%">ID</th>
-                      <th>code</th>
-                      <th scope="col">name</th>
-                    </tr>
-                    </thead>
-                    <!-- order -->
-                    <tbody>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">ABC_123</a></td>
-                      <td>
-                        Upper Anullar Prevents Failure
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal -->
-  <div class="modal fade" id="tests" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-       aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Tests</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <!-- table list of campaigns -->
-            <div class="col-12">
-              <div class="list">
-                <div class="table-responsive">
-                  <table class="table m-0 table-hover dnv-table" id="campaignsTable">
-                    <thead class="">
-                    <tr>
-                      <th scope="col" width="3%">ID</th>
-                      <th>interval</th>
-                      <th scope="col">coverage</th>
-                    </tr>
-                    </thead>
-                    <!-- order -->
-                    <tbody>
-                    <tr>
-                      <td scope="row" align="center">1</td>
-                      <td><a href="">186</a></td>
-                      <td>0.2</td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">2</td>
-                      <td><a href="">336</a></td>
-                      <td>0.6</td>
-                    </tr>
-                    <tr>
-                      <td scope="row" align="center">3</td>
-                      <td><a href="">5346</a></td>
-                      <td>1</td>
-                    </tr>
-
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
+{% block scripts %}
+  <script src="{% static 'js/SelectBox.js' %}"></script>
+  <script src="{% static 'js/SelectFilter.js' %}"></script>
 {% endblock %}

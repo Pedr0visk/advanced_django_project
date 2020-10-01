@@ -1,9 +1,11 @@
 import datetime
+
+from django.core.serializers import json
 from django.test import TestCase, Client
 from django.contrib.auth.models import Group, User
 
 from apps.bops.models import Bop
-from apps.campaigns.models import Campaign
+from apps.campaigns.models import Campaign, Phase
 
 
 class CampaignViewTest(TestCase):
@@ -22,26 +24,28 @@ class CampaignViewTest(TestCase):
         cls.bop = Bop.objects.create(pk=1, name='first bop')
         cls.campaign = Campaign.objects.create(bop=cls.bop, name='first campaign')
 
-    def test_campaign_can_be_created_by_operator(self):
-        """
-        A campaign can be created for a bop
-        """
+    def setUp(self):
         self.client.force_login(self.user)
 
+    def test_campaign_can_be_created_along_with_phases(self):
         """
-        the param pk is 1 cause we have just one bop created on database
+        A campaign must have phases on it, it will be created via ajax using
+        an api endpoint
         """
         data = self.campaign_data()
         response = self.client.post('/bops/1/campaigns/add/', data)
 
+        c = Campaign.objects.get(name=data['name'])
+
         self.assertRedirects(response, '/bops/1/campaigns/')
         self.assertEquals(Campaign.objects.count(), 2)
+        self.assertEquals(c.name, data['name'])
+        self.assertEquals(c.phases.count(), 4)
 
     def test_campaign_can_be_created_with_blank_description(self):
         """
         A campaign can be created for a bop
         """
-        self.client.force_login(self.user)
 
         """
         the param pk is 1 cause we have just one bop created on database
@@ -58,7 +62,6 @@ class CampaignViewTest(TestCase):
         A campaign can be created for a bop
         with start_date and end_date set to null or ''
         """
-        self.client.force_login(self.user)
 
         """
         the param pk is 1 cause we have just one bop created on database
@@ -75,7 +78,6 @@ class CampaignViewTest(TestCase):
         """
         Tests if a campaign can be displayed for a update
         """
-        self.client.force_login(self.user)
 
         response = self.client.get('/bops/1/campaigns/{}/change/'.format(self.campaign.pk))
 
@@ -84,7 +86,6 @@ class CampaignViewTest(TestCase):
 
     def test_campaign_can_be_updated(self):
         """"""
-        self.client.force_login(self.user)
 
         data = self.campaign_data()
         data['name'] = 'Campaign 1 edited'
@@ -106,10 +107,36 @@ class CampaignViewTest(TestCase):
         Private function that returns data for user creation
         """
         return {
-            'name': 'first campaign',
+            'name': 'stargazing',
             'description': 'some short description',
             'well_name': 'well 1',
             'active': False,
             'start_date': '2020-08-01',
             'end_date': '2020-12-31',
+            'phases': json.dumps([
+                {
+                    'name': 'Descend phase',
+                    'start_date': '2020-08-01',
+                    'duration': 45.7,
+                    'step': 1,
+                },
+                {
+                    'name': 'Connection test phase',
+                    'start_date': '2020-08-03',
+                    'duration': 30,
+                    'step': 2,
+                },
+                {
+                    'name': '1 drilling phase',
+                    'start_date': '2020-08-03',
+                    'duration': 467,
+                    'step': 3
+                },
+                {
+                    'name': 'Disconnect phase',
+                    'start_date': '2020-09-01',
+                    'duration': 80,
+                    'step': 4,
+                }
+            ])
         }

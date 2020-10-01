@@ -10504,6 +10504,20 @@ h3 {
   background: #417690;
 }
 
+.btn-standard {
+  line-height: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  padding: 4px 8px;
+  margin: 0;
+  vertical-align: middle;
+  background: #fff;
+  box-shadow: 0 -15px 20px -10px rgba(0, 0, 0, 0.15) inset;
+  cursor: pointer;
+  color: #333;
+}
+
 .timeline {
   position: relative;
 }
@@ -10706,6 +10720,10 @@ table.dnv-table td {
   font-size: 13px;
   padding: 8px;
 }
+table.dnv-table.dnv-table-sm td {
+  padding: 4px;
+  font-size: 12px;
+}
 table.dnv-table tr:nth-of-type(even) {
   background-color: #f9f9f9;
 }
@@ -10724,6 +10742,22 @@ table.dnv-table-admin tbody td i.fa-pencil-alt {
 }
 table.dnv-table-admin tbody td i.fa-times {
   color: #CC0000;
+}
+
+.table-scroll {
+  max-height: 70vh;
+  overflow-y: scroll;
+  position: relative;
+  border-bottom: 2px solid #eee;
+}
+.table-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.table-scroll::-webkit-scrollbar-thumb {
+  background: #adb5bd;
+}
+.table-scroll::-webkit-scrollbar-track {
+  background-color: #dee2e6;
 }
 
 .form-fieldset {
@@ -11021,6 +11055,37 @@ ul.errorlist li {
   background-size: 16px auto;
   font-size: 13px;
   display: block;
+}
+
+.title-1 {
+  color: #6c757d;
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.info h4 {
+  padding: 8px;
+  font-size: 13px;
+  color: white;
+  background-color: #79aec8;
+  margin: 0;
+}
+.info .info-list {
+  color: #495057;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+}
+.info .info-list li {
+  padding: 4px 7px;
+  border-bottom: 1px solid #eee;
+}
+.info .info-list li:nth-of-type(even) {
+  background-color: #f9f9f9;
+}
+
+.font-bold {
+  font-weight: bold;
 }
 
 /*# sourceMappingURL=main.css.map */

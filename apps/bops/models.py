@@ -1,5 +1,5 @@
-from functools import reduce
 from django.db import models
+from django.contrib.admin.utils import NestedObjects
 
 
 class Rig(models.Model):
@@ -21,16 +21,14 @@ class Bop(models.Model):
     def __str__(self):
         return self.name
 
+    def last_certification(self):
+        return self.certifications.last()
 
-class Certification(models.Model):
-    start_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
-    bop = models.ForeignKey(Bop,
-                            on_delete=models.CASCADE,
-                            related_name="certifications")
-
-    def __str__(self):
-        return '{0} {1} certification'.format(self.pk, self.bop.name)
+    def with_counts(self):
+        collector = NestedObjects(using='default')
+        collector.collect([self])
+        model_count = {model._meta.verbose_name_plural: len(objs) for model, objs in collector.model_objs.items()}
+        return model_count.items()
 
 
 class SafetyFunction(models.Model):
@@ -42,3 +40,9 @@ class SafetyFunction(models.Model):
 
     def __str__(self):
         return self.name
+
+    def with_counts(self):
+        collector = NestedObjects(using='default')
+        collector.collect([self])
+        model_count = {model._meta.verbose_name_plural: len(objs) for model, objs in collector.model_objs.items()}
+        return model_count.items()

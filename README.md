@@ -5,4 +5,10 @@ distribution = {
     "time_unit": "hours"
 }
 
-sdasd
+## alteracoes
+- exibir failure modes no grupo
+
+### useful commands
+> coverage run --source='.' manage.py test myapp
+>
+> coverage report
