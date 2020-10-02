@@ -3,9 +3,11 @@ from django.urls import path, include
 from rest_framework import routers
 
 from apps.campaigns.api.views import CampaignViewSet
+from apps.test_groups.api.views import TestScheduleViewSet
 from apps.bops.api.views import BopViewSet
 
 router = routers.DefaultRouter()
+router.register('test-scheduler', TestScheduleViewSet)
 router.register('campaigns', CampaignViewSet)
 router.register('bops', BopViewSet)
 

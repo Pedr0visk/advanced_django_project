@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from apps.bops.models import Bop
 from .serializers import BopSerializer
+from apps.test_groups.api.serializers import TestScheduleSerializer
 from rest_framework import status
 
 

@@ -9,4 +9,3 @@ class BopSerializer(serializers.ModelSerializer):
             'name', 'testgroup'
         )
 
-

@@ -3,6 +3,7 @@ from django.db import models
 from django.shortcuts import redirect
 
 from apps.bops.models import Bop
+from apps.campaigns.models import Phase
 from apps.failuremodes.models import FailureMode
 from apps.tests.models import Test
 from datetime import date
@@ -36,6 +37,12 @@ class TestGroup(CommonInfo):
             super().delete(using=None, keep_parents=False)
 
 
+class TestSchedule(models.Model):
+    date = models.DateTimeField()
+    phase = models.OneToOneField(Phase, on_delete=models.CASCADE, related_name='schedule')
+    test_groups = models.ManyToManyField(TestGroup, related_name='test_schedules')
+
+
 class TestGroupDummy(CommonInfo):
     test_group = models.OneToOneField(TestGroup, on_delete=models.SET_NULL, null=True)
 
@@ -58,8 +65,3 @@ class TestGroupHistory(models.Model):
 
     def event_type(self):
         return self.event
-
-
-class TestSchedule(models.Model):
-    test_group = models.ForeignKey(TestGroup, on_delete=models.CASCADE, related_name='schedules')
-    date = models.DateTimeField()

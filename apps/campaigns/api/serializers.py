@@ -1,14 +1,16 @@
 from rest_framework import serializers
 from apps.campaigns.models import Campaign, Phase
+from apps.test_groups.models import TestSchedule
 
 
 class PhaseSerializer(serializers.ModelSerializer):
     step = serializers.ChoiceField(choices=Phase.Step.choices)
+    test_groups = serializers.ListField(child=serializers.IntegerField(), required=False)
 
     class Meta:
         model = Phase
         fields = (
-            'name', 'step',
+            'name', 'step', 'test_groups',
             'start_date', 'duration'
         )
 
@@ -28,6 +30,13 @@ class CampaignSerializer(serializers.ModelSerializer):
         campaign = Campaign.objects.create(**validated_data)
 
         for phase_data in phases_data:
-            Phase.objects.create(campaign=campaign, **phase_data)
+            if phase_data['step'] == Phase.Step.TEST:
+                test_groups = phase_data.pop('test_groups')
+                new_phase = Phase.objects.create(campaign=campaign, **phase_data)
+                scheduler = TestSchedule.objects.create(phase=new_phase,
+                                                        date=new_phase.start_date)
+                scheduler.test_groups.set(test_groups)
+            else:
+                Phase.objects.create(campaign=campaign, **phase_data)
 
         return campaign
