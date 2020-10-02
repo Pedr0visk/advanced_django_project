@@ -23,6 +23,7 @@ coverage = "*"
 pytest-django = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.8"

@@ -30,6 +30,10 @@ class Bop(models.Model):
         model_count = {model._meta.verbose_name_plural: len(objs) for model, objs in collector.model_objs.items()}
         return model_count.items()
 
+    def schedule_tests(self, start_date, *args, **kwargs):
+        print(self.testgroup.all())
+        print(**kwargs)
+
 
 class SafetyFunction(models.Model):
     name = models.CharField(max_length=50)

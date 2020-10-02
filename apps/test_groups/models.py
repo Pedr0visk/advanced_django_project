@@ -26,7 +26,7 @@ class CommonInfo(models.Model):
 
 class TestGroup(CommonInfo):
     def __str__(self):
-        return f'group {self.id}'
+        return f'test group {self.id}'
 
     def delete(self, using=None, keep_parents=False, soft=False, **kwargs):
         if soft:
@@ -58,3 +58,8 @@ class TestGroupHistory(models.Model):
 
     def event_type(self):
         return self.event
+
+
+class TestSchedule(models.Model):
+    test_group = models.ForeignKey(TestGroup, on_delete=models.CASCADE, related_name='schedules')
+    date = models.DateTimeField()

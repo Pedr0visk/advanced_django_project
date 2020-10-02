@@ -47,5 +47,3 @@ class Phase(models.Model):
     name = models.CharField(max_length=255)
     start_date = models.DateTimeField()
     duration = models.FloatField()
-
-
