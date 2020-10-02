@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.admin.utils import NestedObjects
+from django.db import connection
 
 
 class Rig(models.Model):
@@ -20,6 +21,10 @@ class Bop(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolut_url(self):
+        from django.urls import reverse
+        return reverse('apps.bops.views.index', args=[str(self.pk)])
 
     def last_certification(self):
         return self.certifications.last()
