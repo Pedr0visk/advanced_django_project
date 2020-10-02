@@ -155,24 +155,28 @@ def safety_function_cuts(request, bop_pk, sf_pk):
 
 
 def test_planner(request, pk):
+    """
+    Copy all tests groups to a mirror table called test groups dummy
+    :param request:
+    :param pk:
+    :return:
+    """
     bop = Bop.objects.get(pk=pk)
-    test_group_set = TestGroup.objects.filter(bop=bop.pk, deleted_at__isnull=True).order_by('-updated_at')
+    test_groups_set = bop.testgroup.order_by('-updated_at')
     failure_modes_set = FailureMode.objects.filter(component__subsystem__bop__exact=bop,
                                                    testgroup__isnull=True).order_by('code')
 
-    TestGroupDummy.objects.all().delete()
+    bop.testgroupdummy.all().delete()
 
-    for g in test_group_set:
-        obj = TestGroupDummy(test_group=g,
-                             start_date=g.start_date,
-                             bop=bop,
-                             tests=g.tests)
-        obj.save()
-        obj.failure_modes.set(g.failure_modes.all().values_list('id', flat=True))
+    for test_group in test_groups_set:
+        new_test_group = bop.testgroupdummy.create(test_group=test_group,
+                                                   start_date=test_group.start_date,
+                                                   tests=test_group.tests)
+        new_test_group.failure_modes.set(test_group.failure_modes.all().values_list('id', flat=True))
 
     context = {
         'bop': bop,
-        'test_groups': test_group_set,
+        'test_groups': test_groups_set,
         'failure_modes': failure_modes_set
     }
 
@@ -181,8 +185,8 @@ def test_planner(request, pk):
 
 def test_planner_raw(request, pk):
     bop = Bop.objects.get(pk=pk)
-    test_group_set = TestGroupDummy.objects \
-        .filter(bop=bop.pk, deleted_at__isnull=True) \
+    test_group_set = bop.testgroupdummy \
+        .filter(deleted_at__isnull=True) \
         .order_by('-updated_at')
 
     failure_modes_set = FailureMode.objects.filter(component__subsystem__bop__exact=bop,
@@ -196,17 +200,14 @@ def migrate(request, pk):
     bop = Bop.objects.get(pk=pk)
 
     try:
-        TestGroup.objects.all().delete()
-        test_group_set = TestGroupDummy.objects.all()
-        for g in test_group_set:
-            obj = TestGroup(start_date=g.start_date,
-                            bop=bop,
-                            tests=g.tests)
-            obj.save()
-            obj.failure_modes.set(g.failure_modes.all().values_list('id', flat=True))
+        bop.testgroup.all().delete()
+        test_group_set = bop.testgroupdummy.all()
+        for dummy in test_group_set:
+            new_test_group = bop.testgroup.create(start_date=dummy.start_date,
+                                                  tests=dummy.tests)
+            new_test_group.failure_modes.set(dummy.failure_modes.all().values_list('id', flat=True))
     except RequestAborted:
-        pass
+        raise RequestAborted
 
     messages.success(request, 'Migrate Successfully!')
     return redirect('test_planner', pk)
-
