@@ -72,12 +72,21 @@
             td = quickElement('td', tr);
             let stepSelector = quickElement('select', td, null, 'class',
                 this.classes, 'id', 'step');
-            _setOptionsToSelect(stepSelector, this.steps)
+            _setOptionsToSelect(stepSelector, this.steps);
+
+            document.getElementById('step').addEventListener('change', function (e) {
+                let selector = document.getElementById('testGroup');
+                if (this.value == 5) {
+                    selector.classList.remove('d-none')
+                } else {
+                    selector.classList.add('d-none')
+                }
+            });
 
             // field test group
             td = quickElement('td', tr);
             let testGroupSelector = quickElement('select', td, null, 'class',
-                this.classes, 'id', 'testGroup', 'multiple');
+                this.classes + ' d-none', 'id', 'testGroup', 'multiple');
 
             _setOptionsToSelect(testGroupSelector, this.groups)
 
@@ -132,11 +141,12 @@
     window.addEventListener('load', function (e) {
         SelectPhase.init('phases_list');
 
-        $('#campaignForm').on('submit', function(e) {
+        $('#campaignForm').on('submit', async function (e) {
             e.preventDefault();
             let data = {};
 
             data.name = this.name.value;
+            data.well_name = this.well_name.value;
             data.description = this.description.value;
             data.bop = this.bop.value;
             data.active = this.active.value;
@@ -146,11 +156,27 @@
             let phases = Object.values(SelectPhase.cache)
             data.phases = phases;
 
-            let tests = phases.filter(phase => phase.step == 5)
-            console.log(tests)
-
-            console.log(data)
-
+            let content = await createCampaign(data);
+            if (content.status == 201) {
+                alert('Campaign Successfully created! Go to campaign pages.')
+            }
         });
+
+
+        async function createCampaign(data) {
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            const rawResponse = await fetch('/api/campaigns/', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                mode: 'same-origin',
+                body: JSON.stringify(data)
+            })
+
+            return rawResponse;
+        }
     });
 })(jQuery)

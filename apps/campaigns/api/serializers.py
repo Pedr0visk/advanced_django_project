@@ -1,3 +1,4 @@
+from django.contrib import messages
 from rest_framework import serializers
 from apps.campaigns.models import Campaign, Phase
 from apps.test_groups.models import TestSchedule
@@ -27,11 +28,12 @@ class CampaignSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         phases_data = validated_data.pop('phases')
+        print(phases_data)
         campaign = Campaign.objects.create(**validated_data)
 
         for phase_data in phases_data:
+            test_groups = phase_data.pop('test_groups')
             if phase_data['step'] == Phase.Step.TEST:
-                test_groups = phase_data.pop('test_groups')
                 new_phase = Phase.objects.create(campaign=campaign, **phase_data)
                 scheduler = TestSchedule.objects.create(phase=new_phase,
                                                         date=new_phase.start_date)
