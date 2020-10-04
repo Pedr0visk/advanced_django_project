@@ -38,20 +38,11 @@
           <div class="col-sm-12">
             <form method="POST" id="campaignForm">
               {% csrf_token %}
-              <div class="form-group row">
-                <label class="col-sm-2 col-form-label col-form-label-sm">Well Name:</label>
-                <div class="col-sm-5">
-                  {{ form.well_name }}
-                  <small class="form-text text-muted">
-                    Required.
-                  </small>
-                </div>
-              </div>
-              <hr/>
+              <input type="hidden" id="bopId" value="{{ bop.id }}" name="bop">
 
               <div class="form-group row">
-                <label class="col-sm-2 col-form-label col-form-label-sm">Campaign Name:</label>
-                <div class="col-sm-5">
+                <label class="col-sm-1 col-form-label col-form-label-sm">Name:</label>
+                <div class="col-sm-3">
                   {{ form.name }}
                   <small class="form-text text-muted">
                     Required.
@@ -61,8 +52,8 @@
               <hr/>
 
               <div class="form-group row">
-                <label class="col-sm-2 col-form-label col-form-label-sm">Description:</label>
-                <div class="col-sm-5">
+                <label class="col-sm-1 col-form-label col-form-label-sm">Description:</label>
+                <div class="col-sm-3">
                   {{ form.description }}
                   <small class="form-text text-muted">
                     Optional.
@@ -72,8 +63,8 @@
               <hr/>
 
               <div class="form-group row">
-                <label class="col-sm-2 col-form-label col-form-label-sm">Active:</label>
-                <div class="col-sm-5">
+                <label class="col-sm-1 col-form-label col-form-label-sm">Active:</label>
+                <div class="col-sm-3">
                   {{ form.active }}
                   <small class="form-text text-muted">
                     Required.
@@ -83,8 +74,8 @@
               <hr/>
 
               <div class="form-group row">
-                <label class="col-sm-2 col-form-label col-form-label-sm">Start Date:</label>
-                <div class="col-sm-3">
+                <label class="col-sm-1 col-form-label col-form-label-sm">Start Date:</label>
+                <div class="col-sm-2">
                   {{ form.start_date }}
                   <small class="form-text text-muted">
                     Note: you are 3 hours behind server time.
@@ -94,8 +85,8 @@
               <hr/>
 
               <div class="form-group row">
-                <label class="col-sm-2 col-form-label col-form-label-sm">End Date:</label>
-                <div class="col-sm-3">
+                <label class="col-sm-1 col-form-label col-form-label-sm">End Date:</label>
+                <div class="col-sm-2">
                   {{ form.end_date }}
                   <small class="form-text text-muted">
                     Note: you are 3 hours behind server time.
@@ -104,48 +95,21 @@
               </div>
               <hr/>
 
+              <div class="form-group row">
+                <label class="col-sm-1 col-form-label col-form-label-sm">Well Name:</label>
+                <div class="col-sm-3">
+                  {{ form.well_name }}
+                  <small class="form-text text-muted">
+                    Required.
+                  </small>
+                </div>
+              </div>
+              <hr/>
+
               <fieldset class="form-fieldset">
                 <h4>Phases</h4>
                 <table>
-                  <tr id="inputData">
-                    <td>
-                      <input
-                          id="name"
-                          type="text"
-                          placeholder="name"
-                          class="form-control form-control-sm" />
-                    </td>
-                    <td>
-                      <input
-                          id="date"
-                          type="datetime-local"
-                          class="form-control form-control-sm" />
-                    </td>
-                    <td>
-                      <input
-                          id="duration"
-                          type="number"
-                          placeholder="duration"
-                          class="form-control form-control-sm" />
-                    </td>
-                    <td>
-                      <select name="" id="step" class="form-control form-control-sm">
-                        <option value="1">Test</option>
-                        <option value="2">Connect</option>
-                      </select>
-                    </td>
-                    <td>
-                      <select name="" id="testGroup" multiple class="form-control form-control-sm">
-                        <option value="1">group 5</option>
-                        <option value="2">group 4</option>
-                        <option value="2">group 3</option>
-                        <option value="2">group 2</option>
-                      </select>
-                    </td>
-                    <td>
-                      <button class="btn-standard ml-2" id="add">add</button>
-                    </td>
-                  </tr>
+                  <tbody id="phases_list"></tbody>
                 </table>
               </fieldset>
 

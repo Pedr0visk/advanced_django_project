@@ -3,6 +3,7 @@ from django.db import models
 from django.shortcuts import redirect
 
 from apps.bops.models import Bop
+from apps.campaigns.models import Phase
 from apps.failuremodes.models import FailureMode
 from apps.tests.models import Test
 from datetime import date
@@ -26,7 +27,7 @@ class CommonInfo(models.Model):
 
 class TestGroup(CommonInfo):
     def __str__(self):
-        return f'group {self.id}'
+        return f'test group {self.id}'
 
     def delete(self, using=None, keep_parents=False, soft=False, **kwargs):
         if soft:
@@ -34,6 +35,12 @@ class TestGroup(CommonInfo):
             super().save()
         else:
             super().delete(using=None, keep_parents=False)
+
+
+class TestSchedule(models.Model):
+    date = models.DateTimeField()
+    phase = models.OneToOneField(Phase, on_delete=models.CASCADE, related_name='schedule')
+    test_groups = models.ManyToManyField(TestGroup, related_name='test_schedules')
 
 
 class TestGroupDummy(CommonInfo):

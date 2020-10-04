@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.admin.utils import NestedObjects
+from django.db import connection
 
 
 class Rig(models.Model):
@@ -21,6 +22,10 @@ class Bop(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolut_url(self):
+        from django.urls import reverse
+        return reverse('apps.bops.views.index', args=[str(self.pk)])
+
     def last_certification(self):
         return self.certifications.last()
 
@@ -29,6 +34,10 @@ class Bop(models.Model):
         collector.collect([self])
         model_count = {model._meta.verbose_name_plural: len(objs) for model, objs in collector.model_objs.items()}
         return model_count.items()
+
+    def schedule_tests(self, start_date, *args, **kwargs):
+        print(self.testgroup.all())
+        print(**kwargs)
 
 
 class SafetyFunction(models.Model):

@@ -202,7 +202,15 @@ class BopViewTest(TestCase):
         """
         self.client.get(self.test_planner_create_url_get)
 
-        self.assertEqual(TestGroupDummy.objects.count(), 1)
+        test_group = self.b1.testgroup.first()
+        test_group_dummy = self.b1.testgroupdummy.first()
+
+        self.assertEqual(self.b1.testgroupdummy.count(), 1)
+        self.assertEqual(self.b1.testgroup.count(), 1)
+
+        self.assertEqual(test_group.tests, test_group_dummy.tests)
+        self.assertEqual(test_group.start_date, test_group_dummy.start_date)
+        self.assertEqual(test_group.pk, test_group_dummy.test_group.pk)
 
     def test_create_test_group_dummy(self):
         """
@@ -211,12 +219,12 @@ class BopViewTest(TestCase):
         """
         response = self.client.post(self.test_planner_create_url_post, self.test_group_data())
 
-        tgd = TestGroupDummy.objects.last()
+        tgd = self.b1.testgroupdummy.last()
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual('2020-08-31', tgd.start_date.__str__())
-        self.assertEqual(2, TestGroupDummy.objects.count())
-        self.assertEqual(1, TestGroup.objects.count())
+        self.assertEqual(2, self.b1.testgroupdummy.count())
+        self.assertEqual(1, self.b1.testgroup.count())
         self.assertJSONEqual('[{"coverage": 1, "interval": 168}]', tgd.tests)
 
     def test_update_test_group_dummy(self):

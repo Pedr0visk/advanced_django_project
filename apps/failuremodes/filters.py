@@ -3,6 +3,7 @@ from django.db.models import Q
 
 
 def failure_mode_filter(data_set, query_params={}):
+
     if 'q' in query_params:
         query = query_params['q']
         data_set = data_set.filter(Q(name__icontains=query) | Q(code__icontains=query))
