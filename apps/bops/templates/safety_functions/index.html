@@ -1,4 +1,4 @@
-{% extends 'manager/base.html' %}
+{% extends 'base.html' %}
 
 {% block breadcrumb %}
   <!-- breadcrumb -->
@@ -6,13 +6,9 @@
     <div class="container-fluix px-5">
       <div class="page-title-wrapper-2">
         <div class="page-title-heading-2">
-          <a href="{% url 'manager' %}">Home</a>
+          <a href="{% url 'bops:index' bop.pk %}">{{ bop.name }}</a>
           <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'list_bops' %}">Bops</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'list_safety_functions' bop.pk %}">Safety Functions</a>
+          <a href="{% url 'bops:list_safety_functions' bop.pk %}">Safety Functions</a>
           <span class="fa fa-chevron-right"></span>
           <span class="current-page">{{ object.name }}</span>
         </div>
@@ -32,10 +28,10 @@
         <div class="section-title mb-3">
           <p>Dashboard for Safety Function</p>
           <div>
-            <a href="{% url 'update_bop' bop.pk %}" class="btn btn-sm btn-warning mr-2">
+            <a href="" class="btn btn-sm btn-warning mr-2">
               <small>EDIT SAFETY FUNCTION <i class="fa fa-pencil-alt"></i></small>
             </a>
-            <a href="{% url 'delete_safety_function' bop.pk object.pk %}" class="btn btn-sm btn-danger">
+            <a href="{% url 'bops:delete_safety_function' bop.pk object.pk %}" class="btn btn-sm btn-danger">
               <small>DELETE SAFETY FUNCTION <i class="fa fa-times"></i></small>
             </a>
           </div>
@@ -52,9 +48,9 @@
               </thead>
               <tbody>
               <tr>
-                <td><a href="{% url 'list_safety_function_cuts' bop.pk object.pk %}">Cuts</a></td>
+                <td><a href="{% url 'bops:list_safety_function_cuts' bop.pk object.pk %}">Cuts</a></td>
                 <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                <td width="12%" align="center"><a href="{% url 'list_failuremodes' bop.pk %}"><i
+                <td width="12%" align="center"><a href=""><i
                     class="fa fa-pencil-alt"></i> Edit</a></td>
               </tr>
               </tbody>

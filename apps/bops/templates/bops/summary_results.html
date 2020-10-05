@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <!-- breadcrumb -->
+  <div class="page-title">
+    <div class="container-fluix px-5">
+      <div class="page-title-wrapper-2">
+        <div class="page-title-heading-2">
+          <a href="{% url 'bops:index' campaign.bop.pk %}">{{ campaign.bop.name }}</a>
+          <span class="fa fa-chevron-right"></span>
+          <a href="{% url 'campaigns:index' campaign.pk %}">{{ campaign }}</a>
+          <span class="fa fa-chevron-right"></span>
+          <span class="current-page">Summary Results</span>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block main %}
+  {% if messages %}
+    <ul class="messagelist">
+      {% for message in messages %}
+        <li class="success">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <!-- main -->
+  <div class="main">
+    <!-- section 2 -->
+    <div class="section">
+      <div class="container-fluid px-5">
+        <!-- section title -->
+        <div class="section-title mb-3">
+          <p>Summary Results for safety function<b>"{{ campaign }}"</b></p>
+        </div>
+        <hr>
+
+        <!-- section content -->
+        <div class="row">
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- main -->
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/7.2.2/highcharts.js" integrity="sha512-sYAnmpNKTJz8xm4GBRk/dblXZC8k8MLJKmGQovDbPgPrZTtTwGOw2QitwA39oT/49SwQ1JUN7ttI6rmjxNfxLw==" crossorigin="anonymous"></script>
+{% endblock %}

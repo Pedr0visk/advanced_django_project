@@ -11,7 +11,6 @@
         <div class="page-title-heading-2">
           <a href="{% url 'dashboard' %}">Home</a>
           <span class="fa fa-chevron-right"></span>
-          <span class="current-page">{{ bop.name }}</span>
         </div>
       </div>
     </div>
@@ -31,16 +30,14 @@
     <div class="section">
       <div class="container-fluid px-5">
         <div class="section-title mb-3">
-          <p clas>Bop name:
-            <span class="text-monospace">{{ bop.name }}</span>
-          </p>
+          <p>Select event to manage</p>
           {% include 'common/bop_operator_nav.html' %}
         </div>
         <hr>
         <div class="section-content">
           <div class="d-flex">
             <div class="ml-auto">
-              <a href="{% url 'create_campaign' bop.pk %}" class="btn btn-sm btn-success"><small>ADD CAMPAIGN <i
+              <a href="" class="btn btn-sm btn-success"><small>ADD EVENT <i
                   class="fa fa-plus"></i></small> </a>
             </div>
           </div>
@@ -86,28 +83,7 @@
                     </thead>
                     <!-- order -->
                     <tbody>
-                    {% for campaign in campaigns %}
-                      <tr>
-                        <td scope="row" align="center">{{ campaign.pk }}</td>
-                        <td><a href="{% url 'update_campaign' bop.pk campaign.pk %}">{{ campaign.name }}</a></td>
-                        <td align="center">
-                          {% if campaign.active %}
-                            <img src="{% static 'img/icon-yes.svg' %}"/>
-                          {% else %}
-                            <img src="{% static 'img/icon-no.svg' %}"/>
-                          {% endif %}
-                        </td>
-                        <td align="center">
-                          03/08/2020 <b>to</b> current date
-                        </td>
-                        <td align="center">
-                          53
-                        </td>
-                        <td align="center">
-                          2
-                        </td>
-                      </tr>
-                    {% endfor %}
+
                     </tbody>
                   </table>
                 </div>

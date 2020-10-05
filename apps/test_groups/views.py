@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .forms import TestGroupDummyForm
 from .models import TestGroupHistory, TestGroupDummy
-from ..bops.models import Bop
 from ..tests.models import Test
 
 
@@ -12,27 +11,25 @@ def test_group_list(request):
 
 
 def test_group_create(request, bop_pk):
-    bop = Bop.objects.get(pk=bop_pk)
-    form = TestGroupDummyForm(request.POST or None, bop=bop)
+    form = TestGroupDummyForm(request.POST or None, bop_pk=bop_pk)
     test_set = Test.objects.all()
 
     if request.method == 'POST':
         if form.is_valid():
             tg = form.save(commit=False)
-            tg.bop = bop
+            tg.bop_id = bop_pk
             tg.save()
             form.save_m2m()
             messages.success(request, 'Test Group created successfully!')
-            return redirect('test_planner_raw', bop_pk)
+            return redirect('bops:test_planner_raw', bop_pk)
 
-    context = {'form': form, 'bop': bop, 'tests': test_set}
+    context = {'form': form, 'bop_pk': bop_pk, 'tests': test_set}
     return render(request, 'test_groups/test_group_form.html', context)
 
 
-def test_group_update(request, bop_pk, tg_pk):
-    bop = Bop.objects.get(pk=bop_pk)
+def test_group_update(request, tg_pk):
     test_group_raw = TestGroupDummy.objects.get(pk=tg_pk)
-    form = TestGroupDummyForm(request.POST or None, instance=test_group_raw, bop=bop)
+    form = TestGroupDummyForm(request.POST or None, instance=test_group_raw, bop_pk=test_group_raw.bop.pk)
 
     if request.method == 'POST':
         if form.is_valid():
@@ -40,13 +37,12 @@ def test_group_update(request, bop_pk, tg_pk):
             messages.success(request, f'Test Group "{test_group_raw}" updated successfully!')
             return test_group_raw.success_url()
 
-    context = {'bop': bop, 'test_group': test_group_raw, 'form': form}
+    context = {'test_group': test_group_raw, 'form': form}
     return render(request, 'test_groups/test_group_form.html', context)
 
 
-def test_group_delete(request, bop_pk, tg_pk):
-    bop = Bop.objects.get(pk=bop_pk)
-    test_group_raw = TestGroupDummy.objects.get(pk=tg_pk)
+def test_group_delete(request, tg_pk):
+    test_group_raw = TestGroupDummy.objects.select_related('bop').get(pk=tg_pk)
 
     if request.method == 'POST':
         test_group_id = test_group_raw.id
@@ -55,7 +51,7 @@ def test_group_delete(request, bop_pk, tg_pk):
         messages.success(request, f'Test Group "{test_group_id}" deleted successfully!')
         return redirect('test_planner_raw', bop_pk)
 
-    context = {'bop': bop, 'test_group': test_group_raw}
+    context = {'test_group': test_group_raw}
     return render(request, 'test_groups/test_group_confirm_delete.html', context)
 
 

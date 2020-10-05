@@ -1,4 +1,4 @@
-{% extends 'manager/base.html' %}
+{% extends 'base.html' %}
 
 {% block breadcrumb %}
   <!-- breadcrumb -->
@@ -6,29 +6,23 @@
     <div class="container-fluid px-5">
       <div class="page-title-wrapper-2">
         <div class="page-title-heading-2">
-          <a href="{% url 'dashboard' %}">Home</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'list_bops' %}">Bop list</a>
+          <a href="{% url 'bops:index' bop.pk %}">{{ bop.name }}</a>
           <span class=" fa fa-chevron-right"></span>
-          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
+          <a href="{% url 'bops:list_safety_functions' bop.pk %}">Safety functions</a>
           <span class=" fa fa-chevron-right"></span>
-          <a href="{% url 'list_safety_functions' bop.pk %}">Safety functions</a>
-          <span class=" fa fa-chevron-right"></span>
-          <span class="current-page">Create new Safety function </span>
+          <span class="current-page">Add </span>
         </div>
       </div>
     </div>
   </div>
 {% endblock %}
 
-
-
 {% block main %}
-  <ul class="messagelist" id="messageList">
-  </ul>
+  {% if form.errors %}
+    {{ form.errors }}
+  {% endif %}
   <div class="section bg-white">
     <div class="container-fluid px-5">
-
       <div class="section-title mb-4 d-flex">
         <p clas>Add Safety function</p>
       </div>
@@ -64,7 +58,7 @@
             <div class="row">
               <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Cuts File:</label>
               <div class="col-sm-5">
-                <input name="attachment" type="file" class="">
+                <input name="file" type="file" class="" required>
                 <small class="form-text text-muted">
                   Required. List of cuts for this safety function.
                 </small>
@@ -74,7 +68,7 @@
 
             <div class="card">
               <div class="bg-light text-right p-2">
-                <a href="{% url 'manager' %}" class=" btn btn-default">
+                <a href="{% url 'bops:list_safety_functions' bop.pk %}" class=" btn btn-default">
                   Cancel
                 </a>
                 <button type="submit" class="px-4 btn btn-secondary">

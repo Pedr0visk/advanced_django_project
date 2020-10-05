@@ -16,11 +16,11 @@ class TestGroupForm(ModelForm):
 
 class TestGroupDummyForm(ModelForm):
     def __init__(self, *args, **kwargs):
-        self.bop = kwargs.pop('bop')
+        self.bop_pk = kwargs.pop('bop_pk')
         super(TestGroupDummyForm, self).__init__(*args, **kwargs)
         self.fields['failure_modes'].widget.attrs.update({'class': 'selectfilter'})
         self.fields['failure_modes'].queryset = FailureMode.objects.filter(
-            component__subsystem__bop__exact=self.bop)
+            component__subsystem__bop=self.bop_pk)
 
     class Meta:
         model = TestGroupDummy
