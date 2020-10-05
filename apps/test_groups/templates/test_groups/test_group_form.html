@@ -1,4 +1,4 @@
-{% extends 'manager/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block breadcrumb %}
@@ -7,13 +7,7 @@
     <div class="container-fluid px-5">
       <div class="page-title-wrapper-2">
         <div class="page-title-heading-2">
-          <a href="{% url 'dashboard' %}">Home</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'list_bops' %}">Bops</a>
-          <span class=" fa fa-chevron-right"></span>
-          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
-          <span class=" fa fa-chevron-right"></span>
-          <a href="{% url 'test_planner' bop.pk %}">Test Planner</a>
+          <a href="{% url 'bops:test_planner' test_group.bop.pk %}">Test Planner</a>
           <span class=" fa fa-chevron-right"></span>
           {% if test_group %}
             <span class="current-page">Change Test Group {{ test_group.id }}</span>

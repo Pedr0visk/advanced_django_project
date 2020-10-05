@@ -7,11 +7,9 @@
     <div class="container-fluid px-5">
       <div class="page-title-wrapper-2">
         <div class="page-title-heading-2">
-          <a href="{% url 'dashboard' %}">Home</a>
+          <a href="{% url 'bops:list' %}">Bops</a>
           <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'list_bops' %}">Bops</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
+          <a href="{% url 'bops:index' bop.pk %}">{{ bop.name }}</a>
           <span class="fa fa-chevron-right"></span>
           <span class="current-page">Test Planner </span>
         </div>
@@ -30,37 +28,41 @@
   {% endif %}
   <div class="section container-fluid px-5">
     <!-- section title -->
-    <div class="section-title mb-3">
-      <p>Test Group Scheduler</p>
-      {% include 'common/bop_operator_nav.html' %}
+    <div class="d-flex">
+      <h4 class="title-1">Test Group Scheduler</h4>
+      <div class="d-flex ml-auto">
+        {% if '/raw/' in request.path %}
+          <a href="" class="btn btn-sm btn-success mr-2">
+            <small>RUN (ANALYSIS MODE) <i class="fa fa-cogs"></i></small>
+          </a>
+          <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-warning mr-2">
+              <small>MIGRATE ANALYSIS TO CURRENT <i class="fa fa-database"></i></small>
+            </button>
+          </form>
+        {% else %}
+          <a href="" class="btn btn-sm btn-success mr-2">
+            <small>RUN <i class="fa fa-cogs"></i></small>
+          </a>
+          <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-warning mr-2" disabled>
+              <small>MIGRATE ANALYSIS TO CURRENT <i class="fa fa-database"></i></small>
+            </button>
+          </form>
+        {% endif %}
+
+        <a href="{% url 'test_groups:create' bop.pk %}" class="btn btn-sm btn-quinary">
+          <small>NEW TEST GROUP <i class="fa fa-plus"></i></small>
+        </a>
+
+      </div>
     </div>
-
     <hr>
-
     <div class="section-content">
       <div class="d-flex">
-        <div class="ml-auto">
-          {% if '/raw/' in request.path %}
-            <a href="bop_campaign_form.html" class="btn btn-sm btn-success">
-              <small>RUN (ANALYSIS MODE) <i class="fa fa-cogs"></i></small>
-            </a>
-            <a href="{% url 'test_planner_migrate' bop.pk %}" class="btn btn-sm btn-warning">
-              <small>MIGRATE ANALYSIS TO CURRENT <i class="fa fa-database"></i></small>
-            </a>
-          {% else %}
-            <a href="bop_campaign_form.html" class="btn btn-sm btn-success">
-              <small>RUN <i class="fa fa-cogs"></i></small>
-            </a>
-            <a href="{% url 'test_planner_migrate' bop.pk %}" class="btn btn-sm btn-warning disabled">
-              <small>MIGRATE ANALYSIS TO CURRENT <i class="fa fa-database"></i></small>
-            </a>
-          {% endif %}
 
-          <a href="{% url 'create_test_group' bop.pk %}" class="btn btn-sm btn-quinary">
-            <small>NEW TEST GROUP <i class="fa fa-plus"></i></small>
-          </a>
-
-        </div>
       </div>
       <!--  -->
       <div class="row">
@@ -151,26 +153,26 @@
                     </td>
                     {% if '/raw/' in request.path %}
                       <td width="8%" align="center">
-                        <a href="{% url 'update_test_group' bop.pk test_group.pk %}">
+                        <a href="{% url 'test_groups:update' test_group.pk %}">
                           <i class="fa fa-pencil-alt"></i>
                           edit
                         </a>
                       </td>
                       <td width="9%" align="center">
-                        <a href="{% url 'delete_test_group' bop.pk test_group.pk %}">
+                        <a href="{% url 'test_groups:delete' test_group.pk %}">
                           <i class="fa fa-times"></i>
                           delete
                         </a>
                       </td>
                     {% else %}
                       <td width="8%" align="center">
-                        <a href="{% url 'update_test_group' bop.pk test_group.testgroupdummy.pk %}">
+                        <a href="{% url 'test_groups:update' test_group.testgroupdummy.pk %}">
                           <i class="fa fa-pencil-alt"></i>
                           edit
                         </a>
                       </td>
                       <td width="9%" align="center">
-                        <a href="{% url 'delete_test_group' bop.pk test_group.testgroupdummy.pk %}">
+                        <a href="{% url 'test_groups:delete' test_group.testgroupdummy.pk %}">
                           <i class="fa fa-times"></i>
                           delete
                         </a>

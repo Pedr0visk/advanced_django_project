@@ -1,4 +1,5 @@
-{% extends 'manager/base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
 {% block breadcrumb %}
   <!-- breadcrumb -->
@@ -6,9 +7,7 @@
     <div class="container-fluix px-5">
       <div class="page-title-wrapper-2">
         <div class="page-title-heading-2">
-          <a href="{% url 'manager' %}">Home</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'list_bops' %}">Bops</a>
+          <a href="{% url 'bops:list' %}">Bops</a>
           <span class="fa fa-chevron-right"></span>
           <span class="current-page">{{ bop.name }}</span>
         </div>
@@ -35,82 +34,125 @@
         <div class="section-title mb-3">
           <p>Dashboard for Bop</p>
           <div>
-            <a href="{% url 'update_bop' bop.pk %}" class="btn btn-sm btn-warning mr-2"><small>EDIT BOP <i
-                class="fa fa-pencil-alt"></i></small>
-              <a href="{% url 'delete_bop' bop.pk %}" class="btn btn-sm btn-danger"><small>DELETE BOP <i
-                  class="fa fa-times"></i></small>
-              </a>
+            <a href="{% url 'bops:update' bop.pk %}" class="btn btn-sm btn-warning mr-2"><small>EDIT BOP <i
+                class="fa fa-pencil-alt"></i></small></a>
+            <a href="{% url 'bops:delete' bop.pk %}" class="btn btn-sm btn-danger"><small>DELETE BOP <i
+                class="fa fa-times"></i></small>
+            </a>
           </div>
         </div>
+        <hr>
 
         <!-- section content -->
         <div class="row">
-          <div class="col-sm-5 col-12">
+          <div class="col-sm-6 col-12">
+            <div class="results">
+              <div class="d-flex">
+                <h4 class="title-1 mr-auto">Campaigns</h4>
+                <a href="{% url 'campaigns:create' bop.pk %}">
+                  add campaign <i class="fa fa-plus text-success"></i>
+                </a>
+              </div>
+              <table class="table dnv-table m-0">
+                <thead class="bg-white-50">
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">name</th>
+                  <th scope="col">created_at</th>
+                  <th scope="col">active</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for campaign in bop.campaigns.all %}
+                  <tr>
+                    <td scope="row" width="4%">{{ campaign.pk }}</td>
+                    <td><a href="{{ campaign.get_absolute_url }}">{{ campaign.name }}</a></td>
+                    <td><a href="">{{ campaign.start_date }}</a></td>
+                    <td align="center">
+                      {% if campaign.active %}
+                        <img src="{% static 'img/icon-yes.svg' %}"/>
+                      {% else %}
+                        <img src="{% static 'img/icon-no.svg' %}"/>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="col-sm-3 col-12">
             <table class="table dnv-table dnv-table-admin">
               <thead>
-              <th>{{ bop.name }}</th>
+              <th>Admin</th>
               <th></th>
               <th></th>
               </thead>
               <tbody>
               <tr>
-                <td><a href="{% url 'list_certifications' bop.pk %}">Certifications</a></td>
-                <td width="12%" align="center"></td>
-                <td width="12%" align="center"><i class="fa fa-shield-alt text-success"></i></td>
-              </tr>
-              <tr>
-                <td><a href="#">Hierarchy</a></td>
-                <td width="12%" align="center"></td>
-                <td width="12%" align="center"><i class="fa fa-sitemap text-secondary"></i></td>
-              </tr>
-              <tr>
-                <td><a href="{% url 'list_safety_functions' bop.pk %}">Safety Functions</a></td>
-                <td width="12%" align="center"><a href="{% url 'upload_safety_function' bop.pk %}">
+                <td><a href="{% url 'bops:test_planner' bop.pk %}">Test Planner</a></td>
+                <td width="20%" align="center"><a href="">
                   <i class="fa fa-plus"></i> Add</a>
                 </td>
-                <td width="12%" align="center"><a href="{% url 'list_subsystems' bop.pk %}"><i
+                <td width="20%" align="center"><a href=""><i
                     class="fa fa-pencil-alt"></i> Edit</a></td>
               </tr>
+              <tr>
+                <td><a href="{% url 'bops:list_safety_functions' bop.pk %}">Safety Functions</a></td>
+                <td width="20%" align="center">
+                  <a href="{% url 'bops:upload_safety_function' bop.pk %}">
+                    <i class="fa fa-plus"></i> Add
+                  </a>
+                </td>
+                <td width="20%" align="center">
+                  <a href="{% url 'bops:list_safety_functions' bop.pk %}"><i
+                      class="fa fa-pencil-alt"></i> Edit
+                  </a>
+                </td>
+              </tr>
+
+              <tr>
+                <td><a href="">Certifications</a></td>
+                <td width="20%" align="center"><a href="">
+                  <i class="fa fa-plus"></i> Add</a>
+                </td>
+                <td width="20%" align="center"><a href=""><i
+                    class="fa fa-pencil-alt"></i> Edit</a></td>
+              </tr>
+
               <tr>
                 <td><a href="#">Failure Rate</a></td>
-                <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                <td width="12%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
+                <td width="20%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
+                <td width="20%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
               </tr>
               <tr>
-                <td><a href="{% url 'list_subsystems' bop.pk %}">Subsystems</a></td>
-                <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                <td width="12%" align="center"><a href="{% url 'list_subsystems' bop.pk %}"><i
+                <td><a href="">Subsystems</a></td>
+                <td width="20%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
+                <td width="20%" align="center"><a href=""><i
                     class="fa fa-pencil-alt"></i> Edit</a></td>
               </tr>
               <tr>
-                <td><a href="{% url 'list_components' bop.pk %}">Components</a></td>
-                <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                <td width="12%" align="center"><a href="{% url 'list_components' bop.pk %}"><i
+                <td><a href="">Components</a></td>
+                <td width="20%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
+                <td width="20%" align="center"><a href=""><i
                     class="fa fa-pencil-alt"></i> Edit</a></td>
               </tr>
               <tr>
-                <td><a href="{% url 'list_failuremodes' bop.pk %}">Failure Modes</a></td>
-                <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                <td width="12%" align="center"><a href="{% url 'list_failuremodes' bop.pk %}"><i
+                <td><a href="">Failure Modes</a></td>
+                <td width="20%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
+                <td width="20%" align="center"><a href=""><i
                     class="fa fa-pencil-alt"></i> Edit</a></td>
               </tr>
               </tbody>
             </table>
           </div>
-
-
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <div class="info">
               <h4>Info</h4>
               <ul class="info-list">
                 <li>name: <b>{{ bop.name }}</b></li>
                 <li>certification expiry date: <b>{{ bop.last_certification.end_date | date:"m/d/Y" }}</b></li>
-              </ul>
-              <h4>Related Objects</h4>
-              <ul class="info-list">
-                {% for model, count in bop.with_counts %}
-                  <li>{{ model }}: {{ count }}</li>
-                {% endfor %}
               </ul>
             </div>
           </div>

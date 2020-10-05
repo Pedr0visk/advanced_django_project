@@ -15,7 +15,6 @@ from apps.certifications.forms import CertificationForm
 
 from apps.managers.decorators import allowed_users
 from ..failuremodes.models import FailureMode
-from ..test_groups.models import TestGroup, TestGroupDummy
 
 
 @transaction.atomic
@@ -31,22 +30,22 @@ def bop_upload(request):
 
     if request.method == 'POST':
         if form.is_valid():
-            bop = form.save()
+            new_bop = form.save()
 
             try:
                 # load built-in bop
-                BopLoader(bop).save_many(request.FILES['file'])
+                BopLoader(new_bop).save_many(request.FILES['file'])
             except:
                 pass
 
             # add latest certification
             if cert_form.is_valid():
                 certification = cert_form.save(commit=False)
-                certification.bop = bop
+                certification.bop = new_bop
                 certification.save()
 
             messages.success(request, 'Bop created successfully')
-            return redirect('list_bops')
+            return redirect(new_bop.success_url())
 
     context = {'form': form, 'cert_form': cert_form}
     return render(request, 'bops/bop_form.html', context)
@@ -88,7 +87,8 @@ def bop_delete(request, pk):
 
 
 def index(request, pk):
-    bop = Bop.objects.get(pk=pk)
+    bop = Bop.objects.prefetch_related('campaigns').get(pk=pk)
+    request.session['bop_pk'] = bop.pk
     cache.set('bop', bop)
 
     context = {'bop': bop}
@@ -109,7 +109,7 @@ def safety_function_upload(request, bop_pk):
             SafetyFunctionLoader(request.FILES['file'], sf).run()
 
             messages.success(request, f'Safety Function "{sf.name}" successfully created!')
-            return redirect('list_safety_functions', bop.pk)
+            return redirect(sf.success_url())
 
     context = {'bop': bop, 'form': form}
     return render(request, 'safety_functions/safety_function_form.html', context)
@@ -124,16 +124,16 @@ def safety_function_list(request, bop_pk):
 
 
 def safety_function_index(request, bop_pk, sf_pk):
-    bop = Bop.objects.get(pk=bop_pk)
-    sf = SafetyFunction.objects.get(pk=sf_pk)
+    bop = Bop.objects.prefetch_related('safety_functions').get(pk=bop_pk)
+    sf = bop.safety_functions.get(pk=sf_pk)
 
     context = {'bop': bop, 'object': sf}
     return render(request, 'safety_functions/index.html', context)
 
 
 def safety_function_delete(request, bop_pk, sf_pk):
-    bop = Bop.objects.get(pk=bop_pk)
-    sf = SafetyFunction.objects.get(pk=sf_pk)
+    bop = Bop.objects.prefetch_related('safety_functions').get(pk=bop_pk)
+    sf = bop.safety_functions.get(pk=sf_pk)
 
     if request.method == 'POST':
         sf_name = sf.name
@@ -161,7 +161,7 @@ def test_planner(request, pk):
     :param pk:
     :return:
     """
-    bop = Bop.objects.get(pk=pk)
+    bop = Bop.objects.prefetch_related('testgroup', 'testgroupdummy').get(pk=pk)
     test_groups_set = bop.testgroup.order_by('-updated_at')
     failure_modes_set = FailureMode.objects.filter(component__subsystem__bop__exact=bop,
                                                    testgroup__isnull=True).order_by('code')
@@ -184,13 +184,24 @@ def test_planner(request, pk):
 
 
 def test_planner_raw(request, pk):
-    bop = Bop.objects.get(pk=pk)
-    test_group_set = bop.testgroupdummy \
-        .filter(deleted_at__isnull=True) \
-        .order_by('-updated_at')
+    bop = Bop.objects.prefetch_related('testgroupdummy', 'testgroup').get(pk=pk)
+    test_group_set = bop.testgroupdummy.order_by('-updated_at')
 
-    failure_modes_set = FailureMode.objects.filter(component__subsystem__bop__exact=bop,
+    failure_modes_set = FailureMode.objects.filter(component__subsystem__bop=bop,
                                                    testgroupdummy__isnull=True)
+
+    if request.method == 'POST':
+        try:
+            bop.testgroup.all().delete()
+            for dummy in test_group_set:
+                new_test_group = bop.testgroup.create(start_date=dummy.start_date,
+                                                      tests=dummy.tests)
+                new_test_group.failure_modes.set(dummy.failure_modes.all().values_list('id', flat=True))
+        except RequestAborted:
+            raise RequestAborted
+
+        messages.success(request, 'Migrate Successfully!')
+        return redirect('bops:test_planner', pk)
 
     context = {'bop': bop, 'test_groups': test_group_set, 'failure_modes': failure_modes_set}
     return render(request, 'bops/bop_test_planner.html', context)
@@ -199,15 +210,4 @@ def test_planner_raw(request, pk):
 def migrate(request, pk):
     bop = Bop.objects.get(pk=pk)
 
-    try:
-        bop.testgroup.all().delete()
-        test_group_set = bop.testgroupdummy.all()
-        for dummy in test_group_set:
-            new_test_group = bop.testgroup.create(start_date=dummy.start_date,
-                                                  tests=dummy.tests)
-            new_test_group.failure_modes.set(dummy.failure_modes.all().values_list('id', flat=True))
-    except RequestAborted:
-        raise RequestAborted
 
-    messages.success(request, 'Migrate Successfully!')
-    return redirect('test_planner', pk)

@@ -1,4 +1,4 @@
-{% extends 'manager/base.html' %}
+{% extends 'base.html' %}
 
 {% block breadcrumb %}
   <!-- breadcrumb -->
@@ -6,11 +6,7 @@
     <div class="container-fluid px-5">
       <div class="page-title-wrapper-2">
         <div class="page-title-heading-2">
-          <a href="{% url 'manager' %}">Home</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'list_bops' %}">Bops</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
+          <a href="{% url 'bops:index' bop.pk %}">{{ bop.name }}</a>
           <span class="fa fa-chevron-right"></span>
           <span class="current-page">Safety Functions</span>
         </div>
@@ -33,7 +29,7 @@
       <div class="container-fluid px-5">
         <div class="section-title mb-3">
           <p>Select safety function to manage</p>
-          <a href="{% url 'upload_safety_function' bop.pk %}" class="btn btn-sm btn-success"><small>ADD SAFETY FUNCTION <i
+          <a href="{% url 'bops:upload_safety_function' bop.pk %}" class="btn btn-sm btn-success"><small>ADD SAFETY FUNCTION <i
               class="fa fa-plus"></i></small> </a>
         </div>
 
@@ -70,7 +66,7 @@
                 {% for sf in safety_functions %}
                   <tr>
                     <td scope="row" width="4%">{{ sf.pk }}</td>
-                    <td><a href="{% url 'index_safety_function' bop.pk sf.pk %}">{{ sf.name }}</a></td>
+                    <td><a href="{% url 'bops:index_safety_function' bop.pk sf.pk %}">{{ sf.name }}</a></td>
                     <td>{{ sf.description }}</td>
                     <td><a href="">{{ sf.cuts.count }}</a></td>
                   </tr>

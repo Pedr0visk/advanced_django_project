@@ -1,4 +1,6 @@
 from django.db import models
+from django.urls import reverse
+
 from apps.bops.models import Bop
 
 
@@ -26,6 +28,9 @@ class Campaign(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def get_absolute_url(self):
+        return reverse('campaigns:index', args=[self.pk])
 
     def __str__(self):
         return self.name

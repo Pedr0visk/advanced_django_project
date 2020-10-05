@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.admin.utils import NestedObjects
 from django.db import connection
+from django.urls import reverse
 
 
 class Rig(models.Model):
@@ -21,6 +22,9 @@ class Bop(models.Model):
 
     def __str__(self):
         return self.name
+
+    def success_url(self):
+        return reverse('bops:index', args=[self.pk])
 
     def get_absolut_url(self):
         from django.urls import reverse
@@ -47,11 +51,14 @@ class SafetyFunction(models.Model):
                             on_delete=models.CASCADE,
                             related_name="safety_functions")
 
-    def __str__(self):
-        return self.name
-
     def with_counts(self):
         collector = NestedObjects(using='default')
         collector.collect([self])
         model_count = {model._meta.verbose_name_plural: len(objs) for model, objs in collector.model_objs.items()}
         return model_count.items()
+
+    def success_url(self):
+        return reverse('bops:list_safety_functions', args=[self.bop.pk])
+
+    def __str__(self):
+        return self.name

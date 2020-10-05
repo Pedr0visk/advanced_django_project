@@ -1,4 +1,6 @@
 from django.db import models
+from django.urls import reverse
+
 from apps.campaigns.models import Campaign
 from django.utils.translation import gettext_lazy as _
 
@@ -15,7 +17,10 @@ class Event(models.Model):
 
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, null=True)
+    campaign = models.ForeignKey(Campaign,
+                                 on_delete=models.CASCADE,
+                                 null=True,
+                                 related_name='events')
 
     type = models.CharField(
         max_length=3,
@@ -23,8 +28,10 @@ class Event(models.Model):
         default=TypeEvent.REPAIR
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField()
+
+    def success_url(self):
+        return reverse('campaigns:index', args=[self.campaign_id])
 
     def __str__(self):
         return self.name

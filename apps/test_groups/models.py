@@ -47,7 +47,7 @@ class TestGroupDummy(CommonInfo):
     test_group = models.OneToOneField(TestGroup, on_delete=models.SET_NULL, null=True)
 
     def success_url(self):
-        return redirect('test_planner_raw', self.bop.pk)
+        return redirect('bops:test_planner_raw', self.bop.pk)
 
 
 class TestGroupHistory(models.Model):
