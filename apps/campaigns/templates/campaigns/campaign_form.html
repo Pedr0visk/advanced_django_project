@@ -7,9 +7,7 @@
     <div class="container-fluid px-5">
       <div class="page-title-wrapper-2">
         <div class="page-title-heading-2">
-          <a href="{% url 'dashboard' %}">Home</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'list_campaigns' bop.pk %}">Bop: {{ bop.name }}</a>
+          <a href="{% url 'bops:index' bop_pk %}">Bop</a>
           <span class="fa fa-chevron-right"></span>
           {% if campaign %}
             <span class="current-page">{{ campaign.name }}</span>
@@ -26,19 +24,17 @@
 
   <div class="section bg-white">
     <div class="container-fluid px-5">
-      <div class="section-title mb-4 d-flex">
-        {% if campaign %}
-          <p>Change Campaign</p>
-        {% else %}
-          <p>Add Campaign</p>
-        {% endif %}
-      </div>
+      {% if campaign %}
+        <h4 class="title-1 mb-4">Change Campaign</h4>
+      {% else %}
+        <h4 class="title-1 mb-4">Add Campaign</h4>
+      {% endif %}
       <div class="section-content">
         <div class="row">
           <div class="col-sm-12">
             <form method="POST" id="campaignForm">
               {% csrf_token %}
-              <input type="hidden" id="bopId" value="{{ bop.id }}" name="bop">
+              <input type="hidden" id="bopId" value="{{ bop_pk }}" name="bop">
 
               <div class="form-group row">
                 <label class="col-sm-1 col-form-label col-form-label-sm">Name:</label>
@@ -115,7 +111,9 @@
 
               <div class="card p-2 bg-light text-right">
                 <div class="d-flex">
-
+                  <div>
+                    <a href="{% url 'bops:index' bop_pk %}" class="btn btn-danger">Cancel</a>
+                  </div>
                   <div class="ml-auto">
                     <button type="submit" class="btn btn-secondary">
                       Save and add another

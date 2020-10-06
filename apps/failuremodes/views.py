@@ -10,7 +10,7 @@ from apps.bops.models import Bop
 
 def failuremode_list(request, bop_pk):
     bop = Bop.objects.get(pk=bop_pk)
-    failure_modes = FailureMode.objects.filter(component__subsystem__bop__exact=bop)
+    failure_modes = FailureMode.objects.filter(component__subsystem__bop=bop)
     query_set = failure_mode_filter(failure_modes, request.GET)
 
     context = {'bop': bop, 'failuremodes': query_set}

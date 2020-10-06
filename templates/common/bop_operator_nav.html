@@ -20,14 +20,6 @@
     <i class="fa fa-sitemap"></i>
     Hierarchy</a> /
 
-  {% if '/events/' in request.path %}
-  <a href="{% url 'list_events' bop.pk %}" class="active">
-  {% else %}
-    <a href="{% url 'list_events' bop.pk %}">
-  {% endif %}
-    <i class="fa fa-clipboard-list"></i>
-    Event Logger</a> /
-
   {% if '/test-planner/' in request.path %}
   <a href="{% url 'test_planner' bop.pk %}" class="active">
   {% else %}

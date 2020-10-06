@@ -2,9 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from apps.bops.models import Bop
 from .models import Campaign
 from .forms import CampaignForm
+from .filters import campaign_filter
 
 
 def campaign_update(request, bop_pk, campaign_pk):
@@ -26,23 +26,21 @@ def campaign_update(request, bop_pk, campaign_pk):
 
 
 @login_required
-def campaign_list(request, bop_pk):
-    bop = Bop.objects.get(pk=bop_pk)
-    campaigns = bop.campaigns.all()
-
-    context = {'bop': bop, 'campaigns': campaigns}
+def campaign_list(request):
+    campaigns = Campaign.objects.order_by('-start_date')
+    results = campaign_filter(campaigns, request.GET)
+    context = {'campaigns': results}
     return render(request, 'campaigns/campaign_list.html', context)
 
 
 @login_required
 def campaign_create(request, bop_pk):
     form = CampaignForm()
-    bop = Bop.objects.get(pk=bop_pk)
-    test_groups = bop.testgroup.all()
-
-    context = {'form': form, 'bop': bop, 'test_groups': test_groups}
+    context = {'form': form, 'bop_pk': bop_pk}
     return render(request, 'campaigns/campaign_form.html', context)
 
 
-def run_analysis(request, bop_pk):
-    pass
+def campaign_index(request, campaign_pk):
+    campaign = Campaign.objects.prefetch_related('phases', 'events').get(pk=campaign_pk)
+    context = {'campaign': campaign}
+    return render(request, 'campaigns/campaign_index.html', context)

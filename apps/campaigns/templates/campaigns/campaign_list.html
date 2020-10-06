@@ -11,9 +11,11 @@
         <div class="page-title-heading-2">
           <a href="{% url 'dashboard' %}">Home</a>
           <span class="fa fa-chevron-right"></span>
-          <span class="current-page">{{ bop.name }}</span>
+          <a href="{% url 'list_bops' %}">Bops</a>
           <span class="fa fa-chevron-right"></span>
-          <span class="current-page">Events</span>
+          <a href="{% url 'index_bop' bop_pk %}">{{ bop_pk }}</a>
+          <span class="fa fa-chevron-right"></span>
+          <span class="current-page">Campaigns</span>
         </div>
       </div>
     </div>
@@ -33,17 +35,15 @@
     <div class="section">
       <div class="container-fluid px-5">
         <div class="section-title mb-3">
-          <p clas>Bop name:
-            <span class="text-monospace">{{ bop.name }}</span>
-          </p>
-          {% include 'common/bop_operator_nav.html' %}
+          <p>Select campaigns to manage</p>
         </div>
         <hr>
         <div class="section-content">
           <div class="d-flex">
             <div class="ml-auto">
-              <a href="{% url 'create_campaign' bop.pk %}" class="ml-auto btn btn-sm btn-success"><small>ADD CAMPAIGN <i
-                  class="fa fa-plus"></i></small> </a>
+{#              <a href="{% url 'create_campaign' campaigns.first.bop.pk %}" class="ml-auto btn btn-sm#}
+{#              btn-success"><small>ADD CAMPAIGN <i#}
+{#                  class="fa fa-plus"></i></small> </a>#}
             </div>
           </div>
 
@@ -91,7 +91,8 @@
                     {% for campaign in campaigns %}
                       <tr>
                         <td scope="row" align="center">{{ campaign.pk }}</td>
-                        <td><a href="{% url 'update_campaign' bop.pk campaign.pk %}">{{ campaign.name }}</a></td>
+
+{#                        <td><a href="{% url 'update_campaign' bop.pk campaign.pk %}">{{ campaign.name }}</a></td>#}
                         <td align="center">
                           {% if campaign.active %}
                             <img src="{% static 'img/icon-yes.svg' %}"/>

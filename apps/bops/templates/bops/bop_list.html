@@ -1,4 +1,4 @@
-{% extends 'manager/base.html' %}
+{% extends 'base.html' %}
 
 {% block breadcrumb %}
   <!-- breadcrumb -->
@@ -6,8 +6,6 @@
     <div class="container-fluid px-5">
       <div class="page-title-wrapper-2">
         <div class="page-title-heading-2">
-          <a href="{% url 'manager' %}">Home</a>
-          <span class="fa fa-chevron-right"></span>
           <span class="current-page">Bops </span>
         </div>
       </div>
@@ -29,7 +27,7 @@
       <div class="container-fluid px-5">
         <div class="section-title mb-3">
           <p>Select bop to manage</p>
-          <a href="{% url 'upload_bop' %}" class="btn btn-sm btn-success"><small>ADD BOP <i
+          <a href="{% url 'bops:upload' %}" class="btn btn-sm btn-success"><small>ADD BOP <i
               class="fa fa-plus"></i></small> </a>
         </div>
 
@@ -65,7 +63,7 @@
                 {% for bop in bops %}
                   <tr>
                     <td scope="row" width="4%">{{ bop.pk }}</td>
-                    <td><a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a></td>
+                    <td><a href="{% url 'bops:index' bop.pk %}">{{ bop.name }}</a></td>
                     <td><a href="">{{ bop.created_at }}</a></td>
                   </tr>
                 {% endfor %}
