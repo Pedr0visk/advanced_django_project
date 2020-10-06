@@ -56,6 +56,10 @@
               <table class="table dnv-table m-0">
                 <thead class="bg-white-50">
                 <tr>
+<<<<<<< HEAD
+=======
+                  <th scope="col">ID</th>
+>>>>>>> ce1031869617e2f6940c5804db54ef2acac3c49f
                   <th scope="col">name</th>
                   <th scope="col">created_at</th>
                   <th scope="col">active</th>
@@ -64,9 +68,16 @@
                 <tbody>
                 {% for campaign in bop.campaigns.all %}
                   <tr>
+<<<<<<< HEAD
                     <td><a href="{{ campaign.get_absolute_url }}">{{ campaign.name }}</a></td>
                     <td><a href="">{{ campaign.start_date }}</a></td>
                     <td>
+=======
+                    <td scope="row" width="4%">{{ campaign.pk }}</td>
+                    <td><a href="{{ campaign.get_absolute_url }}">{{ campaign.name }}</a></td>
+                    <td><a href="">{{ campaign.start_date }}</a></td>
+                    <td align="center">
+>>>>>>> ce1031869617e2f6940c5804db54ef2acac3c49f
                       {% if campaign.active %}
                         <img src="{% static 'img/icon-yes.svg' %}"/>
                       {% else %}

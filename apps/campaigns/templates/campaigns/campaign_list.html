@@ -90,7 +90,8 @@
                     <tbody>
                     {% for campaign in campaigns %}
                       <tr>
-                        <td scope="row" align="center">{{ campaign.pk }} a</td>
+                        <td scope="row" align="center">{{ campaign.pk }}</td>
+
 {#                        <td><a href="{% url 'update_campaign' bop.pk campaign.pk %}">{{ campaign.name }}</a></td>#}
                         <td align="center">
                           {% if campaign.active %}
