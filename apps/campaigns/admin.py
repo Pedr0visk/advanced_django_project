@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Campaign
+from .models import Campaign, Phase
 
 
 class CampaignAdmin(admin.ModelAdmin):
@@ -10,3 +10,5 @@ class CampaignAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Campaign, CampaignAdmin)
+admin.site.register(Phase)
+

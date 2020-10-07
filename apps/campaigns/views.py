@@ -1,10 +1,15 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from .models import Campaign
-from .forms import CampaignForm
+from .models import Campaign, Phase
+from .forms import CampaignForm, PhaseForm
 from .filters import campaign_filter
+
+from django.shortcuts import get_object_or_404
+
+from apps.test_groups.models import TestGroup
 
 
 def campaign_update(request, bop_pk, campaign_pk):
@@ -44,3 +49,23 @@ def campaign_index(request, campaign_pk):
     campaign = Campaign.objects.prefetch_related('phases', 'events').get(pk=campaign_pk)
     context = {'campaign': campaign}
     return render(request, 'campaigns/campaign_index.html', context)
+
+
+def phase_update(request, pk):
+    phase = get_object_or_404(Phase, pk=pk)
+    form = PhaseForm(request.POST or None, instance=phase)
+    test_groups = TestGroup.objects.filter(bop_id=phase.campaign.bop.pk)
+    if request.method == 'POST':
+        if form.is_valid():
+            p = form.save()
+            if p.step == Phase.Step.TEST:
+                try:
+                    print(request.POST['test_groups'])
+                    p.schedule.test_groups.set()
+                except ModuleNotFoundError:
+                    return
+            return HttpResponse('updated!')
+
+    print(form.errors)
+    context = {'phase': phase, 'form': form, 'test_groups': test_groups}
+    return render(request, 'campaigns/phase_form.html', context)

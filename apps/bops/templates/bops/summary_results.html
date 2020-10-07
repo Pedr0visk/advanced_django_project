@@ -6,9 +6,7 @@
     <div class="container-fluix px-5">
       <div class="page-title-wrapper-2">
         <div class="page-title-heading-2">
-          <a href="{% url 'bops:index' campaign.bop.pk %}">{{ campaign.bop.name }}</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'campaigns:index' campaign.pk %}">{{ campaign }}</a>
+          <a href="{% url 'bops:index' bop.pk %}">{{ bop }}</a>
           <span class="fa fa-chevron-right"></span>
           <span class="current-page">Summary Results</span>
         </div>
@@ -31,13 +29,26 @@
     <div class="section">
       <div class="container-fluid px-5">
         <!-- section title -->
-        <div class="section-title mb-3">
-          <p>Summary Results for safety function<b>"{{ campaign }}"</b></p>
+        <div class="section-title">
+          <form action="" method="GET" class="form-inline">
+            <p class="mr-4">Summary Results for safety function:</p>
+            <select name="sf" id="" class="form-control form-control-sm mr-4">
+              <option value="">--</option>
+              {% for sf in bop.safety_functions.all %}
+              <option value="{{ sf.pk }}">{{ sf.name }}</option>
+              {% endfor %}
+
+            </select>
+            <button class="btn-standard">see</button>
+          </form>
         </div>
         <hr>
 
         <!-- section content -->
         <div class="row">
+          <div class="col-sm-4">
+
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import apps.bops.metrics as metrics
+from apps.bops import metrics
 
 from django.contrib import messages
 from django.core.exceptions import RequestAborted
@@ -67,7 +67,7 @@ def bop_update(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, f'Successfully updated bop "{bop.name}" ')
-            return redirect('index_bop', bop.pk)
+            return redirect(bop.success_url())
 
     context = {'form': form, 'bop': bop}
     return render(request, 'bops/bop_form.html', context)
@@ -82,7 +82,7 @@ def bop_delete(request, pk):
         name = bop.name
         bop.delete()
         messages.success(request, f'Bop "{name}" successfully deleted')
-        return redirect('list_bops')
+        return redirect('bops:list')
     return render(request, 'bops/bop_confirm_delete.html', context)
 
 
@@ -207,7 +207,13 @@ def test_planner_raw(request, pk):
     return render(request, 'bops/bop_test_planner.html', context)
 
 
-def migrate(request, pk):
-    bop = Bop.objects.get(pk=pk)
-
-
+def summary_results(request, pk):
+    bop = Bop.objects.prefetch_related('safety_functions',
+                                       'campaigns',
+                                       'campaigns__phases').get(pk=pk)
+    sf_pk = request.GET.get('sf')
+    if sf_pk is not None:
+        safety_function = bop.safety_functions.get(pk=sf_pk)
+        metrics.run(bop, safety_function)
+    context = {'bop': bop}
+    return render(request, 'bops/summary_results.html', context)

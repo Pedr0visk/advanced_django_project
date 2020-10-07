@@ -10,6 +10,7 @@ urlpatterns = [
     path('<int:pk>/delete/', views.bop_delete, name='delete'),
     path('<int:pk>/test-planner/', views.test_planner, name='test_planner'),
     path('<int:pk>/test-planner/raw/', views.test_planner_raw, name='test_planner_raw'),
+    path('<int:pk>/summary-results/', views.summary_results, name='summary_results'),
 
     path('<int:bop_pk>/safety-functions/',
          views.safety_function_list,
