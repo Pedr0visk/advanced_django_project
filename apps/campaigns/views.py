@@ -80,3 +80,7 @@ def phase_update(request, pk):
     print(form.errors)
     context = {'phase': phase, 'form': form, 'test_groups': test_groups}
     return render(request, 'campaigns/phase_form.html', context)
+
+
+def show_charts(request):
+    pass
