@@ -1,5 +1,6 @@
-import random
 import json
+import time
+from apps.campaigns import metrics
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -82,5 +83,12 @@ def phase_update(request, pk):
     return render(request, 'campaigns/phase_form.html', context)
 
 
-def show_charts(request):
-    pass
+def campaign_metrics(request, campaign_pk):
+    campaign = Campaign.objects.\
+        select_related('bop').\
+        prefetch_related('phases').get(pk=campaign_pk)
+
+    results = metrics.run(campaign)
+    print(results)
+    context = {'campaign': campaign, 'results': results}
+    return render(request, 'campaigns/campaign_charts.html', context)

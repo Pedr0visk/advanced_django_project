@@ -12,15 +12,13 @@ import math
 import numpy as np
 
 
-def run(campid):
+def run(campaign):
     print(datetime.datetime.today(), "incio do calculo")
-
-    camp = Campaign.objects.get(pk=campid)
-    bop = camp.bop
+    bop = campaign.bop
 
     m = get_m_matrix(bop)
 
-    sf_pfds = calculate_SF_PFDS(camp, m)
+    sf_pfds = calculate_SF_PFDS(campaign, m)
 
     return sf_pfds
 
