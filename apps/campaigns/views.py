@@ -1,3 +1,5 @@
+import random
+import json
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -41,7 +43,16 @@ def campaign_list(request):
 @login_required
 def campaign_create(request, bop_pk):
     form = CampaignForm()
-    context = {'form': form, 'bop_pk': bop_pk}
+    names = ("bob", "dan", "jack", "lizzy", "susan")
+
+    items = []
+    for i in range(100):
+        items.append({
+            "name": random.choice(names),
+            "age": random.randint(20, 80),
+            "url": "https://example.com",
+        })
+    context = {'form': form, 'bop_pk': bop_pk, 'items_json': json.dumps(items)}
     return render(request, 'campaigns/campaign_form.html', context)
 
 

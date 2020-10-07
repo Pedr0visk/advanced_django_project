@@ -2,6 +2,8 @@
 {% load static %}
 {% load manager_extras %}
 
+
+
 {% block breadcrumb %}
   <div class="page-title">
     <div class="container-fluid px-5">
@@ -21,7 +23,6 @@
 {% endblock %}
 
 {% block main %}
-
   <div class="section bg-white">
     <div class="container-fluid px-5">
       {% if campaign %}
@@ -104,6 +105,46 @@
 
               <fieldset class="form-fieldset">
                 <h4>Phases</h4>
+                <div id="app" class="container">
+                  <ul>
+                    <li v-for="person in people">
+                      <a v-bind:href="person.url">[[ person.name ]]</a>
+                      <button v-on:click="greet(person.name)">hey</button>
+                    </li>
+                  </ul>
+                  <div class="form-group row">
+                    <input
+                        class="form-control form-control-sm col-2 mr-2"
+                        placeholder="phase name"
+                        id="name"
+                        required
+                        v-model="phase.name"
+                        name="name"
+                    />
+                    <input
+                        class="form-control form-control-sm col-2 mr-2"
+                        id="start_date"
+                        type="datetime-local"
+                        required
+                        v-model="phase.start_date"
+                        name="start_date"
+                    />
+                    <select
+                        class="form-control form-control-sm col-2 mr-2"
+                        id="step"
+                        required
+                        v-model="phase.step"
+                        name="step"
+                    >
+                      <option v-for="option in step_options" value="option.value">
+                        [[option.text]]
+                      </option>
+                    </select>
+
+                  </div>
+                </div>
+
+
                 <table>
                   <tbody id="phases_list"></tbody>
                 </table>
@@ -133,26 +174,55 @@
 {% endblock %}
 
 {% block scripts %}
-  <script src="{% static 'js/SelectPhase.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script>
-      // Query all input fields
-      var form_fields = document.getElementsByTagName('input')
-      // customization of form fields
-      for (var field in form_fields) {
-          if (form_fields[field].type == 'checkbox') continue
-          form_fields[field].className += 'form-control form-control-sm'
-      }
-
-      // Query all textarea fields
-      var form_fields = document.getElementsByTagName('textarea')
-      for (var field in form_fields) {
-          form_fields[field].className += 'form-control form-control-sm'
-      }
-
-      // Query all select fields
-      var form_fields = document.getElementsByTagName('select')
-      for (var field in form_fields) {
-          form_fields[field].className += 'form-control form-control-sm'
-      }
+      let people = {{ items_json|safe }};
+      const app = new Vue({
+          delimiters: ['[[', ']]'],
+          el: '#app',
+          data: {
+              step_options: [
+                  {value: 1, text: 'descend'},
+                  {value: 2, text: 'connect'},
+                  {value: 3, text: 'drilling'},
+                  {value: 4, text: 'disconnect'},
+                  {value: 5, text: 'test'}
+              ],
+              phases: [],
+              phase: {
+                  name: '',
+                  start_date: null,
+                  duration: 0,
+                  step: null,
+              }
+          },
+          methods: {
+              addPhase: function (name, start_date, duration, step, test_groups) {
+                  console.log('Hello from ' + name + '!')
+              }
+          }
+      });
   </script>
+  {#  <script src="{% static 'js/SelectPhase.js' %}"></script>#}
+  {#  <script>#}
+  {#      // Query all input fields#}
+  {#      var form_fields = document.getElementsByTagName('input')#}
+  {#      // customization of form fields#}
+  {#      for (var field in form_fields) {#}
+  {#          if (form_fields[field].type == 'checkbox') continue#}
+  {#          form_fields[field].className += 'form-control form-control-sm'#}
+  {#      }#}
+  {##}
+  {#      // Query all textarea fields#}
+  {#      var form_fields = document.getElementsByTagName('textarea')#}
+  {#      for (var field in form_fields) {#}
+  {#          form_fields[field].className += 'form-control form-control-sm'#}
+  {#      }#}
+  {##}
+  {#      // Query all select fields#}
+  {#      var form_fields = document.getElementsByTagName('select')#}
+  {#      for (var field in form_fields) {#}
+  {#          form_fields[field].className += 'form-control form-control-sm'#}
+  {#      }#}
+  {#  </script>#}
 {% endblock %}

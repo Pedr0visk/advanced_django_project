@@ -32,6 +32,7 @@
     const SelectPhase = {
         index: 1,
         cache: {},
+        data: {},
         classes: 'form-control form-control-sm',
         steps: [
             {value: 1, text: 'descend'},
@@ -109,14 +110,17 @@
 
                 // saved data
                 for (let attr in obj) {
-                    let td = quickElement('td', tr),
+                    let hasTest = attr == 'test_groups';
+                    let td = quickElement('td', tr, null, 'id', 'td_' + attr),
                         config = [
-                            'input', td, null,
+                            hasTest ? 'textarea' : 'input', td, null,
                             'value', obj[attr],
                             'class', this.classes,
                             'disabled', true
                         ];
                     let $el = quickElement(...config);
+                    if (hasTest)
+                        $el.innerText = obj[attr]
                 }
             }
 
@@ -129,14 +133,40 @@
                 step = $('#step').val(),
                 test_groups = $('#testGroup').val();
 
+            // display step option name on added phase row
+            let selectStep = document.getElementById('step')
+            let {selectedIndex} = selectStep
+            let optionText = selectStep.options[selectedIndex].text
+
+            // display test group options name on added phase row
+            let test_group_box = document.getElementById('testGroup')
+            let option;
+            let boxOptions = test_group_box.options;
+            let boxOptionsLength = boxOptions.length;
+            let text_options = ''
+            for (let i = 0, j = boxOptionsLength; i < j; i++) {
+                option = boxOptions[i];
+                let option_text = option.text;
+                if (option.selected) {
+                    text_options += option_text + ', '
+                }
+            }
+
             let id = this.index;
-            SelectPhase.cache[id] = {name, start_date, duration, step, test_groups}
+            SelectPhase.cache[id] = {
+                name,
+                start_date,
+                duration: duration + 'h',
+                step: optionText,
+                test_groups: text_options
+            }
+            SelectPhase.data[id] = {name, start_date, duration, step, test_groups}
             SelectPhase.redisplay(field_id);
             this.index++;
         },
     };
 
-    window.SelectPhase = SelectPhase
+    window.SelectPhase = SelectPhase;
 
     window.addEventListener('load', function (e) {
         SelectPhase.init('phases_list');
