@@ -24,6 +24,7 @@ pytest-django = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
 python-dotenv = "*"
+numpy = "*"
 
 [requires]
 python_version = "3.8"
