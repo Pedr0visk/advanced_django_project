@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from .forms import EventForm
 
@@ -9,6 +10,7 @@ def event_create(request, campaign_pk):
             new_event = form.save(commit=False)
             new_event.campaign_id = campaign_pk
             new_event.save()
+            messages.success(request, f'Event "{new_event.name}" created successfully!')
             return redirect(new_event.success_url())
 
     context = {'form': form, 'campaign_pk': campaign_pk}

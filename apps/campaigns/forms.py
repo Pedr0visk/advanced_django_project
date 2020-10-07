@@ -1,5 +1,5 @@
-from django.forms import ModelForm, DateInput
-from .models import Campaign
+from django.forms import ModelForm, DateInput, DateTimeInput, IntegerField
+from .models import Campaign, Phase
 
 
 class CampaignForm(ModelForm):
@@ -17,3 +17,15 @@ class CampaignForm(ModelForm):
             'end_date': DateInput(format='%Y-%m-%d',
                                   attrs={'placeholder': 'Select a date', 'type': 'date'}),
         }
+
+
+class PhaseForm(ModelForm):
+    class Meta:
+        model = Phase
+        fields = ['name', 'duration', 'start_date', 'step']
+        widgets = {
+            'start_date': DateTimeInput(format='%Y-%m-%d',
+                                        attrs={'placeholder': 'Select a date', 'type': 'date'}),
+
+        }
+

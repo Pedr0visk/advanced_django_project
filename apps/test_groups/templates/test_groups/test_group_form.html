@@ -7,11 +7,13 @@
     <div class="container-fluid px-5">
       <div class="page-title-wrapper-2">
         <div class="page-title-heading-2">
-          <a href="{% url 'bops:test_planner' test_group.bop.pk %}">Test Planner</a>
-          <span class=" fa fa-chevron-right"></span>
           {% if test_group %}
+            <a href="{% url 'bops:test_planner' test_group.bop.pk %}">Test Planner</a>
+            <span class=" fa fa-chevron-right"></span>
             <span class="current-page">Change Test Group {{ test_group.id }}</span>
           {% else %}
+            <a href="{% url 'bops:test_planner' bop_pk %}">Test Planner</a>
+            <span class=" fa fa-chevron-right"></span>
             <span class="current-page">Add new Test Group</span>
           {% endif %}
         </div>

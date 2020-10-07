@@ -29,6 +29,16 @@ class Campaign(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def get_period(self):
+        """
+        Get the campaign period converted in hours
+        :return:
+        """
+        dt = self.end_date - self.start_date
+        days = dt.days
+        hours = days * 24
+        return days, hours
+
     def get_absolute_url(self):
         return reverse('campaigns:index', args=[self.pk])
 
@@ -40,7 +50,7 @@ class Campaign(models.Model):
 
 
 class Phase(models.Model):
-    class Step(models.TextChoices):
+    class Step(models.IntegerChoices):
         DESCEND = 1
         CONNECT = 2
         DRILLING = 3
