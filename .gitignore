@@ -6,3 +6,5 @@ venv
 bop_management/__pycache__/
 media/
 .env
+# node modules
+/node_modules

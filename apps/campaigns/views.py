@@ -44,16 +44,7 @@ def campaign_list(request):
 @login_required
 def campaign_create(request, bop_pk):
     form = CampaignForm()
-    names = ("bob", "dan", "jack", "lizzy", "susan")
-
-    items = []
-    for i in range(100):
-        items.append({
-            "name": random.choice(names),
-            "age": random.randint(20, 80),
-            "url": "https://example.com",
-        })
-    context = {'form': form, 'bop_pk': bop_pk, 'items_json': json.dumps(items)}
+    context = {'form': form, 'bop_pk': bop_pk}
     return render(request, 'campaigns/campaign_form.html', context)
 
 
