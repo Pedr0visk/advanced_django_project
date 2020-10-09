@@ -83,3 +83,5 @@ def campaign_metrics(request, campaign_pk):
     print(results)
     context = {'campaign': campaign, 'results': results}
     return render(request, 'campaigns/campaign_charts.html', context)
+
+

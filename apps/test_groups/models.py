@@ -3,13 +3,13 @@ from django.db import models
 from django.shortcuts import redirect
 
 from apps.bops.models import Bop
-from apps.campaigns.models import Phase
 from apps.failuremodes.models import FailureMode
 from apps.tests.models import Test
 from datetime import date
 
 
 class CommonInfo(models.Model):
+    name = models.CharField(max_length=255)
     start_date = models.DateField()
     bop = models.ForeignKey(Bop, on_delete=models.CASCADE, related_name="%(class)s")
     failure_modes = models.ManyToManyField(FailureMode,
@@ -35,12 +35,6 @@ class TestGroup(CommonInfo):
             super().save()
         else:
             super().delete(using=None, keep_parents=False)
-
-
-class TestSchedule(models.Model):
-    date = models.DateTimeField()
-    phase = models.OneToOneField(Phase, on_delete=models.CASCADE, related_name='schedule')
-    test_groups = models.ManyToManyField(TestGroup, related_name='test_schedules')
 
 
 class TestGroupDummy(CommonInfo):

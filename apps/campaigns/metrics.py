@@ -12,13 +12,19 @@ import math
 import numpy as np
 
 
-def run(campaign):
+def run(campaign, **kwargs):
+    datetime.today()
     print(datetime.datetime.today(), "incio do calculo")
     bop = campaign.bop
 
     m = get_m_matrix(bop)
 
     sf_pfds = calculate_SF_PFDS(campaign, m)
+
+    # campaign.schemas.all() # 2
+    # if phase.has_test:
+    #       phase.test_groups.all()
+
 
     return sf_pfds
 
