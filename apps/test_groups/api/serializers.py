@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.test_groups.models import TestGroup, TestSchedule
+from apps.test_groups.models import TestGroup
 
 
 class TestGroupSerializer(serializers.ModelSerializer):
@@ -8,11 +8,3 @@ class TestGroupSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'name'
         )
-
-
-class TestScheduleSerializer(serializers.ModelSerializer):
-    test_groups = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-
-    class Meta:
-        model = TestSchedule
-        fields = ('date', 'test_groups', 'phase')

@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 
 from apps.bops.models import Bop
+from apps.test_groups.models import TestGroup
 
 
 class Campaign(models.Model):
@@ -49,16 +50,20 @@ class Campaign(models.Model):
         ordering = ['-active', '-start_date']
 
 
-class Phase(models.Model):
-    class Step(models.IntegerChoices):
-        DESCEND = 1
-        CONNECT = 2
-        DRILLING = 3
-        DISCONNECT = 4
-        TEST = 5
-
-    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='phases')
-    step = models.IntegerField(choices=Step.choices, default=Step.DESCEND)
+class Schema(models.Model):
     name = models.CharField(max_length=255)
+    campaign = models.ForeignKey(Campaign,
+                                 on_delete=models.CASCADE,
+                                 related_name='phases')
+
+
+class Phase(models.Model):
+    name = models.CharField(max_length=255)
+    schema = models.ForeignKey(Schema,
+                               on_delete=models.CASCADE,
+                               related_name='phases')
+    test_groups = models.ManyToManyField(TestGroup)
     start_date = models.DateTimeField()
     duration = models.FloatField()
+    has_test = models.BooleanField(default=False)
+    is_drilling = models.BooleanField(default=False)
