@@ -1,8 +1,11 @@
 import Vue from "vue";
-import { DatetimePicker } from '@livelybone/vue-datepicker';
+import { uuid } from 'vue-uuid';
 import Axios from "axios";
 
-Vue.prototype.$http = Axios
+import { DatetimePicker } from '@livelybone/vue-datepicker';
+
+Vue.prototype.$http = Axios;
+Vue.prototype.$uuid = uuid;
 
 // import components
 Vue.component('datetime-picker', DatetimePicker);

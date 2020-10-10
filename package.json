@@ -24,6 +24,7 @@
   "dependencies": {
     "@livelybone/vue-datepicker": "^4.0.2",
     "axios": "^0.20.0",
-    "vue": "^2.6.12"
+    "vue": "^2.6.12",
+    "vue-uuid": "^2.0.2"
   }
 }

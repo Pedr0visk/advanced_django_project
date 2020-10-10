@@ -80,8 +80,7 @@ def campaign_metrics(request, campaign_pk):
         prefetch_related('phases').get(pk=campaign_pk)
 
     results = metrics.run(campaign)
-    print(results)
     context = {'campaign': campaign, 'results': results}
-    return render(request, 'campaigns/campaign_charts.html', context)
+    return HttpResponse(json.dumps(results))
 
 
