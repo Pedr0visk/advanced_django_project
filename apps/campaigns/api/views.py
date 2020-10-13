@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from .serializers import CampaignSerializer, PhaseSerializer
+from .serializers import CampaignSerializer
 from apps.campaigns.models import Campaign
 
 

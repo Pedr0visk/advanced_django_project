@@ -43,13 +43,21 @@ def campaign_list(request):
 
 @login_required
 def campaign_create(request, bop_pk):
-    form = CampaignForm()
+    form = CampaignForm(request.POST or None)
+
+    if form.is_valid():
+        campaign = form.save(commit=False)
+        campaign.bop_id = bop_pk
+        campaign.save()
+        messages.success(request, f'Campaign "{campaign.name}" successfully created!')
+        return redirect(campaign.success_url())
+
     context = {'form': form, 'bop_pk': bop_pk}
     return render(request, 'campaigns/campaign_form.html', context)
 
 
 def campaign_index(request, campaign_pk):
-    campaign = Campaign.objects.prefetch_related('phases', 'events').get(pk=campaign_pk)
+    campaign = Campaign.objects.prefetch_related('schemas', 'events').get(pk=campaign_pk)
     context = {'campaign': campaign}
     return render(request, 'campaigns/campaign_index.html', context)
 
@@ -75,12 +83,16 @@ def phase_update(request, pk):
 
 
 def campaign_metrics(request, campaign_pk):
-    campaign = Campaign.objects.\
-        select_related('bop').\
-        prefetch_related('phases').get(pk=campaign_pk)
+    campaign = Campaign.objects. \
+        select_related('bop'). \
+        prefetch_related('schemas').get(pk=campaign_pk)
 
     results = metrics.run(campaign)
     context = {'campaign': campaign, 'results': results}
     return HttpResponse(json.dumps(results))
 
 
+def schema_create(request, campaign_pk):
+    campaign = Campaign.objects.get(pk=campaign_pk)
+    context = {'campaign': campaign}
+    return render(request, 'schemas/schema_form.html', context)

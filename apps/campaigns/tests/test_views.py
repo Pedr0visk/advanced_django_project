@@ -29,7 +29,7 @@ class CampaignViewTest(TestCase):
 
     def test_campaign_can_be_created_along_with_phases(self):
         """
-        A campaign must have phases on it, it will be created via ajax using
+        A campaign must have schemas on it, it will be created via ajax using
         an api endpoint
         """
         data = self.campaign_data()
@@ -113,7 +113,7 @@ class CampaignViewTest(TestCase):
             'active': False,
             'start_date': '2020-08-01',
             'end_date': '2020-12-31',
-            'phases': json.dumps([
+            'schemas': json.dumps([
                 {
                     'name': 'Descend phase',
                     'start_date': '2020-08-01',

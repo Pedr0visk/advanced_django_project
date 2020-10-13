@@ -40,6 +40,9 @@ class Campaign(models.Model):
         hours = days * 24
         return days, hours
 
+    def success_url(self):
+        return reverse('bops:index', args=[self.bop.pk])
+
     def get_absolute_url(self):
         return reverse('campaigns:index', args=[self.pk])
 
@@ -54,14 +57,15 @@ class Schema(models.Model):
     name = models.CharField(max_length=255)
     campaign = models.ForeignKey(Campaign,
                                  on_delete=models.CASCADE,
-                                 related_name='phases')
+                                 related_name='schemas')
 
 
 class Phase(models.Model):
     name = models.CharField(max_length=255)
     schema = models.ForeignKey(Schema,
                                on_delete=models.CASCADE,
-                               related_name='phases')
+                               related_name='schemas')
+
     test_groups = models.ManyToManyField(TestGroup)
     start_date = models.DateTimeField()
     duration = models.FloatField()

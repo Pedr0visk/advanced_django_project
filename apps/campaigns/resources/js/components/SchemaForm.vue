@@ -3,62 +3,7 @@
     <div class="form-group row">
       <label class="col-sm-1 col-form-label col-form-label-sm">Name:</label>
       <div class="col-sm-3">
-        <input type="text" v-model="campaign.name">
-        <small class="form-text text-muted">
-          Required.
-        </small>
-      </div>
-    </div>
-    <hr/>
-
-    <div class="form-group row">
-      <label class="col-sm-1 col-form-label col-form-label-sm">Description:</label>
-      <div class="col-sm-3">
-        <textarea name="" id="" cols="30" rows="10">{{ campaign.description }}</textarea>
-        <small class="form-text text-muted">
-          Optional.
-        </small>
-      </div>
-    </div>
-    <hr/>
-
-    <div class="form-group row">
-      <label class="col-sm-1 col-form-label col-form-label-sm">Active:</label>
-      <div class="col-sm-3">
-        <input type="checkbox" v-model="campaign.active">
-        <small class="form-text text-muted">
-          Required.
-        </small>
-      </div>
-    </div>
-    <hr/>
-
-    <div class="form-group row">
-      <label class="col-sm-1 col-form-label col-form-label-sm">Start Date:</label>
-      <div class="col-sm-2">
-        <input type="date" v-model="campaign.start_date">
-        <small class="form-text text-muted">
-          Note: you are 3 hours behind server time.
-        </small>
-      </div>
-    </div>
-    <hr/>
-
-    <div class="form-group row">
-      <label class="col-sm-1 col-form-label col-form-label-sm">End Date:</label>
-      <div class="col-sm-2">
-        <input type="date" v-model="campaign.end_date">
-        <small class="form-text text-muted">
-          Note: you are 3 hours behind server time.
-        </small>
-      </div>
-    </div>
-    <hr/>
-
-    <div class="form-group row">
-      <label class="col-sm-1 col-form-label col-form-label-sm">Well Name:</label>
-      <div class="col-sm-3">
-        <input type="text" v-model="campaign.well_name">
+        <input type="text" v-model="schema.name">
         <small class="form-text text-muted">
           Required.
         </small>
@@ -68,7 +13,6 @@
 
     <fieldset class="form-fieldset">
       <h4>Phases</h4>
-
       <div class="px-3">
         <div class="form-add-phase row">
           <!-- name -->
@@ -267,15 +211,10 @@ export default {
       testGroups: [],
       btnStr: 'pick',
       dayStr: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-      campaign: {
-        name: '',
-        active: true,
-        description: '',
-        start_date: '',
-        end_date: '',
-        well_name: '',
-      },
       phases: [],
+      schema: {
+        name: ''
+      },
       phase: {
         name: '',
         has_test: false,

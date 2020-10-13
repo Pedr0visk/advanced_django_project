@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block main %}
-<div class="section bg-white">
+<div class="section bg-white" id="app">
   <div class="container-fluid px-5">
     {% if campaign %}
     <h4 class="title-1 mb-4">Change Campaign</h4>
@@ -76,6 +76,7 @@
               <label class="col-sm-1 col-form-label col-form-label-sm">Start Date:</label>
               <div class="col-sm-2">
                 {{ form.start_date }}
+
                 <small class="form-text text-muted">
                   Note: you are 3 hours behind server time.
                 </small>
@@ -86,7 +87,7 @@
             <div class="form-group row">
               <label class="col-sm-1 col-form-label col-form-label-sm">End Date:</label>
               <div class="col-sm-2">
-                {{ form.end_date }}
+                {{ form.start_date }}
                 <small class="form-text text-muted">
                   Note: you are 3 hours behind server time.
                 </small>
@@ -104,17 +105,6 @@
               </div>
             </div>
             <hr/>
-
-            <fieldset class="form-fieldset">
-              <h4>Phases</h4>
-              <div id="app">
-                <demo-component></demo-component>
-              </div>
-
-              <table>
-                <tbody id="phases_list"></tbody>
-              </table>
-            </fieldset>
 
             <div class="card p-2 bg-light text-right">
               <div class="d-flex">
@@ -139,6 +129,3 @@
 </div>
 {% endblock %}
 
-{% block scripts %}
-<script type="text/javascript" src="{% static 'build/campaign.js' %}"></script>
-{% endblock %}

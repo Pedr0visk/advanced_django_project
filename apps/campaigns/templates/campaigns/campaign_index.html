@@ -48,12 +48,12 @@
 
       <!-- section content -->
       <div class="row">
-        <div class="col-sm-5 col-12">
+        <div class="col-sm-3 col-12">
           <div class="results">
             <div class="d-flex  px-1">
-              <h4 class="title-1 mr-auto">Phases</h4>
+              <h4 class="title-1 mr-auto">Schemas</h4>
               <a href="" class="mr-4">all <i class="fa fa-pencil-alt text-warning"></i></a>
-              <a href="" class="">add phase <i class="fa fa-plus
+              <a href="" class="">add schema <i class="fa fa-plus
                 text-success"></i></a>
             </div>
 
@@ -61,30 +61,21 @@
               <thead class="bg-white-50">
               <tr>
                 <th scope="col">name</th>
-                <th scope="col">step</th>
-                <th scope="col">start date</th>
-                <th scope="col">duration</th>
               </tr>
               </thead>
               <tbody>
-              <!--                {% for phase in campaign.phases.all %}-->
-              <!--                  <tr>-->
-              <!--                    <td><a href="{% url 'campaigns:update_phase' phase.pk %}">{{ phase.name }}</a></td>-->
-              <!--                    <td><a href="">{{ phase.step }}</a></td>-->
-              <!--                    <td><a href="">-->
-              <!--                      {{ phase.start_date|date:"m/d/Y" }}-->
-              <!--                      {{ phase.start_date|time:"H:i" }}h-->
-              <!--                    </a></td>-->
-              <!--                    <td><a href="">{{ phase.duration }}h</a></td>-->
-              <!--                  </tr>-->
-              <!--                {% endfor %}-->
+              {% for schema in campaign.schemas.all %}
+              <tr>
+                <td><a href="">{{ schema.name }}</a></td>
+              </tr>
+              {% endfor %}
               </tbody>
             </table>
 
           </div>
         </div>
 
-        <div class="col-sm-4 col-12">
+        <div class="col-sm-6 col-12">
           <div class="results">
             <div class="d-flex  px-1">
               <h4 class="title-1 mr-auto">Events</h4>
