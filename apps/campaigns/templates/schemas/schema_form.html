@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load manager_extras %}
+
+{% block breadcrumb %}
+<div class="page-title">
+  <div class="container-fluid px-5">
+    <div class="page-title-wrapper-2">
+      <div class="page-title-heading-2">
+        <a href="{% url 'campaigns:index' campaign.pk %}">{{ campaign.name }}</a>
+        <span class="fa fa-chevron-right"></span>
+        {% if schema %}
+        <span class="current-page">{{ schema.name }}</span>
+        {% else %}
+        <span class="current-page">Add new schema</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block main %}
+<div class="section bg-white" id="app">
+  <div class="container-fluid px-5">
+    {% if schema %}
+    <h4 class="title-1 mb-4">Change Schema</h4>
+    {% else %}
+    <h4 class="title-1 mb-4">Add Schema</h4>
+    {% endif %}
+    <div class="section-content">
+      <div class="row">
+        <div class="col-sm-12">
+          <form method="POST" id="schemaForm">
+            {% csrf_token %}
+            <input type="hidden" id="bopId" value="{{ campaign.bop.pk }}" name="bop">
+            <input type="hidden" id="campaignId" value="{{ campaign.pk }}" name="campaign">
+            <schema-form></schema-form>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{% static 'build/campaign.js' %}"></script>
+{% endblock %}

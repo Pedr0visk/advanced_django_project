@@ -34,8 +34,8 @@
         <div class="section-title mb-3">
           <p>Dashboard for Bop</p>
           <div>
-            <a href="{% url 'bops:summary_results' bop.pk %}" class="btn btn-sm btn-success mr-2"><small>SUMMARY
-              RESULTS</small></a>
+            <a href="{% url 'bops:summary_results' bop.pk %}" class="btn btn-sm btn-info mr-2"><small>SUMMARY
+              RESULTS <i class="fa fa-chart-bar"></i></small></a>
             <a href="{% url 'bops:update' bop.pk %}" class="btn btn-sm btn-warning mr-2"><small>EDIT <i
                 class="fa fa-pencil-alt"></i></small></a>
             <a href="{% url 'bops:delete' bop.pk %}" class="btn btn-sm btn-danger"><small>DELETE <i
@@ -47,7 +47,7 @@
 
         <!-- section content -->
         <div class="row">
-          <div class="col-sm-6 col-12">
+          <div class="col-sm-9 col-12">
             <div class="results">
               <div class="d-flex">
                 <h4 class="title-1 mr-auto">Campaigns</h4>
@@ -59,7 +59,8 @@
                 <thead class="bg-white-50">
                 <tr>
                   <th scope="col">name</th>
-                  <th scope="col">created_at</th>
+                  <th scope="col">start date</th>
+                  <th scope="col">end date</th>
                   <th scope="col">active</th>
                 </tr>
                 </thead>
@@ -68,6 +69,7 @@
                   <tr>
                     <td><a href="{{ campaign.get_absolute_url }}">{{ campaign.name }}</a></td>
                     <td><a href="">{{ campaign.start_date }}</a></td>
+                    <td><a href="">{{ campaign.end_date }}</a></td>
                     <td>
                       {% if campaign.active %}
                         <img src="{% static 'img/icon-yes.svg' %}"/>
@@ -82,71 +84,71 @@
             </div>
           </div>
 
-          <div class="col-sm-3 col-12">
-            <table class="table dnv-table dnv-table-admin">
-              <thead>
-              <th>Admin</th>
-              <th></th>
-              <th></th>
-              </thead>
-              <tbody>
-              <tr>
-                <td><a href="{% url 'bops:test_planner' bop.pk %}">Test Planner</a></td>
-                <td width="20%" align="center"><a href="{% url 'test_groups:create' bop.pk %}">
-                  <i class="fa fa-plus"></i> Add</a>
-                </td>
-                <td width="20%" align="center"><a href="{% url 'bops:test_planner' bop.pk %}"><i
-                    class="fa fa-pencil-alt"></i> Edit</a></td>
-              </tr>
-              <tr>
-                <td><a href="{% url 'bops:list_safety_functions' bop.pk %}">Safety Functions</a></td>
-                <td width="20%" align="center">
-                  <a href="{% url 'bops:upload_safety_function' bop.pk %}">
-                    <i class="fa fa-plus"></i> Add
-                  </a>
-                </td>
-                <td width="20%" align="center">
-                  <a href="{% url 'bops:list_safety_functions' bop.pk %}"><i
-                      class="fa fa-pencil-alt"></i> Edit
-                  </a>
-                </td>
-              </tr>
+<!--          <div class="col-sm-3 col-12">-->
+<!--            <table class="table dnv-table dnv-table-admin">-->
+<!--              <thead>-->
+<!--              <th>Admin</th>-->
+<!--              <th></th>-->
+<!--              <th></th>-->
+<!--              </thead>-->
+<!--              <tbody>-->
+<!--              <tr>-->
+<!--                <td><a href="{% url 'bops:test_planner' bop.pk %}">Test Planner</a></td>-->
+<!--                <td width="20%" align="center"><a href="{% url 'test_groups:create' bop.pk %}">-->
+<!--                  <i class="fa fa-plus"></i> Add</a>-->
+<!--                </td>-->
+<!--                <td width="20%" align="center"><a href="{% url 'bops:test_planner' bop.pk %}"><i-->
+<!--                    class="fa fa-pencil-alt"></i> Edit</a></td>-->
+<!--              </tr>-->
+<!--              <tr>-->
+<!--                <td><a href="{% url 'bops:list_safety_functions' bop.pk %}">Safety Functions</a></td>-->
+<!--                <td width="20%" align="center">-->
+<!--                  <a href="{% url 'bops:upload_safety_function' bop.pk %}">-->
+<!--                    <i class="fa fa-plus"></i> Add-->
+<!--                  </a>-->
+<!--                </td>-->
+<!--                <td width="20%" align="center">-->
+<!--                  <a href="{% url 'bops:list_safety_functions' bop.pk %}"><i-->
+<!--                      class="fa fa-pencil-alt"></i> Edit-->
+<!--                  </a>-->
+<!--                </td>-->
+<!--              </tr>-->
 
-              <tr>
-                <td><a href="">Certifications</a></td>
-                <td width="20%" align="center"><a href="">
-                  <i class="fa fa-plus"></i> Add</a>
-                </td>
-                <td width="20%" align="center"><a href=""><i
-                    class="fa fa-pencil-alt"></i> Edit</a></td>
-              </tr>
+<!--              <tr>-->
+<!--                <td><a href="">Certifications</a></td>-->
+<!--                <td width="20%" align="center"><a href="">-->
+<!--                  <i class="fa fa-plus"></i> Add</a>-->
+<!--                </td>-->
+<!--                <td width="20%" align="center"><a href=""><i-->
+<!--                    class="fa fa-pencil-alt"></i> Edit</a></td>-->
+<!--              </tr>-->
 
-              <tr>
-                <td><a href="#">Failure Rate</a></td>
-                <td width="20%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                <td width="20%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>
-              </tr>
-              <tr>
-                <td><a href="">Subsystems</a></td>
-                <td width="20%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                <td width="20%" align="center"><a href=""><i
-                    class="fa fa-pencil-alt"></i> Edit</a></td>
-              </tr>
-              <tr>
-                <td><a href="">Components</a></td>
-                <td width="20%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                <td width="20%" align="center"><a href=""><i
-                    class="fa fa-pencil-alt"></i> Edit</a></td>
-              </tr>
-              <tr>
-                <td><a href="">Failure Modes</a></td>
-                <td width="20%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                <td width="20%" align="center"><a href=""><i
-                    class="fa fa-pencil-alt"></i> Edit</a></td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
+<!--              <tr>-->
+<!--                <td><a href="#">Failure Rate</a></td>-->
+<!--                <td width="20%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>-->
+<!--                <td width="20%" align="center"><a href=""><i class="fa fa-pencil-alt"></i> Edit</a></td>-->
+<!--              </tr>-->
+<!--              <tr>-->
+<!--                <td><a href="">Subsystems</a></td>-->
+<!--                <td width="20%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>-->
+<!--                <td width="20%" align="center"><a href=""><i-->
+<!--                    class="fa fa-pencil-alt"></i> Edit</a></td>-->
+<!--              </tr>-->
+<!--              <tr>-->
+<!--                <td><a href="">Components</a></td>-->
+<!--                <td width="20%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>-->
+<!--                <td width="20%" align="center"><a href=""><i-->
+<!--                    class="fa fa-pencil-alt"></i> Edit</a></td>-->
+<!--              </tr>-->
+<!--              <tr>-->
+<!--                <td><a href="">Failure Modes</a></td>-->
+<!--                <td width="20%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>-->
+<!--                <td width="20%" align="center"><a href=""><i-->
+<!--                    class="fa fa-pencil-alt"></i> Edit</a></td>-->
+<!--              </tr>-->
+<!--              </tbody>-->
+<!--            </table>-->
+<!--          </div>-->
           <div class="col-sm-3">
             <div class="info">
               <h4>Info</h4>

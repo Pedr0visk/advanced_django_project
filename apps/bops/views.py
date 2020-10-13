@@ -169,7 +169,8 @@ def test_planner(request, pk):
     bop.testgroupdummy.all().delete()
 
     for test_group in test_groups_set:
-        new_test_group = bop.testgroupdummy.create(test_group=test_group,
+        new_test_group = bop.testgroupdummy.create(name=test_group.name,
+                                                   test_group=test_group,
                                                    start_date=test_group.start_date,
                                                    tests=test_group.tests)
         new_test_group.failure_modes.set(test_group.failure_modes.all().values_list('id', flat=True))
@@ -194,7 +195,8 @@ def test_planner_raw(request, pk):
         try:
             bop.testgroup.all().delete()
             for dummy in test_group_set:
-                new_test_group = bop.testgroup.create(start_date=dummy.start_date,
+                new_test_group = bop.testgroup.create(name=dummy.name,
+                                                      start_date=dummy.start_date,
                                                       tests=dummy.tests)
                 new_test_group.failure_modes.set(dummy.failure_modes.all().values_list('id', flat=True))
         except RequestAborted:

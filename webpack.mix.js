@@ -2,7 +2,7 @@ let mix = require('laravel-mix');
 let staticPath = "apps/campaigns/static/build";
 let resourcesPath = "apps/campaigns/resources";
 
-mix.setResourceRoot("/static/build"); // setResroucesRoots add prefix to url() in scss on example: from /images/close.svg to /static/images/close.svg
+mix.setResourceRoot("/static/build"); // setResroucesRoots add prefix to url() in sass on example: from /images/close.svg to /static/images/close.svg
 mix.setPublicPath("apps/campaigns/static"); // Path where mix-manifest.json is created
 
 
@@ -20,6 +20,7 @@ mix.setPublicPath("apps/campaigns/static"); // Path where mix-manifest.json is c
 // Now you can use full mix api
 // Refer the file that was created in Step 2 to be compile
 mix.js(`${resourcesPath}/js/campaign.js`, `${staticPath}/`);
+mix.sass(`${resourcesPath}/sass/campaign.scss`, `${staticPath}/`);
 
 // Full API
 // mix.js(src, output);

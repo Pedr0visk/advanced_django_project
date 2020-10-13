@@ -126,6 +126,7 @@
                 <thead>
                 <tr>
                   <th scope="col">ID</th>
+                  <th scope="col">name</th>
                   <th scope="col">start date</th>
                   <th scope="col">failure modes</th>
                   <th scope="col">tests <small>(interval, coverage)</small></th>
@@ -139,6 +140,7 @@
                 {% for test_group in test_groups %}
                   <tr>
                     <td width="4%">{{ test_group.id }}</td>
+                    <td width="4%">{{ test_group.name }}</td>
                     <td width="10%">{{ test_group.start_date | date:"m/d/Y" }}</td>
                     <td width="40%">
                       {% for fm in test_group.failure_modes.all %}
