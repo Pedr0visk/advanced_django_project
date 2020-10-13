@@ -7502,6 +7502,16 @@ var popperProps = {
   }
 };
 
+var parseDateTime = function parseDateTime(datetime) {
+  var full_date = datetime.split(' ');
+  var date = full_date[0].split('-');
+  var year = parseInt(date[0]),
+      month = parseInt(date[1]),
+      day = parseInt(date[2]),
+      hour = parseInt(full_date[1]);
+  return new Date(year, month, day, hour);
+};
+
 var formatDate = function formatDate(date) {
   var nextYear = date.getFullYear();
   var nextMonth = ("0" + date.getMonth()).slice(-2);
@@ -7511,14 +7521,8 @@ var formatDate = function formatDate(date) {
 };
 
 var nextDate = function nextDate(start_date, duration) {
-  var full_date = start_date.split(' ');
-  var date = full_date[0].split('-');
-  var year = parseInt(date[0]),
-      month = parseInt(date[1]),
-      day = parseInt(date[2]),
-      hour = parseInt(full_date[1]);
-  start_date = new Date(year, month, day, hour);
-  var nextDate = new Date(start_date.getTime() + duration * 60 * 60 * 1000);
+  var parsed_date = parseDateTime(start_date);
+  var nextDate = new Date(parsed_date.getTime() + duration * 60 * 60 * 1000);
   nextDate = formatDate(nextDate);
   return nextDate;
 };
@@ -7535,7 +7539,7 @@ var nextDate = function nextDate(start_date, duration) {
       dayStr: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
       phases: [],
       schema: {
-        name: 'first schema'
+        name: ''
       },
       phase: {
         name: '',
@@ -7565,39 +7569,23 @@ var nextDate = function nextDate(start_date, duration) {
   },
   methods: {
     createSchema: function createSchema() {
+      var _this2 = this;
+
       var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
       var payload = {
-        campaign: document.getElementById('campaignId').value,
+        campaign: parseInt(document.getElementById('campaignId').value),
         name: this.schema.name,
-        phases: [{
-          name: "phase descend 1",
-          has_test: false,
-          is_drilling: false,
-          start_date: "2020-08-31T00:00:00Z",
-          duration: 80.6,
-          test_groups: []
-        }, {
-          name: "phase test connection 1",
-          has_test: false,
-          is_drilling: false,
-          start_date: "2020-09-02T00:00:00Z",
-          duration: 30.0,
-          test_groups: []
-        }, {
-          name: "phase drilling 1.0",
-          has_test: false,
-          is_drilling: true,
-          start_date: "2020-09-02T00:00:00Z",
-          duration: 467.8,
-          test_groups: []
-        }, {
-          name: "phase test",
-          has_test: true,
-          is_drilling: false,
-          start_date: "2020-09-30T00:00:00Z",
-          duration: 53.9,
-          test_groups: [17, 18, 19]
-        }]
+        phases: this.phases.map(function (phase) {
+          return {
+            name: phase.name,
+            has_test: phase.has_test,
+            is_drilling: phase.is_drilling,
+            duration: phase.duration,
+            start_date: phase.start_date + ':00:00',
+            end_date: phase.end_date + ':00:00',
+            test_groups: phase.test_groups
+          };
+        })
       };
       var config = {
         method: 'post',
@@ -7616,7 +7604,11 @@ var nextDate = function nextDate(start_date, duration) {
           type: "success",
           showConfirmButton: false,
           timer: 1500
-        }).then(function (swalRes) {});
+        }).then(function (swalRes) {
+          _this2.phase = {};
+          _this2.phases = [];
+          _this2.schema = {};
+        });
       });
     },
     add: function add() {

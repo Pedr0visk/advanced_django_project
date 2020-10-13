@@ -177,6 +177,17 @@ const popperProps = {
   }
 }
 
+const parseDateTime = (datetime) => {
+  let full_date = datetime.split(' ')
+  let date = full_date[0].split('-')
+  const year = parseInt(date[0]),
+      month = parseInt(date[1]),
+      day = parseInt(date[2]),
+      hour = parseInt(full_date[1])
+
+  return new Date(year, month, day, hour)
+}
+
 const formatDate = (date) => {
   let nextYear = date.getFullYear()
   let nextMonth = ("0" + (date.getMonth())).slice(-2)
@@ -187,15 +198,8 @@ const formatDate = (date) => {
 }
 
 const nextDate = (start_date, duration) => {
-  let full_date = start_date.split(' ')
-  let date = full_date[0].split('-')
-  const year = parseInt(date[0]),
-      month = parseInt(date[1]),
-      day = parseInt(date[2]),
-      hour = parseInt(full_date[1])
-
-  start_date = new Date(year, month, day, hour)
-  let nextDate = new Date(start_date.getTime() + (duration * 60 * 60 * 1000))
+  const parsed_date = parseDateTime(start_date)
+  let nextDate = new Date(parsed_date.getTime() + (duration * 60 * 60 * 1000))
   nextDate = formatDate(nextDate)
   return nextDate
 }
@@ -213,7 +217,7 @@ export default {
       dayStr: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
       phases: [],
       schema: {
-        name: 'first schema'
+        name: ''
       },
       phase: {
         name: '',
@@ -240,43 +244,21 @@ export default {
   methods: {
     createSchema() {
       const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
       const payload = {
-        campaign: document.getElementById('campaignId').value,
+        campaign: parseInt(document.getElementById('campaignId').value),
         name: this.schema.name,
-        phases: [
-          {
-            name: "phase descend 1",
-            has_test: false,
-            is_drilling: false,
-            start_date: "2020-08-31T00:00:00Z",
-            duration: 80.6,
-            test_groups: []
-          },
-          {
-            name: "phase test connection 1",
-            has_test: false,
-            is_drilling: false,
-            start_date: "2020-09-02T00:00:00Z",
-            duration: 30.0,
-            test_groups: []
-          },
-          {
-            name: "phase drilling 1.0",
-            has_test: false,
-            is_drilling: true,
-            start_date: "2020-09-02T00:00:00Z",
-            duration: 467.8,
-            test_groups: []
-          },
-          {
-            name: "phase test",
-            has_test: true,
-            is_drilling: false,
-            start_date: "2020-09-30T00:00:00Z",
-            duration: 53.9,
-            test_groups: [17,18,19]
+        phases: this.phases.map(phase => {
+          return {
+            name: phase.name,
+            has_test: phase.has_test,
+            is_drilling: phase.is_drilling,
+            duration: phase.duration,
+            start_date: phase.start_date + ':00:00',
+            end_date: phase.end_date + ':00:00',
+            test_groups: phase.test_groups
           }
-        ]
+        })
       }
 
       const config = {
@@ -299,6 +281,9 @@ export default {
                   timer: 1500
                 })
                 .then(swalRes => {
+                  this.phase = {}
+                  this.phases = []
+                  this.schema = {}
                 });
           })
     },
