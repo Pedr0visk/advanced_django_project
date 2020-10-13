@@ -93,15 +93,15 @@
               </tr>
               </thead>
               <tbody>
-              <!--                {% for event in campaign.events.all %}-->
-              <!--                  <tr>-->
-              <!--                    <td><a href="">{{ event.name }}</a></td>-->
-              <!--                    <td><a href="">{{ event.type }}</a></td>-->
-              <!--                    <td><a href="">-->
-              <!--                      {{ event.date|date:"m/d/Y" }}-->
-              <!--                    </a></td>-->
-              <!--                  </tr>-->
-              <!--                {% endfor %}-->
+              {% for c_event in campaign.events.all %}
+              <tr>
+                <td><a href="">{{ c_event.name }}</a></td>
+                <td><a href="">{{ c_event.type }}</a></td>
+                <td><a href="">
+                  {{ c_event.date|date:"m/d/Y" }}
+                </a></td>
+              </tr>
+              {% endfor %}
               </tbody>
             </table>
 

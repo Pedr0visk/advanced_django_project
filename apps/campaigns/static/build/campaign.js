@@ -7535,7 +7535,7 @@ var nextDate = function nextDate(start_date, duration) {
       dayStr: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
       phases: [],
       schema: {
-        name: ''
+        name: 'first schema'
       },
       phase: {
         name: '',
@@ -7564,6 +7564,61 @@ var nextDate = function nextDate(start_date, duration) {
     }];
   },
   methods: {
+    createSchema: function createSchema() {
+      var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      var payload = {
+        campaign: document.getElementById('campaignId').value,
+        name: this.schema.name,
+        phases: [{
+          name: "phase descend 1",
+          has_test: false,
+          is_drilling: false,
+          start_date: "2020-08-31T00:00:00Z",
+          duration: 80.6,
+          test_groups: []
+        }, {
+          name: "phase test connection 1",
+          has_test: false,
+          is_drilling: false,
+          start_date: "2020-09-02T00:00:00Z",
+          duration: 30.0,
+          test_groups: []
+        }, {
+          name: "phase drilling 1.0",
+          has_test: false,
+          is_drilling: true,
+          start_date: "2020-09-02T00:00:00Z",
+          duration: 467.8,
+          test_groups: []
+        }, {
+          name: "phase test",
+          has_test: true,
+          is_drilling: false,
+          start_date: "2020-09-30T00:00:00Z",
+          duration: 53.9,
+          test_groups: [17, 18, 19]
+        }]
+      };
+      var config = {
+        method: 'post',
+        url: '/api/schemas/',
+        headers: {
+          'X-CSRFToken': csrftoken
+        },
+        data: payload
+      };
+      var that = this;
+      this.$http(config).then(function (response) {
+        console.log(response);
+        that.$swal({
+          title: "Campaign created successfully!",
+          text: 'go to campaign list to see it',
+          type: "success",
+          showConfirmButton: false,
+          timer: 1500
+        }).then(function (swalRes) {});
+      });
+    },
     add: function add() {
       this.phase._id = this.$uuid.v1();
       var newPhases = [].concat(_toConsumableArray(this.phases), [this.phase]);
@@ -7623,18 +7678,6 @@ var nextDate = function nextDate(start_date, duration) {
     toggleAction: function toggleAction() {
       this.isUpdate = !this.isUpdate;
       this.clear();
-    },
-    createCampaign: function createCampaign() {
-      var that = this;
-      this.$http.post('api/campaigns').then(function (response) {
-        that.$swal({
-          title: "Campaign created successfully!",
-          text: 'go to campaign list to see it',
-          type: "success",
-          showConfirmButton: false,
-          timer: 1500
-        }).then(function (swalRes) {});
-      });
     }
   },
   watch: {
@@ -15172,7 +15215,7 @@ var render = function() {
               on: {
                 click: function($event) {
                   $event.preventDefault()
-                  return _vm.createCampaign($event)
+                  return _vm.createSchema($event)
                 }
               }
             },

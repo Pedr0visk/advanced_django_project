@@ -66,7 +66,7 @@ class Phase(models.Model):
                                on_delete=models.CASCADE,
                                related_name='phases')
 
-    test_groups = models.ManyToManyField(TestGroup)
+    test_groups = models.ManyToManyField(TestGroup, related_name='test_groups')
     start_date = models.DateTimeField()
     duration = models.FloatField()
     has_test = models.BooleanField(default=False)

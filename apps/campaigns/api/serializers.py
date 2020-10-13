@@ -1,9 +1,12 @@
 from rest_framework import serializers
+
 from apps.campaigns.models import Campaign, Phase, Schema
 
 
 class PhaseSerializer(serializers.ModelSerializer):
-    test_groups = serializers.ListField(child=serializers.IntegerField(), required=False)
+    test_groups = serializers.ListField(child=serializers.IntegerField(),
+                                        required=False,
+                                        write_only=True)
 
     class Meta:
         model = Phase
