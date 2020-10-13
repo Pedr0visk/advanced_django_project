@@ -18,7 +18,19 @@ class SchemaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Schema
-        fields = ('name', 'schemas',)
+        fields = ('name', 'phases', 'campaign')
+
+    def create(self, validated_data):
+        phases_data = validated_data.pop('phases')
+        schema = Schema.objects.create(**validated_data)
+
+        for phase_data in phases_data:
+            test_groups = phase_data.pop('test_groups')
+            phase = Phase.objects.create(schema=schema, **phase_data)
+            if phase_data['has_test']:
+                phase.test_groups.set(test_groups)
+
+        return schema
 
 
 class CampaignSerializer(serializers.ModelSerializer):

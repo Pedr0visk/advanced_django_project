@@ -74,4 +74,4 @@ def dashboard(request):
     bops = Bop.objects.all()
 
     context = {'bops': bops}
-    return render(request, 'accounts/dashboard.html', context)
+    return render(request, 'bops/bop_list.html', context)

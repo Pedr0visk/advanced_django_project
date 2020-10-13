@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.admin.utils import NestedObjects
-from django.db import connection
 from django.urls import reverse
 
 

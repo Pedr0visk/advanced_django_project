@@ -64,7 +64,7 @@ class Phase(models.Model):
     name = models.CharField(max_length=255)
     schema = models.ForeignKey(Schema,
                                on_delete=models.CASCADE,
-                               related_name='schemas')
+                               related_name='phases')
 
     test_groups = models.ManyToManyField(TestGroup)
     start_date = models.DateTimeField()
