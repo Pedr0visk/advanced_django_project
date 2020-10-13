@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from apps.bops.models import Bop
 from .serializers import BopSerializer
+from apps.test_groups.api.serializers import TestGroupSerializer
 from rest_framework import status
 
 
@@ -18,5 +19,6 @@ class BopViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         if request.method == 'GET':
-            serializer = BopSerializer(bop)
+            test_groups = bop.testgroup.all()
+            serializer = TestGroupSerializer(test_groups, many=True)
             return Response(serializer.data)

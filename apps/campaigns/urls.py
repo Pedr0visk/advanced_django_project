@@ -7,6 +7,7 @@ urlpatterns = [
     path('add/<int:bop_pk>/', views.campaign_create, name="create"),
     path('<int:campaign_pk>/', views.campaign_index, name="index"),
     path('<int:campaign_pk>/change/', views.campaign_update, name="update"),
-    path('phases/<int:pk>/change/', views.phase_update, name="update_phase"),
+    path('schemas/<int:pk>/change/', views.phase_update, name="update_phase"),
     path('<int:campaign_pk>/run/', views.campaign_metrics, name="run"),
+    path('<int:campaign_pk>/schemas/add/', views.schema_create, name="create_schema"),
 ]

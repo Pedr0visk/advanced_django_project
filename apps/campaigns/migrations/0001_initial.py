@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255)),
-                ('campaign', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='phases', to='campaigns.Campaign')),
+                ('campaign', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='schemas', to='campaigns.Campaign')),
             ],
         ),
         migrations.CreateModel(
@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
                 ('duration', models.FloatField()),
                 ('has_test', models.BooleanField(default=False)),
                 ('is_drilling', models.BooleanField(default=False)),
-                ('schema', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='phases', to='campaigns.Schema')),
+                ('schema', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='schemas', to='campaigns.Schema')),
                 ('test_groups', models.ManyToManyField(to='test_groups.TestGroup')),
             ],
         ),

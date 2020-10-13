@@ -3,62 +3,7 @@
     <div class="form-group row">
       <label class="col-sm-1 col-form-label col-form-label-sm">Name:</label>
       <div class="col-sm-3">
-        <input type="text" v-model="campaign.name">
-        <small class="form-text text-muted">
-          Required.
-        </small>
-      </div>
-    </div>
-    <hr/>
-
-    <div class="form-group row">
-      <label class="col-sm-1 col-form-label col-form-label-sm">Description:</label>
-      <div class="col-sm-3">
-        <textarea name="" id="" cols="30" rows="10">{{ campaign.description }}</textarea>
-        <small class="form-text text-muted">
-          Optional.
-        </small>
-      </div>
-    </div>
-    <hr/>
-
-    <div class="form-group row">
-      <label class="col-sm-1 col-form-label col-form-label-sm">Active:</label>
-      <div class="col-sm-3">
-        <input type="checkbox" v-model="campaign.active">
-        <small class="form-text text-muted">
-          Required.
-        </small>
-      </div>
-    </div>
-    <hr/>
-
-    <div class="form-group row">
-      <label class="col-sm-1 col-form-label col-form-label-sm">Start Date:</label>
-      <div class="col-sm-2">
-        <input type="date" v-model="campaign.start_date">
-        <small class="form-text text-muted">
-          Note: you are 3 hours behind server time.
-        </small>
-      </div>
-    </div>
-    <hr/>
-
-    <div class="form-group row">
-      <label class="col-sm-1 col-form-label col-form-label-sm">End Date:</label>
-      <div class="col-sm-2">
-        <input type="date" v-model="campaign.end_date">
-        <small class="form-text text-muted">
-          Note: you are 3 hours behind server time.
-        </small>
-      </div>
-    </div>
-    <hr/>
-
-    <div class="form-group row">
-      <label class="col-sm-1 col-form-label col-form-label-sm">Well Name:</label>
-      <div class="col-sm-3">
-        <input type="text" v-model="campaign.well_name">
+        <input type="text" v-model="schema.name">
         <small class="form-text text-muted">
           Required.
         </small>
@@ -68,7 +13,6 @@
 
     <fieldset class="form-fieldset">
       <h4>Phases</h4>
-
       <div class="px-3">
         <div class="form-add-phase row">
           <!-- name -->
@@ -209,7 +153,7 @@
           <button type="submit" class="btn btn-secondary">
             Save and add another
           </button>
-          <button @click.prevent="createCampaign" type="submit" class="btn btn-primary">
+          <button @click.prevent="createSchema" type="submit" class="btn btn-primary">
             SAVE
           </button>
         </div>
@@ -267,15 +211,10 @@ export default {
       testGroups: [],
       btnStr: 'pick',
       dayStr: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-      campaign: {
-        name: '',
-        active: true,
-        description: '',
-        start_date: '',
-        end_date: '',
-        well_name: '',
-      },
       phases: [],
+      schema: {
+        name: 'first schema'
+      },
       phase: {
         name: '',
         has_test: false,
@@ -299,6 +238,70 @@ export default {
     ]
   },
   methods: {
+    createSchema() {
+      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      const payload = {
+        campaign: document.getElementById('campaignId').value,
+        name: this.schema.name,
+        phases: [
+          {
+            name: "phase descend 1",
+            has_test: false,
+            is_drilling: false,
+            start_date: "2020-08-31T00:00:00Z",
+            duration: 80.6,
+            test_groups: []
+          },
+          {
+            name: "phase test connection 1",
+            has_test: false,
+            is_drilling: false,
+            start_date: "2020-09-02T00:00:00Z",
+            duration: 30.0,
+            test_groups: []
+          },
+          {
+            name: "phase drilling 1.0",
+            has_test: false,
+            is_drilling: true,
+            start_date: "2020-09-02T00:00:00Z",
+            duration: 467.8,
+            test_groups: []
+          },
+          {
+            name: "phase test",
+            has_test: true,
+            is_drilling: false,
+            start_date: "2020-09-30T00:00:00Z",
+            duration: 53.9,
+            test_groups: [17,18,19]
+          }
+        ]
+      }
+
+      const config = {
+        method: 'post',
+        url: '/api/schemas/',
+        headers: {'X-CSRFToken': csrftoken},
+        data: payload
+      }
+
+      let that = this
+      this.$http(config)
+          .then(response => {
+            console.log(response)
+            that
+                .$swal({
+                  title: "Campaign created successfully!",
+                  text: 'go to campaign list to see it',
+                  type: "success",
+                  showConfirmButton: false,
+                  timer: 1500
+                })
+                .then(swalRes => {
+                });
+          })
+    },
     add() {
       this.phase._id = this.$uuid.v1()
       let newPhases = [...this.phases, this.phase]
@@ -357,23 +360,7 @@ export default {
       this.isUpdate = !this.isUpdate
       this.clear()
     },
-    createCampaign() {
-      let that = this
-      this.$http
-          .post('api/campaigns')
-          .then(response => {
-            that
-                .$swal({
-                  title: "Campaign created successfully!",
-                  text: 'go to campaign list to see it',
-                  type: "success",
-                  showConfirmButton: false,
-                  timer: 1500
-                })
-                .then(swalRes => {
-                });
-          })
-    },
+
   },
   watch: {
     'phase.duration': function (val, oldVal) {

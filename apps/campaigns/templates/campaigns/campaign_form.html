@@ -2,141 +2,130 @@
 {% load static %}
 {% load manager_extras %}
 
-
-
 {% block breadcrumb %}
-  <div class="page-title">
-    <div class="container-fluid px-5">
-      <div class="page-title-wrapper-2">
-        <div class="page-title-heading-2">
-          <a href="{% url 'bops:index' bop_pk %}">Bop</a>
-          <span class="fa fa-chevron-right"></span>
-          {% if campaign %}
-            <span class="current-page">{{ campaign.name }}</span>
-          {% else %}
-            <span class="current-page">Add new campaign</span>
-          {% endif %}
-        </div>
+<div class="page-title">
+  <div class="container-fluid px-5">
+    <div class="page-title-wrapper-2">
+      <div class="page-title-heading-2">
+        <a href="{% url 'bops:index' bop_pk %}">Bop</a>
+        <span class="fa fa-chevron-right"></span>
+        {% if campaign %}
+        <span class="current-page">{{ campaign.name }}</span>
+        {% else %}
+        <span class="current-page">Add new campaign</span>
+        {% endif %}
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
 
 {% block main %}
-  <div class="section bg-white">
-    <div class="container-fluid px-5">
-      {% if campaign %}
-        <h4 class="title-1 mb-4">Change Campaign</h4>
-      {% else %}
-        <h4 class="title-1 mb-4">Add Campaign</h4>
-      {% endif %}
-      <div class="section-content">
-        <div class="row">
-          <div class="col-sm-12">
-            <form method="POST" id="campaignForm">
-              {% csrf_token %}
-              <input type="hidden" id="bopId" value="{{ bop_pk }}" name="bop">
+<div class="section bg-white" id="app">
+  <div class="container-fluid px-5">
+    {% if campaign %}
+    <h4 class="title-1 mb-4">Change Campaign</h4>
+    {% else %}
+    <h4 class="title-1 mb-4">Add Campaign</h4>
+    {% endif %}
+    <div class="section-content">
+      <div class="row">
+        <div class="col-sm-12">
+          <form method="POST" id="campaignForm">
+            {% csrf_token %}
+            {% if campaign %}
+            <span class="current-page">{{ campaign.bop.pk }}</span>
+            {% else %}
+            <input type="hidden" id="bopId" value="{{ bop_pk }}" name="bop">
+            {% endif %}
 
-              <div class="form-group row">
-                <label class="col-sm-1 col-form-label col-form-label-sm">Name:</label>
-                <div class="col-sm-3">
-                  {{ form.name }}
-                  <small class="form-text text-muted">
-                    Required.
-                  </small>
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label col-form-label-sm">Name:</label>
+              <div class="col-sm-3">
+                {{ form.name }}
+                <small class="form-text text-muted">
+                  Required.
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label col-form-label-sm">Description:</label>
+              <div class="col-sm-3">
+                {{ form.description }}
+                <small class="form-text text-muted">
+                  Optional.
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label col-form-label-sm">Active:</label>
+              <div class="col-sm-3">
+                {{ form.active }}
+                <small class="form-text text-muted">
+                  Required.
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label col-form-label-sm">Start Date:</label>
+              <div class="col-sm-2">
+                {{ form.start_date }}
+
+                <small class="form-text text-muted">
+                  Note: you are 3 hours behind server time.
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label col-form-label-sm">End Date:</label>
+              <div class="col-sm-2">
+                {{ form.end_date }}
+                <small class="form-text text-muted">
+                  Note: you are 3 hours behind server time.
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label col-form-label-sm">Well Name:</label>
+              <div class="col-sm-3">
+                {{ form.well_name }}
+                <small class="form-text text-muted">
+                  Required.
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+            <div class="card p-2 bg-light text-right">
+              <div class="d-flex">
+                <div>
+                  <a href="{% url 'bops:index' bop_pk %}" class="btn btn-danger">Cancel</a>
+                </div>
+                <div class="ml-auto">
+                  <button type="submit" class="btn btn-secondary">
+                    Save and add another
+                  </button>
+                  <button type="submit" class="btn btn-primary">
+                    SAVE
+                  </button>
                 </div>
               </div>
-              <hr/>
-
-              <div class="form-group row">
-                <label class="col-sm-1 col-form-label col-form-label-sm">Description:</label>
-                <div class="col-sm-3">
-                  {{ form.description }}
-                  <small class="form-text text-muted">
-                    Optional.
-                  </small>
-                </div>
-              </div>
-              <hr/>
-
-              <div class="form-group row">
-                <label class="col-sm-1 col-form-label col-form-label-sm">Active:</label>
-                <div class="col-sm-3">
-                  {{ form.active }}
-                  <small class="form-text text-muted">
-                    Required.
-                  </small>
-                </div>
-              </div>
-              <hr/>
-
-              <div class="form-group row">
-                <label class="col-sm-1 col-form-label col-form-label-sm">Start Date:</label>
-                <div class="col-sm-2">
-                  {{ form.start_date }}
-                  <small class="form-text text-muted">
-                    Note: you are 3 hours behind server time.
-                  </small>
-                </div>
-              </div>
-              <hr/>
-
-              <div class="form-group row">
-                <label class="col-sm-1 col-form-label col-form-label-sm">End Date:</label>
-                <div class="col-sm-2">
-                  {{ form.end_date }}
-                  <small class="form-text text-muted">
-                    Note: you are 3 hours behind server time.
-                  </small>
-                </div>
-              </div>
-              <hr/>
-
-              <div class="form-group row">
-                <label class="col-sm-1 col-form-label col-form-label-sm">Well Name:</label>
-                <div class="col-sm-3">
-                  {{ form.well_name }}
-                  <small class="form-text text-muted">
-                    Required.
-                  </small>
-                </div>
-              </div>
-              <hr/>
-
-              <fieldset class="form-fieldset">
-                <h4>Phases</h4>
-                <div id="app">
-                  <demo-component></demo-component>
-                </div>
-
-                <table>
-                  <tbody id="phases_list"></tbody>
-                </table>
-              </fieldset>
-
-              <div class="card p-2 bg-light text-right">
-                <div class="d-flex">
-                  <div>
-                    <a href="{% url 'bops:index' bop_pk %}" class="btn btn-danger">Cancel</a>
-                  </div>
-                  <div class="ml-auto">
-                    <button type="submit" class="btn btn-secondary">
-                      Save and add another
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                      SAVE
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
 
-{% block scripts %}
-  <script type="text/javascript" src="{% static 'build/campaign.js' %}"></script>
-{% endblock %}

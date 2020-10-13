@@ -41,7 +41,21 @@
             {% csrf_token %}
             <!-- name field -->
             <div class="form-group row">
-              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Start
+              <label class="col-sm-2 col-form-label col-form-label-sm">Name</label>
+              <div class="col-sm-2">
+                {{ form.name }}
+              </div>
+              <div class="col-sm-10 offset-2">
+                <small class="form-text text-muted">
+                  Required
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+            <!-- name field -->
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label col-form-label-sm">Start
                 date:</label>
               <div class="col-sm-2">
                 {{ form.start_date }}

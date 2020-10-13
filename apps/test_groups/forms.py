@@ -6,7 +6,7 @@ from ..failuremodes.models import FailureMode
 class TestGroupForm(ModelForm):
     class Meta:
         model = TestGroup
-        fields = ['start_date', 'tests', 'failure_modes']
+        fields = ['name', 'start_date', 'tests', 'failure_modes']
 
         widgets = {
             'start_date': DateInput(format='%Y-%m-%d',
@@ -24,7 +24,7 @@ class TestGroupDummyForm(ModelForm):
 
     class Meta:
         model = TestGroupDummy
-        fields = ['start_date', 'tests', 'failure_modes']
+        fields = ['name', 'start_date', 'tests', 'failure_modes']
 
         widgets = {
             'start_date': DateInput(format='%Y-%m-%d',

@@ -2,11 +2,12 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from apps.campaigns.api.views import CampaignViewSet
+from apps.campaigns.api.views import CampaignViewSet, SchemaViewSet
 from apps.bops.api.views import BopViewSet
 
 router = routers.DefaultRouter()
 router.register('campaigns', CampaignViewSet)
+router.register('schemas', SchemaViewSet)
 router.register('bops', BopViewSet)
 
 urlpatterns = [
