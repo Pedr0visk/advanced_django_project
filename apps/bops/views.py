@@ -5,7 +5,7 @@ from django.core.exceptions import RequestAborted
 from django.db import transaction
 from django.shortcuts import render, redirect
 from django.core.cache import cache
-
+from django.core.cache.utils import make_template_fragment_key
 from .models import Bop, SafetyFunction
 from .forms import BopForm, SafetyFunctionForm
 from .load_bop import Loader as BopLoader

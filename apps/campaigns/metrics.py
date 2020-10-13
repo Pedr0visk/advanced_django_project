@@ -167,8 +167,11 @@ def calculate_SF_PFDS(camp, m):
     failure_modes = len(m)
 
     dt = 1
-    t_op = get_t_op(t_start_camp, t_end_camp, 0, dt)
-    v_integrate = calculate_failure_modes(m, failure_modes, False, dt, False, steps, t_op)
+    #teste = Phase.objects.filter(has_test=True)
+    #print("testes", teste)
+    teste = 0
+    t_op = get_t_op(t_start_camp, t_end_camp, teste, dt)
+    v_integrate = calculate_failure_modes(m, failure_modes, teste, dt, False, steps, t_op)
     # print("v integrate",v_integrate)
 
     safety_function_numbers = SafetyFunction.objects.filter(bop=camp.bop).count()
@@ -347,6 +350,28 @@ def get_t_op(start, end, testes, dt):
     # start = history[0][0]
     # end = history[campanhas - 1][1]
 
+    inicio = []
+    end = []
+    # for phase in phases:
+    #     if phase.is_drilling:
+    #         inicio.append(phase.start_date)
+    #         fim = phase.start_date + datetime.timedelta(hours=phase.duration)    # é necessario ordenar os fins e inicios
+    #         end.append(fim)
+    #     elif phase.has_test:
+    #         end.append(phase.start_date)
+    #         fim = phase.start_date + datetime.timedelta(hours=phase.duration)
+    #         inicio.append(fim)
+    # cont = 0
+    # t=[]
+    # for i in range(len(inicio)):
+    #     steps = (fim[i] - inicio[i]).hours
+    #     for j in range(0,steps):
+    #         t.append(cont)
+    #         cont = cont + 1
+
+
+
+
     firststart = start
     firstend = end
 
@@ -356,17 +381,21 @@ def get_t_op(start, end, testes, dt):
     t_op[0][0] = 0
     t_op[0][1] = 0
 
+    cont = 0
+
+
+
     for i in range(1, tmax):
 
         dataatual = start + datetime.timedelta(days=i)
 
-        if dataatual > firstend:
+        if dataatual > firststart:
             flag = flag + 1
-            # firststart = history[flag][0]
+            # firststart = history[flag][0]     #atualização da data da campanha
             # firstend = history[flag][1]
             work = 0
 
-        if dataatual >= firststart and work == 0:
+        elif dataatual >= firststart and work == 0:
             # firstend = history[flag][1]
             work = 1
 
