@@ -41,7 +41,7 @@ class Campaign(models.Model):
         return days, hours
 
     def success_url(self):
-        return reverse('bops:index', args=[self.bop.pk])
+        return reverse('campaigns:index', args=[self.pk])
 
     def get_absolute_url(self):
         return reverse('campaigns:index', args=[self.pk])

@@ -7,11 +7,13 @@
   <div class="container-fluid px-5">
     <div class="page-title-wrapper-2">
       <div class="page-title-heading-2">
-        <a href="{% url 'campaigns:index' campaign.pk %}">{{ campaign.name }}</a>
-        <span class="fa fa-chevron-right"></span>
         {% if schema %}
+        <a href="{% url 'campaigns:index' schema.campaign.pk %}">{{ schema.campaign.name }}</a>
+        <span class="fa fa-chevron-right"></span>
         <span class="current-page">{{ schema.name }}</span>
         {% else %}
+        <a href="{% url 'campaigns:index' campaign.pk %}">{{ campaign.name }}</a>
+        <span class="fa fa-chevron-right"></span>
         <span class="current-page">Add new schema</span>
         {% endif %}
       </div>
@@ -33,9 +35,15 @@
         <div class="col-sm-12">
           <form method="POST" id="schemaForm">
             {% csrf_token %}
+            {% if campaign %}
             <input type="hidden" id="bopId" value="{{ campaign.bop.pk }}" name="bop">
             <input type="hidden" id="campaignId" value="{{ campaign.pk }}" name="campaign">
             <schema-form></schema-form>
+            {% else %}
+            <input type="hidden" id="bopId" value="{{ schema.campaign.bop.pk }}" name="bop">
+            <input type="hidden" id="schemaId" value="{{ schema.pk }}" name="schema">
+            <schema-update></schema-update>
+            {% endif %}
           </form>
         </div>
       </div>
