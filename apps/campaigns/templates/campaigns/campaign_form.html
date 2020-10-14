@@ -10,7 +10,9 @@
         <a href="{% url 'bops:index' bop_pk %}">Bop</a>
         <span class="fa fa-chevron-right"></span>
         {% if campaign %}
-        <span class="current-page">{{ campaign.name }}</span>
+        <a href="{% url 'campaigns:index' campaign.pk %}">{{ campaign.name }}</a>
+        <span class="fa fa-chevron-right"></span>
+        <span class="current-page">Change</span>
         {% else %}
         <span class="current-page">Add new campaign</span>
         {% endif %}
