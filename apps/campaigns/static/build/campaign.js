@@ -7946,9 +7946,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
 var popperProps = {
   popperOptions: {
     modifiers: {
@@ -8021,7 +8018,7 @@ var nextDate = function nextDate(start_date, duration) {
       return _this.testGroups = response.data;
     });
     this.$http.get("/api/schemas/".concat(schemaId, "/")).then(function (response) {
-      _this.name = response.data.name;
+      _this.schema.name = response.data.name;
       _this.phases = response.data.phases.map(function (phase) {
         return {
           name: phase.name,
@@ -8037,10 +8034,9 @@ var nextDate = function nextDate(start_date, duration) {
     });
   },
   methods: {
-    createSchema: function createSchema() {
-      var _this2 = this;
-
+    updateSchema: function updateSchema() {
       var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      var schemaId = document.getElementById('schemaId').value;
       var payload = {
         campaign: parseInt(document.getElementById('campaignId').value),
         name: this.schema.name,
@@ -8057,28 +8053,23 @@ var nextDate = function nextDate(start_date, duration) {
         })
       };
       var config = {
-        method: 'post',
-        url: '/api/schemas/',
+        method: 'put',
+        url: "/api/schemas/".concat(schemaId, "/"),
         headers: {
           'X-CSRFToken': csrftoken
         },
         data: payload
       };
-      console.log(payload);
       var that = this;
       this.$http(config).then(function (response) {
         console.log(response);
         that.$swal({
-          title: "Campaign created successfully!",
+          title: "Campaign updated successfully!",
           text: 'go to campaign list to see it',
           type: "success",
           showConfirmButton: false,
           timer: 1500
-        }).then(function (swalRes) {
-          _this2.phase = {};
-          _this2.phases = [];
-          _this2.schema = {};
-        });
+        }).then(function (swalRes) {});
       });
     },
     add: function add() {
@@ -16244,19 +16235,13 @@ var render = function() {
         _c("div", { staticClass: "ml-auto" }, [
           _c(
             "button",
-            { staticClass: "btn btn-secondary", attrs: { type: "submit" } },
-            [_vm._v("\n          Save and add another\n        ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
             {
               staticClass: "btn btn-primary",
               attrs: { type: "submit" },
               on: {
                 click: function($event) {
                   $event.preventDefault()
-                  return _vm.createSchema($event)
+                  return _vm.updateSchema($event)
                 }
               }
             },
@@ -16301,14 +16286,9 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", [
-      _c(
-        "a",
-        {
-          staticClass: "btn btn-danger",
-          attrs: { href: "{% url 'bops:index' bop_pk %}" }
-        },
-        [_vm._v("Cancel")]
-      )
+      _c("a", { staticClass: "btn btn-danger", attrs: { href: "" } }, [
+        _vm._v("Cancel")
+      ])
     ])
   }
 ]

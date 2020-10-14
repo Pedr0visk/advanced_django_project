@@ -28,9 +28,10 @@
     <div class="container-fluid px-5">
       <!-- section title -->
       <div class="section-title mb-3">
-        <p>Schema {{ schema.name }}</p>
+        <p>Schema "{{ schema.name }}"</p>
         <div>
-          <a href="" class="btn btn-sm btn-warning mr-2">
+          <a href="{% url 'campaigns:update_schema' schema.campaign.pk schema.pk %}"
+             class="btn btn-sm btn-warning mr-2">
             <small>EDIT
               <i class="fa fa-pencil-alt"></i></small>
           </a>

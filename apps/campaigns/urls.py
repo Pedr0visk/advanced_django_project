@@ -16,5 +16,5 @@ urlpatterns = [
          name="delete_schema"),
     path('<int:campaign_pk>/schemas/<int:schema_pk>/change/',
          views.schema_update,
-         name="change_schema"),
+         name="update_schema"),
 ]

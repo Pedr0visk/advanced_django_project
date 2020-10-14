@@ -157,13 +157,10 @@
     <div class="card p-2 bg-light text-right">
       <div class="d-flex">
         <div>
-          <a href="{% url 'bops:index' bop_pk %}" class="btn btn-danger">Cancel</a>
+          <a href="" class="btn btn-danger">Cancel</a>
         </div>
         <div class="ml-auto">
-          <button type="submit" class="btn btn-secondary">
-            Save and add another
-          </button>
-          <button @click.prevent="createSchema" type="submit" class="btn btn-primary">
+          <button @click.prevent="updateSchema" type="submit" class="btn btn-primary">
             SAVE
           </button>
         </div>
@@ -250,7 +247,7 @@ export default {
     this.$http
         .get(`/api/schemas/${schemaId}/`)
         .then(response => {
-          this.name = response.data.name
+          this.schema.name = response.data.name
           this.phases = response.data.phases.map(phase => ({
             name: phase.name,
             has_test: phase.has_test,
@@ -264,8 +261,9 @@ export default {
         })
   },
   methods: {
-    createSchema() {
+    updateSchema() {
       const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      let schemaId = document.getElementById('schemaId').value
 
       const payload = {
         campaign: parseInt(document.getElementById('campaignId').value),
@@ -284,13 +282,11 @@ export default {
       }
 
       const config = {
-        method: 'post',
-        url: '/api/schemas/',
+        method: 'put',
+        url: `/api/schemas/${schemaId}/`,
         headers: {'X-CSRFToken': csrftoken},
         data: payload
       }
-
-      console.log(payload)
 
       let that = this
       this.$http(config)
@@ -298,16 +294,14 @@ export default {
             console.log(response)
             that
                 .$swal({
-                  title: "Campaign created successfully!",
+                  title: "Campaign updated successfully!",
                   text: 'go to campaign list to see it',
                   type: "success",
                   showConfirmButton: false,
                   timer: 1500
                 })
                 .then(swalRes => {
-                  this.phase = {}
-                  this.phases = []
-                  this.schema = {}
+
                 });
           })
     },

@@ -34,6 +34,20 @@ class SchemaSerializer(serializers.ModelSerializer):
 
         return schema
 
+    def update(self, instance, validated_data):
+        phases_data = validated_data.pop('phases')
+        instance.name = validated_data.get('name', instance.name)
+        instance.save()
+        instance.phases.all().delete()
+
+        for phase_data in phases_data:
+            test_groups = phase_data.pop('test_groups')
+            phase = Phase.objects.create(schema=instance, **phase_data)
+            if phase.has_test:
+                phase.test_groups.set(test_groups)
+
+        return instance
+
 
 class CampaignSerializer(serializers.ModelSerializer):
     schemas = SchemaSerializer()

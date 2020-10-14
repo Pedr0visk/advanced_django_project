@@ -10,7 +10,9 @@
         {% if schema %}
         <a href="{% url 'campaigns:index' schema.campaign.pk %}">{{ schema.campaign.name }}</a>
         <span class="fa fa-chevron-right"></span>
-        <span class="current-page">{{ schema.name }}</span>
+        <a href="{% url 'campaigns:schema_index' schema.campaign.pk schema.pk %}">{{ schema.name }}</a>
+        <span class="fa fa-chevron-right"></span>
+        <span class="current-page">Change</span>
         {% else %}
         <a href="{% url 'campaigns:index' campaign.pk %}">{{ campaign.name }}</a>
         <span class="fa fa-chevron-right"></span>
@@ -41,6 +43,7 @@
             <schema-form></schema-form>
             {% else %}
             <input type="hidden" id="bopId" value="{{ schema.campaign.bop.pk }}" name="bop">
+            <input type="hidden" id="campaignId" value="{{ schema.campaign.pk }}" name="campaign">
             <input type="hidden" id="schemaId" value="{{ schema.pk }}" name="schema">
             <schema-update></schema-update>
             {% endif %}
