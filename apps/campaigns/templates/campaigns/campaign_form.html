@@ -10,7 +10,9 @@
         <a href="{% url 'bops:index' bop_pk %}">Bop</a>
         <span class="fa fa-chevron-right"></span>
         {% if campaign %}
-        <span class="current-page">{{ campaign.name }}</span>
+        <a href="{% url 'campaigns:index' campaign.pk %}">{{ campaign.name }}</a>
+        <span class="fa fa-chevron-right"></span>
+        <span class="current-page">Change</span>
         {% else %}
         <span class="current-page">Add new campaign</span>
         {% endif %}
@@ -33,11 +35,7 @@
         <div class="col-sm-12">
           <form method="POST" id="campaignForm">
             {% csrf_token %}
-            {% if campaign %}
-            <span class="current-page">{{ campaign.bop.pk }}</span>
-            {% else %}
             <input type="hidden" id="bopId" value="{{ bop_pk }}" name="bop">
-            {% endif %}
 
             <div class="form-group row">
               <label class="col-sm-1 col-form-label col-form-label-sm">Name:</label>
@@ -109,7 +107,7 @@
             <div class="card p-2 bg-light text-right">
               <div class="d-flex">
                 <div>
-                  <a href="{% url 'bops:index' bop_pk %}" class="btn btn-danger">Cancel</a>
+                  <a href="" class="btn btn-danger">Cancel</a>
                 </div>
                 <div class="ml-auto">
                   <button type="submit" class="btn btn-secondary">

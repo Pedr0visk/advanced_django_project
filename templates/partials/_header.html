@@ -21,19 +21,20 @@
 
             {% if '/bops/' in request.path %}
             <li class="nav-item">
-              <a href="" class="nav-link"><i class="fa fa-sign-out-alt"></i> Test Planner</a>
+              <a href="{% url 'bops:test_planner' bop.pk %}" class="nav-link"><i class="fa fa-flask"></i> Test
+                Planner</a>
             </li>
 
             <li class="nav-item">
-              <a href="" class="nav-link"><i class="fa fa-sign-out-alt"></i> Safety Function</a>
+              <a href="" class="nav-link"><i class="fa fa-hard-hat"></i> Safety Function</a>
             </li>
 
             <li class="nav-item">
-              <a href="" class="nav-link"><i class="fa fa-sign-out-alt"></i> Failure Rate</a>
+              <a href="" class="nav-link"><i class="fa fa-bug"></i> Failure Rate</a>
             </li>
 
             <li class="nav-item">
-              <a href="" class="nav-link"><i class="fa fa-sign-out-alt"></i> Hierarchy</a>
+              <a href="" class="nav-link"><i class="fa fa-sitemap"></i> Hierarchy</a>
             </li>
 
             <li class="nav-item">

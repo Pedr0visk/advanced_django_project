@@ -116,6 +116,7 @@
             <th>test groups</th>
             <th></th>
             <th></th>
+            <th></th>
           </tr>
           </thead>
           <tbody>
@@ -138,6 +139,15 @@
                   @click.prevent="remove(phase._id)"
                   href="" class="px-2"><i class="fa fa-times text-danger"></i></a>
             </td>
+            <td width="10%">
+              <a
+                  @click.prevent="addBefore(key)"
+                  href="" class="px-2">add before</a>
+            </td><td width="10%">
+              <a
+                  @click.prevent="addAfter(key)"
+                  href="" class="px-2">add after</a>
+            </td>
           </tr>
           </tbody>
         </table>
@@ -147,13 +157,10 @@
     <div class="card p-2 bg-light text-right">
       <div class="d-flex">
         <div>
-          <a href="{% url 'bops:index' bop_pk %}" class="btn btn-danger">Cancel</a>
+          <a href="" class="btn btn-danger">Cancel</a>
         </div>
         <div class="ml-auto">
-          <button type="submit" class="btn btn-secondary">
-            Save and add another
-          </button>
-          <button @click.prevent="createSchema" type="submit" class="btn btn-primary">
+          <button @click.prevent="updateSchema" type="submit" class="btn btn-primary">
             SAVE
           </button>
         </div>
@@ -190,7 +197,7 @@ const parseDateTime = (datetime) => {
 
 const formatDate = (date) => {
   let nextYear = date.getFullYear()
-  let nextMonth = ("0" + (date.getMonth())).slice(-2)
+  let nextMonth = ("0" + (date.getMonth() + 1)).slice(-2)
   let nextDay = ("0" + (date.getDate())).slice(-2)
   let nextHour = ("0" + (date.getHours())).slice(-2)
 
@@ -232,14 +239,31 @@ export default {
   },
   mounted() {
     let bopId = document.getElementById('bopId').value
-    console.log(bopId)
+    let schemaId = document.getElementById('schemaId').value
     this.$http
         .get(`/api/bops/${bopId}/test-groups/`)
         .then(response => this.testGroups = response.data)
+
+    this.$http
+        .get(`/api/schemas/${schemaId}/`)
+        .then(response => {
+          this.schema.name = response.data.name
+          this.phases = response.data.phases.map(phase => ({
+            name: phase.name,
+            has_test: phase.has_test,
+            is_drilling: phase.is_drilling,
+            duration: phase.duration,
+            start_date: formatDate(new Date(phase.start_date)),
+            end_date: nextDate(formatDate(new Date(phase.start_date)), phase.duration),
+            test_groups: phase.test_groups
+          }))
+          this.phase.start_date = this.phases[this.phases.length - 1].end_date
+        })
   },
   methods: {
-    createSchema() {
+    updateSchema() {
       const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      let schemaId = document.getElementById('schemaId').value
 
       const payload = {
         campaign: parseInt(document.getElementById('campaignId').value),
@@ -258,13 +282,11 @@ export default {
       }
 
       const config = {
-        method: 'post',
-        url: '/api/schemas/',
+        method: 'put',
+        url: `/api/schemas/${schemaId}/`,
         headers: {'X-CSRFToken': csrftoken},
         data: payload
       }
-
-      console.log(payload)
 
       let that = this
       this.$http(config)
@@ -272,16 +294,14 @@ export default {
             console.log(response)
             that
                 .$swal({
-                  title: "Campaign created successfully!",
+                  title: "Campaign updated successfully!",
                   text: 'go to campaign list to see it',
                   type: "success",
                   showConfirmButton: false,
                   timer: 1500
                 })
                 .then(swalRes => {
-                  this.phase = {}
-                  this.phases = []
-                  this.schema = {}
+
                 });
           })
     },
@@ -308,6 +328,22 @@ export default {
         this.phases[index] = phase
       }
       this.toggleAction()
+    },
+    addBefore(index) {
+      let prevPhase = this.phases[index-1]
+      this.phases.splice(index, 0, Object.assign(this.phase, {
+        _id: this.$uuid.v1(),
+        start_date: prevPhase.end_date
+      }))
+      this.clear()
+    },
+    addAfter(index) {
+      let prevPhase = this.phases[index]
+      this.phases.splice(index+1, 0, Object.assign(this.phase, {
+        _id: this.$uuid.v1(),
+        start_date: prevPhase.end_date
+      }))
+      this.clear()
     },
     remove(id) {
       console.log('deleting')
