@@ -19,29 +19,6 @@
               <a href="{% url 'dashboard' %}" class="nav-link"><i class="fa fa-home"></i> Main</a>
             </li>
 
-            {% if '/bops/' in request.path %}
-            <li class="nav-item">
-              <a href="{% url 'bops:test_planner' bop.pk %}" class="nav-link"><i class="fa fa-flask"></i> Test
-                Planner</a>
-            </li>
-
-            <li class="nav-item">
-              <a href="" class="nav-link"><i class="fa fa-hard-hat"></i> Safety Function</a>
-            </li>
-
-            <li class="nav-item">
-              <a href="" class="nav-link"><i class="fa fa-bug"></i> Failure Rate</a>
-            </li>
-
-            <li class="nav-item">
-              <a href="" class="nav-link"><i class="fa fa-sitemap"></i> Hierarchy</a>
-            </li>
-
-            <li class="nav-item">
-              <a href="" class="nav-link"><i class="fa fa-chart-bar"></i> Summary Results</a>
-            </li>
-            {% endif %}
-
             {% if request.user.groups.all.0.name == 'Admin' %}
             <li class="nav-item">
               <a href="{% url 'list_accounts' %}" class="nav-link"><i class="fa fa-users"></i> Users</a>
