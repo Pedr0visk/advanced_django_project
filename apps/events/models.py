@@ -31,7 +31,7 @@ class Event(models.Model):
     date = models.DateTimeField()
 
     def success_url(self):
-        return reverse('campaigns:index', args=[self.campaign_id])
+        return reverse('campaigns:index', args=[self.campaign.pk])
 
     def __str__(self):
         return self.name

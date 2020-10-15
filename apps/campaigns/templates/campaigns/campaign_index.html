@@ -52,7 +52,6 @@
           <div class="results">
             <div class="d-flex  px-1">
               <h4 class="title-1 mr-auto">Schemas</h4>
-              <a href="" class="mr-4">all <i class="fa fa-pencil-alt text-warning"></i></a>
               <a href="{% url 'campaigns:create_schema' campaign.pk %}" class="">add schema <i class="fa fa-plus
                 text-success"></i></a>
             </div>
@@ -86,8 +85,7 @@
           <div class="results">
             <div class="d-flex  px-1">
               <h4 class="title-1 mr-auto">Events</h4>
-              <a href="" class="mr-4">all <i class="fa fa-pencil-alt text-warning"></i></a>
-              <a href="{% url 'events:create' campaign.pk %}" class="">add event <i
+              <a href="{% url 'events:create' campaign.pk %}" >add event <i
                   class="fa fa-plus text-success"></i></a>
             </div>
 
@@ -102,7 +100,7 @@
               <tbody>
               {% for c_event in campaign.events.all %}
               <tr>
-                <td><a href="">{{ c_event.name }}</a></td>
+                <td><a href="{% url 'events:update' c_event.pk %}">{{ c_event.name }}</a></td>
                 <td><a href="">{{ c_event.type }}</a></td>
                 <td><a href="">
                   {{ c_event.date }}
