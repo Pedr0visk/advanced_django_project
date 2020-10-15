@@ -114,6 +114,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_sweetalert2__WEBPACK_IMPORTED
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('datetime-picker', _livelybone_vue_datepicker__WEBPACK_IMPORTED_MODULE_4__["DatetimePicker"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component("demo-component", __webpack_require__(/*! ./components/DemoComponent.vue */ "./apps/campaigns/resources/js/components/DemoComponent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component("schema-form", __webpack_require__(/*! ./components/SchemaForm.vue */ "./apps/campaigns/resources/js/components/SchemaForm.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component("schema-update", __webpack_require__(/*! ./components/SchemaUpdate.vue */ "./apps/campaigns/resources/js/components/SchemaUpdate.vue")["default"]);
 /*
  * By extending the Vue prototype with a new '$bus' property
  * we can easily access our global event bus from any child component.
@@ -271,6 +272,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SchemaForm_vue_vue_type_template_id_c54382a6___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SchemaForm_vue_vue_type_template_id_c54382a6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./apps/campaigns/resources/js/components/SchemaUpdate.vue":
+/*!*****************************************************************!*\
+  !*** ./apps/campaigns/resources/js/components/SchemaUpdate.vue ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SchemaUpdate_vue_vue_type_template_id_1eb8601c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SchemaUpdate.vue?vue&type=template&id=1eb8601c& */ "./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=template&id=1eb8601c&");
+/* harmony import */ var _SchemaUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SchemaUpdate.vue?vue&type=script&lang=js& */ "./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _SchemaUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SchemaUpdate_vue_vue_type_template_id_1eb8601c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SchemaUpdate_vue_vue_type_template_id_1eb8601c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "apps/campaigns/resources/js/components/SchemaUpdate.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************!*\
+  !*** ./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SchemaUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./SchemaUpdate.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SchemaUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=template&id=1eb8601c&":
+/*!************************************************************************************************!*\
+  !*** ./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=template&id=1eb8601c& ***!
+  \************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SchemaUpdate_vue_vue_type_template_id_1eb8601c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./SchemaUpdate.vue?vue&type=template&id=1eb8601c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=template&id=1eb8601c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SchemaUpdate_vue_vue_type_template_id_1eb8601c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SchemaUpdate_vue_vue_type_template_id_1eb8601c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -7502,6 +7572,16 @@ var popperProps = {
   }
 };
 
+var parseDateTime = function parseDateTime(datetime) {
+  var full_date = datetime.split(' ');
+  var date = full_date[0].split('-');
+  var year = parseInt(date[0]),
+      month = parseInt(date[1]),
+      day = parseInt(date[2]),
+      hour = parseInt(full_date[1]);
+  return new Date(year, month, day, hour);
+};
+
 var formatDate = function formatDate(date) {
   var nextYear = date.getFullYear();
   var nextMonth = ("0" + date.getMonth()).slice(-2);
@@ -7511,14 +7591,8 @@ var formatDate = function formatDate(date) {
 };
 
 var nextDate = function nextDate(start_date, duration) {
-  var full_date = start_date.split(' ');
-  var date = full_date[0].split('-');
-  var year = parseInt(date[0]),
-      month = parseInt(date[1]),
-      day = parseInt(date[2]),
-      hour = parseInt(full_date[1]);
-  start_date = new Date(year, month, day, hour);
-  var nextDate = new Date(start_date.getTime() + duration * 60 * 60 * 1000);
+  var parsed_date = parseDateTime(start_date);
+  var nextDate = new Date(parsed_date.getTime() + duration * 60 * 60 * 1000);
   nextDate = formatDate(nextDate);
   return nextDate;
 };
@@ -7535,7 +7609,7 @@ var nextDate = function nextDate(start_date, duration) {
       dayStr: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
       phases: [],
       schema: {
-        name: 'first schema'
+        name: ''
       },
       phase: {
         name: '',
@@ -7552,52 +7626,30 @@ var nextDate = function nextDate(start_date, duration) {
     var _this = this;
 
     var bopId = document.getElementById('bopId').value;
+    console.log(bopId);
     this.$http.get("/api/bops/".concat(bopId, "/test-groups/")).then(function (response) {
       return _this.testGroups = response.data;
     });
-    this.testGroups = [{
-      _id: 1,
-      name: 'test group 1'
-    }, {
-      _id: 2,
-      name: 'test group 2'
-    }];
   },
   methods: {
     createSchema: function createSchema() {
+      var _this2 = this;
+
       var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
       var payload = {
-        campaign: document.getElementById('campaignId').value,
+        campaign: parseInt(document.getElementById('campaignId').value),
         name: this.schema.name,
-        phases: [{
-          name: "phase descend 1",
-          has_test: false,
-          is_drilling: false,
-          start_date: "2020-08-31T00:00:00Z",
-          duration: 80.6,
-          test_groups: []
-        }, {
-          name: "phase test connection 1",
-          has_test: false,
-          is_drilling: false,
-          start_date: "2020-09-02T00:00:00Z",
-          duration: 30.0,
-          test_groups: []
-        }, {
-          name: "phase drilling 1.0",
-          has_test: false,
-          is_drilling: true,
-          start_date: "2020-09-02T00:00:00Z",
-          duration: 467.8,
-          test_groups: []
-        }, {
-          name: "phase test",
-          has_test: true,
-          is_drilling: false,
-          start_date: "2020-09-30T00:00:00Z",
-          duration: 53.9,
-          test_groups: [17, 18, 19]
-        }]
+        phases: this.phases.map(function (phase) {
+          return {
+            name: phase.name,
+            has_test: phase.has_test,
+            is_drilling: phase.is_drilling,
+            duration: phase.duration,
+            start_date: phase.start_date + ':00:00',
+            end_date: phase.end_date + ':00:00',
+            test_groups: phase.test_groups
+          };
+        })
       };
       var config = {
         method: 'post',
@@ -7607,11 +7659,412 @@ var nextDate = function nextDate(start_date, duration) {
         },
         data: payload
       };
+      console.log(payload);
       var that = this;
       this.$http(config).then(function (response) {
         console.log(response);
         that.$swal({
           title: "Campaign created successfully!",
+          text: 'go to campaign list to see it',
+          type: "success",
+          showConfirmButton: false,
+          timer: 1500
+        }).then(function (swalRes) {
+          _this2.phase = {};
+          _this2.phases = [];
+          _this2.schema = {};
+        });
+      });
+    },
+    add: function add() {
+      this.phase._id = this.$uuid.v1();
+      var newPhases = [].concat(_toConsumableArray(this.phases), [this.phase]);
+      this.phases = newPhases;
+      this.clear();
+    },
+    update: function update(id) {
+      var index = this.phases.findIndex(function (phase) {
+        return phase._id == id;
+      });
+      this.phases[index] = this.phase;
+      var length = this.phases.length;
+      var phase;
+      var prevPhase;
+      index += 1;
+
+      for (index; index < length; index++) {
+        prevPhase = this.phases[index - 1];
+        phase = this.phases[index];
+        phase.start_date = nextDate(prevPhase.start_date, prevPhase.duration);
+        phase.end_date = nextDate(phase.start_date, phase.duration);
+        this.phases[index] = phase;
+      }
+
+      this.toggleAction();
+    },
+    remove: function remove(id) {
+      console.log('deleting');
+      this.phases = this.phases.filter(function (phase) {
+        return phase._id != id;
+      });
+    },
+    select: function select(index) {
+      this.isUpdate = true;
+      this.phase = _objectSpread({}, this.phases[index]);
+    },
+    displayTests: function displayTests(e) {
+      var value = e.target.value;
+      if (value == 5) return this.hasTest = true;
+      return this.hasTest = false;
+    },
+    clear: function clear() {
+      var lastPhase = this.phases[this.phases.length - 1];
+      var start_date = lastPhase.start_date,
+          duration = lastPhase.duration;
+      var next_date = nextDate(start_date, duration);
+      this.phase = {
+        name: '',
+        duration: null,
+        start_date: next_date,
+        end_date: '',
+        test_groups: [],
+        has_test: false,
+        is_drilling: false
+      };
+    },
+    toggleAction: function toggleAction() {
+      this.isUpdate = !this.isUpdate;
+      this.clear();
+    }
+  },
+  watch: {
+    'phase.duration': function phaseDuration(val, oldVal) {
+      if (val !== null && oldVal !== null) {
+        this.phase.end_date = nextDate(this.phase.start_date, this.phase.duration);
+      }
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var popperProps = {
+  popperOptions: {
+    modifiers: {
+      preventOverflow: {
+        padding: 20
+      }
+    } // onUpdate: function (data) {
+    //   console.log(JSON.stringify(data.attributes))
+    // }
+
+  }
+};
+
+var parseDateTime = function parseDateTime(datetime) {
+  var full_date = datetime.split(' ');
+  var date = full_date[0].split('-');
+  var year = parseInt(date[0]),
+      month = parseInt(date[1]),
+      day = parseInt(date[2]),
+      hour = parseInt(full_date[1]);
+  return new Date(year, month, day, hour);
+};
+
+var formatDate = function formatDate(date) {
+  var nextYear = date.getFullYear();
+  var nextMonth = ("0" + (date.getMonth() + 1)).slice(-2);
+  var nextDay = ("0" + date.getDate()).slice(-2);
+  var nextHour = ("0" + date.getHours()).slice(-2);
+  return "".concat(nextYear, "-").concat(nextMonth, "-").concat(nextDay, " ").concat(nextHour);
+};
+
+var nextDate = function nextDate(start_date, duration) {
+  var parsed_date = parseDateTime(start_date);
+  var nextDate = new Date(parsed_date.getTime() + duration * 60 * 60 * 1000);
+  nextDate = formatDate(nextDate);
+  return nextDate;
+};
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      timeStr: ['hour'],
+      isM: false,
+      isUpdate: false,
+      popperProps: popperProps,
+      testGroups: [],
+      btnStr: 'pick',
+      dayStr: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+      phases: [],
+      schema: {
+        name: ''
+      },
+      phase: {
+        name: '',
+        has_test: false,
+        is_drilling: false,
+        duration: null,
+        start_date: '',
+        end_date: '',
+        test_groups: []
+      }
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    var bopId = document.getElementById('bopId').value;
+    var schemaId = document.getElementById('schemaId').value;
+    this.$http.get("/api/bops/".concat(bopId, "/test-groups/")).then(function (response) {
+      return _this.testGroups = response.data;
+    });
+    this.$http.get("/api/schemas/".concat(schemaId, "/")).then(function (response) {
+      _this.schema.name = response.data.name;
+      _this.phases = response.data.phases.map(function (phase) {
+        return {
+          name: phase.name,
+          has_test: phase.has_test,
+          is_drilling: phase.is_drilling,
+          duration: phase.duration,
+          start_date: formatDate(new Date(phase.start_date)),
+          end_date: nextDate(formatDate(new Date(phase.start_date)), phase.duration),
+          test_groups: phase.test_groups
+        };
+      });
+      _this.phase.start_date = _this.phases[_this.phases.length - 1].end_date;
+    });
+  },
+  methods: {
+    updateSchema: function updateSchema() {
+      var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      var schemaId = document.getElementById('schemaId').value;
+      var payload = {
+        campaign: parseInt(document.getElementById('campaignId').value),
+        name: this.schema.name,
+        phases: this.phases.map(function (phase) {
+          return {
+            name: phase.name,
+            has_test: phase.has_test,
+            is_drilling: phase.is_drilling,
+            duration: phase.duration,
+            start_date: phase.start_date + ':00:00',
+            end_date: phase.end_date + ':00:00',
+            test_groups: phase.test_groups
+          };
+        })
+      };
+      var config = {
+        method: 'put',
+        url: "/api/schemas/".concat(schemaId, "/"),
+        headers: {
+          'X-CSRFToken': csrftoken
+        },
+        data: payload
+      };
+      var that = this;
+      this.$http(config).then(function (response) {
+        console.log(response);
+        that.$swal({
+          title: "Campaign updated successfully!",
           text: 'go to campaign list to see it',
           type: "success",
           showConfirmButton: false,
@@ -7644,6 +8097,22 @@ var nextDate = function nextDate(start_date, duration) {
       }
 
       this.toggleAction();
+    },
+    addBefore: function addBefore(index) {
+      var prevPhase = this.phases[index - 1];
+      this.phases.splice(index, 0, Object.assign(this.phase, {
+        _id: this.$uuid.v1(),
+        start_date: prevPhase.end_date
+      }));
+      this.clear();
+    },
+    addAfter: function addAfter(index) {
+      var prevPhase = this.phases[index];
+      this.phases.splice(index + 1, 0, Object.assign(this.phase, {
+        _id: this.$uuid.v1(),
+        start_date: prevPhase.end_date
+      }));
+      this.clear();
     },
     remove: function remove(id) {
       console.log('deleting');
@@ -14906,7 +15375,7 @@ var render = function() {
               }
             }),
             _vm._v(" "),
-            _c("small", [_vm._v("duration")])
+            _c("small", [_vm._v("duration (h)")])
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-1" }, [
@@ -15147,7 +15616,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(phase.end_date))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(phase.duration))]),
+                _c("td", [_vm._v(_vm._s(phase.duration) + "h")]),
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(phase.has_test))]),
                 _vm._v(" "),
@@ -15239,7 +15708,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("end date")]),
         _vm._v(" "),
-        _c("th", [_vm._v("duration")]),
+        _c("th", [_vm._v("duration (h)")]),
         _vm._v(" "),
         _c("th", [_vm._v("Test")]),
         _vm._v(" "),
@@ -15266,6 +15735,560 @@ var staticRenderFns = [
         },
         [_vm._v("Cancel")]
       )
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=template&id=1eb8601c&":
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=template&id=1eb8601c& ***!
+  \******************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "form-group row" }, [
+      _c(
+        "label",
+        { staticClass: "col-sm-1 col-form-label col-form-label-sm" },
+        [_vm._v("Name:")]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-sm-3" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.schema.name,
+              expression: "schema.name"
+            }
+          ],
+          attrs: { type: "text" },
+          domProps: { value: _vm.schema.name },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.schema, "name", $event.target.value)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("small", { staticClass: "form-text text-muted" }, [
+          _vm._v("\n        Required.\n      ")
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("hr"),
+    _vm._v(" "),
+    _c("fieldset", { staticClass: "form-fieldset" }, [
+      _c("h4", [_vm._v("Phases")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "px-3" }, [
+        _c("div", { staticClass: "form-add-phase row" }, [
+          _c("div", { staticClass: "col-2" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.phase.name,
+                  expression: "phase.name"
+                }
+              ],
+              staticClass: "form-control form-control-sm",
+              attrs: { placeholder: "phase name", type: "text" },
+              domProps: { value: _vm.phase.name },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.phase, "name", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("small", [_vm._v("phase name")])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "col-3" },
+            [
+              _c("datetime-picker", {
+                attrs: {
+                  placeholder: "start date",
+                  dayStr: _vm.dayStr,
+                  btnStr: _vm.btnStr,
+                  timeType: "hour",
+                  popperProps: _vm.popperProps,
+                  timeStr: _vm.timeStr
+                },
+                model: {
+                  value: _vm.phase.start_date,
+                  callback: function($$v) {
+                    _vm.$set(_vm.phase, "start_date", $$v)
+                  },
+                  expression: "phase.start_date"
+                }
+              }),
+              _vm._v(" "),
+              _c("small", [_vm._v("format: Year-Month-Day Hour")])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "col-3" },
+            [
+              _c("datetime-picker", {
+                attrs: {
+                  placeholder: "end date",
+                  dayStr: _vm.dayStr,
+                  btnStr: _vm.btnStr,
+                  timeType: "hour",
+                  popperProps: _vm.popperProps,
+                  timeStr: _vm.timeStr
+                },
+                model: {
+                  value: _vm.phase.end_date,
+                  callback: function($$v) {
+                    _vm.$set(_vm.phase, "end_date", $$v)
+                  },
+                  expression: "phase.end_date"
+                }
+              }),
+              _vm._v(" "),
+              _c("small", [_vm._v("format: Year-Month-Day Hour")])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-1" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.phase.duration,
+                  expression: "phase.duration"
+                }
+              ],
+              staticClass: "form-control form-control-sm",
+              attrs: { type: "number" },
+              domProps: { value: _vm.phase.duration },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.phase, "duration", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("small", [_vm._v("duration (h)")])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-1" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.phase.has_test,
+                  expression: "phase.has_test"
+                }
+              ],
+              attrs: { type: "checkbox" },
+              domProps: {
+                checked: Array.isArray(_vm.phase.has_test)
+                  ? _vm._i(_vm.phase.has_test, null) > -1
+                  : _vm.phase.has_test
+              },
+              on: {
+                change: function($event) {
+                  var $$a = _vm.phase.has_test,
+                    $$el = $event.target,
+                    $$c = $$el.checked ? true : false
+                  if (Array.isArray($$a)) {
+                    var $$v = null,
+                      $$i = _vm._i($$a, $$v)
+                    if ($$el.checked) {
+                      $$i < 0 &&
+                        _vm.$set(_vm.phase, "has_test", $$a.concat([$$v]))
+                    } else {
+                      $$i > -1 &&
+                        _vm.$set(
+                          _vm.phase,
+                          "has_test",
+                          $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                        )
+                    }
+                  } else {
+                    _vm.$set(_vm.phase, "has_test", $$c)
+                  }
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("small", [_vm._v("Test")])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-1" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.phase.is_drilling,
+                  expression: "phase.is_drilling"
+                }
+              ],
+              attrs: { type: "checkbox" },
+              domProps: {
+                checked: Array.isArray(_vm.phase.is_drilling)
+                  ? _vm._i(_vm.phase.is_drilling, null) > -1
+                  : _vm.phase.is_drilling
+              },
+              on: {
+                change: function($event) {
+                  var $$a = _vm.phase.is_drilling,
+                    $$el = $event.target,
+                    $$c = $$el.checked ? true : false
+                  if (Array.isArray($$a)) {
+                    var $$v = null,
+                      $$i = _vm._i($$a, $$v)
+                    if ($$el.checked) {
+                      $$i < 0 &&
+                        _vm.$set(_vm.phase, "is_drilling", $$a.concat([$$v]))
+                    } else {
+                      $$i > -1 &&
+                        _vm.$set(
+                          _vm.phase,
+                          "is_drilling",
+                          $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                        )
+                    }
+                  } else {
+                    _vm.$set(_vm.phase, "is_drilling", $$c)
+                  }
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("small", [_vm._v("is drilling")])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.phase.has_test,
+                  expression: "phase.has_test"
+                }
+              ],
+              staticClass: "col-2"
+            },
+            [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.phase.test_groups,
+                      expression: "phase.test_groups"
+                    }
+                  ],
+                  staticClass: "form-control form-control-sm",
+                  attrs: { multiple: "" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.phase,
+                        "test_groups",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                _vm._l(_vm.testGroups, function(group) {
+                  return _c("option", { domProps: { value: group.id } }, [
+                    _vm._v(_vm._s(group.name) + "\n            ")
+                  ])
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c("small", [_vm._v("step")])
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-1" }, [
+            _c(
+              "button",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.isUpdate,
+                    expression: "!isUpdate"
+                  }
+                ],
+                staticClass: "btn-standard",
+                attrs: { type: "submit" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.add($event)
+                  }
+                }
+              },
+              [_vm._v("save\n          ")]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "d-flex" }, [
+              _c(
+                "button",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.isUpdate,
+                      expression: "isUpdate"
+                    }
+                  ],
+                  staticClass: "btn-standard mr-2",
+                  attrs: { type: "submit" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.update(_vm.phase._id)
+                    }
+                  }
+                },
+                [_vm._v("update\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.isUpdate,
+                      expression: "isUpdate"
+                    }
+                  ],
+                  staticClass: "btn-standard",
+                  attrs: { type: "submit" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.toggleAction($event)
+                    }
+                  }
+                },
+                [_vm._v("cancel\n            ")]
+              )
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("hr"),
+        _vm._v(" "),
+        _c("table", { staticClass: "phase-list table m-0 dnv-table" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            _vm._l(_vm.phases, function(phase, key) {
+              return _c("tr", { key: key }, [
+                _c("td", [_vm._v(_vm._s(phase.name))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(phase.start_date))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(phase.end_date))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(phase.duration) + "h")]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(phase.has_test))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(phase.is_drilling))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(phase.test_groups))]),
+                _vm._v(" "),
+                _c("td", { attrs: { width: "5%" } }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "px-2",
+                      attrs: { href: "" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.select(key)
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "fa fa-pencil-alt text-warning" })]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("td", { attrs: { width: "5%" } }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "px-2",
+                      attrs: { href: "" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.remove(phase._id)
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "fa fa-times text-danger" })]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("td", { attrs: { width: "10%" } }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "px-2",
+                      attrs: { href: "" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.addBefore(key)
+                        }
+                      }
+                    },
+                    [_vm._v("add before")]
+                  )
+                ]),
+                _c("td", { attrs: { width: "10%" } }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "px-2",
+                      attrs: { href: "" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.addAfter(key)
+                        }
+                      }
+                    },
+                    [_vm._v("add after")]
+                  )
+                ])
+              ])
+            }),
+            0
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card p-2 bg-light text-right" }, [
+      _c("div", { staticClass: "d-flex" }, [
+        _vm._m(1),
+        _vm._v(" "),
+        _c("div", { staticClass: "ml-auto" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              attrs: { type: "submit" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.updateSchema($event)
+                }
+              }
+            },
+            [_vm._v("\n          SAVE\n        ")]
+          )
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("start date")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("end date")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("duration (h)")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Test")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("is drilling")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("test groups")]),
+        _vm._v(" "),
+        _c("th"),
+        _vm._v(" "),
+        _c("th"),
+        _vm._v(" "),
+        _c("th")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("a", { staticClass: "btn btn-danger", attrs: { href: "" } }, [
+        _vm._v("Cancel")
+      ])
     ])
   }
 ]

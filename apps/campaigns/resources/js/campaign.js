@@ -20,7 +20,10 @@ Vue.component(
     "schema-form",
     require("./components/SchemaForm.vue").default
 );
-
+Vue.component(
+    "schema-update",
+    require("./components/SchemaUpdate.vue").default
+);
 
 /*
  * By extending the Vue prototype with a new '$bus' property

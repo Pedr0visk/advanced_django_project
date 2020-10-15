@@ -1,12 +1,11 @@
 from rest_framework import serializers
 
 from apps.campaigns.models import Campaign, Phase, Schema
+from apps.test_groups.models import TestGroup
 
 
 class PhaseSerializer(serializers.ModelSerializer):
-    test_groups = serializers.ListField(child=serializers.IntegerField(),
-                                        required=False,
-                                        write_only=True)
+    test_groups = serializers.PrimaryKeyRelatedField(many=True, queryset=TestGroup.objects.all())
 
     class Meta:
         model = Phase
@@ -30,10 +29,24 @@ class SchemaSerializer(serializers.ModelSerializer):
         for phase_data in phases_data:
             test_groups = phase_data.pop('test_groups')
             phase = Phase.objects.create(schema=schema, **phase_data)
-            if phase_data['has_test']:
+            if phase.has_test:
                 phase.test_groups.set(test_groups)
 
         return schema
+
+    def update(self, instance, validated_data):
+        phases_data = validated_data.pop('phases')
+        instance.name = validated_data.get('name', instance.name)
+        instance.save()
+        instance.phases.all().delete()
+
+        for phase_data in phases_data:
+            test_groups = phase_data.pop('test_groups')
+            phase = Phase.objects.create(schema=instance, **phase_data)
+            if phase.has_test:
+                phase.test_groups.set(test_groups)
+
+        return instance
 
 
 class CampaignSerializer(serializers.ModelSerializer):
