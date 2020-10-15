@@ -89,7 +89,7 @@ def bop_delete(request, pk):
 def index(request, pk):
     bop = Bop.objects.prefetch_related('campaigns').get(pk=pk)
     request.session['bop_pk'] = bop.pk
-    cache.set('bop', bop)
+    #cache.set('bop', bop)
 
     context = {'bop': bop}
     return render(request, 'bops/index.html', context)
