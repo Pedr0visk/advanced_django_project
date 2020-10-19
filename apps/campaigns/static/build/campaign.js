@@ -88,7 +88,7 @@
 
 /***/ "./apps/campaigns/resources/js/campaign.js":
 /*!*************************************************!*\
-  !*** ./apps/campaigns/resources/js/campaign.js ***!
+  !*** ./apps/campaigns/resources/js/app.js ***!
   \*************************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -281,14 +281,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!*****************************************************************!*\
   !*** ./apps/campaigns/resources/js/components/SchemaUpdate.vue ***!
   \*****************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SchemaUpdate_vue_vue_type_template_id_1eb8601c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SchemaUpdate.vue?vue&type=template&id=1eb8601c& */ "./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=template&id=1eb8601c&");
 /* harmony import */ var _SchemaUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SchemaUpdate.vue?vue&type=script&lang=js& */ "./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _SchemaUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _SchemaUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -318,13 +319,15 @@ component.options.__file = "apps/campaigns/resources/js/components/SchemaUpdate.
 /*!******************************************************************************************!*\
   !*** ./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=script&lang=js& ***!
   \******************************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SchemaUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./SchemaUpdate.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SchemaUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SchemaUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SchemaUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SchemaUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SchemaUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SchemaUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -7771,441 +7774,10 @@ var nextDate = function nextDate(start_date, duration) {
 /*!**************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./apps/campaigns/resources/js/components/SchemaUpdate.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var popperProps = {
-  popperOptions: {
-    modifiers: {
-      preventOverflow: {
-        padding: 20
-      }
-    } // onUpdate: function (data) {
-    //   console.log(JSON.stringify(data.attributes))
-    // }
-
-  }
-};
-
-var parseDateTime = function parseDateTime(datetime) {
-  var full_date = datetime.split(' ');
-  var date = full_date[0].split('-');
-  var year = parseInt(date[0]),
-      month = parseInt(date[1]),
-      day = parseInt(date[2]),
-      hour = parseInt(full_date[1]);
-  return new Date(year, month, day, hour);
-};
-
-var formatDate = function formatDate(date) {
-  var nextYear = date.getFullYear();
-  var nextMonth = ("0" + (date.getMonth() + 1)).slice(-2);
-  var nextDay = ("0" + date.getDate()).slice(-2);
-  var nextHour = ("0" + date.getHours()).slice(-2);
-  return "".concat(nextYear, "-").concat(nextMonth, "-").concat(nextDay, " ").concat(nextHour);
-};
-
-var nextDate = function nextDate(start_date, duration) {
-  var parsed_date = parseDateTime(start_date);
-  var nextDate = new Date(parsed_date.getTime() + duration * 60 * 60 * 1000);
-  nextDate = formatDate(nextDate);
-  return nextDate;
-};
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      errors: [],
-      timeStr: ['hour'],
-      isM: false,
-      isUpdate: false,
-      popperProps: popperProps,
-      testGroups: [],
-      btnStr: 'pick',
-      dayStr: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-      phases: [],
-      schema: {
-        name: ''
-      },
-      phase: {
-        _id: null,
-        name: '',
-        has_test: false,
-        is_drilling: false,
-        duration: null,
-        start_date: '',
-        end_date: '',
-        test_groups: []
-      }
-    };
-  },
-  mounted: function mounted() {
-    var _this = this;
-
-    var bopId = document.getElementById('bopId').value;
-    var schemaId = document.getElementById('schemaId').value;
-    this.$http.get("/api/bops/".concat(bopId, "/test-groups/")).then(function (response) {
-      return _this.testGroups = response.data;
-    });
-    this.$http.get("/api/schemas/".concat(schemaId, "/")).then(function (response) {
-      _this.schema.name = response.data.name;
-      console.log(response);
-      _this.phases = response.data.phases.map(function (phase) {
-        return {
-          _id: _this.$uuid.v1(),
-          name: phase.name,
-          has_test: phase.has_test,
-          is_drilling: phase.is_drilling,
-          duration: phase.duration,
-          start_date: formatDate(new Date(phase.start_date)),
-          end_date: nextDate(formatDate(new Date(phase.start_date)), phase.duration),
-          test_groups: phase.test_groups
-        };
-      });
-      _this.phase.start_date = _this.phases[_this.phases.length - 1].end_date;
-    });
-  },
-  methods: {
-    updateSchema: function updateSchema() {
-      var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-      var schemaId = document.getElementById('schemaId').value;
-      var payload = {
-        campaign: parseInt(document.getElementById('campaignId').value),
-        name: this.schema.name,
-        phases: this.phases.map(function (phase) {
-          return {
-            name: phase.name,
-            has_test: phase.has_test,
-            is_drilling: phase.is_drilling,
-            duration: phase.duration,
-            start_date: phase.start_date + ':00:00',
-            end_date: phase.end_date + ':00:00',
-            test_groups: phase.test_groups
-          };
-        })
-      };
-      var config = {
-        method: 'put',
-        url: "/api/schemas/".concat(schemaId, "/"),
-        headers: {
-          'X-CSRFToken': csrftoken
-        },
-        data: payload
-      };
-      var that = this;
-      this.$http(config).then(function (response) {
-        console.log(response);
-        that.$swal({
-          title: "Campaign updated successfully!",
-          text: 'go to campaign list to see it',
-          type: "success",
-          showConfirmButton: false,
-          timer: 1500
-        }).then(function (swalRes) {});
-      });
-    },
-    add: function add() {
-      if (!this.checkForm()) return;
-      this.phase._id = this.$uuid.v1();
-      var newPhases = [].concat(_toConsumableArray(this.phases), [this.phase]);
-      this.phases = newPhases;
-      this.clear();
-    },
-    update: function update(id) {
-      if (!this.checkForm()) return;
-      var index = this.phases.findIndex(function (phase) {
-        return phase._id == id;
-      });
-      this.phases[index] = this.phase;
-      var length = this.phases.length;
-      var phase;
-      var prevPhase;
-      index += 1;
-
-      for (index; index < length; index++) {
-        prevPhase = this.phases[index - 1];
-        phase = this.phases[index];
-        phase.start_date = nextDate(prevPhase.start_date, prevPhase.duration);
-        phase.end_date = nextDate(phase.start_date, phase.duration);
-        this.phases[index] = phase;
-      }
-
-      this.toggleAction();
-    },
-    addBefore: function addBefore(index) {
-      var prevPhase = this.phases[index - 1];
-      this.phases.splice(index, 0, Object.assign(this.phase, {
-        _id: this.$uuid.v1(),
-        start_date: prevPhase.end_date
-      }));
-      this.select(index);
-    },
-    addAfter: function addAfter(index) {
-      var prevPhase = this.phases[index];
-      this.phases.splice(index + 1, 0, Object.assign(this.phase, {
-        _id: this.$uuid.v1(),
-        start_date: prevPhase.end_date
-      }));
-      this.select(index + 1);
-    },
-    remove: function remove(id) {
-      console.log('deleting');
-      this.phases = this.phases.filter(function (phase) {
-        return phase._id != id;
-      });
-    },
-    select: function select(index) {
-      this.isUpdate = true;
-      this.phase = _objectSpread({}, this.phases[index]);
-    },
-    displayTests: function displayTests(e) {
-      var value = e.target.value;
-      if (value == 5) return this.hasTest = true;
-      return this.hasTest = false;
-    },
-    clear: function clear() {
-      var lastPhase = this.phases[this.phases.length - 1];
-      var start_date = lastPhase.start_date,
-          duration = lastPhase.duration;
-      var next_date = nextDate(start_date, duration);
-      this.phase = {
-        _id: '',
-        name: '',
-        duration: null,
-        start_date: next_date,
-        end_date: '',
-        test_groups: [],
-        has_test: false,
-        is_drilling: false
-      };
-      this.errors = [];
-    },
-    toggleAction: function toggleAction() {
-      this.isUpdate = !this.isUpdate;
-      this.clear();
-    },
-    checkForm: function checkForm() {
-      this.errors = [];
-      var _this$phase = this.phase,
-          name = _this$phase.name,
-          duration = _this$phase.duration,
-          start_date = _this$phase.start_date;
-      if (!name) this.errors.push('the field name is required');
-      if (!duration) this.errors.push('the field duration is required');
-      if (!start_date) this.errors.push('the field start date is required');
-      if (this.errors.length > 0) return false;
-      return true;
-    }
-  },
-  watch: {
-    'phase.duration': function phaseDuration(val, oldVal) {
-      if (val !== null && oldVal !== null) {
-        this.phase.end_date = nextDate(this.phase.start_date, this.phase.duration);
-      }
-    }
-  }
-});
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /home/pedro/www/dnv/bop/apps/campaigns/resources/js/components/SchemaUpdate.vue: Unexpected token, expected \",\" (393:11)\n\n\u001b[0m \u001b[90m 391 | \u001b[39m        duration\u001b[33m:\u001b[39m \u001b[36mnull\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 392 | \u001b[39m        start_date\u001b[33m:\u001b[39m next_date\u001b[33m,\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 393 | \u001b[39mcd         end_date\u001b[33m:\u001b[39m \u001b[32m''\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m     | \u001b[39m           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 394 | \u001b[39m        test_groups\u001b[33m:\u001b[39m []\u001b[33m,\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 395 | \u001b[39m        has_test\u001b[33m:\u001b[39m \u001b[36mfalse\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 396 | \u001b[39m        is_drilling\u001b[33m:\u001b[39m \u001b[36mfalse\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\n    at Parser._raise (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:766:17)\n    at Parser.raiseWithData (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:759:17)\n    at Parser.raise (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:753:17)\n    at Parser.unexpected (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:8966:16)\n    at Parser.expect (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:8952:28)\n    at Parser.parseObjectLike (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:10655:14)\n    at Parser.parseExprAtom (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:10198:23)\n    at Parser.parseExprSubscripts (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:9844:23)\n    at Parser.parseUpdate (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:9824:21)\n    at Parser.parseMaybeUnary (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:9813:17)\n    at Parser.parseExprOps (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:9683:23)\n    at Parser.parseMaybeConditional (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:9657:23)\n    at Parser.parseMaybeAssign (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:9620:21)\n    at Parser.parseMaybeAssign (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:9644:25)\n    at Parser.parseExpressionBase (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:9564:23)\n    at /home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:9558:39\n    at Parser.allowInAnd (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:11297:16)\n    at Parser.parseExpression (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:9558:17)\n    at Parser.parseStatementContent (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:11562:23)\n    at Parser.parseStatement (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:11431:17)\n    at Parser.parseBlockOrModuleBlockBody (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:12013:25)\n    at Parser.parseBlockBody (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:11999:10)\n    at Parser.parseBlock (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:11983:10)\n    at Parser.parseFunctionBody (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:10963:24)\n    at Parser.parseFunctionBodyAndFinish (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:10946:10)\n    at Parser.parseMethod (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:10883:10)\n    at Parser.parseObjectMethod (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:10808:19)\n    at Parser.parseObjPropValue (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:10841:23)\n    at Parser.parsePropertyDefinition (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:10772:10)\n    at Parser.parseObjectLike (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:10664:25)\n    at Parser.parseExprAtom (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:10198:23)\n    at Parser.parseExprSubscripts (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:9844:23)\n    at Parser.parseUpdate (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:9824:21)\n    at Parser.parseMaybeUnary (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:9813:17)\n    at Parser.parseExprOps (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:9683:23)\n    at Parser.parseMaybeConditional (/home/pedro/www/dnv/bop/node_modules/@babel/parser/lib/index.js:9657:23)");
 
 /***/ }),
 
@@ -30112,12 +29684,12 @@ module.exports = g;
 
 /***/ 0:
 /*!*****************************************************************************************************!*\
-  !*** multi ./apps/campaigns/resources/js/campaign.js ./apps/campaigns/resources/sass/campaign.scss ***!
+  !*** multi ./apps/campaigns/resources/js/app.js ./apps/campaigns/resources/sass/campaign.scss ***!
   \*****************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/pedro/www/dnv/bop/apps/campaigns/resources/js/campaign.js */"./apps/campaigns/resources/js/campaign.js");
+__webpack_require__(/*! /home/pedro/www/dnv/bop/apps/campaigns/resources/js/app.js */"./apps/campaigns/resources/js/campaign.js");
 module.exports = __webpack_require__(/*! /home/pedro/www/dnv/bop/apps/campaigns/resources/sass/campaign.scss */"./apps/campaigns/resources/sass/campaign.scss");
 
 

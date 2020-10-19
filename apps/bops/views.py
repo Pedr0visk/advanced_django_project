@@ -5,6 +5,7 @@ from django.core.exceptions import RequestAborted
 from django.db import transaction
 from django.shortcuts import render, redirect
 from django.core.cache import cache
+from django.core.paginator import Paginator
 
 from .models import Bop, SafetyFunction
 from .forms import BopForm, SafetyFunctionForm
@@ -15,7 +16,6 @@ from apps.certifications.forms import CertificationForm
 
 from apps.managers.decorators import allowed_users
 from ..failuremodes.models import FailureMode
-
 
 @transaction.atomic
 @allowed_users(allowed_roles=['Admin'])
@@ -124,10 +124,10 @@ def safety_function_list(request, bop_pk):
 
 
 def safety_function_index(request, bop_pk, sf_pk):
-    bop = Bop.objects.prefetch_related('safety_functions').get(pk=bop_pk)
-    sf = bop.safety_functions.get(pk=sf_pk)
-
-    context = {'bop': bop, 'object': sf}
+    sf = SafetyFunction.objects.prefetch_related('cuts').get(pk=sf_pk)
+    bop = sf.bop
+    cuts = list(sf.cuts.all().values('id', 'failure_modes', 'order'))
+    context = {'bop': bop, 'object': sf, 'json_data': cuts}
     return render(request, 'safety_functions/index.html', context)
 
 
