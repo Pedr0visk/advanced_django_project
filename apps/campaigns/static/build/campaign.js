@@ -7559,6 +7559,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
 var popperProps = {
   popperOptions: {
     modifiers: {
@@ -7600,6 +7606,7 @@ var nextDate = function nextDate(start_date, duration) {
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      errors: [],
       timeStr: ['hour'],
       isM: false,
       isUpdate: false,
@@ -7677,6 +7684,7 @@ var nextDate = function nextDate(start_date, duration) {
       });
     },
     add: function add() {
+      if (!this.checkForm()) return;
       this.phase._id = this.$uuid.v1();
       var newPhases = [].concat(_toConsumableArray(this.phases), [this.phase]);
       this.phases = newPhases;
@@ -7735,6 +7743,17 @@ var nextDate = function nextDate(start_date, duration) {
     toggleAction: function toggleAction() {
       this.isUpdate = !this.isUpdate;
       this.clear();
+    },
+    checkForm: function checkForm() {
+      this.errors = [];
+      var _this$phase = this.phase,
+          name = _this$phase.name,
+          duration = _this$phase.duration,
+          start_date = _this$phase.start_date;
+      if (!name) this.errors.push('the field name is required');
+      if (!duration) this.errors.push('the field duration is required');
+      if (!start_date) this.errors.push('the field start date is required');
+      if (this.errors.length > 0) return false;
     }
   },
   watch: {
@@ -7775,6 +7794,16 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -7987,6 +8016,7 @@ var nextDate = function nextDate(start_date, duration) {
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      errors: [],
       timeStr: ['hour'],
       isM: false,
       isUpdate: false,
@@ -7999,6 +8029,7 @@ var nextDate = function nextDate(start_date, duration) {
         name: ''
       },
       phase: {
+        _id: null,
         name: '',
         has_test: false,
         is_drilling: false,
@@ -8019,8 +8050,10 @@ var nextDate = function nextDate(start_date, duration) {
     });
     this.$http.get("/api/schemas/".concat(schemaId, "/")).then(function (response) {
       _this.schema.name = response.data.name;
+      console.log(response);
       _this.phases = response.data.phases.map(function (phase) {
         return {
+          _id: _this.$uuid.v1(),
           name: phase.name,
           has_test: phase.has_test,
           is_drilling: phase.is_drilling,
@@ -8073,12 +8106,14 @@ var nextDate = function nextDate(start_date, duration) {
       });
     },
     add: function add() {
+      if (!this.checkForm()) return;
       this.phase._id = this.$uuid.v1();
       var newPhases = [].concat(_toConsumableArray(this.phases), [this.phase]);
       this.phases = newPhases;
       this.clear();
     },
     update: function update(id) {
+      if (!this.checkForm()) return;
       var index = this.phases.findIndex(function (phase) {
         return phase._id == id;
       });
@@ -8104,7 +8139,7 @@ var nextDate = function nextDate(start_date, duration) {
         _id: this.$uuid.v1(),
         start_date: prevPhase.end_date
       }));
-      this.clear();
+      this.select(index);
     },
     addAfter: function addAfter(index) {
       var prevPhase = this.phases[index];
@@ -8112,7 +8147,7 @@ var nextDate = function nextDate(start_date, duration) {
         _id: this.$uuid.v1(),
         start_date: prevPhase.end_date
       }));
-      this.clear();
+      this.select(index + 1);
     },
     remove: function remove(id) {
       console.log('deleting');
@@ -8135,6 +8170,7 @@ var nextDate = function nextDate(start_date, duration) {
           duration = lastPhase.duration;
       var next_date = nextDate(start_date, duration);
       this.phase = {
+        _id: '',
         name: '',
         duration: null,
         start_date: next_date,
@@ -8143,10 +8179,23 @@ var nextDate = function nextDate(start_date, duration) {
         has_test: false,
         is_drilling: false
       };
+      this.errors = [];
     },
     toggleAction: function toggleAction() {
       this.isUpdate = !this.isUpdate;
       this.clear();
+    },
+    checkForm: function checkForm() {
+      this.errors = [];
+      var _this$phase = this.phase,
+          name = _this$phase.name,
+          duration = _this$phase.duration,
+          start_date = _this$phase.start_date;
+      if (!name) this.errors.push('the field name is required');
+      if (!duration) this.errors.push('the field duration is required');
+      if (!start_date) this.errors.push('the field start date is required');
+      if (this.errors.length > 0) return false;
+      return true;
     }
   },
   watch: {
@@ -15270,6 +15319,20 @@ var render = function() {
     _c("fieldset", { staticClass: "form-fieldset" }, [
       _c("h4", [_vm._v("Phases")]),
       _vm._v(" "),
+      _vm.errors.length
+        ? _c("div", [
+            _c(
+              "ul",
+              _vm._l(_vm.errors, function(error) {
+                return _c("li", { staticClass: "text-danger" }, [
+                  _vm._v(_vm._s(error))
+                ])
+              }),
+              0
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
       _c("div", { staticClass: "px-3" }, [
         _c("div", { staticClass: "form-add-phase row" }, [
           _c("div", { staticClass: "col-2" }, [
@@ -15282,7 +15345,7 @@ var render = function() {
                   expression: "phase.name"
                 }
               ],
-              staticClass: "form-control form-control-sm",
+              staticClass: "form-control form-control-sm ",
               attrs: { placeholder: "phase name", type: "text" },
               domProps: { value: _vm.phase.name },
               on: {
@@ -15608,21 +15671,21 @@ var render = function() {
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.phases, function(phase, key) {
+            _vm._l(_vm.phases, function(p, key) {
               return _c("tr", { key: key }, [
-                _c("td", [_vm._v(_vm._s(phase.name))]),
+                _c("td", [_vm._v(_vm._s(p.name))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(phase.start_date))]),
+                _c("td", [_vm._v(_vm._s(p.start_date))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(phase.end_date))]),
+                _c("td", [_vm._v(_vm._s(p.end_date))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(phase.duration) + "h")]),
+                _c("td", [_vm._v(_vm._s(p.duration) + "h")]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(phase.has_test))]),
+                _c("td", [_vm._v(_vm._s(p.has_test))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(phase.is_drilling))]),
+                _c("td", [_vm._v(_vm._s(p.is_drilling))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(phase.test_groups))]),
+                _c("td", [_vm._v(_vm._s(p.test_groups))]),
                 _vm._v(" "),
                 _c("td", { attrs: { width: "5%" } }, [
                   _c(
@@ -15650,7 +15713,7 @@ var render = function() {
                       on: {
                         click: function($event) {
                           $event.preventDefault()
-                          return _vm.remove(phase._id)
+                          return _vm.remove(_vm.phase._id)
                         }
                       }
                     },
@@ -15800,6 +15863,20 @@ var render = function() {
     _c("fieldset", { staticClass: "form-fieldset" }, [
       _c("h4", [_vm._v("Phases")]),
       _vm._v(" "),
+      _vm.errors.length
+        ? _c("div", [
+            _c(
+              "ul",
+              _vm._l(_vm.errors, function(error) {
+                return _c("li", { staticClass: "text-danger" }, [
+                  _vm._v(_vm._s(error))
+                ])
+              }),
+              0
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
       _c("div", { staticClass: "px-3" }, [
         _c("div", { staticClass: "form-add-phase row" }, [
           _c("div", { staticClass: "col-2" }, [
@@ -16138,89 +16215,98 @@ var render = function() {
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.phases, function(phase, key) {
-              return _c("tr", { key: key }, [
-                _c("td", [_vm._v(_vm._s(phase.name))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(phase.start_date))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(phase.end_date))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(phase.duration) + "h")]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(phase.has_test))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(phase.is_drilling))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(phase.test_groups))]),
-                _vm._v(" "),
-                _c("td", { attrs: { width: "5%" } }, [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "px-2",
-                      attrs: { href: "" },
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.select(key)
+            _vm._l(_vm.phases, function(item, key) {
+              return _c(
+                "tr",
+                { key: key, class: { selected: item._id === _vm.phase._id } },
+                [
+                  _c("td", [_vm._v(_vm._s(item.name))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(item.start_date))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(item.end_date))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(item.duration) + "h")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(item.has_test))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(item.is_drilling))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(item.test_groups))]),
+                  _vm._v(" "),
+                  _c("td", { attrs: { width: "5%" } }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "px-2",
+                        attrs: { href: "" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.select(key)
+                          }
                         }
-                      }
-                    },
-                    [_c("i", { staticClass: "fa fa-pencil-alt text-warning" })]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("td", { attrs: { width: "5%" } }, [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "px-2",
-                      attrs: { href: "" },
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.remove(phase._id)
+                      },
+                      [
+                        _c("i", {
+                          staticClass: "fa fa-pencil-alt text-warning"
+                        })
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { attrs: { width: "5%" } }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "px-2",
+                        attrs: { href: "" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.remove(_vm.phase._id)
+                          }
                         }
-                      }
-                    },
-                    [_c("i", { staticClass: "fa fa-times text-danger" })]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("td", { attrs: { width: "10%" } }, [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "px-2",
-                      attrs: { href: "" },
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.addBefore(key)
+                      },
+                      [_c("i", { staticClass: "fa fa-times text-danger" })]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { attrs: { width: "10%" } }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "px-2",
+                        attrs: { href: "" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.addBefore(key)
+                          }
                         }
-                      }
-                    },
-                    [_vm._v("add before")]
-                  )
-                ]),
-                _c("td", { attrs: { width: "10%" } }, [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "px-2",
-                      attrs: { href: "" },
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.addAfter(key)
+                      },
+                      [_vm._v("add before")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { attrs: { width: "10%" } }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "px-2",
+                        attrs: { href: "" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.addAfter(key)
+                          }
                         }
-                      }
-                    },
-                    [_vm._v("add after")]
-                  )
-                ])
-              ])
+                      },
+                      [_vm._v("add after")]
+                    )
+                  ])
+                ]
+              )
             }),
             0
           )
@@ -16272,6 +16358,8 @@ var staticRenderFns = [
         _c("th", [_vm._v("is drilling")]),
         _vm._v(" "),
         _c("th", [_vm._v("test groups")]),
+        _vm._v(" "),
+        _c("th"),
         _vm._v(" "),
         _c("th"),
         _vm._v(" "),

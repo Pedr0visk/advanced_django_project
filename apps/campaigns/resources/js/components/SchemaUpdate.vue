@@ -13,6 +13,11 @@
 
     <fieldset class="form-fieldset">
       <h4>Phases</h4>
+      <div v-if="errors.length">
+        <ul>
+          <li v-for="error in errors" class="text-danger">{{ error }}</li>
+        </ul>
+      </div>
       <div class="px-3">
         <div class="form-add-phase row">
           <!-- name -->
@@ -117,18 +122,22 @@
             <th></th>
             <th></th>
             <th></th>
+            <th></th>
           </tr>
           </thead>
           <tbody>
 
-          <tr v-for="(phase, key) in phases" :key="key">
-            <td>{{ phase.name }}</td>
-            <td>{{ phase.start_date }}</td>
-            <td>{{ phase.end_date }}</td>
-            <td>{{ phase.duration }}h</td>
-            <td>{{ phase.has_test }}</td>
-            <td>{{ phase.is_drilling }}</td>
-            <td>{{ phase.test_groups }}</td>
+          <tr
+              v-for="(item, key) in phases"
+              :key="key"
+              v-bind:class="{selected: item._id === phase._id }">
+            <td>{{ item.name }}</td>
+            <td>{{ item.start_date }}</td>
+            <td>{{ item.end_date }}</td>
+            <td>{{ item.duration }}h</td>
+            <td>{{ item.has_test }}</td>
+            <td>{{ item.is_drilling }}</td>
+            <td>{{ item.test_groups }}</td>
             <td width="5%">
               <a
                   @click.prevent="select(key)"
@@ -143,7 +152,8 @@
               <a
                   @click.prevent="addBefore(key)"
                   href="" class="px-2">add before</a>
-            </td><td width="10%">
+            </td>
+            <td width="10%">
               <a
                   @click.prevent="addAfter(key)"
                   href="" class="px-2">add after</a>
@@ -215,6 +225,7 @@ export default {
 
   data() {
     return {
+      errors: [],
       timeStr: ['hour'],
       isM: false,
       isUpdate: false,
@@ -227,6 +238,7 @@ export default {
         name: ''
       },
       phase: {
+        _id: null,
         name: '',
         has_test: false,
         is_drilling: false,
@@ -248,7 +260,9 @@ export default {
         .get(`/api/schemas/${schemaId}/`)
         .then(response => {
           this.schema.name = response.data.name
+          console.log(response)
           this.phases = response.data.phases.map(phase => ({
+            _id: this.$uuid.v1(),
             name: phase.name,
             has_test: phase.has_test,
             is_drilling: phase.is_drilling,
@@ -306,12 +320,18 @@ export default {
           })
     },
     add() {
+      if (!this.checkForm())
+        return
+
       this.phase._id = this.$uuid.v1()
       let newPhases = [...this.phases, this.phase]
       this.phases = newPhases
       this.clear()
     },
     update(id) {
+      if (!this.checkForm())
+        return
+      
       let index = this.phases.findIndex(phase => phase._id == id)
       this.phases[index] = this.phase
 
@@ -330,20 +350,20 @@ export default {
       this.toggleAction()
     },
     addBefore(index) {
-      let prevPhase = this.phases[index-1]
+      let prevPhase = this.phases[index - 1]
       this.phases.splice(index, 0, Object.assign(this.phase, {
         _id: this.$uuid.v1(),
         start_date: prevPhase.end_date
       }))
-      this.clear()
+      this.select(index)
     },
     addAfter(index) {
       let prevPhase = this.phases[index]
-      this.phases.splice(index+1, 0, Object.assign(this.phase, {
+      this.phases.splice(index + 1, 0, Object.assign(this.phase, {
         _id: this.$uuid.v1(),
         start_date: prevPhase.end_date
       }))
-      this.clear()
+      this.select(index + 1)
     },
     remove(id) {
       console.log('deleting')
@@ -366,19 +386,36 @@ export default {
       const next_date = nextDate(start_date, duration)
 
       this.phase = {
+        _id: '',
         name: '',
         duration: null,
         start_date: next_date,
-        end_date: '',
+cd         end_date: '',
         test_groups: [],
         has_test: false,
         is_drilling: false,
       }
+      this.errors = []
     },
     toggleAction() {
       this.isUpdate = !this.isUpdate
       this.clear()
     },
+    checkForm() {
+      this.errors = []
+      let {name, duration, start_date} = this.phase
+
+      if (!name)
+        this.errors.push('the field name is required')
+      if (!duration)
+        this.errors.push('the field duration is required')
+      if (!start_date)
+        this.errors.push('the field start date is required')
+
+      if (this.errors.length > 0)
+        return false;
+      return true;
+    }
 
   },
   watch: {

@@ -219,3 +219,7 @@ def summary_results(request, pk):
         metrics.run(bop, safety_function)
     context = {'bop': bop}
     return render(request, 'bops/summary_results.html', context)
+
+
+def list_subsystems(request, pk):
+    pass

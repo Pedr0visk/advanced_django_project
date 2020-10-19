@@ -3,126 +3,168 @@
 {% load manager_extras %}
 
 {% block breadcrumb %}
-  <div class="page-title">
-    <div class="container-fluid px-5">
-      <div class="page-title-wrapper-2">
-        <div class="page-title-heading-2">
-          <a href="{% url 'campaigns:index' campaign_pk %}">Campaign</a>
-          <span class="fa fa-chevron-right"></span>
-          {% if event %}
-            <span class="current-page">{{ event.name }}</span>
-          {% else %}
-            <span class="current-page">Add new event</span>
-          {% endif %}
-        </div>
+<div class="page-title">
+  <div class="container-fluid px-5">
+    <div class="page-title-wrapper-2">
+      <div class="page-title-heading-2">
+        <a href="{% url 'campaigns:index' campaign_pk %}">Campaign</a>
+        <span class="fa fa-chevron-right"></span>
+        {% if event %}
+        <span class="current-page">{{ event.name }}</span>
+        {% else %}
+        <span class="current-page">Add new event</span>
+        {% endif %}
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
 
 {% block main %}
-  {% if form.errors %}
-    {{ form.errors }}
-  {% endif %}
-  <div class="section bg-white">
-    <div class="container-fluid px-5">
-      <div class="section-title mb-4 d-flex">
-        {% if event %}
-          <p>Change Event</p>
-        {% else %}
-          <p>Add Event</p>
-        {% endif %}
-      </div>
-      <div class="section-content">
-        <div class="row">
-          <div class="col-sm-12">
-            <form method="POST" id="eventForm">
-              {% csrf_token %}
+{% if form.errors %}
+{{ form.errors }}
+{% endif %}
+<div class="section bg-white">
+  <div class="container-fluid px-5">
+    <div class="section-title mb-4 d-flex">
+      {% if event %}
+      <p>Change Event</p>
+      {% else %}
+      <p>Add Event</p>
+      {% endif %}
+    </div>
+    <div class="section-content">
+      <div class="row">
+        <div class="col-sm-12">
+          <form method="POST" id="eventForm">
+            {% csrf_token %}
 
-              <div class="form-group row">
-                <label class="col-sm-1 col-form-label col-form-label-sm">Name:</label>
-                <div class="col-sm-3">
-                  {{ form.name }}
-                  <small class="form-text text-muted">
-                    Required.
-                  </small>
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label col-form-label-sm">Name:</label>
+              <div class="col-sm-3">
+                {{ form.name }}
+                <small class="form-text text-muted">
+                  Required.
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label col-form-label-sm">Description:</label>
+              <div class="col-sm-3">
+                {{ form.description }}
+                <small class="form-text text-muted">
+                  Optional.
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label col-form-label-sm">Type:</label>
+              <div class="col-sm-3">
+                {{ form.type }}
+                <small class="form-text text-muted">
+                  Required.
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label col-form-label-sm">Select Code:</label>
+              <div class="col-sm-5">
+                <select name="object_id" id="failure_modes_code" class="objects">
+                  {% for failure_mode in failure_modes %}
+                  <option value="{{failure_mode.code}}">{{ failure_mode.code }} - {{ failure_mode.name }}</option>
+                  {% endfor %}
+                </select>
+
+                <select name="object_id" id="components_code" class="objects">
+                  {% for component in components %}
+                  <option value="{{component.code}}">{{ component.code }} - {{ component.name }}</option>
+                  {% endfor %}
+                </select>
+
+                <select name="object_id" id="subsystems_code" class="objects">
+                  {% for subsystem in subsystems %}
+                  <option value="{{subsystem.code}}">{{ subsystem.code }} - {{ subsystem.name }}</option>
+                  {% endfor %}
+                </select>
+                <small class="form-text text-muted">
+                  Failure Mode list.
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+            <div class="form-group row">
+              <label class="col-sm-1 col-form-label col-form-label-sm">Date:</label>
+              <div class="col-sm-2">
+                {{ form.date }}
+                <small class="form-text text-muted">
+                  Note: you are 3 hours behind server time.
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+            <div class="card p-2 bg-light text-right">
+              <div class="d-flex">
+                <div class="ml-auto">
+                  <button type="submit" class="btn btn-secondary">
+                    Save and add another
+                  </button>
+                  <button type="submit" class="btn btn-primary">
+                    SAVE
+                  </button>
                 </div>
               </div>
-              <hr/>
+            </div>
 
-              <div class="form-group row">
-                <label class="col-sm-1 col-form-label col-form-label-sm">Description:</label>
-                <div class="col-sm-3">
-                  {{ form.description }}
-                  <small class="form-text text-muted">
-                    Optional.
-                  </small>
-                </div>
-              </div>
-
-              <div class="form-group row">
-                <label class="col-sm-1 col-form-label col-form-label-sm">Type:</label>
-                <div class="col-sm-3">
-                  {{ form.type }}
-                  <small class="form-text text-muted">
-                    Required.
-                  </small>
-                </div>
-              </div>
-              <hr/>
-
-              <div class="form-group row">
-                <label class="col-sm-1 col-form-label col-form-label-sm">Date:</label>
-                <div class="col-sm-2">
-                  {{ form.date }}
-                  <small class="form-text text-muted">
-                    Note: you are 3 hours behind server time.
-                  </small>
-                </div>
-              </div>
-              <hr/>
-
-              <div class="card p-2 bg-light text-right">
-                <div class="d-flex">
-                  <div class="ml-auto">
-                    <button type="submit" class="btn btn-secondary">
-                      Save and add another
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                      SAVE
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-            </form>
-          </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
-  <script>
-      // Query all input fields
-      var form_fields = document.getElementsByTagName('input')
-      // customization of form fields
-      for (var field in form_fields) {
-          if (form_fields[field].type == 'checkbox') continue
-          form_fields[field].className += 'form-control form-control-sm'
-      }
+<script>
+    // Query all input fields
+    var form_fields = document.getElementsByTagName('input')
+    // customization of form fields
+    for (var field in form_fields) {
+        if (form_fields[field].type == 'checkbox') continue
+        form_fields[field].className += 'form-control form-control-sm'
+    }
 
-      // Query all textarea fields
-      var form_fields = document.getElementsByTagName('textarea')
-      for (var field in form_fields) {
-          form_fields[field].className += 'form-control form-control-sm'
-      }
+    // Query all textarea fields
+    var form_fields = document.getElementsByTagName('textarea')
+    for (var field in form_fields) {
+        form_fields[field].className += 'form-control form-control-sm'
+    }
 
-      // Query all select fields
-      var form_fields = document.getElementsByTagName('select')
-      for (var field in form_fields) {
-          form_fields[field].className += 'form-control form-control-sm'
-      }
-  </script>
+    // Query all select fields
+    var form_fields = document.getElementsByTagName('select')
+    for (var field in form_fields) {
+        form_fields[field].className += 'form-control form-control-sm'
+    }
+
+    const type = document.getElementById('id_type')
+    type.addEventListener('change', function() {
+        switch (this.value) {
+            case 'FIL':
+            case 'CIL':
+            case 'SIL':
+                $('#subsystems_code').addClass('d-none')
+                $('#components_code').addClass('d-none')
+                $('#failure_modes_code').removeClass('d-none')
+                break;
+            default:
+                break
+        }
+    })
+</script>
 {% endblock %}

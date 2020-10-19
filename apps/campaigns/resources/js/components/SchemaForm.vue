@@ -13,6 +13,11 @@
 
     <fieldset class="form-fieldset">
       <h4>Phases</h4>
+      <div v-if="errors.length">
+        <ul>
+          <li v-for="error in errors" class="text-danger">{{ error }}</li>
+        </ul>
+      </div>
       <div class="px-3">
         <div class="form-add-phase row">
           <!-- name -->
@@ -21,8 +26,9 @@
                 v-model="phase.name"
                 placeholder="phase name"
                 type="text"
-                class="form-control form-control-sm">
+                class="form-control form-control-sm ">
             <small>phase name</small>
+
           </div>
           <!-- datetime picker -->
           <div class="col-3">
@@ -120,14 +126,14 @@
           </thead>
           <tbody>
 
-          <tr v-for="(phase, key) in phases" :key="key">
-            <td>{{ phase.name }}</td>
-            <td>{{ phase.start_date }}</td>
-            <td>{{ phase.end_date }}</td>
-            <td>{{ phase.duration }}h</td>
-            <td>{{ phase.has_test }}</td>
-            <td>{{ phase.is_drilling }}</td>
-            <td>{{ phase.test_groups }}</td>
+          <tr v-for="(p, key) in phases" :key="key">
+            <td>{{ p.name }}</td>
+            <td>{{ p.start_date }}</td>
+            <td>{{ p.end_date }}</td>
+            <td>{{ p.duration }}h</td>
+            <td>{{ p.has_test }}</td>
+            <td>{{ p.is_drilling }}</td>
+            <td>{{ p.test_groups }}</td>
             <td width="5%">
               <a
                   @click.prevent="select(key)"
@@ -208,6 +214,7 @@ export default {
 
   data() {
     return {
+      errors: [],
       timeStr: ['hour'],
       isM: false,
       isUpdate: false,
@@ -286,6 +293,9 @@ export default {
           })
     },
     add() {
+      if(!this.checkForm())
+        return
+
       this.phase._id = this.$uuid.v1()
       let newPhases = [...this.phases, this.phase]
       this.phases = newPhases
@@ -314,6 +324,7 @@ export default {
       this.phases = this.phases.filter(phase => phase._id != id)
     },
     select(index) {
+
       this.isUpdate = true
       this.phase = {...this.phases[index]}
     },
@@ -343,6 +354,20 @@ export default {
       this.isUpdate = !this.isUpdate
       this.clear()
     },
+    checkForm() {
+      this.errors = []
+      let {name, duration, start_date} = this.phase
+
+      if (!name)
+        this.errors.push('the field name is required')
+      if (!duration)
+        this.errors.push('the field duration is required')
+      if (!start_date)
+        this.errors.push('the field start date is required')
+
+      if (this.errors.length > 0)
+        return false;
+    }
 
   },
   watch: {

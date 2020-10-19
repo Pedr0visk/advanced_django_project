@@ -11,12 +11,13 @@ class Event(models.Model):
         REPLACE = 'RCE', _('Replace')
         WITHDRAW = 'WAW', _('Withdraw')
         REINSTALL = 'RLL', _('Reinstall')
-        COMP_FAIL = 'CIL', _('Failure in Component')
         FMODE_FAIL = 'FIL', _('Failure in Failure Mode')
+        COMP_FAIL = 'CIL', _('Failure in Component')
         SUBSYS_FAIL = 'SIL', _('Failure in Subsystem')
 
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
+    object_code = models.CharField(blank=True, max_length=255)
     campaign = models.ForeignKey(Campaign,
                                  on_delete=models.CASCADE,
                                  null=True,
