@@ -35,16 +35,24 @@
         <!-- menu -->
         <div class="collapse navbar-collapse" id="menu">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
+            {% if '/' == request.path %}
+              <li class="nav-item active">
+              {% else %}
+              <li class="nav-item ">
+              {% endif %}
               <a href="{% url 'dashboard' %}" class="nav-link"><i class="fa fa-home"></i> Main</a>
             </li>
 
             {% block extra_menu %}{% endblock %}
 
             {% if request.user.groups.all.0.name == 'Admin' %}
-            <li class="nav-item">
-              <a href="{% url 'list_accounts' %}" class="nav-link"><i class="fa fa-users"></i> Users</a>
-            </li>
+              {% if 'users' in request.path %}
+              <li class="nav-item active">
+              {% else %}
+              <li class="nav-item ">
+              {% endif %}
+                <a href="{% url 'list_accounts' %}" class="nav-link"><i class="fa fa-users"></i> Users</a>
+              </li>
             {% endif %}
             <li class="nav-item">
               <a href="" class="nav-link"><i class="fa fa-sign-out-alt"></i> Logout</a>

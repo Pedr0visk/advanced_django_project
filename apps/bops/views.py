@@ -17,6 +17,8 @@ from apps.certifications.forms import CertificationForm
 from apps.managers.decorators import allowed_users
 from ..failuremodes.models import FailureMode
 
+from .decorators import query_debugger
+
 @transaction.atomic
 @allowed_users(allowed_roles=['Admin'])
 def bop_upload(request):
@@ -123,6 +125,7 @@ def safety_function_list(request, bop_pk):
     return render(request, 'safety_functions/safety_function_list.html', context)
 
 
+@query_debugger
 def safety_function_index(request, bop_pk, sf_pk):
     sf = SafetyFunction.objects.prefetch_related('cuts').get(pk=sf_pk)
     bop = sf.bop
