@@ -87,6 +87,20 @@ def campaign_metrics(request, campaign_pk):
     return HttpResponse(json.dumps(results))
 
 
+def campaign_delete(request, campaign_pk):
+    campaign = Campaign.objects.select_related('bop').get(pk=campaign_pk)
+    context = {'object': campaign}
+
+    if request.method == 'POST':
+        name = campaign.name
+        bop = campaign.bop
+        campaign.delete()
+        messages.success(request, f'Bop "{name}" successfully deleted')
+        return redirect('bops:index', bop.pk)
+
+    return render(request, 'campaigns/campaign_confirm_delete.html', context)
+
+
 def schema_create(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
     context = {'campaign': campaign, 'campaign_pk': campaign_pk}

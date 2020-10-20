@@ -46,7 +46,7 @@
             {% block extra_menu %}{% endblock %}
 
             {% if request.user.groups.all.0.name == 'Admin' %}
-              {% if 'users' in request.path %}
+              {% if '/manager/accounts/' in request.path %}
               <li class="nav-item active">
               {% else %}
               <li class="nav-item ">
@@ -55,7 +55,7 @@
               </li>
             {% endif %}
             <li class="nav-item">
-              <a href="" class="nav-link"><i class="fa fa-sign-out-alt"></i> Logout</a>
+              <a href="{% url 'logout' %}" class="nav-link"><i class="fa fa-sign-out-alt"></i> Logout</a>
             </li>
           </ul>
         </div>

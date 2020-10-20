@@ -81,6 +81,8 @@ def account_update(request, pk):
         'groups': groups
     }
 
+    print(form.errors)
+
     return render(request, 'managers/account_form.html', context)
 
 

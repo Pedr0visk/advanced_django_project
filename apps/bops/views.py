@@ -19,6 +19,7 @@ from ..failuremodes.models import FailureMode
 
 from .decorators import query_debugger
 
+
 @transaction.atomic
 @allowed_users(allowed_roles=['Admin'])
 def bop_upload(request):
@@ -97,6 +98,15 @@ def index(request, pk):
     return render(request, 'bops/index.html', context)
 
 
+@query_debugger
+def safety_function_index(request, bop_pk, sf_pk):
+    sf = SafetyFunction.objects.prefetch_related('cuts').get(pk=sf_pk)
+    bop = sf.bop
+    cuts = list(sf.cuts.all().order_by('order').values('id', 'failure_modes', 'order'))
+    context = {'bop': bop, 'object': sf, 'json_data': cuts}
+    return render(request, 'safety_functions/index.html', context)
+
+
 @transaction.atomic
 def safety_function_upload(request, bop_pk):
     bop = Bop.objects.get(pk=bop_pk)
@@ -125,26 +135,29 @@ def safety_function_list(request, bop_pk):
     return render(request, 'safety_functions/safety_function_list.html', context)
 
 
-@query_debugger
-def safety_function_index(request, bop_pk, sf_pk):
-    sf = SafetyFunction.objects.prefetch_related('cuts').get(pk=sf_pk)
-    bop = sf.bop
-    cuts = list(sf.cuts.all().values('id', 'failure_modes', 'order'))
-    context = {'bop': bop, 'object': sf, 'json_data': cuts}
-    return render(request, 'safety_functions/index.html', context)
+def safety_function_update(request, bop_pk, sf_pk):
+    sf = SafetyFunction.objects.select_related('bop').get(pk=sf_pk)
+    form = SafetyFunctionForm(request.POST or None, instance=sf)
+    context = {'object': sf, 'form': form}
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Safety Function updated successfully!')
+            return redirect('bops:index_safety_function', sf.bop.pk, sf.pk)
+    return render(request, 'safety_functions/safety_function_form.html', context)
 
 
 def safety_function_delete(request, bop_pk, sf_pk):
-    bop = Bop.objects.prefetch_related('safety_functions').get(pk=bop_pk)
-    sf = bop.safety_functions.get(pk=sf_pk)
+    sf = SafetyFunction.objects.select_related('bop').get(pk=sf_pk)
 
     if request.method == 'POST':
         sf_name = sf.name
         sf.delete()
         messages.success(request, f'Safety Function "{sf_name}" successfully deleted!')
-        return redirect('list_safety_functions', bop_pk)
+        return redirect('bops:list_safety_functions', bop_pk)
 
-    context = {'bop': bop, 'object': sf}
+    context = {'object': sf}
     return render(request, 'safety_functions/safety_function_confirm_delete.html', context)
 
 
