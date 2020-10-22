@@ -24,6 +24,10 @@
   "dependencies": {
     "@livelybone/vue-datepicker": "^4.0.2",
     "axios": "^0.20.0",
+    "bootstrap": "^4.5.3",
+    "bootstrap-vue": "^2.18.0",
+    "lodash": "^4.17.20",
+    "vee-validate": "^3.4.2",
     "vue": "^2.6.12",
     "vue-sweetalert2": "^3.0.8",
     "vue-uuid": "^2.0.2"

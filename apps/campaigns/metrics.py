@@ -20,8 +20,6 @@ def run(campaign, **kwargs):
 
     sf_pfds = calculate_SF_PFDS(campaign, m)
 
-
-
     return sf_pfds
 
 
@@ -328,9 +326,6 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
                 v_integrate[j][i] = 1 - (1 - pol_falha)
         # print(v_integrate[j])
     return v_integrate
-
-
-0
 
 
 def get_t_op(start, end, testes, dt):

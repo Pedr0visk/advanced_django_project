@@ -25,6 +25,7 @@ djangorestframework = "*"
 django-cors-headers = "*"
 python-dotenv = "*"
 numpy = "*"
+django-debug-toolbar = "*"
 
 [requires]
 python_version = "3.8"

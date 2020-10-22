@@ -3,6 +3,11 @@
 {% load manager_extras %}
 
 {% block breadcrumb %}
+<style>
+  tr.selected {
+      background-color: rgba(248,168,37,0.3) !important;
+  }
+</style>
 <div class="page-title">
   <div class="container-fluid px-5">
     <div class="page-title-wrapper-2">
@@ -56,5 +61,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript" src="{% static 'build/campaign.js' %}"></script>
+<script type="text/javascript" src="{% static 'build/app.js' %}"></script>
 {% endblock %}

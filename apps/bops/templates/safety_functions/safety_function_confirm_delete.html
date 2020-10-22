@@ -1,4 +1,4 @@
-{% extends 'manager/base.html' %}
+{% extends 'base.html' %}
 
 {% block breadcrumb %}
   <!-- breadcrumb -->
@@ -6,11 +6,7 @@
     <div class="container-fluid px-5">
       <div class="page-title-wrapper-2">
         <div class="page-title-heading-2">
-          <a href="{% url 'dashboard' %}">Home</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'list_bops' %}">Bops</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
+          <a href="{% url 'bops:index_safety_function' object.bop.pk object.pk %}">{{ object }}</a>
           <span class="fa fa-chevron-right"></span>
           <span class="current-page">Delete Group </span>
         </div>
@@ -39,7 +35,8 @@
         <form method="post">
           {% csrf_token %}
           <button type="submit" class="btn btn-danger">Yes, I'm sure</button>
-          <a href="{% url 'index_safety_function' bop.pk object.pk %}" class="btn btn-quinary">No, take me back</a>
+          <a href="{% url 'bops:index_safety_function' object.bop.pk object.pk %}" class="btn btn-quinary">No, take
+            me back</a>
         </form>
       </div>
     </div>

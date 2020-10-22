@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'apps.certifications',
     'rest_framework',
     'rest_framework.authtoken',
-    'corsheaders'
+    'corsheaders',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -68,7 +69,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'apps.bops.middleware.SimpleMiddleware'
+    'apps.bops.middleware.SimpleMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
+]
+
+# enable internal ips
+INTERNAL_IPS = [
+    '127.0.0.1',
 ]
 
 # enable cors
