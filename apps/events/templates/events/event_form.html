@@ -102,7 +102,6 @@
               <label class="col-sm-1 col-form-label col-form-label-sm">Date:</label>
               <div class="col-sm-2">
                 {{ form.date }}
-                {{form.object_code}}
                 <small class="form-text text-muted">
                   Note: you are 3 hours behind server time.
                 </small>
@@ -231,7 +230,7 @@
     submitBtn.addEventListener('click', function (e) {
         e.preventDefault()
         let data = new FormData()
-        data.append('name', form.name.value)
+        data.append('name', 'custom name')
         data.append('description', form.description.value)
         data.append('type', form.type.value)
         data.append('object_code', getObjectId(form.type.value))

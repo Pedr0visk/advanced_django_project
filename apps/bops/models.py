@@ -43,7 +43,6 @@ class Bop(models.Model):
         print(self.testgroup.all())
         print(**kwargs)
 
-    @query_debugger
     def component_list(self):
         subsystem_qs = self.subsystems.prefetch_related('components').all()
         components = []
@@ -52,7 +51,6 @@ class Bop(models.Model):
 
         return components
 
-    @query_debugger
     def failure_mode_list(self):
         subsystem_qs = self.subsystems.prefetch_related('components__failure_modes').all()
         failure_modes = []
