@@ -77,14 +77,52 @@ def phase_update(request, pk):
     return render(request, 'campaigns/phase_form.html', context)
 
 
-def campaign_metrics(request, campaign_pk):
-    campaign = Campaign.objects. \
-        select_related('bop'). \
-        prefetch_related('schemas').get(pk=campaign_pk)
+def campaign_metrics(request, schema_pk):
 
-    results = metrics.run(campaign)
-    context = {'campaign': campaign, 'results': results}
-    return HttpResponse(json.dumps(results))
+    schema = Schema.objects.get(pk=schema_pk)
+    campaign = schema.campaign
+    results = metrics.run(schema)
+
+
+    time = []
+    number_Sf = len(results[0])
+    tempo = len(results) - 1
+    data_to_charts = []
+    print("veiws number sf", number_Sf, tempo)
+
+    for j in range(1, number_Sf):
+        result_sf = []
+        #result_sf_falho = []
+        soma = 0
+        avg = 0
+        for i in range(1, tempo):
+            if j == 1:
+                time.append(results[i][0])
+
+            result_sf.append(results[i][j])
+            soma = soma + results[i][j]
+            #if i+2 > inicio:
+            #    result_sf_falho.append(result_falho[i][j])
+            #else:
+            #    result_sf_falho.append("null")
+
+
+        avg = soma / tempo
+
+        maximo = max(result_sf)
+
+        print("views media e max",avg, maximo)
+
+        data_to_charts.append({
+            'average': avg,
+            'result': result_sf,
+            'max': maximo
+        })
+
+
+
+    context = {'campaign': campaign,'schema': Schema, 'results': results, 'data_to_charts':data_to_charts}
+    return render(request, 'campaigns/campaign_charts.html', context)
 
 
 def campaign_delete(request, campaign_pk):
