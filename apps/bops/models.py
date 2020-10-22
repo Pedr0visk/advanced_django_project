@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.admin.utils import NestedObjects
 from django.urls import reverse
+from .decorators import query_debugger
 
 
 class Rig(models.Model):
@@ -41,6 +42,25 @@ class Bop(models.Model):
     def schedule_tests(self, start_date, *args, **kwargs):
         print(self.testgroup.all())
         print(**kwargs)
+
+    @query_debugger
+    def component_list(self):
+        subsystem_qs = self.subsystems.prefetch_related('components').all()
+        components = []
+        for subsystem in subsystem_qs:
+            components += subsystem.components.all()
+
+        return components
+
+    @query_debugger
+    def failure_mode_list(self):
+        subsystem_qs = self.subsystems.prefetch_related('components__failure_modes').all()
+        failure_modes = []
+        for subsystem in subsystem_qs:
+            for component in subsystem.components.all():
+                failure_modes += component.failure_mode_list()
+
+        return failure_modes
 
 
 class SafetyFunction(models.Model):

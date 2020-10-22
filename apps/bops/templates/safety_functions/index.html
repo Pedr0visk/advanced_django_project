@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_menu %}
+{% include 'common/bop_menu.html' %}
+{% endblock %}
 
 {% block breadcrumb %}
   <!-- breadcrumb -->
@@ -26,9 +31,9 @@
       <div class="container-fluid px-5">
         <!-- section title -->
         <div class="section-title mb-3">
-          <p>Dashboard for Safety Function</p>
+          <p>Dashboard for Safety Function "{{object}}"</p>
           <div>
-            <a href="" class="btn btn-sm btn-warning mr-2">
+            <a href="{% url 'bops:update_safety_function' bop.pk object.pk %}" class="btn btn-sm btn-warning mr-2">
               <small>EDIT SAFETY FUNCTION <i class="fa fa-pencil-alt"></i></small>
             </a>
             <a href="{% url 'bops:delete_safety_function' bop.pk object.pk %}" class="btn btn-sm btn-danger">
@@ -36,25 +41,13 @@
             </a>
           </div>
         </div>
-
+        <hr>
         <!-- section content -->
-        <div class="row">
-          <div class="col-sm-5 col-12">
-            <table class="table dnv-table dnv-table-admin">
-              <thead>
-              <th>{{ object.name }}</th>
-              <th></th>
-              <th></th>
-              </thead>
-              <tbody>
-              <tr>
-                <td><a href="{% url 'bops:list_safety_function_cuts' bop.pk object.pk %}">Cuts</a></td>
-                <td width="12%" align="center"><a href=""><i class="fa fa-plus"></i> Add</a></td>
-                <td width="12%" align="center"><a href=""><i
-                    class="fa fa-pencil-alt"></i> Edit</a></td>
-              </tr>
-              </tbody>
-            </table>
+        <div class="row" id="app">
+          <div class="col-sm-12 col-12">
+            <h4 class="title-1">Cut List</h4>
+            {{ json_data|json_script:"json_data" }}
+            <cuts-table></cuts-table>
           </div>
         </div>
 
@@ -63,4 +56,8 @@
 
   </div>
   <!-- main -->
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{% static 'build/app.js' %}"></script>
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends 'manager/base.html' %}
+{% extends 'base.html' %}
 {% load manager_extras %}
 
 {% block breadcrumb %}
@@ -7,7 +7,7 @@
     <div class="container-fluix px-5">
       <div class="page-title-wrapper-2">
         <div class="page-title-heading-2">
-          <a href="{% url 'manager' %}">Home</a>
+          <a href="{% url 'dashboard' %}">Home</a>
           <span class="fa fa-chevron-right"></span>
           <span class="current-page">Users </span>
         </div>
@@ -127,7 +127,7 @@
                     {% endif %}
                   </nav>
                   <small class="counter">
-                    12 Campaigns
+
                   </small>
                 </div>
 

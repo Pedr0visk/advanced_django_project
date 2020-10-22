@@ -1,3 +1,4 @@
+from django.contrib.admin.utils import NestedObjects
 from django.db import models
 from django.urls import reverse
 
@@ -45,6 +46,12 @@ class Campaign(models.Model):
 
     def get_absolute_url(self):
         return reverse('campaigns:index', args=[self.pk])
+
+    def with_counts(self):
+        collector = NestedObjects(using='default')
+        collector.collect([self])
+        model_count = {model._meta.verbose_name_plural: len(objs) for model, objs in collector.model_objs.items()}
+        return model_count.items()
 
     def __str__(self):
         return self.name

@@ -1,14 +1,5 @@
 <div class="bop-tools">
-  {% if '/campaigns/' in request.path %}
-    <a href="{% url 'list_campaigns' bop.pk %}" class="active">
-  {% else %}
-    <a href="{% url 'list_campaigns' bop.pk %}">
-  {% endif %}
-    <i class="fa fa-chess-rook"></i>
-    Campaigns
-  </a> /
-
-  <a href="" style="pointer-events: none; color: #666666">
+  <a href="" style="pointer-events: none; color: #666666" class="active">
     <i class="fas fa-folder-open"></i>
     Summary of Results</a> /
 

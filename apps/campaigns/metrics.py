@@ -20,8 +20,6 @@ def run(campaign, **kwargs):
 
     sf_pfds = calculate_SF_PFDS(campaign, m)
 
-
-
     return sf_pfds
 
 
@@ -339,9 +337,8 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
 
 
 
-
-
 def get_t_op(start, end, schema, dt):
+
     count = 0
     flag = 0
     tmax = (abs((end - start).days)) * 24
