@@ -17,5 +17,8 @@ class Subsystem(models.Model):
         self.slug = self.code.lower().replace('_', '-')
         super(Subsystem, self).save(*args, **kwargs)
 
+    def component_list(self):
+        return self.components.all()
+
     def __str__(self):
         return self.name

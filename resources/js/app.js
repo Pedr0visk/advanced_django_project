@@ -1,3 +1,4 @@
+require('./bootstrap');
 import Vue from "vue";
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import {uuid} from 'vue-uuid';
@@ -15,6 +16,37 @@ Vue.prototype.$http = Axios;
 Vue.prototype.$uuid = uuid;
 
 Vue.use(VueSweetalert2);
+
+// setup axios interceptor
+window.axios.interceptors.response.use(function (response) {
+    // Do something before request is sent
+    return response;
+}, function (error) {
+
+    if (error.response.status == 400) {
+        let errorMessages = []
+
+        for (let err in error.response.data) {
+            errorMessages.push(`${err} - ${error.response.data[err]}`)
+        }
+
+        Vue.swal({
+            title: 'Validation Failed!',
+            html: errorMessages.join('<br>'),
+            type: 'error',
+        })
+    } else if (error.response.status == 500) {
+        Vue.swal({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
+        })
+    } else if (error.response.status == 401) {
+        // window.location = '/login'
+    }
+
+    return Promise.reject(error.response);
+});
 
 // import components
 Vue.component('datetime-picker', DatetimePicker);

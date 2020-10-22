@@ -132,11 +132,11 @@
               :key="key"
               v-bind:class="{selected: item._id === phase._id }">
             <td>{{ item.name }}</td>
-            <td>{{ item.start_date }}</td>
-            <td>{{ item.end_date }}</td>
+            <td>{{ item.start_date }}:00h</td>
+            <td>{{ item.end_date }}:00h</td>
             <td>{{ item.duration }}h</td>
-            <td>{{ item.has_test }}</td>
-            <td>{{ item.is_drilling }}</td>
+            <td><img v-if="item.has_test" src="/static/img/icon-yes.svg" alt=""></td>
+            <td><img v-if="item.is_drilling" src="/static/img/icon-yes.svg" alt=""></td>
             <td>{{ item.test_groups }}</td>
             <td width="5%">
               <a
@@ -145,7 +145,7 @@
             </td>
             <td width="5%">
               <a
-                  @click.prevent="remove(phase._id)"
+                  @click.prevent="remove(item._id)"
                   href="" class="px-2"><i class="fa fa-times text-danger"></i></a>
             </td>
             <td width="10%">
@@ -158,6 +158,9 @@
                   @click.prevent="addAfter(key)"
                   href="" class="px-2">add after</a>
             </td>
+          </tr>
+          <tr v-if="isLoading">
+            <td colspan="11" align="center"><h3>Loading...</h3></td>
           </tr>
           </tbody>
         </table>
@@ -225,6 +228,7 @@ export default {
 
   data() {
     return {
+      isLoading: true,
       errors: [],
       timeStr: ['hour'],
       isM: false,
@@ -260,7 +264,6 @@ export default {
         .get(`/api/schemas/${schemaId}/`)
         .then(response => {
           this.schema.name = response.data.name
-          console.log(response)
           this.phases = response.data.phases.map(phase => ({
             _id: this.$uuid.v1(),
             name: phase.name,
@@ -271,6 +274,8 @@ export default {
             end_date: nextDate(formatDate(new Date(phase.start_date)), phase.duration),
             test_groups: phase.test_groups
           }))
+
+          this.isLoading = false
           this.phase.start_date = this.phases[this.phases.length - 1].end_date
         })
   },

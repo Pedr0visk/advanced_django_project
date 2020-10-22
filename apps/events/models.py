@@ -7,8 +7,10 @@ from django.utils.translation import gettext_lazy as _
 
 class Event(models.Model):
     class TypeEvent(models.TextChoices):
-        REPAIR = 'RIR', _('Repair')
-        REPLACE = 'RCE', _('Replace')
+        COMP_REPAIR = 'CRIR', _('Repair in Component')
+        SUBSYS_REPAIR = 'SRIR', _('Repair in Subsystem')
+        COMP_REPLACE = 'CRCE', _('Replace in Component')
+        SUBSYS_REPLACE = 'SRCE', _('Replace in Subsystem')
         WITHDRAW = 'WAW', _('Withdraw')
         REINSTALL = 'RLL', _('Reinstall')
         FMODE_FAIL = 'FIL', _('Failure in Failure Mode')
@@ -24,9 +26,9 @@ class Event(models.Model):
                                  related_name='events')
 
     type = models.CharField(
-        max_length=3,
+        max_length=14,
         choices=TypeEvent.choices,
-        default=TypeEvent.REPAIR
+        default=TypeEvent.WITHDRAW
     )
 
     date = models.DateTimeField()

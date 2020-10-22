@@ -50,17 +50,19 @@
                 :dayStr="dayStr"
                 :btnStr="btnStr"
                 timeType="hour"
+                :canEdit="false"
                 v-model="phase.end_date"
                 :popperProps="popperProps"
                 :timeStr="timeStr"
             />
-            <small>format: Year-Month-Day Hour</small>
+            <small>autofillable</small>
           </div>
           <!-- duration -->
           <div class="col-1">
             <input
                 v-model="phase.duration"
                 type="number"
+                :disabled="phase.start_date == ''"
                 class="form-control form-control-sm">
             <small>duration (h)</small>
           </div>
@@ -126,14 +128,14 @@
           </thead>
           <tbody>
 
-          <tr v-for="(p, key) in phases" :key="key">
-            <td>{{ p.name }}</td>
-            <td>{{ p.start_date }}</td>
-            <td>{{ p.end_date }}</td>
-            <td>{{ p.duration }}h</td>
-            <td>{{ p.has_test }}</td>
-            <td>{{ p.is_drilling }}</td>
-            <td>{{ p.test_groups }}</td>
+          <tr v-for="(item, key) in phases" :key="key">
+            <td>{{ item.name }}</td>
+            <td>{{ item.start_date }}:00h</td>
+            <td>{{ item.end_date }}:00h</td>
+            <td>{{ item.duration }}h</td>
+            <td><img v-if="item.has_test" src="/static/img/icon-yes.svg" alt=""></td>
+            <td><img v-if="item.is_drilling" src="/static/img/icon-yes.svg" alt=""></td>
+            <td>{{ item.test_groups }}</td>
             <td width="5%">
               <a
                   @click.prevent="select(key)"
@@ -141,7 +143,7 @@
             </td>
             <td width="5%">
               <a
-                  @click.prevent="remove(phase._id)"
+                  @click.prevent="remove(item._id)"
                   href="" class="px-2"><i class="fa fa-times text-danger"></i></a>
             </td>
           </tr>
@@ -215,7 +217,7 @@ export default {
   data() {
     return {
       errors: [],
-      timeStr: ['hour'],
+      timeStr: ['hour', 'minutes', 'seconds'],
       isM: false,
       isUpdate: false,
       popperProps: popperProps,
@@ -239,15 +241,13 @@ export default {
   },
   mounted() {
     let bopId = document.getElementById('bopId').value
-    console.log(bopId)
-    this.$http
+    axios
         .get(`/api/bops/${bopId}/test-groups/`)
         .then(response => this.testGroups = response.data)
   },
   methods: {
     createSchema() {
       const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
       const payload = {
         campaign: parseInt(document.getElementById('campaignId').value),
         name: this.schema.name,
@@ -263,18 +263,16 @@ export default {
           }
         })
       }
+      console.log('debugging...')
+      console.log('[LOG PHASES]', this.phases)
+      console.log('[LOG PAYLOAD]', payload)
 
       const config = {
-        method: 'post',
-        url: '/api/schemas/',
         headers: {'X-CSRFToken': csrftoken},
-        data: payload
       }
 
-      console.log(payload)
-
       let that = this
-      this.$http(config)
+      axios.post('/api/schemas/', payload, config)
           .then(response => {
             console.log(response)
             that
@@ -293,13 +291,14 @@ export default {
           })
     },
     add() {
-      if(!this.checkForm())
+      if (!this.checkForm())
         return
 
       this.phase._id = this.$uuid.v1()
       let newPhases = [...this.phases, this.phase]
       this.phases = newPhases
       this.clear()
+      console.log(this.phases)
     },
     update(id) {
       let index = this.phases.findIndex(phase => phase._id == id)
@@ -320,7 +319,6 @@ export default {
       this.toggleAction()
     },
     remove(id) {
-      console.log('deleting')
       this.phases = this.phases.filter(phase => phase._id != id)
     },
     select(index) {
@@ -355,6 +353,7 @@ export default {
       this.clear()
     },
     checkForm() {
+      console.log('checking fields...')
       this.errors = []
       let {name, duration, start_date} = this.phase
 
@@ -367,8 +366,9 @@ export default {
 
       if (this.errors.length > 0)
         return false;
-    }
 
+      return true
+    }
   },
   watch: {
     'phase.duration': function (val, oldVal) {

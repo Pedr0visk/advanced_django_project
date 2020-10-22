@@ -5,9 +5,6 @@ from .models import Event
 
 # dependencies
 from apps.campaigns.models import Campaign
-from apps.failuremodes.models import FailureMode
-from apps.components.models import Component
-from apps.subsystems.models import Subsystem
 
 
 def event_create(request, campaign_pk):
@@ -15,12 +12,13 @@ def event_create(request, campaign_pk):
     bop = campaign.bop
 
     form = EventForm(request.POST or None)
-    failure_modes = FailureMode.objects.filter(component__subsystem__bop=bop)
-    components = Component.objects.filter(subsystem__bop=bop)
-    subsystems = Subsystem.objects.filter(bop=bop)
+    failure_modes = bop.failure_mode_list()
+    components = bop.component_list()
+    subsystems = bop.subsystems.all()
 
     if request.method == 'POST':
         if form.is_valid():
+            print(request.POST)
             new_event = form.save(commit=False)
             new_event.campaign_id = campaign_pk
             new_event.save()
@@ -54,15 +52,3 @@ def event_update(request, event_pk):
 
 def event_list(request):
     return render(request, 'events/event_list.html')
-
-
-"""
-    {name: 'event 1', type: 'fmode_fail', _id: 'abc123'}
-    if type == 'fmode_fail':
-        FailureMode.objects.get(pk=_id)
-    if type == 'comp_fail':
-        Component.objects.get(pk=_id)
-    if type == 'subsys_fail':
-        Subsystem.objects.get(pk=_id)
-
-"""

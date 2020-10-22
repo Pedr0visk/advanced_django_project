@@ -74,19 +74,19 @@
             <div class="form-group row">
               <label class="col-sm-1 col-form-label col-form-label-sm">Select Code:</label>
               <div class="col-sm-5">
-                <select name="object_id" id="failure_modes_code" class="objects">
+                <select name="failure_mode_code" id="failure_mode_codes" class="objects">
                   {% for failure_mode in failure_modes %}
                   <option value="{{failure_mode.code}}">{{ failure_mode.code }} - {{ failure_mode.name }}</option>
                   {% endfor %}
                 </select>
 
-                <select name="object_id" id="components_code" class="objects">
+                <select name="component_code" id="component_codes" class="objects">
                   {% for component in components %}
                   <option value="{{component.code}}">{{ component.code }} - {{ component.name }}</option>
                   {% endfor %}
                 </select>
 
-                <select name="object_id" id="subsystems_code" class="objects">
+                <select name="subsystem_code" id="subsystem_codes" class="objects">
                   {% for subsystem in subsystems %}
                   <option value="{{subsystem.code}}">{{ subsystem.code }} - {{ subsystem.name }}</option>
                   {% endfor %}
@@ -102,6 +102,7 @@
               <label class="col-sm-1 col-form-label col-form-label-sm">Date:</label>
               <div class="col-sm-2">
                 {{ form.date }}
+                {{form.object_code}}
                 <small class="form-text text-muted">
                   Note: you are 3 hours behind server time.
                 </small>
@@ -115,9 +116,9 @@
                   <button type="submit" class="btn btn-secondary">
                     Save and add another
                   </button>
-                  <button type="submit" class="btn btn-primary">
+                  <a href="" id="submitBtn" class="btn btn-primary">
                     SAVE
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
@@ -152,19 +153,91 @@
         form_fields[field].className += 'form-control form-control-sm'
     }
 
-    const type = document.getElementById('id_type')
-    type.addEventListener('change', function() {
-        switch (this.value) {
-            case 'FIL':
+    function hideElements() {
+        for (let index in arguments) {
+            let el = document.getElementById(arguments[index])
+            if (!el.classList.contains('d-none')) {
+                el.classList.add('d-none')
+            }
+        }
+    }
+
+    function displayElements() {
+        for (let index in arguments) {
+            let el = document.getElementById(arguments[index])
+            if (el.classList.contains('d-none')) {
+                el.classList.remove('d-none')
+            }
+        }
+    }
+
+    function getObjectId(type) {
+        switch (type) {
+            case 'WAW':
+            case 'RLL':
+                return null;
+                break;
+            case 'CRIR':
+            case 'CRCE':
             case 'CIL':
+                return $('#component_codes').val()
+                break;
+            case 'SRIR':
+            case 'SRCE':
             case 'SIL':
-                $('#subsystems_code').addClass('d-none')
-                $('#components_code').addClass('d-none')
-                $('#failure_modes_code').removeClass('d-none')
+                return $('#subsystem_codes').val()
+                break;
+            case 'FIL':
+                return $('#failure_mode_codes').val()
                 break;
             default:
                 break
         }
+    }
+
+    const type = document.getElementById('id_type')
+    const form = document.getElementById('eventForm')
+    const submitBtn = document.getElementById('submitBtn')
+
+    hideElements('failure_mode_codes', 'component_codes', 'subsystem_codes')
+
+    type.addEventListener('change', function () {
+        switch (this.value) {
+            case 'WAW':
+            case 'RLL':
+                hideElements('failure_mode_codes', 'component_codes', 'subsystem_codes')
+                break;
+            case 'CRIR':
+            case 'CRCE':
+            case 'CIL':
+                displayElements('component_codes')
+                hideElements('failure_mode_codes', 'subsystem_codes')
+                break;
+            case 'SRIR':
+            case 'SRCE':
+            case 'SIL':
+                displayElements('subsystem_codes')
+                hideElements('component_codes', 'failure_mode_codes')
+                break;
+            case 'FIL':
+                displayElements('failure_mode_codes')
+                hideElements('component_codes', 'subsystem_codes')
+                break;
+            default:
+                break
+        }
+    })
+
+    submitBtn.addEventListener('click', function (e) {
+        e.preventDefault()
+        let data = new FormData()
+        data.append('name', form.name.value)
+        data.append('description', form.description.value)
+        data.append('type', form.type.value)
+        data.append('object_code', getObjectId(form.type.value))
+        data.append('date', getObjectId(form.date.value))
+
+        form.submit()
     })
 </script>
 {% endblock %}

@@ -94,6 +94,7 @@
               <tr>
                 <th scope="col">name</th>
                 <th scope="col">type</th>
+                <th scope="col">object id</th>
                 <th scope="col">date</th>
               </tr>
               </thead>
@@ -102,6 +103,7 @@
               <tr>
                 <td><a href="{% url 'events:update' c_event.pk %}">{{ c_event.name }}</a></td>
                 <td><a href="">{{ c_event.type }}</a></td>
+                <td><a href="">{{ c_event.object_code }}</a></td>
                 <td><a href="">
                   {{ c_event.date }}
                 </a></td>
