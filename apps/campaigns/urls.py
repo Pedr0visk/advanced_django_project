@@ -9,7 +9,6 @@ urlpatterns = [
     path('<int:campaign_pk>/change/', views.campaign_update, name="update"),
     path('phases/<int:pk>/change/', views.phase_update, name="update_phase"),
     path('schemas/<int:pk>/change/', views.phase_update, name="update_phase"),
-    path('<int:campaign_pk>/run/', views.campaign_metrics, name="run"),
     path('<int:campaign_pk>/schemas/add/', views.schema_create, name="create_schema"),
     path('<int:campaign_pk>/schemas/<int:schema_pk>/', views.schema_index, name="schema_index"),
     path('<int:campaign_pk>/schemas/<int:schema_pk>/delete/',

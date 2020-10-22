@@ -14,16 +14,13 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Subsystem',
+            name='Cut',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('code', models.CharField(max_length=255)),
-                ('name', models.CharField(max_length=255)),
-                ('slug', models.SlugField(blank=True, max_length=255, null=True)),
-                ('bop', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='subsystems', to='bops.Bop')),
+                ('index', models.BigIntegerField()),
+                ('order', models.BigIntegerField()),
+                ('failure_modes', models.TextField()),
+                ('safety_function', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='cuts', to='bops.SafetyFunction')),
             ],
-            options={
-                'ordering': ('code', 'name'),
-            },
         ),
     ]

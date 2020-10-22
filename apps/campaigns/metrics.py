@@ -158,16 +158,15 @@ def calculate_SF_PFDS(camp, m):
     # tf_integracao = (t_end_camp - t_start_recert).days
     # ti_integracao = (current_date - t_start_recert).days
 
-    steps = abs((t_end_camp - t_start_camp).days) * 24
-
+    steps = abs((t_end_camp - t_start_camp).days) *24
+    print("steps", steps)
     failure_modes = len(m)
 
-    dt = 1
-    #teste = Phase.objects.filter(has_test=True)
-    #print("testes", teste)
-    teste = 0
-    t_op = get_t_op(t_start_camp, t_end_camp, teste, dt)
-    v_integrate = calculate_failure_modes(m, failure_modes, teste, dt, False, steps, t_op)
+    dt = 1 #passo horario
+    schema = Schema.objects.filter(campaign=camp)
+    print("schema", schema)
+    t_op = get_t_op(t_start_camp, t_end_camp, schema, dt)
+    v_integrate = calculate_failure_modes(m, failure_modes, False, dt, False, steps, t_op)
     # print("v integrate",v_integrate)
 
     safety_function_numbers = SafetyFunction.objects.filter(bop=camp.bop).count()
@@ -185,9 +184,10 @@ def calculate_SF_PFDS(camp, m):
         max_cuts = Cut.objects.filter(safety_function=safety_function).count()
         corte = 0
 
-        matriz_index = gerar_matriz(max_cuts, 4)
+        #matriz_index = gerar_matriz(max_cuts, 4)
+        matriz_index = [[' ' for i in range(4)] for j in range(max_cuts)]
 
-        print(datetime.datetime.today(), "Inicio da organização da sf ")
+        #print(datetime.datetime.today(), "Inicio da organização da sf ")
 
         for cut in cuts:
 
@@ -195,20 +195,25 @@ def calculate_SF_PFDS(camp, m):
             falha = 0
 
             for fail in fails:
-                fail_line = Fail_line(fail, v_integrate)
-                # print("faill", fail, fail_line)
-                matriz_index[corte][falha] = fail_line
+                if fail:
+                    fail_line = Fail_line(fail, v_integrate)
+
+                    matriz_index[corte][falha] = fail_line
+                else:
+                    matriz_index[corte][falha] = ' '
                 falha = falha + 1
 
             corte = corte + 1
 
-        print(datetime.datetime.today(), "Inicio do calculo PFD, com steps ", steps)
+        #print(datetime.datetime.today(), "Inicio do calculo PFD, com steps ", steps)
+        print("matrix de index", matriz_index)
+
         for i in range(1, steps):
             result_each_sf_integrate[i][0] = i * dt
             result_each_sf_integrate[i][fl] = calc_PFD_this_timestep(i, v_integrate, matriz_index)
 
         # print("resultado ", result)
-        print(datetime.datetime.today(), "Fim do calculo da Sf: ", safety_function)
+        #print(datetime.datetime.today(), "Fim do calculo da Sf: ", safety_function)
 
         # print("total de steps calculados:", i)
 
@@ -286,7 +291,7 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
             elif m[j][23] == "Step":
 
                 xlambda = float(m[j][27])
-                increase = float(m[j][28]) / 100
+                increase = float(m[j][28])
 
             # get test time for each test
 
@@ -318,7 +323,7 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
                     pol_falha = 1 - math.exp(((-1) * coverage * (lambda_effetivo)))
 
                 if m[j][23] == "Step":
-                    # Cintegrated = t[j][i][6 + k]
+                    #Cintegrated = t[j][i][6 + k]
                     Cintegrated = tempo
                     l_ = xlambda
                     c_ = coverage
@@ -326,48 +331,67 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
                     i_ = increase
                     Cin_ = Cintegrated
 
-                    pol_falha = 1 - math.exp(c_ * ((((-1) * l_) * i_ * Cin_) + (((-1) * l_) * t_)))
+                    pol_falha = 1 - math.exp(c_ * ((((-1) * l_) * i_ * t_) + (((-1) * l_) * t_)))
 
                 v_integrate[j][i] = 1 - (1 - pol_falha)
-        # print(v_integrate[j])
+
     return v_integrate
 
 
-0
 
 
-def get_t_op(start, end, testes, dt):
+
+def get_t_op(start, end, schema, dt):
     count = 0
     flag = 0
+    tmax = (abs((end - start).days)) * 24
+    t_op = [[None for i in range(2)] for j in range(tmax+1)]
+    work = 1
+    t_op[0][0] = 0
+    t_op[0][1] = 0
+
+    for s in schema:
+
+        phases = s.phases.all().order_by('start_date')
+
+        for phase in phases:
+
+
+            if phase.is_drilling:
+
+                for i in range(0,int(phase.duration)):
+
+                    count = count + 1
+                    t_op[count][0] = count
+                    t_op[count][1] = t_op[count - 1][1] + dt
+
+            elif phase.has_test:
+
+                for i in range(0,int(phase.duration)):
+
+                    count = count + 1
+                    t_op[count][0] = count
+                    t_op[count][1] = t_op[count - 1][1]
+            else:
+
+                for i in range(0, int(phase.duration)):
+
+                    count = count + 1
+                    t_op[count][0] = count
+                    t_op[count][1] = t_op[count - 1][1]
+
+
+    return t_op
+
+    """
 
     # history = get_campaign_list2(bop)
 
-    # campanhas = len(history)
+    # campanhas = len(history)  
     # start = history[0][0]
     # end = history[campanhas - 1][1]
 
-    inicio = []
-    end = []
-    # for phase in phases:
-    #     if phase.is_drilling:
-    #         inicio.append(phase.start_date)
-    #         fim = phase.start_date + datetime.timedelta(hours=phase.duration)    # é necessario ordenar os fins e inicios
-    #         end.append(fim)
-    #     elif phase.has_test:
-    #         end.append(phase.start_date)
-    #         fim = phase.start_date + datetime.timedelta(hours=phase.duration)
-    #         inicio.append(fim)
-    # cont = 0
-    # t=[]
-    # for i in range(len(inicio)):
-    #     steps = (fim[i] - inicio[i]).hours
-    #     for j in range(0,steps):
-    #         t.append(cont)
-    #         cont = cont + 1
-
-
-
-
+   
     firststart = start
     firstend = end
 
@@ -377,21 +401,17 @@ def get_t_op(start, end, testes, dt):
     t_op[0][0] = 0
     t_op[0][1] = 0
 
-    cont = 0
-
-
-
     for i in range(1, tmax):
 
         dataatual = start + datetime.timedelta(days=i)
 
-        if dataatual > firststart:
+        if dataatual > firstend:
             flag = flag + 1
-            # firststart = history[flag][0]     #atualização da data da campanha
+            # firststart = history[flag][0]
             # firstend = history[flag][1]
             work = 0
 
-        elif dataatual >= firststart and work == 0:
+        if dataatual >= firststart and work == 0:
             # firstend = history[flag][1]
             work = 1
 
@@ -403,8 +423,7 @@ def get_t_op(start, end, testes, dt):
             t_op[i][0] = i
             t_op[i][1] = t_op[i - 1][1]
 
-    return t_op
-
+"""
 
 def Fail_line(failmode, v_integrate):
     line = -1
@@ -414,22 +433,29 @@ def Fail_line(failmode, v_integrate):
         if failmode == v_integrate[i][0]:
             line = i
             return line
-
+    print("não encontrou", failmode)
     return line
 
 
 def calc_PFD_this_timestep(step, v_integrate, matriz_index):
     prod_sf = 1
-    print_v = []
+
     for corte in range(0, len(matriz_index)):
         produtorio = 1
         for falha in range(0, 4):
             if matriz_index[corte][falha] != ' ':
-                produtorio = produtorio * float(v_integrate[matriz_index[corte][falha]][step])
-        prod_sf = prod_sf * (1.0 - produtorio)
+                try:
+                    produtorio = produtorio * float(v_integrate[matriz_index[corte][falha]][step])
+                except:
+                    print("v_integrate[matriz_index[corte][falha]][step]",
+                          v_integrate[matriz_index[corte][falha]][step], corte, falha, step)
+        try:
+            prod_sf = prod_sf * (1.0 - produtorio)
+        except:
+            print("prod", prod_sf, produtorio)
 
     prod_sf = 1.0 - prod_sf
-    print_v.append(prod_sf)
+
 
     if prod_sf == 0:
         prod_sf = 10 ** -40
