@@ -43,6 +43,17 @@
             />
             <small>format: Year-Month-Day Hour</small>
           </div>
+
+          <!-- duration -->
+          <div class="col-1">
+            <input
+                v-model="phase.duration"
+                type="number"
+                :disabled="phase.start_date == ''"
+                class="form-control form-control-sm">
+            <small>duration (h)</small>
+          </div>
+
           <!-- datetime picker -->
           <div class="col-3">
             <datetime-picker
@@ -57,15 +68,7 @@
             />
             <small>autofillable</small>
           </div>
-          <!-- duration -->
-          <div class="col-1">
-            <input
-                v-model="phase.duration"
-                type="number"
-                :disabled="phase.start_date == ''"
-                class="form-control form-control-sm">
-            <small>duration (h)</small>
-          </div>
+
           <!-- has_test -->
           <div class="col-1">
             <input type="checkbox" v-model="phase.has_test">
@@ -93,7 +96,7 @@
                 v-show="!isUpdate"
                 type="submit"
                 class="btn-standard"
-                @click.prevent="add">save
+                @click.prevent="add">add
             </button>
             <div class="d-flex">
               <button
@@ -119,8 +122,8 @@
             <th>start date</th>
             <th>end date</th>
             <th>duration (h)</th>
-            <th>Test</th>
-            <th>is drilling</th>
+            <th>test</th>
+            <th>drilling</th>
             <th>test groups</th>
             <th></th>
             <th></th>
@@ -277,7 +280,7 @@ export default {
             console.log(response)
             that
                 .$swal({
-                  title: "Campaign created successfully!",
+                  title: "Schema created successfully!",
                   text: 'go to campaign list to see it',
                   type: "success",
                   showConfirmButton: false,

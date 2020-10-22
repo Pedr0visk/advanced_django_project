@@ -60,6 +60,7 @@
             <input
                 v-model="phase.duration"
                 type="number"
+                :disabled="phase.start_date == ''"
                 class="form-control form-control-sm">
             <small>duration (h)</small>
           </div>
@@ -116,8 +117,8 @@
             <th>start date</th>
             <th>end date</th>
             <th>duration (h)</th>
-            <th>Test</th>
-            <th>is drilling</th>
+            <th>test</th>
+            <th>drilling</th>
             <th>test groups</th>
             <th></th>
             <th></th>
