@@ -12,13 +12,14 @@ import math
 import numpy as np
 
 
-def run(campaign, **kwargs):
-    print(datetime.datetime.today(), "incio do calculo")
-    bop = campaign.bop
+def run(schema, **kwargs):
+    print("schema", schema)
 
+    print(datetime.datetime.today(), "incio do calculo")
+    bop = schema.campaign.bop
     m = get_m_matrix(bop)
 
-    sf_pfds = calculate_SF_PFDS(campaign, m)
+    sf_pfds = calculate_SF_PFDS(schema, m)
 
     return sf_pfds
 
@@ -140,7 +141,7 @@ def get_m_matrix(bop):
     return m
 
 
-def calculate_SF_PFDS(camp, m):
+def calculate_SF_PFDS(schema, m):
     flag = 1
     dt = 1
     # count_camps = count_Campaings(bop)  # contagem de campanhas
@@ -150,25 +151,24 @@ def calculate_SF_PFDS(camp, m):
 
     # t_end_camp = getEndCampaignDate(bop.id, count_camps)
     # t_start_camp = getStartCampaignDate(bop.id, 1)
-    t_start_camp = camp.start_date
-    t_end_camp = camp.end_date
+    t_start_camp = schema.campaign.start_date
+    t_end_camp = schema.campaign.end_date
     current_date = datetime.datetime.today()
     # tf_integracao = (t_end_camp - t_start_recert).days
     # ti_integracao = (current_date - t_start_recert).days
 
-    steps = abs((t_end_camp - t_start_camp).days) *24
+    steps = abs((t_end_camp - t_start_camp).days) * 24
     print("steps", steps)
     failure_modes = len(m)
 
-    dt = 1 #passo horario
-    schema = Schema.objects.filter(campaign=camp)
-    print("schema", schema)
+    dt = 1  # passo horario
+
     t_op = get_t_op(t_start_camp, t_end_camp, schema, dt)
     v_integrate = calculate_failure_modes(m, failure_modes, False, dt, False, steps, t_op)
     # print("v integrate",v_integrate)
 
-    safety_function_numbers = SafetyFunction.objects.filter(bop=camp.bop).count()
-    sf = SafetyFunction.objects.filter(bop=camp.bop)
+    safety_function_numbers = SafetyFunction.objects.filter(bop=schema.campaign.bop).count()
+    sf = SafetyFunction.objects.filter(bop=schema.campaign.bop)
 
     result_each_sf_integrate = gerar_matriz(steps + 1, safety_function_numbers + 1)
     result_each_sf_integrate_falho = gerar_matriz(steps + 1, safety_function_numbers + 1)
@@ -182,10 +182,10 @@ def calculate_SF_PFDS(camp, m):
         max_cuts = Cut.objects.filter(safety_function=safety_function).count()
         corte = 0
 
-        #matriz_index = gerar_matriz(max_cuts, 4)
+        # matriz_index = gerar_matriz(max_cuts, 4)
         matriz_index = [[' ' for i in range(4)] for j in range(max_cuts)]
 
-        #print(datetime.datetime.today(), "Inicio da organização da sf ")
+        # print(datetime.datetime.today(), "Inicio da organização da sf ")
 
         for cut in cuts:
 
@@ -203,7 +203,7 @@ def calculate_SF_PFDS(camp, m):
 
             corte = corte + 1
 
-        #print(datetime.datetime.today(), "Inicio do calculo PFD, com steps ", steps)
+        # print(datetime.datetime.today(), "Inicio do calculo PFD, com steps ", steps)
         print("matrix de index", matriz_index)
 
         for i in range(1, steps):
@@ -211,11 +211,25 @@ def calculate_SF_PFDS(camp, m):
             result_each_sf_integrate[i][fl] = calc_PFD_this_timestep(i, v_integrate, matriz_index)
 
         # print("resultado ", result)
-        #print(datetime.datetime.today(), "Fim do calculo da Sf: ", safety_function)
+        # print(datetime.datetime.today(), "Fim do calculo da Sf: ", safety_function)
 
         # print("total de steps calculados:", i)
 
     return result_each_sf_integrate
+
+
+def get_t(t_op):
+    t = []
+    count = 0
+    for i in range(1, len(t_op)):
+        if t_op[i - 1][1] == t_op[i][1]:
+            count = 0
+            t.append(count)
+        else:
+            count = count + 1
+            t.append(count)
+
+    return t
 
 
 def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
@@ -227,7 +241,8 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
     v_integrate = gerar_matriz(failure_modes, step_max)
 
     # calculates PFD(t) for all listed failure modes
-    #    t = time_per_op_mode_cert(m, failure_modes, t_op, step_max)
+    # t = time_per_op_mode_cert(m, failure_modes, t_op, step_max)
+    t = get_t(t_op)
 
     # else:
     # t = time_per_op_mode(delay)
@@ -295,7 +310,8 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
 
             for i in range(1, step_max):
 
-                tempo = t_op[i][1]
+                tempo = t[i]
+
                 # Calculate normal PFD fractions
                 if m[j][23] == "Exponential":
 
@@ -321,7 +337,7 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
                     pol_falha = 1 - math.exp(((-1) * coverage * (lambda_effetivo)))
 
                 if m[j][23] == "Step":
-                    #Cintegrated = t[j][i][6 + k]
+                    # Cintegrated = t[j][i][6 + k]
                     Cintegrated = tempo
                     l_ = xlambda
                     c_ = coverage
@@ -336,47 +352,147 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
     return v_integrate
 
 
+def time_per_op_mode_cert(m, failure_modes, t_op, tmax):
+    tx = gerar_matriz(failure_modes, tmax)
+
+    for i in range(0, len(m)):
+        stagger = m[i][19]
+        cycle_size = 168
+        cycle_to_replace = 10
+        teste1 = m[i][10]
+        teste2 = m[i][11]
+        teste3 = m[i][12]
+        teste4 = m[i][13]
+
+        tx[i] = calc_op_time_each_test_recert(m, teste1, teste2,
+                                              teste3,
+                                              teste4, t_op,
+                                              stagger, cycle_size,
+                                              cycle_to_replace, i, tmax)
+
+    return tx
+
+
+def calc_op_time_each_test_recert(m, T1, T2, T3, T4, t_op, stagger, cycle_size, cycle_to_replace, coluna, tmax):
+    a = len(t_op)
+
+    t_tests = gerar_matriz(a, 15)
+
+    prox_teste = [None for i in range(5)]
+    #               data_atual =  time_now - time_sv
+    syst = m[coluna][3]
+    comp = m[coluna][5]
+    fm = m[coluna][7]
+    tipo = m[coluna][23]
+
+    for ii in range(1, len(t_op)):
+        # verify teste change
+
+        t_tests[ii][1] = calc_t_test_recert((t_op[ii][1] / 24), T1, stagger)
+
+        t_tests[ii][2] = calc_t_test_recert((t_op[ii][1] / 24), T2, stagger)
+
+        #    t_tests[ii][3] = calc_t_test_recert((t_op[ii][1]/24), T3, stagger)
+
+        #   t_tests[ii][4] = calc_t_test_recert((t_op[ii][1]/24), T4, stagger)
+
+        if tipo == "Step":
+
+            t_tests[ii][6] = (t_op[ii][1] // cycle_size) % cycle_to_replace + 1
+            # Calc t-LTk for Step and Weibull Calculations
+            for j in range(1, 5):
+
+                if t_tests[ii][j] < 1:
+                    t_tests[ii][6 + j] = ii
+                else:
+                    if ii == 1:
+                        t_tests[ii][6 + j] = 0
+                    else:
+
+                        t_tests[ii][6 + j] = t_tests[ii - 1][6 + j]
+
+                t_tests[ii][10 + j] = calc_integral_ciclos(t_tests, j, ii, 24)
+
+
+        else:
+            if tipo == "Weibull":
+                for j in range(1, 5):
+                    if t_tests[ii][j] < 1:
+                        t_tests[ii][6 + j] = ii
+                    else:
+                        if ii == 1:
+                            t_tests[ii][6 + j] = 0
+                        else:
+                            t_tests[ii][6 + j] = t_tests[ii - 1][6 + j]
+                t_tests[ii][11] = calc_last_replacement(t_tests, ii)
+
+    return t_tests
+
+
+def calc_t_test_recert(tempo, test_interval, stagger):
+    # if stagger == None :            #retirando o stagger do calculo, igualando sempre a zero (não altera o seu tempo de teste)
+    stagger = 0
+
+    if test_interval == None:
+        return 0
+
+    if test_interval > 0:
+        if tempo > stagger:
+            tempo = tempo - stagger
+        t = tempo % test_interval
+
+        return t
+    else:
+        return 0
+
+
+def calc_last_replacement(t_tests, tempo):
+    if tempo == 1:
+        return 0  # na planilha o retorno é 0.
+    return t_tests[tempo - 1][11]
+
+
+def calc_integral_ciclos(t_tests, nivel, tempo, dt):
+    if tempo == 1:
+        return dt
+    if t_tests[tempo][nivel] <= 1:
+        return 0
+
+    return t_tests[tempo - 1][10 + nivel] + t_tests[tempo][6] * dt
+
 
 def get_t_op(start, end, schema, dt):
-
     count = 0
     flag = 0
     tmax = (abs((end - start).days)) * 24
-    t_op = [[None for i in range(2)] for j in range(tmax+1)]
+    t_op = [[None for i in range(2)] for j in range(tmax + 1)]
     work = 1
     t_op[0][0] = 0
     t_op[0][1] = 0
 
-    for s in schema:
+    phases = schema.phases.all().order_by('start_date')
 
-        phases = s.phases.all().order_by('start_date')
+    for phase in phases:
 
-        for phase in phases:
+        if phase.is_drilling:
 
+            for i in range(0, int(phase.duration)):
+                count = count + 1
+                t_op[count][0] = count
+                t_op[count][1] = t_op[count - 1][1] + dt
 
-            if phase.is_drilling:
+        elif phase.has_test:
 
-                for i in range(0,int(phase.duration)):
+            for i in range(0, int(phase.duration)):
+                count = count + 1
+                t_op[count][0] = count
+                t_op[count][1] = t_op[count - 1][1]
+        else:
 
-                    count = count + 1
-                    t_op[count][0] = count
-                    t_op[count][1] = t_op[count - 1][1] + dt
-
-            elif phase.has_test:
-
-                for i in range(0,int(phase.duration)):
-
-                    count = count + 1
-                    t_op[count][0] = count
-                    t_op[count][1] = t_op[count - 1][1]
-            else:
-
-                for i in range(0, int(phase.duration)):
-
-                    count = count + 1
-                    t_op[count][0] = count
-                    t_op[count][1] = t_op[count - 1][1]
-
+            for i in range(0, int(phase.duration)):
+                count = count + 1
+                t_op[count][0] = count
+                t_op[count][1] = t_op[count - 1][1]
 
     return t_op
 
@@ -388,7 +504,7 @@ def get_t_op(start, end, schema, dt):
     # start = history[0][0]
     # end = history[campanhas - 1][1]
 
-   
+
     firststart = start
     firstend = end
 
@@ -422,6 +538,7 @@ def get_t_op(start, end, schema, dt):
 
 """
 
+
 def Fail_line(failmode, v_integrate):
     line = -1
 
@@ -452,7 +569,6 @@ def calc_PFD_this_timestep(step, v_integrate, matriz_index):
             print("prod", prod_sf, produtorio)
 
     prod_sf = 1.0 - prod_sf
-
 
     if prod_sf == 0:
         prod_sf = 10 ** -40

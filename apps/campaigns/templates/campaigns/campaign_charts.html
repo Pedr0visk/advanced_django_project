@@ -59,15 +59,34 @@
 
                 <!-- section content -->
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-6">
 
                         <div id="container1"></div>
+
+
+                    </div>
+                    <div class="col-6">
+
+
                         <div id="container2"></div>
 
                     </div>
+</div>
+                 <div class="row">
+                    <div class="col-6">
+
+                        <div id="container3"></div>
 
 
-                </div>
+                    </div>
+                    <div class="col-6">
+
+
+                        <div id="container4"></div>
+
+                    </div>
+</div>
+
             </div>
         </div>
 
@@ -126,13 +145,11 @@
 
                         plotLines: [
 
-                            {value: {{0.01}}, width: 2, label: {text: "SIL 1"}},
-                            {value: {{0.001}}, width: 2, label: {text: "SIL 2"}},
+                            {value: {{0.01}}, width: 1, color: 'red', dashStyle: 'ShortDash', label: {text: "SIL 1"}},
+                            {value: {{0.001}}, width: 1, color: 'orange', dashStyle: 'ShortDash', label: {text: "SIL 2"}},
+                            {value: {{0.0001}}, width: 1,  dashStyle: 'ShortDash', label: {text: "SIL 3"}},
 
-                        ],
-
-
-                    },
+                        ]},
 
                     xAxis: {
 
@@ -157,8 +174,8 @@
                     plotOptions: {
 
                         series: {
-
-                            pointInterval: 24 * 3600 * 1000
+                            pointStart: Date.UTC({{campaign.start_date.year}}, {{campaign.start_date.month}} - 1, {{campaign.start_date.day}}), // start date
+                            pointInterval: 3600 * 1000 // one hour in miliseconds
                         }
                     },
 
