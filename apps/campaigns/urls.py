@@ -1,4 +1,6 @@
-from django.urls import path, include
+from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 app_name = 'campaigns'
@@ -9,6 +11,7 @@ urlpatterns = [
     path('<int:campaign_pk>/change/', views.campaign_update, name="update"),
     path('<int:campaign_pk>/delete/', views.campaign_delete, name="delete"),
     # schemas
+    path('<int:schema_pk>/run/', views.campaign_metrics, name="run"),
     path('schemas/<int:pk>/change/', views.phase_update, name="update_phase"),
     path('<int:campaign_pk>/schemas/add/', views.schema_create, name="create_schema"),
     path('<int:campaign_pk>/schemas/<int:schema_pk>/', views.schema_index, name="schema_index"),
