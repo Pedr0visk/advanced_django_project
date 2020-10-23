@@ -21,7 +21,7 @@ def event_create(request, campaign_pk):
             print(request.POST)
             new_event = form.save(commit=False)
             new_event.campaign_id = campaign_pk
-            new_event.save()
+            print(new_event.object_code)
             messages.success(request, f'Event "{new_event.name}" created successfully!')
             return redirect(new_event.success_url())
 

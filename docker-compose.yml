@@ -1,38 +1,32 @@
 version: '3.7'
 
 services:
-  postgres-container:
-    image: postgres:12.2
-    environment:
-      POSTGRES_DB: bop_database
-      POSTGRES_PASSWORD: secret
-    ports:
-      - "5432:5432"
+  app:
+    container_name: bop-app
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/docker-entrypoint-initdb.d
-    networks:
-      - net
-
-  pgadmin-container:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: pwd
+      - .:/usr/src/app/
     ports:
-      - "8002:80"
+      - 8000:8000
+    env_file:
+      - ./.env
     depends_on:
-      - postgres-container
-    networks:
-      - net
+      - db
+
+  db:
+    container_name: bop-database
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=bop_database
 
   redis:
+    container_name: bop-redis
     image: redis:latest
-    ports:
-      - "6379:6379"
-    networks:
-      - net
 
 volumes:
-  postgres:
-networks:
-  net:
+  postgres_data:
