@@ -88,6 +88,8 @@ def campaign_metrics(request, schema_pk):
     number_Sf = len(results[0])
     tempo = len(results) - 1
     data_to_charts = []
+    average = []
+    maxi = []
 
     print("veiws number sf", number_Sf, tempo)
 
@@ -113,7 +115,8 @@ def campaign_metrics(request, schema_pk):
         maximo = max(result_sf)
 
         desc = "safety Function" + " " + str(j)
-
+        average.append(avg)
+        maxi.append(maximo)
         for i in range(0, tempo):
             average_to_chart.append(avg)
         print("a", average_to_chart)
@@ -126,7 +129,8 @@ def campaign_metrics(request, schema_pk):
             'desc': desc,
         })
 
-    context = {'campaign': campaign, 'schema': Schema, 'results': results, 'data_to_charts': data_to_charts}
+    context = {'campaign': campaign, 'schema': Schema, 'results': results, 'average': average, 'maxi': maxi,
+               'data_to_charts': data_to_charts}
     return render(request, 'campaigns/campaign_charts.html', context)
 
 

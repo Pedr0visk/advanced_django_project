@@ -124,12 +124,12 @@
 
                                 <tr>
 
-                                    <td scope="col"> {{ maximo.0 | stringformat:".2e" }} </td>
-                                    {% if maximo.0  > 0.01 %}
+                                    <td scope="col"> {{ maxi.0 | stringformat:".2e" }} </td>
+                                    {% if maxi.0  > 0.01 %}
                                         <td style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
                                             SIL 1
                                         </td>
-                                    {% elif maximo.0 > 0.001 %}
+                                    {% elif maxi.0 > 0.001 %}
                                         <td style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
                                             SIL 2
                                         </td>
@@ -214,12 +214,12 @@
 
                             <tr>
 
-                                <td scope="col"> {{ maximo.1 | stringformat:".2e" }} </td>
-                                {% if maximo.1  > 0.01 %}
+                                <td scope="col"> {{ maxi.1 | stringformat:".2e" }} </td>
+                                {% if maxi.1  > 0.01 %}
                                     <td style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
                                         SIL 1
                                     </td>
-                                {% elif maximo.1 > 0.001 %}
+                                {% elif maxi.1 > 0.001 %}
                                     <td style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
                                         SIL 2
                                     </td>
@@ -266,7 +266,7 @@
                                 <tbody>
 
                                 <tr>
-                                    <td scope="col"> Normal</td>
+
                                     <td scope="col"> {{ average.2 | stringformat:".2e" }} </td>
                                     {% if average.2  > 0.01 %}
                                         <td style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
@@ -303,13 +303,13 @@
                             <tbody>
 
                             <tr>
-                                <td scope="col"> Normal</td>
-                                <td scope="col"> {{ maximo.2 | stringformat:".2e" }} </td>
-                                {% if maximo.2  > 0.01 %}
+
+                                <td scope="col"> {{ maxi.2 | stringformat:".2e" }} </td>
+                                {% if maxi.2  > 0.01 %}
                                     <td style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
                                         SIL 1
                                     </td>
-                                {% elif maximo.2 > 0.001 %}
+                                {% elif maxi.2 > 0.001 %}
                                     <td style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
                                         SIL 2
                                     </td>
