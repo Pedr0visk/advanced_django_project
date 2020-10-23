@@ -296,10 +296,12 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
                 xlambda = float(m[j][24])
 
 
-            elif m[j][23] == "Weibull":
 
+
+            elif m[j][23] == "Weibull":
                 xlambda = 1 / int(m[j][25])
                 eta = float(m[j][26])
+                print(eta)
 
             elif m[j][23] == "Step":
 

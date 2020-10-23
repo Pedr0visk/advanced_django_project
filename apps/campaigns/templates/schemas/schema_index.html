@@ -30,6 +30,9 @@
       <div class="section-title mb-3">
         <p>Schema "{{ schema.name }}"</p>
         <div>
+            <a href="{% url 'campaigns:run' schema.pk %}" class="btn btn-sm btn-success mr-2">
+            <small>RUN</small>
+          </a>
           <a href="{% url 'campaigns:update_schema' schema.campaign.pk schema.pk %}"
              class="btn btn-sm btn-warning mr-2">
             <small>EDIT
@@ -52,9 +55,9 @@
                 <th scope="col">ID</th>
                 <th scope="col">name</th>
                 <th scope="col">duration</th>
-                <th scope="col">start date <small>(mm/dd/YYYY)</small></th>
-                <th scope="col" style="text-align: center">drilling</th>
-                <th scope="col" style="text-align: center">test</th>
+                <th scope="col">start date</th>
+                <th scope="col" style="text-align: center">is drilling</th>
+                <th scope="col" style="text-align: center">has test</th>
                 <th scope="col">test groups</th>
               </tr>
               </thead>
@@ -64,15 +67,19 @@
                 <td>{{ phase.id }}</td>
                 <td>{{ phase.name }}</td>
                 <td>{{ phase.duration }}h</td>
-                <td>{{ phase.start_date|date:"m/d/Y" }} {{phase.start_date|time:'H:i'}}</td>
+                <td>{{ phase.start_date|date:"Y/m/d" }}</td>
                 <td align="center">
-                  {% if phase.is_drilling %}
+                  {% if phase.has_drilling %}
                   <img src="{% static 'img/icon-yes.svg' %}"/>
+                  {% else %}
+                  <img src="{% static 'img/icon-no.svg' %}"/>
                   {% endif %}
                 </td>
                 <td align="center">
                   {% if phase.has_test %}
                   <img src="{% static 'img/icon-yes.svg' %}"/>
+                  {% else %}
+                  <img src="{% static 'img/icon-no.svg' %}"/>
                   {% endif %}
                 </td>
                 <td>

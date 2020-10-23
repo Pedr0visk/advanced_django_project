@@ -1,6 +1,6 @@
 import json
 import time
-from apps.campaigns import metrics
+from . import metrics
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -78,21 +78,23 @@ def phase_update(request, pk):
 
 
 def campaign_metrics(request, schema_pk):
-
     schema = Schema.objects.get(pk=schema_pk)
     campaign = schema.campaign
     results = metrics.run(schema)
-
+    schema.result = results
+    schema.save()
 
     time = []
     number_Sf = len(results[0])
     tempo = len(results) - 1
     data_to_charts = []
+
     print("veiws number sf", number_Sf, tempo)
 
     for j in range(1, number_Sf):
         result_sf = []
-        #result_sf_falho = []
+        average_to_chart = []
+        # result_sf_falho = []
         soma = 0
         avg = 0
         for i in range(1, tempo):
@@ -101,27 +103,30 @@ def campaign_metrics(request, schema_pk):
 
             result_sf.append(results[i][j])
             soma = soma + results[i][j]
-            #if i+2 > inicio:
+            # if i+2 > inicio:
             #    result_sf_falho.append(result_falho[i][j])
-            #else:
+            # else:
             #    result_sf_falho.append("null")
-
 
         avg = soma / tempo
 
         maximo = max(result_sf)
 
-        print("views media e max",avg, maximo)
+        desc = "safety Function" + " " + str(j)
 
+        for i in range(0, tempo):
+            average_to_chart.append(avg)
+        print("a", average_to_chart)
+        print("desc", desc, soma, tempo)
         data_to_charts.append({
             'average': avg,
+            'average_to_chart': average_to_chart,
             'result': result_sf,
-            'max': maximo
+            'max': maximo,
+            'desc': desc,
         })
 
-
-
-    context = {'campaign': campaign,'schema': Schema, 'results': results, 'data_to_charts':data_to_charts}
+    context = {'campaign': campaign, 'schema': Schema, 'results': results, 'data_to_charts': data_to_charts}
     return render(request, 'campaigns/campaign_charts.html', context)
 
 
