@@ -1,0 +1,11 @@
+app/.idea
+.pytest_cache
+.vscode
+*.sqlite3
+venv
+*.pyc
+bop_management/__pycache__/
+media/
+# node modules
+./node_modules
+
