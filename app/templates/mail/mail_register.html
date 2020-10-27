@@ -1,0 +1,21 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome BOP</title>
+  <style>
+    btn-info {
+      background-color: #0f6674;
+      color: white;
+      padding: .25rem .75rem;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <p>Welcome, {{ user.username }}.</p>
+  <a href="{% url 'login' %}/next">Click here to login and change your password</a>
+</body>
+</html>

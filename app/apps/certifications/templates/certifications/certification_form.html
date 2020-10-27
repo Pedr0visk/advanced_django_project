@@ -1,0 +1,119 @@
+{% extends 'manager/base.html' %}
+
+{% block breadcrumb %}
+  <!-- breadcrumb -->
+  <div class="page-title">
+    <div class="container-fluid px-5">
+      <div class="page-title-wrapper-2">
+        <div class="page-title-heading-2">
+          <a href="{% url 'dashboard' %}">Home</a>
+          <span class="fa fa-chevron-right"></span>
+          <a href="{% url 'list_bops' %}">Bops</a>
+          <span class="fa fa-chevron-right"></span>
+          {% if object %}
+            <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
+            <span class="fa fa-chevron-right"></span>
+            <span class="current-page">{{ object }}</span>
+          {% else %}
+            <span class="current-page">Add new certification</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block main %}
+  {{ cert_form.errors }}
+  <div class="section bg-white">
+    <div class="container-fluid px-5">
+      <div class="section-title mb-4 d-flex">
+        {% if object %}
+          <p>Change certification "{{ object }}"</p>
+        {% else %}
+          <p>Add new certification</p>
+        {% endif %}
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- code field -->
+            <div class="form-group row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Code:</label>
+              <div class="col-sm-3">
+                {{ form.code }}
+              </div>
+              <div class="col-sm-10 offset-2">
+                <small class="form-text text-muted">
+                  Required
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+            <!-- start date field -->
+            <div class="form-group row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Start Date:</label>
+              <div class="col-sm-3">
+                {{ form.start_date }}
+              </div>
+              <div class="col-sm-10 offset-2">
+                <small class="form-text text-muted">
+                  Required
+                </small>
+              </div>
+            </div>
+
+            <!-- end date field -->
+            <div class="form-group row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">End Date:</label>
+              <div class="col-sm-3">
+                {{ form.end_date }}
+              </div>
+              <div class="col-sm-10 offset-2">
+                <small class="form-text text-muted">
+                  Required
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+
+            <!-- actions -->
+            <div class="card">
+              <div class="bg-light text-right p-2">
+                <a href="{% url 'manager' %}" class=" btn btn-default">
+                  Cancel
+                </a>
+                <button type="submit" class="px-4 btn btn-secondary">
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+      // Query all input fields
+      var form_fields = document.getElementsByTagName('input')
+      // customization of form fields
+      for (var field in form_fields) {
+          if (form_fields[field].type == 'file') continue
+          form_fields[field].className += 'form-control form-control-sm'
+      }
+
+      // Query all selects fields
+      var form_fields = document.getElementsByTagName('select')
+      // customization of form fields
+      for (var field in form_fields) {
+          form_fields[field].className += 'form-control form-control-sm'
+      }
+  </script>
+{% endblock %}

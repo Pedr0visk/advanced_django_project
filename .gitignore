@@ -1,10 +1,1 @@
-.idea
-.vscode
-*.sqlite3
-venv
-*.pyc
-bop_management/__pycache__/
-media/
-# node modules
-/node_modules
-/.env
+./app/node_modules/

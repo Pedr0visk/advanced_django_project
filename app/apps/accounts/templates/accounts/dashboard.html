@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block main %}
+  <!-- main -->
+  <div class="main">
+    <!-- section bop list -->
+    <div class="section" id="home">
+      <div class="container-fluid px-5">
+        <div class="section-title mb-2 d-flex">
+          <p>Select Bop to manage</p>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="toolbar ml-auto px-3 py-2 mb-3">
+              <div class="search-bar">
+                <form class="form-inline my-2 my-lg-0">
+                  <label for="" class="mr-2"><i class="fa fa-search"></i></label>
+                  <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search bop"
+                         aria-label="Search">
+                  <button class="" type="submit">
+                    Search
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- BOP's table list -->
+          <div class="col-12">
+            <div class="list">
+              <div class="list-actions">
+                <span>4 bops</span>
+              </div>
+              <table class="table dnv-table">
+                <thead class="bg-white-50">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Rig</th>
+                  <th scope="col">Active campaign</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for bop in bops %}
+                  <tr>
+                    <td scope="row">1</td>
+                    <td><a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a></td>
+                    <td><a href="bop.html">Deepstar 2</a></td>
+                    <td><a href="bop.html">First campaign</a></td>
+
+                  </tr>
+                {% endfor %}
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- end cols -->
+        </div>
+      </div>
+      <!-- ./ container -->
+    </div>
+    <!-- ./ section -->
+  </div>
+  <!-- main -->
+{% endblock %}

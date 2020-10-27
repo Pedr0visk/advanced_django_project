@@ -1,0 +1,9 @@
+[
+  {
+    "model": "bops.Rig",
+    "pk": 1,
+    "fields": {
+      "name": "rig 01"
+    }
+  }
+]

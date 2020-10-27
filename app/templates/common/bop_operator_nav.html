@@ -1,0 +1,21 @@
+<div class="bop-tools">
+  <a href="" style="pointer-events: none; color: #666666" class="active">
+    <i class="fas fa-folder-open"></i>
+    Summary of Results</a> /
+
+  <a href="" style="pointer-events: none; color: #666666">
+    <i class="fa fa-poll"></i>
+    Detailed Results</a> /
+
+  <a href="" style="pointer-events: none; color: #666666">
+    <i class="fa fa-sitemap"></i>
+    Hierarchy</a> /
+
+  {% if '/test-planner/' in request.path %}
+  <a href="{% url 'test_planner' bop.pk %}" class="active">
+  {% else %}
+    <a href="{% url 'test_planner' bop.pk %}">
+  {% endif %}
+    <i class="fa fa-vial"></i>
+    Test Planner</a> /
+</div>
