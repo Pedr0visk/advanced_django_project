@@ -42,12 +42,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ab9272b5-04b0-4ace-b403-7bfcd1922d35" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/bop-mvp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/bop-mvp.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -62,8 +68,8 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/venv" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -71,6 +77,81 @@
       <recent name="$PROJECT_DIR$/app" />
       <recent name="$PROJECT_DIR$" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
+      <module name="bop-mvp" />
+      <option name="INTERPRETER_OPTIONS" value="$PROJECT_DIR$/app/venv/bin/python" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/app" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="net.ashald.envfile">
+        <option name="IS_ENABLED" value="false" />
+        <option name="IS_SUBST" value="false" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" />
+        </ENTRIES>
+      </EXTENSION>
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="bop" type="Python.DjangoServer" factoryName="Django server">
+      <module name="bop-mvp" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="bop.settings" />
+      </envs>
+      <option name="SDK_HOME" value="$PROJECT_DIR$/app/venv/bin/python3.8" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/app" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="net.ashald.envfile">
+        <option name="IS_ENABLED" value="false" />
+        <option name="IS_SUBST" value="false" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" />
+        </ENTRIES>
+      </EXTENSION>
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="localhost" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -103,13 +184,56 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="238" y="98" width="1022" height="737" key="SettingsEditor" timestamp="1603976448679">
+    <state x="207" y="74" width="1084" height="826" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603980096084">
       <screen x="58" y="27" width="1382" height="873" />
     </state>
-    <state x="238" y="98" width="1022" height="737" key="SettingsEditor/58.27.1382.873/1440.72.1366.768@58.27.1382.873" timestamp="1603976448679" />
-    <state x="412" y="214" key="search.everywhere.popup" timestamp="1603891976170">
+    <state x="207" y="74" width="1084" height="826" key="#com.intellij.execution.impl.EditConfigurationsDialog/58.27.1382.873/1440.72.1366.768@58.27.1382.873" timestamp="1603980096084" />
+    <state x="589" y="225" width="309" height="489" key="EnvironmentVariablesDialog" timestamp="1603979192894">
       <screen x="58" y="27" width="1382" height="873" />
     </state>
-    <state x="412" y="214" key="search.everywhere.popup/58.27.1382.873/1440.72.1366.768@58.27.1382.873" timestamp="1603891976170" />
+    <state x="589" y="225" width="309" height="489" key="EnvironmentVariablesDialog/58.27.1382.873/1440.72.1366.768@58.27.1382.873" timestamp="1603979192894" />
+    <state x="532" y="210" width="424" height="520" key="FileChooserDialogImpl" timestamp="1603980597093">
+      <screen x="58" y="27" width="1382" height="873" />
+    </state>
+    <state x="532" y="210" width="424" height="520" key="FileChooserDialogImpl/58.27.1382.873/1440.72.1366.768@58.27.1382.873" timestamp="1603980597093" />
+    <state width="1336" height="248" key="GridCell.Tab.0.bottom" timestamp="1603993463967">
+      <screen x="58" y="27" width="1382" height="873" />
+    </state>
+    <state width="1336" height="248" key="GridCell.Tab.0.bottom/58.27.1382.873/1440.72.1366.768@58.27.1382.873" timestamp="1603993463967" />
+    <state width="1336" height="248" key="GridCell.Tab.0.center" timestamp="1603993463967">
+      <screen x="58" y="27" width="1382" height="873" />
+    </state>
+    <state width="1336" height="248" key="GridCell.Tab.0.center/58.27.1382.873/1440.72.1366.768@58.27.1382.873" timestamp="1603993463967" />
+    <state width="1336" height="248" key="GridCell.Tab.0.left" timestamp="1603993463966">
+      <screen x="58" y="27" width="1382" height="873" />
+    </state>
+    <state width="1336" height="248" key="GridCell.Tab.0.left/58.27.1382.873/1440.72.1366.768@58.27.1382.873" timestamp="1603993463966" />
+    <state width="1336" height="248" key="GridCell.Tab.0.right" timestamp="1603993463967">
+      <screen x="58" y="27" width="1382" height="873" />
+    </state>
+    <state width="1336" height="248" key="GridCell.Tab.0.right/58.27.1382.873/1440.72.1366.768@58.27.1382.873" timestamp="1603993463967" />
+    <state x="238" y="98" width="1022" height="737" key="SettingsEditor" timestamp="1603980640186">
+      <screen x="58" y="27" width="1382" height="873" />
+    </state>
+    <state x="238" y="98" width="1022" height="737" key="SettingsEditor/58.27.1382.873/1440.72.1366.768@58.27.1382.873" timestamp="1603980640186" />
+    <state x="412" y="214" width="672" height="678" key="search.everywhere.popup" timestamp="1603992971017">
+      <screen x="58" y="27" width="1382" height="873" />
+    </state>
+    <state x="412" y="214" width="672" height="678" key="search.everywhere.popup/58.27.1382.873/1440.72.1366.768@58.27.1382.873" timestamp="1603992971017" />
+    <state x="474" y="355" width="540" height="223" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1603990415285">
+      <screen x="58" y="27" width="1382" height="873" />
+    </state>
+    <state x="474" y="355" width="540" height="223" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/58.27.1382.873/1440.72.1366.768@58.27.1382.873" timestamp="1603990415285" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/apps/failuremodes/migrations/0001_initial.py</url>
+          <line>2</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
