@@ -18,7 +18,7 @@ services:
     build:
       context: nginx
     volumes:
-      - static_data:/vol/web
+      - static_data:/vol/static
     ports:
       - "7654:8080"
     depends_on:

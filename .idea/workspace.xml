@@ -41,14 +41,19 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab9272b5-04b0-4ace-b403-7bfcd1922d35" name="Default Changelist" comment="" />
+    <list default="true" id="ab9272b5-04b0-4ace-b403-7bfcd1922d35" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.env.dev" beforeDir="false" afterPath="$PROJECT_DIR$/.env.dev" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.prod.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/app" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="JupyterTrust" id="904ee0a5-043e-41e4-8f0b-85d7eb355395" />
   <component name="ProjectId" id="1jSqYZlwXwWmsUFXeJK5TmcreE0" />
@@ -79,7 +84,8 @@
       <updated>1603806563256</updated>
       <workItem from="1603806564338" duration="1242000" />
       <workItem from="1603807897541" duration="497000" />
-      <workItem from="1603821893156" duration="982000" />
+      <workItem from="1603821893156" duration="22910000" />
+      <workItem from="1603976036955" duration="377000" />
     </task>
     <servers />
   </component>
@@ -97,5 +103,11 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="412" y="214" key="search.everywhere.popup" timestamp="1603891976170">
+      <screen x="58" y="27" width="1382" height="873" />
+    </state>
+    <state x="412" y="214" key="search.everywhere.popup/58.27.1382.873/1440.72.1366.768@58.27.1382.873" timestamp="1603891976170" />
   </component>
 </project>
