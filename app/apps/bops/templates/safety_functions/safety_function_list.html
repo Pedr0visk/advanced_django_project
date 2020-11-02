@@ -32,8 +32,9 @@
     <div class="section" id="home">
       <div class="container-fluid px-5">
         <div class="section-title mb-3">
-          <p>Select safety function to manage</p>
-          <a href="{% url 'bops:upload_safety_function' bop.pk %}" class="btn btn-sm btn-success"><small>ADD SAFETY FUNCTION <i
+          <p>Bop name: <b>{{bop}}</b></p>
+          <a href="{% url 'bops:upload_safety_function' bop.pk %}" class="btn btn-sm btn-primary"><small>ADD SAFETY
+            FUNCTION <i
               class="fa fa-plus"></i></small> </a>
         </div>
 

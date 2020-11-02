@@ -5,7 +5,7 @@ from .models import Certification
 class CertificationForm(ModelForm):
     class Meta:
         model = Certification
-        fields = ['start_date', 'end_date', 'code']
+        fields = ['start_date', 'end_date']
 
         widgets = {
             'start_date': DateInput(format='%Y-%m-%d',

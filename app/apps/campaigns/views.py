@@ -1,18 +1,16 @@
-import json
-import time
 from . import metrics
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from .models import Campaign, Phase, Schema
-from .forms import CampaignForm, PhaseForm
+from .models import Campaign, Phase, Schema, Event
+from .forms import CampaignForm, PhaseForm, EventForm
 from .filters import campaign_filter
 
 from django.shortcuts import get_object_or_404
 
-from apps.test_groups.models import TestGroup
+from ..test_groups.models import TestGroup
 
 
 def campaign_update(request, campaign_pk):
@@ -54,7 +52,7 @@ def campaign_create(request, bop_pk):
 
 def campaign_index(request, campaign_pk):
     campaign = Campaign.objects.prefetch_related('schemas', 'events').get(pk=campaign_pk)
-    context = {'campaign': campaign}
+    context = {'campaign': campaign, 'bop': campaign.bop}
     return render(request, 'campaigns/campaign_index.html', context)
 
 
@@ -150,25 +148,85 @@ def campaign_delete(request, campaign_pk):
 
 def schema_create(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
-    context = {'campaign': campaign, 'campaign_pk': campaign_pk}
+    context = {'campaign': campaign}
     return render(request, 'schemas/schema_form.html', context)
 
 
-def schema_update(request, campaign_pk, schema_pk):
+def schema_update(request, schema_pk):
     schema = Schema.objects.prefetch_related('phases').get(pk=schema_pk)
-    context = {'schema': schema, 'campaign_pk': campaign_pk}
+    campaign = schema.campaign
+    context = {'schema': schema, 'campaign': campaign}
     return render(request, 'schemas/schema_form.html', context)
 
 
-def schema_index(request, campaign_pk, schema_pk):
+def schema_index(request, schema_pk):
     schema = Schema.objects.prefetch_related('phases', 'phases__test_groups').get(pk=schema_pk)
-
+    campaign_pk = schema.campaign.pk
     context = {'schema': schema, 'campaign_pk': campaign_pk}
     return render(request, 'schemas/schema_index.html', context)
 
 
-def schema_delete(request, campaign_pk, schema_pk):
+def schema_delete(request, schema_pk):
     schema = Schema.objects.get(pk=schema_pk)
+    campaign_pk = schema.campaign.pk
     schema.delete()
     messages.success(request, f'Schema "{schema.name}" deleted successfully')
     return redirect('campaigns:index', campaign_pk)
+
+
+def event_create(request, campaign_pk):
+    campaign = Campaign.objects.get(pk=campaign_pk)
+    bop = campaign.bop
+
+    form = EventForm(request.POST or None)
+    failure_modes = bop.failure_modes
+    components = bop.components
+    subsystems = bop.subsystems.all()
+
+    if request.method == 'POST':
+        if form.is_valid():
+            print(request.POST)
+            new_event = form.save(commit=False)
+            new_event.campaign_id = campaign_pk
+            new_event.save()
+            messages.success(request, f'Event "{new_event.name}" created successfully!')
+            return redirect(new_event.success_url())
+
+    context = {
+        'form': form,
+        'campaign': campaign,
+        'campaign_pk': campaign_pk,
+        'failure_modes': failure_modes,
+        'components': components,
+        'subsystems': subsystems
+    }
+
+    return render(request, 'events/event_form.html', context)
+
+
+def event_update(request, event_pk):
+    event = Event.objects.get(pk=event_pk)
+    form = EventForm(request.POST or None, instance=event)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Event "{event.name}" updated successfully!')
+            return redirect(event.success_url())
+
+    context = {'form': event, 'form': form, 'campaign_pk': event.campaign.pk}
+    return render(request, 'events/event_form.html', context)
+
+
+def event_list(request):
+    return render(request, 'events/event_list.html')
+
+
+def event_delete(request, event_pk):
+    event = Event.objects.get(pk=event_pk)
+    campaign_pk = event.campaign.pk
+
+    if request.method == 'POST':
+        event.delete()
+        messages.success(request, f'Schema "{event.name}" deleted successfully')
+        return redirect('campaigns:index', campaign_pk)

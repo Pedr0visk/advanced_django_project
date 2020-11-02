@@ -3,8 +3,8 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from apps.campaigns.api.views import CampaignViewSet, SchemaViewSet
 from apps.bops.api.views import BopViewSet
+from apps.campaigns.api.views import CampaignViewSet, SchemaViewSet
 
 router = routers.DefaultRouter()
 router.register('campaigns', CampaignViewSet)
@@ -17,8 +17,7 @@ urlpatterns = [
     path('cuts/', include('apps.cuts.urls')),
     path('admin/', admin.site.urls),
     path('manager/', include('apps.managers.urls')),
-    path('campaigns/', include('apps.campaigns.urls')),
-    path('events/', include('apps.events.urls')),
+    path('', include('apps.campaigns.urls')),
     path('test-groups/', include('apps.test_groups.urls')),
     # api
     path('api/', include(router.urls)),

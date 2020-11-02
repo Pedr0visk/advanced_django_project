@@ -1,40 +1,33 @@
 {% extends 'base.html' %}
 
-{% block breadcrumb %}
-<!-- breadcrumb -->
-<div class="page-title">
-  <div class="container-fluid px-5">
-    <div class="page-title-wrapper-2">
-      <div class="page-title-heading-2">
-        {% if object %}
-        <a href="{% url 'bops:index_safety_function' object.bop.pk object.pk %}">{{ object }}</a>
-        <span class=" fa fa-chevron-right"></span>
-        <span class="current-page">Update {{ object }} </span>
-        {% else %}
-        <a href="{% url 'bops:list_safety_functions' bop.pk %}">Safety functions</a>
-        <span class=" fa fa-chevron-right"></span>
-        <span class="current-page">Add </span>
-        {% endif %}
-
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
-
 {% block main %}
 {% if form.errors %}
 {{ form.errors }}
 {% endif %}
 <div class="section bg-white">
   <div class="container-fluid px-5">
-    <div class="section-title mb-4 d-flex">
-      <p clas>Add Safety function</p>
+    <div class="d-flex flex-column">
+      <a href="{% url 'bops:list_safety_functions' bop.pk %}" class="mb-3">
+        <i class="fa fa-arrow-left"></i> back
+      </a>
+      <h4 class="title-1 mb-4">Add Safety function</h4>
     </div>
+
     <div class="row">
       <div class="col-sm-12">
         <form method="POST" enctype="multipart/form-data" id="sfForm">
           {% csrf_token %}
+
+          <!-- bop field -->
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label col-form-label-sm">Bop:</label>
+            <div class="col-sm-3">
+              <select name="" id="" disabled>
+                <option value="" selected>{{ bop.name }}</option>
+              </select>
+            </div>
+          </div>
+          <hr/>
 
           <!-- name field -->
           <div class="form-group row">

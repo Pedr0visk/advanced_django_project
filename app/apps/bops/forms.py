@@ -7,7 +7,7 @@ class BopForm(ModelForm):
 
     class Meta:
         model = Bop
-        fields = ['name', 'rig']
+        fields = ['name', 'rig', 'model']
 
 
 class SafetyFunctionForm(ModelForm):

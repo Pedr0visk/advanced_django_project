@@ -1,35 +1,20 @@
 {% extends 'base.html' %}
 
-{% block breadcrumb %}
-  <!-- breadcrumb -->
-  <div class="page-title">
-    <div class="container-fluid px-5">
-      <div class="page-title-wrapper-2">
-        <div class="page-title-heading-2">
-          <a href="{% url 'bops:list' %}">Bops</a>
-          <span class="fa fa-chevron-right"></span>
-          {% if bop %}
-            <a href="{% url 'bops:index' bop.pk %}">{{ bop.name }}</a>
-            <span class="fa fa-chevron-right"></span>
-            <span class="current-page">Edit</span>
-          {% else %}
-            <span class="current-page">Add new bop</span>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
-{% endblock %}
-
 {% block main %}
   {{ cert_form.errors }}
   <div class="section bg-white">
     <div class="container-fluid px-5">
       <div class="section-title mb-4 d-flex">
         {% if bop %}
-          <p>Change bop "{{ bop.name }}"</p>
+          <div class="d-flex flex-column">
+            <a href="{% url 'bops:index' bop.pk %}" class="mb-3"><i class="fa fa-arrow-left"></i> back</a>
+            <p>Change bop "{{ bop.name }}"</p>
+          </div>
         {% else %}
-          <p>Add new bop</p>
+          <div class="d-flex flex-column">
+            <a href="{% url 'dashboard' %}" class="mb-3"><i class="fa fa-arrow-left"></i> back</a>
+            <p>Add new bop</p>
+          </div>
         {% endif %}
       </div>
       <div class="row">
@@ -39,7 +24,7 @@
 
             <!-- name field -->
             <div class="form-group row">
-              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Name:</label>
+              <label class="col-sm-2 col-form-label col-form-label-sm">Name:</label>
               <div class="col-sm-3">
                 {{ form.name }}
               </div>
@@ -51,17 +36,30 @@
             </div>
             <hr/>
 
-            <!-- description field -->
-            <div class="form-group row align-items-center no-gutters">
-              <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Rig:</label>
-              <div class="col-sm-1">
+            <!-- rig field -->
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label col-form-label-sm">Rig:</label>
+              <div class="col-sm-3">
                 {{ form.rig }}
               </div>
-              <div class="col-sm-2">
-                <div class="ml-2">
-                  <a href="" class="px-2"><i class="fa fa-plus text-success"></i></a>
-                  <a href="" class="px-2"><i class="fa fa-pencil-alt text-warning"></i></a>
-                </div>
+              <div class="col-sm-10 offset-2">
+                <small class="form-text text-muted">
+                  Required
+                </small>
+              </div>
+            </div>
+            <hr/>
+
+            <!-- rig field -->
+            <div class="form-group row ">
+              <label class="col-sm-2 col-form-label col-form-label-sm">Model:</label>
+              <div class="col-sm-3">
+                {{ form.model }}
+              </div>
+              <div class="col-sm-10 offset-2">
+                <small class="form-text text-muted">
+                  Required
+                </small>
               </div>
             </div>
             <hr/>
@@ -81,14 +79,6 @@
               <!-- certification -->
               <fieldset class="form-fieldset">
                 <h4>Last Certification</h4>
-
-                <div class="form-group row px-2">
-                  <label class="col-sm-2 col-form-label col-form-label-sm">code:</label>
-                  <div class="col-sm-2">
-                    {{ cert_form.code }}
-                  </div>
-                </div>
-                <hr/>
 
                 <div class="form-group row px-2">
                   <label class="col-sm-2 col-form-label col-form-label-sm">start date:</label>

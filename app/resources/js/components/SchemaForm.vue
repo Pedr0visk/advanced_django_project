@@ -70,11 +70,11 @@
           </div>
 
           <!-- has_test -->
-          <div class="col-1">
+          <div class="col-auto">
             <input type="checkbox" v-model="phase.has_test">
             <small>Test</small>
           </div>
-          <div class="col-1">
+          <div class="col-auto">
             <input type="checkbox" v-model="phase.is_drilling">
             <small>is drilling</small>
           </div>
@@ -89,7 +89,7 @@
               >{{ group.name }}
               </option>
             </select>
-            <small>step</small>
+            <small>test groups</small>
           </div>
           <div class="col-1">
             <button

@@ -4,16 +4,13 @@ from django.contrib import messages
 from django.core.exceptions import RequestAborted
 from django.db import transaction
 from django.shortcuts import render, redirect
-from django.core.cache import cache
-from django.core.paginator import Paginator
 from .models import Bop, SafetyFunction
 from .forms import BopForm, SafetyFunctionForm
 from .load_bop import Loader as BopLoader
 from .load_safety_function import Loader as SafetyFunctionLoader
 
-from apps.certifications.forms import CertificationForm
-
-from apps.managers.decorators import allowed_users
+from ..certifications.forms import CertificationForm
+from ..managers.decorators import allowed_users
 from ..failuremodes.models import FailureMode
 
 from .decorators import query_debugger
@@ -91,7 +88,6 @@ def bop_delete(request, pk):
 def index(request, pk):
     bop = Bop.objects.prefetch_related('campaigns').get(pk=pk)
     request.session['bop_pk'] = bop.pk
-    #cache.set('bop', bop)
 
     context = {'bop': bop}
     return render(request, 'bops/index.html', context)

@@ -43,6 +43,7 @@ def test_group_update(request, tg_pk):
 
 def test_group_delete(request, tg_pk):
     test_group_raw = TestGroupDummy.objects.select_related('bop').get(pk=tg_pk)
+    bop_pk = test_group_raw.bop.pk
 
     if request.method == 'POST':
         test_group_id = test_group_raw.id

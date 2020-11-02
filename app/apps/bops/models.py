@@ -1,21 +1,12 @@
 from django.db import models
 from django.contrib.admin.utils import NestedObjects
 from django.urls import reverse
-from .decorators import query_debugger
-
-
-class Rig(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
 
 
 class Bop(models.Model):
     name = models.CharField(max_length=100)
-    rig = models.ForeignKey(Rig,
-                            on_delete=models.PROTECT,
-                            null=True)
+    rig = models.CharField(max_length=255)
+    model = models.CharField(max_length=255)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -33,6 +24,9 @@ class Bop(models.Model):
     def last_certification(self):
         return self.certifications.last()
 
+    def active_campaign(self):
+        return self.campaigns.filter(active=True).first()
+
     def with_counts(self):
         collector = NestedObjects(using='default')
         collector.collect([self])
@@ -43,7 +37,8 @@ class Bop(models.Model):
         print(self.testgroup.all())
         print(**kwargs)
 
-    def component_list(self):
+    @property
+    def components(self):
         subsystem_qs = self.subsystems.prefetch_related('components').all()
         components = []
         for subsystem in subsystem_qs:
@@ -51,12 +46,13 @@ class Bop(models.Model):
 
         return components
 
-    def failure_mode_list(self):
+    @property
+    def failure_modes(self):
         subsystem_qs = self.subsystems.prefetch_related('components__failure_modes').all()
         failure_modes = []
         for subsystem in subsystem_qs:
             for component in subsystem.components.all():
-                failure_modes += component.failure_mode_list()
+                failure_modes += component.failure_modes.all()
 
         return failure_modes
 
