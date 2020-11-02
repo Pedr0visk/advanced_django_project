@@ -1,0 +1,43 @@
+{% if '/dashboard/' in request.path %}
+<li class="nav-item active">
+{% else %}
+<li class="nav-item ">
+{% endif %}
+  <a href="{% url 'bops:index' bop.pk %}" class="nav-link">
+    <i class="fa fa-circle"></i> Dashboard, <b>{{bop}}</b></a>
+</li>
+
+{% if 'test-planner' in request.path %}
+<li class="nav-item active">
+{% else %}
+<li class="nav-item ">
+{% endif %}
+  <a href="{% url 'bops:test_planner' bop.pk %}" class="nav-link"><i class="fa fa-flask"></i> Test
+    Planner</a>
+</li>
+
+{% if 'safety-functions' in request.path %}
+<li class="nav-item active">
+{% else %}
+<li class="nav-item ">
+{% endif %}
+  <a href="{% url 'bops:list_safety_functions' bop.pk %}" class="nav-link"><i class="fa fa-hard-hat"></i> Safety Function</a>
+</li>
+
+{% if 'hierarchy' in request.path %}
+<li class="nav-item active">
+{% else %}
+<li class="nav-item">
+{% endif %}
+  <a class="nav-link"  style="cursor:not-allowed;color: currentColor;opacity: 0.5;"><i class="fa fa-sitemap"></i> Hierarchy</a>
+</li>
+
+{% if 'summary-results' in request.path %}
+<li class="nav-item active">
+{% else %}
+<li class="nav-item ">
+{% endif %}
+  <a href="" class="nav-link"><i class="fa fa-chart-bar"></i> Results</a>
+</li>
+
+

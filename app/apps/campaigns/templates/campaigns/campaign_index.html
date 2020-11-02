@@ -1,18 +1,7 @@
 {% extends 'base.html' %}
 
-{% block breadcrumb %}
-<!-- breadcrumb -->
-<div class="page-title">
-  <div class="container-fluid px-5">
-    <div class="page-title-wrapper-2">
-      <div class="page-title-heading-2">
-        <a href="{% url 'bops:index' campaign.bop.pk %}">{{ campaign.bop }}</a>
-        <span class="fa fa-chevron-right"></span>
-        <span class="current-page">{{ campaign.name }}</span>
-      </div>
-    </div>
-  </div>
-</div>
+{% block extra_menu %}
+{% include 'common/bop_menu.html' %}
 {% endblock %}
 
 {% block main %}
@@ -30,16 +19,21 @@
     <div class="container-fluid px-5">
       <!-- section title -->
       <div class="section-title mb-3">
-        <p>Dashboard for campaign</p>
+        <div class="d-flex flex-column">
+          <a href="{% url 'bops:index' campaign.bop.pk %}" class="mb-3">
+            <i class="fa fa-arrow-left"></i> back to bop
+          </a>
+          <p>Bop name: <b>{{ campaign.bop }}</b> > Campaign name: <b>{{ campaign }}</b></p>
+        </div>
         <div>
-          <a href="{% url 'campaigns:run' campaign.pk %}" class="btn btn-sm btn-success mr-2">
+          <a href="{% url 'campaigns:run' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
             <small>RUN</small>
           </a>
-          <a href="{% url 'campaigns:update' campaign.pk %}" class="btn btn-sm btn-warning mr-2">
+          <a href="{% url 'campaigns:update' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
             <small>EDIT
               <i class="fa fa-pencil-alt"></i></small>
           </a>
-          <a href="{% url 'campaigns:delete' campaign.pk %}" class="btn btn-sm btn-danger"><small>DELETE <i
+          <a href="{% url 'campaigns:delete' campaign.pk %}" class="btn btn-sm btn-primary"><small>DELETE <i
               class="fa fa-times"></i></small>
           </a>
         </div>
@@ -67,10 +61,10 @@
               {% for schema in campaign.schemas.all %}
               <tr>
                 <td>
-                  <a href="{% url 'campaigns:schema_index' campaign.pk schema.pk %}">{{ schema.name }}</a>
+                  <a href="{% url 'campaigns:update_schema' schema.pk %}">{{ schema.name }}</a>
                 </td>
                 <td width="10%">
-                  <a href="{% url 'campaigns:delete_schema' campaign.pk schema.pk %}"><i
+                  <a href="{% url 'campaigns:delete_schema' schema.pk %}"><i
                       class="fa fa-times text-danger"></i></a>
                 </td>
               </tr>
@@ -85,7 +79,7 @@
           <div class="results">
             <div class="d-flex  px-1">
               <h4 class="title-1 mr-auto">Events</h4>
-              <a href="{% url 'events:create' campaign.pk %}" >add event <i
+              <a href="{% url 'campaigns:create_event' campaign.pk %}">add event <i
                   class="fa fa-plus text-success"></i></a>
             </div>
 
@@ -96,17 +90,25 @@
                 <th scope="col">type</th>
                 <th scope="col">object id</th>
                 <th scope="col">date</th>
+                <th scope="col"></th>
               </tr>
               </thead>
               <tbody>
-              {% for c_event in campaign.events.all %}
+              {% for e in campaign.events.all %}
               <tr>
-                <td><a href="{% url 'events:update' c_event.pk %}">{{ c_event.name }}</a></td>
-                <td><a href="">{{ c_event.type }}</a></td>
-                <td><a href="">{{ c_event.object_code }}</a></td>
+                <td><a href="">{{ e.name }}</a></td>
+                <td><a href="">{{ e.type }}</a></td>
+                <td><a href="">{{ e.object_code }}</a></td>
                 <td><a href="">
-                  {{ c_event.date }}
+                  {{ e.date }}
                 </a></td>
+                <td width="10%">
+                  <form method="post" action="{% url 'campaigns:delete_event' e.pk %}">
+                    {% csrf_token %}
+                    <button  type="submit" class="btn"><i
+                      class="fa fa-times text-danger"></i></button>
+                  </form>
+                </td>
               </tr>
               {% endfor %}
               </tbody>
@@ -121,6 +123,7 @@
             <ul class="info-list">
               <li>name: <b>{{ campaign.name }}</b></li>
               <li>start date: <b>{{ campaign.start_date }}</b></li>
+              <li>end date: <b>{{ campaign.end_date }}</b></li>
             </ul>
           </div>
         </div>

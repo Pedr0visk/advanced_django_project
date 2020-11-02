@@ -10561,6 +10561,21 @@ h3 {
 |     HEADER      |
 |-----------------|
 */
+.header-top-bar {
+  background-color: #2a5e77;
+}
+.header-top-bar .navbar {
+  padding: 0.2rem 0;
+}
+.header-top-bar .navbar .navbar-nav .nav-item.active .nav-link, .header-top-bar .navbar .navbar-nav .nav-item:hover .nav-link {
+  transition: ease-in 0.1s;
+  color: #f9a825;
+}
+.header-top-bar .navbar .navbar-nav .nav-item .nav-link {
+  font-size: 11px;
+  color: #fff;
+}
+
 .main-header {
   font-size: 12px;
   text-transform: uppercase;
@@ -10680,9 +10695,6 @@ table.bop-table tbody tr td.description {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-}
-.section-title .btn {
-  border-radius: 20px;
 }
 .section-title p {
   color: #6c757d;

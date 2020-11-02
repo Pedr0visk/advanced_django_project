@@ -49,8 +49,6 @@ INSTALLED_APPS = [
     'apps.managers',
     'apps.campaigns',
     'apps.accounts',
-    'apps.events',
-    'apps.wells',
     'apps.certifications',
     'rest_framework',
     'rest_framework.authtoken',

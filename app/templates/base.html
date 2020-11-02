@@ -21,13 +21,46 @@
 
 <!-- header -->
 <header>
+  <!-- header top bar -->
+  <div class="header-top-bar" id="headerTopbar">
+    <div class="container-fluid px-5">
+      <nav class="navbar navbar-expand-lg">
+        <small class="text-white">In collaboration with Petrobras</small>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link">WELCOME, <b>ADMIN.</b></a>
+          </li>
+          {% if '/' == request.path %}
+          <li class="nav-item active">
+            {% else %}
+          <li class="nav-item ">
+            {% endif %}
+            <a href="{% url 'dashboard' %}" class="nav-link"><i class="fa fa-home"></i> Main</a>
+          </li>
+          {% if request.user.groups.all.0.name == 'Admin' %}
+          {% if '/manager/accounts/' in request.path %}
+          <li class="nav-item active">
+            {% else %}
+          <li class="nav-item ">
+            {% endif %}
+            <a href="{% url 'list_accounts' %}" class="nav-link"><i class="fa fa-users"></i> Users</a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <a href="{% url 'logout' %}" class="nav-link"><i class="fa fa-sign-out-alt"></i> Logout</a>
+          </li>
+
+        </ul>
+      </nav>
+    </div>
+  </div>
   <div class="main-header bg-primary">
     <div class="container-fluid px-5">
       <nav class="navbar navbar-expand-lg">
         <a href="{% url 'dashboard' %}" class="navbar-brand">
           <img src="{% static 'img/logo.png' %}" width="140" alt="" style="filter: invert(1)">
         </a>
-        <span class="text-white">in collaboration with Petrobras</span>
+
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu"
                 aria-expanded="false" aria-label="Toggle navigation">
           <span class="fa fa-bars text-white"></span>
@@ -36,37 +69,13 @@
         <!-- menu -->
         <div class="collapse navbar-collapse" id="menu">
           <ul class="navbar-nav ml-auto">
-            {% if '/' == request.path %}
-              <li class="nav-item active">
-              {% else %}
-              <li class="nav-item ">
-              {% endif %}
-              <a href="{% url 'dashboard' %}" class="nav-link"><i class="fa fa-home"></i> Main</a>
-            </li>
-
             {% block extra_menu %}{% endblock %}
-
-            {% if request.user.groups.all.0.name == 'Admin' %}
-              {% if '/manager/accounts/' in request.path %}
-              <li class="nav-item active">
-              {% else %}
-              <li class="nav-item ">
-              {% endif %}
-                <a href="{% url 'list_accounts' %}" class="nav-link"><i class="fa fa-users"></i> Users</a>
-              </li>
-            {% endif %}
-            <li class="nav-item">
-              <a href="{% url 'logout' %}" class="nav-link"><i class="fa fa-sign-out-alt"></i> Logout</a>
-            </li>
           </ul>
         </div>
       </nav>
     </div>
   </div>
 </header>
-
-<!-- breadcrumb -->
-{% block breadcrumb %} {% endblock %}
 
 <!-- main -->
 <div class="main">

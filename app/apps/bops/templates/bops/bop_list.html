@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block breadcrumb %}
   <!-- breadcrumb -->
@@ -54,17 +55,27 @@
               <table class="table dnv-table m-0">
                 <thead class="bg-white-50">
                 <tr>
-                  <th scope="col">ID</th>
                   <th scope="col">name</th>
-                  <th scope="col">created_at</th>
+                  <th scope="col">rig</th>
+                  <th scope="col">last certification</th>
+                  <th scope="col">campaign active</th>
+                  <th scope="col" width="5%">active</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for bop in bops %}
                   <tr>
-                    <td scope="row" width="4%">{{ bop.pk }}</td>
                     <td><a href="{% url 'bops:index' bop.pk %}">{{ bop.name }}</a></td>
-                    <td><a href="">{{ bop.created_at }}</a></td>
+                    <td><a href="{% url 'bops:index' bop.pk %}">{{ bop.rig }}</a></td>
+                    <td>expiry at: {{ bop.last_certification.end_date}}</td>
+                    <td>{{ bop.active_campaign }}</td>
+                    <td align="center">
+                      {% if bop.active_campaign %}
+                      <img src="{% static 'img/icon-yes.svg' %}" alt="">
+                      {% else %}
+                      {% endif %}
+                    </td>
+
                   </tr>
                 {% endfor %}
                 </tbody>

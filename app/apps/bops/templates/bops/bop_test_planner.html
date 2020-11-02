@@ -5,23 +5,6 @@
 {% include 'common/bop_menu.html' %}
 {% endblock %}
 
-{% block breadcrumb %}
-  <!-- breadcrumb -->
-  <div class="page-title">
-    <div class="container-fluid px-5">
-      <div class="page-title-wrapper-2">
-        <div class="page-title-heading-2">
-          <a href="{% url 'bops:list' %}">Bops</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'bops:index' bop.pk %}">{{ bop.name }}</a>
-          <span class="fa fa-chevron-right"></span>
-          <span class="current-page">Test Planner </span>
-        </div>
-      </div>
-    </div>
-  </div>
-{% endblock %}
-
 {% block main %}
   {% if messages %}
     <ul class="messagelist">
@@ -33,7 +16,7 @@
   <div class="section container-fluid px-5">
     <!-- section title -->
     <div class="d-flex">
-      <h4 class="title-1">Test Group Scheduler</h4>
+      <h4 class="title-1">Bop name: <b>{{ bop }}</b></h4>
       <div class="d-flex ml-auto">
         {% if '/raw/' in request.path %}
           <a href="" class="btn btn-sm btn-success mr-2">
@@ -41,7 +24,7 @@
           </a>
           <form method="POST">
             {% csrf_token %}
-            <button type="submit" class="btn btn-sm btn-warning mr-2">
+            <button type="submit" class="btn btn-sm btn-primary mr-2">
               <small>MIGRATE ANALYSIS TO CURRENT <i class="fa fa-database"></i></small>
             </button>
           </form>
@@ -51,7 +34,7 @@
           </a>
           <form method="POST">
             {% csrf_token %}
-            <button type="submit" class="btn btn-sm btn-warning mr-2" disabled>
+            <button type="submit" class="btn btn-sm btn-primary mr-2" disabled>
               <small>MIGRATE ANALYSIS TO CURRENT <i class="fa fa-database"></i></small>
             </button>
           </form>
@@ -129,7 +112,6 @@
               <table class="table m-0 table-hover dnv-table dnv-table-admin" id="campaignsTable">
                 <thead>
                 <tr>
-                  <th scope="col">ID</th>
                   <th scope="col">name</th>
                   <th scope="col">start date</th>
                   <th scope="col">failure modes</th>
@@ -143,10 +125,9 @@
                 <tbody>
                 {% for test_group in test_groups %}
                   <tr>
-                    <td width="4%">{{ test_group.id }}</td>
-                    <td width="4%">{{ test_group.name }}</td>
+                    <td>{{ test_group.name }}</td>
                     <td width="10%">{{ test_group.start_date | date:"m/d/Y" }}</td>
-                    <td width="40%">
+                    <td width="50%">
                       {% for fm in test_group.failure_modes.all %}
                         <small>{{ fm.code }}<b>,</b> </small>
                       {% endfor %}
@@ -156,31 +137,26 @@
                         level {{ forloop.counter }}: <b>{{ test.interval }}, {{ test.coverage }}</b><br>
                       {% endfor %}
                     </td>
-                    </td>
                     {% if '/raw/' in request.path %}
-                      <td width="8%" align="center">
+                      <td width="4%" align="center">
                         <a href="{% url 'test_groups:update' test_group.pk %}">
                           <i class="fa fa-pencil-alt"></i>
-                          edit
                         </a>
                       </td>
-                      <td width="9%" align="center">
+                      <td width="4%" align="center">
                         <a href="{% url 'test_groups:delete' test_group.pk %}">
                           <i class="fa fa-times"></i>
-                          delete
                         </a>
                       </td>
                     {% else %}
-                      <td width="8%" align="center">
+                      <td width="4%" align="center">
                         <a href="{% url 'test_groups:update' test_group.testgroupdummy.pk %}">
                           <i class="fa fa-pencil-alt"></i>
-                          edit
                         </a>
                       </td>
-                      <td width="9%" align="center">
+                      <td width="4%" align="center">
                         <a href="{% url 'test_groups:delete' test_group.testgroupdummy.pk %}">
                           <i class="fa fa-times"></i>
-                          delete
                         </a>
                       </td>
                     {% endif %}

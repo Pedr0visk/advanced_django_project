@@ -42,19 +42,7 @@
             />
             <small>format: Year-Month-Day Hour</small>
           </div>
-          <!-- datetime picker -->
-          <div class="col-3">
-            <datetime-picker
-                placeholder="end date"
-                :dayStr="dayStr"
-                :btnStr="btnStr"
-                timeType="hour"
-                v-model="phase.end_date"
-                :popperProps="popperProps"
-                :timeStr="timeStr"
-            />
-            <small>format: Year-Month-Day Hour</small>
-          </div>
+
           <!-- duration -->
           <div class="col-1">
             <input
@@ -64,14 +52,30 @@
                 class="form-control form-control-sm">
             <small>duration (h)</small>
           </div>
+
+          <!-- datetime picker -->
+          <div class="col-3">
+            <datetime-picker
+                placeholder="end date"
+                :dayStr="dayStr"
+                :btnStr="btnStr"
+                timeType="hour"
+                :canEdit="false"
+                v-model="phase.end_date"
+                :popperProps="popperProps"
+                :timeStr="timeStr"
+            />
+            <small>format: Year-Month-Day Hour</small>
+          </div>
           <!-- has_test -->
-          <div class="col-1">
+          <div class="col-auto">
             <input type="checkbox" v-model="phase.has_test">
             <small>Test</small>
           </div>
-          <div class="col-1">
+          <!-- is_drilling -->
+          <div class="col-auto">
             <input type="checkbox" v-model="phase.is_drilling">
-            <small>is drilling</small>
+            <small>drilling</small>
           </div>
           <div class="col-2" v-show="phase.has_test">
             <select
@@ -84,13 +88,16 @@
               >{{ group.name }}
               </option>
             </select>
-            <small>step</small>
+            <small>test groups</small>
           </div>
+
+          <!-- actions -->
           <div class="col-1">
             <button
-                v-show="!isUpdate"
+               v-show="!isUpdate"
                 type="submit"
                 class="btn-standard"
+                :disabled="isUpdate"
                 @click.prevent="add">save
             </button>
             <div class="d-flex">
@@ -98,12 +105,14 @@
                   v-show="isUpdate"
                   type="submit"
                   class="btn-standard mr-2"
+                  :disabled="!isUpdate"
                   @click.prevent="update(phase._id)">update
               </button>
               <button
                   v-show="isUpdate"
                   type="submit"
                   class="btn-standard"
+                  :disabled="!isUpdate"
                   @click.prevent="toggleAction">cancel
               </button>
             </div>
@@ -170,10 +179,8 @@
 
     <div class="card p-2 bg-light text-right">
       <div class="d-flex">
-        <div>
-          <a href="" class="btn btn-danger">Cancel</a>
-        </div>
         <div class="ml-auto">
+          <a href="" class="btn">Cancel</a>
           <button @click.prevent="updateSchema" type="submit" class="btn btn-primary">
             SAVE
           </button>
@@ -218,11 +225,14 @@ const formatDate = (date) => {
   return `${nextYear}-${nextMonth}-${nextDay} ${nextHour}`
 }
 
+const calcNextDate = (date, duration) => {
+  return new Date(date.getTime() + (duration * 60 * 60 * 1000))
+}
+
 const nextDate = (start_date, duration) => {
   const parsed_date = parseDateTime(start_date)
-  let nextDate = new Date(parsed_date.getTime() + (duration * 60 * 60 * 1000))
-  nextDate = formatDate(nextDate)
-  return nextDate
+  let next_date = calcNextDate(parsed_date, duration)
+  return formatDate(next_date)
 }
 
 export default {
@@ -265,6 +275,7 @@ export default {
         .get(`/api/schemas/${schemaId}/`)
         .then(response => {
           this.schema.name = response.data.name
+          console.log(response.data)
           this.phases = response.data.phases.map(phase => ({
             _id: this.$uuid.v1(),
             name: phase.name,
@@ -272,7 +283,7 @@ export default {
             is_drilling: phase.is_drilling,
             duration: phase.duration,
             start_date: formatDate(new Date(phase.start_date)),
-            end_date: nextDate(formatDate(new Date(phase.start_date)), phase.duration),
+            end_date: formatDate(calcNextDate(new Date(phase.start_date), phase.duration)),
             test_groups: phase.test_groups
           }))
 
@@ -314,7 +325,7 @@ export default {
             console.log(response)
             that
                 .$swal({
-                  title: "Campaign updated successfully!",
+                  title: "Schema updated successfully!",
                   text: 'go to campaign list to see it',
                   type: "success",
                   showConfirmButton: false,
@@ -422,7 +433,6 @@ export default {
         return false;
       return true;
     }
-
   },
   watch: {
     'phase.duration': function (val, oldVal) {

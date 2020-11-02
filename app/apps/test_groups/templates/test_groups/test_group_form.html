@@ -2,179 +2,187 @@
 {% load static %}
 
 {% block breadcrumb %}
-  <!-- breadcrumb -->
-  <div class="page-title">
-    <div class="container-fluid px-5">
-      <div class="page-title-wrapper-2">
-        <div class="page-title-heading-2">
-          {% if test_group %}
-            <a href="{% url 'bops:test_planner' test_group.bop.pk %}">Test Planner</a>
-            <span class=" fa fa-chevron-right"></span>
-            <span class="current-page">Change Test Group {{ test_group.id }}</span>
-          {% else %}
-            <a href="{% url 'bops:test_planner' bop_pk %}">Test Planner</a>
-            <span class=" fa fa-chevron-right"></span>
-            <span class="current-page">Add new Test Group</span>
-          {% endif %}
-        </div>
+<!-- breadcrumb -->
+<div class="page-title">
+  <div class="container-fluid px-5">
+    <div class="page-title-wrapper-2">
+      <div class="page-title-heading-2">
+        {% if test_group %}
+        <a href="{% url 'bops:test_planner' test_group.bop.pk %}">Test Planner</a>
+        <span class=" fa fa-chevron-right"></span>
+        <span class="current-page">Change Test Group {{ test_group.id }}</span>
+        {% else %}
+        <a href="{% url 'bops:test_planner' bop_pk %}">Test Planner</a>
+        <span class=" fa fa-chevron-right"></span>
+        <span class="current-page">Add new Test Group</span>
+        {% endif %}
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
 
 {% block main %}
-  {% if form.errors %}
-    {{ form.errors }}
-  {% endif %}
-  <div class="section container-fluid px-5">
-    <div class="section-title mb-4 d-flex">
-      {% if test_group %}
-        <p class="current-page">Change Test Group {{ test_group.id }}</p>
-      {% else %}
-        <p class="current-page">Add new Test Group</p>
-      {% endif %}
+{% if form.errors %}
+{{ form.errors }}
+{% endif %}
+<div class="section container-fluid px-5">
+  <div class="section-title mb-4 d-flex">
+    <div class="d-flex flex-column">
+    {% if test_group %}
+      <a href="{% url 'bops:test_planner' test_group.bop.pk %}" class="mb-3">
+        <i class="fa fa-arrow-left"></i> back
+      </a>
+      <p class="current-page">Change Test Group {{ test_group.id }}</p>
+    {% else %}
+      <a href="{% url 'bops:test_planner' bop_pk%}" class="mb-3">
+        <i class="fa fa-arrow-left"></i> back
+      </a>
+      <p class="current-page">Add new test group</p>
+    {% endif %}
     </div>
-    <div class="section-content bg-white">
-      <div class="row">
-        <div class="col-sm-12">
-          <form method="POST" id="testGroup">
-            {% csrf_token %}
-            <!-- name field -->
-            <div class="form-group row">
-              <label class="col-sm-2 col-form-label col-form-label-sm">Name</label>
-              <div class="col-sm-2">
-                {{ form.name }}
-              </div>
-              <div class="col-sm-10 offset-2">
-                <small class="form-text text-muted">
-                  Required
-                </small>
-              </div>
+  </div>
+  <div class="section-content bg-white">
+    <div class="row">
+      <div class="col-sm-12">
+        <form method="POST" id="testGroup">
+          {% csrf_token %}
+          <!-- name field -->
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label col-form-label-sm">Name</label>
+            <div class="col-sm-2">
+              {{ form.name }}
             </div>
-            <hr/>
-
-            <!-- name field -->
-            <div class="form-group row">
-              <label class="col-sm-2 col-form-label col-form-label-sm">Start
-                date:</label>
-              <div class="col-sm-2">
-                {{ form.start_date }}
-              </div>
-              <div class="col-sm-10 offset-2">
-                <small class="form-text text-muted">
-                  Required
-                </small>
-              </div>
+            <div class="col-sm-10 offset-2">
+              <small class="form-text text-muted">
+                Required
+              </small>
             </div>
-            <hr/>
+          </div>
+          <hr/>
+
+          <!-- name field -->
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label col-form-label-sm">Start
+              date:</label>
+            <div class="col-sm-2">
+              {{ form.start_date }}
+            </div>
+            <div class="col-sm-10 offset-2">
+              <small class="form-text text-muted">
+                Required
+              </small>
+            </div>
+          </div>
+          <hr/>
 
 
-            <!-- failure modes field -->
-            <div class="form-group row">
-              <label for="" class="col-sm-2 col-form-label col-form-label-sm">Failure Modes:</label>
-              <div class="col-sm-10">
-                <!-- selector -->
-                <div class="selector">
-                  <div class="selector-available">
-                    <h4>Available Failure Modes</h4>
-                    <!-- filter -->
-                    <div class="selector-filter form-inline">
-                      <label for=""><i class="fa fa-search"></i></label>
-                      <input id="id_failure_modes_input" type="text" placeholder="Filter" class="form-control
+          <!-- failure modes field -->
+          <div class="form-group row">
+            <label for="" class="col-sm-2 col-form-label col-form-label-sm">Failure Modes:</label>
+            <div class="col-sm-10">
+              <!-- selector -->
+              <div class="selector">
+                <div class="selector-available">
+                  <h4>Available Failure Modes</h4>
+                  <!-- filter -->
+                  <div class="selector-filter form-inline">
+                    <label for=""><i class="fa fa-search"></i></label>
+                    <input id="id_failure_modes_input" type="text" placeholder="Filter" class="form-control
                       form-control-sm">
-                    </div>
-                    <!-- selector -->
-                    {{ form.failure_modes }}
                   </div>
-
-                  <div class="selector-chooser">
-                    <a href="" class="active" id="id_failure_modes_add_link">
-                      <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                    <a href="" class="active" id="id_failure_modes_remove_link">
-                      <i class="fa fa-arrow-circle-left"></i>
-                    </a>
-                  </div>
-
-                  <div class="selector-chosen">
-                    <h4>Available Tests</h4>
-                    <!-- selector -->
-                    <select name="failure_modes" id="to_box" multiple class="">
-                    </select>
-                  </div>
-
-                  <div class="mx-4">
-                    <a href="/admin/failuremodes/failuremode/add/?_to_field=id&_popup=1"><i
-                        class="fa fa-plus text-success"></i></a>
-                  </div>
+                  <!-- selector -->
+                  {{ form.failure_modes }}
                 </div>
 
-                <!-- ./ selector -->
+                <div class="selector-chooser">
+                  <a href="" class="active" id="id_failure_modes_add_link">
+                    <i class="fa fa-arrow-circle-right"></i>
+                  </a>
+                  <a href="" class="active" id="id_failure_modes_remove_link">
+                    <i class="fa fa-arrow-circle-left"></i>
+                  </a>
+                </div>
+
+                <div class="selector-chosen">
+                  <h4>Available Tests</h4>
+                  <!-- selector -->
+                  <select name="failure_modes" id="to_box" multiple class="">
+                  </select>
+                </div>
+
+                <div class="mx-4">
+                  <a href="/admin/failuremodes/failuremode/add/?_to_field=id&_popup=1"><i
+                      class="fa fa-plus text-success"></i></a>
+                </div>
               </div>
-              <div class="col-sm-10 offset-2">
-                <small class="form-text text-muted">
-                  Some explanation. Hold down “Control”, or “Command” on a Mac, to select more than one.
-                </small>
+
+              <!-- ./ selector -->
+            </div>
+            <div class="col-sm-10 offset-2">
+              <small class="form-text text-muted">
+                Some explanation. Hold down “Control”, or “Command” on a Mac, to select more than one.
+              </small>
+            </div>
+          </div>
+          <hr/>
+
+          <fieldset class="form-fieldset" id="testsWrapper">
+            <h4>Tests</h4>
+            <button id="addLevelBtn" class="" type="button">add test</button>
+            <hr>
+            {% for test in test_group.tests %}
+            <div class="form-group row px-3">
+              <label class="col-sm-2 col-form-label col-form-label-sm">Test level {{ forloop.counter }}:</label>
+
+              <div class="col-sm-1">
+                <input type="text" data-level="{{ forloop.counter }}" class="form-control form-control-sm"
+                       value="{{ test.interval }}"
+                       name="interval_{{ forloop.counter }}"/>
+                <small>Interval</small>
+              </div>
+
+              <div class="col-sm-1">
+                <input type="text" data-level="{{ forloop.counter }}" class="testcoverage " value=
+                    "{{ test.coverage }}"
+                       name="coverage_{{ forloop.counter }}"/>
+                <small>Coverage</small>
               </div>
             </div>
             <hr/>
+            {% endfor %}
 
-            <fieldset class="form-fieldset" id="testsWrapper">
-              <h4>Tests</h4>
-              <button id="addLevelBtn" class="" type="button">add test</button>
-              <hr>
-              {% for test in test_group.tests %}
-                <div class="form-group row px-3">
-                  <label class="col-sm-2 col-form-label col-form-label-sm">Test level {{ forloop.counter }}:</label>
+            <input type="hidden" name="tests">
+          </fieldset>
 
-                  <div class="col-sm-1">
-                    <input type="text" data-level="{{ forloop.counter }}" class="form-control form-control-sm"
-                           value="{{ test.interval }}"
-                           name="interval_{{ forloop.counter }}"/>
-                    <small>Interval</small>
-                  </div>
-
-                  <div class="col-sm-1">
-                    <input type="text" data-level="{{ forloop.counter }}" class="testcoverage " value=
-                        "{{ test.coverage }}"
-                           name="coverage_{{ forloop.counter }}"/>
-                    <small>Coverage</small>
-                  </div>
-                </div>
-                <hr/>
-              {% endfor %}
-
-              <input type="hidden" name="tests">
-            </fieldset>
-
-            <div class="card">
-              <div class="bg-light text-right p-2">
-                <a href="{% url 'manager' %}" class=" btn btn-default">
-                  Cancel
-                </a>
-                <button type="submit" class="px-4 btn btn-secondary">
-                  Save
-                </button>
-              </div>
+          <div class="card">
+            <div class="bg-light text-right p-2">
+              <a href="{% url 'manager' %}" class=" btn btn-default">
+                Cancel
+              </a>
+              <button type="submit" class="px-4 btn btn-secondary">
+                Save
+              </button>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
-  <script src="{% static 'js/SelectBox.js' %}"></script>
-  <script src="{% static 'js/SelectFilter.js' %}"></script>
-  <script src="{% static 'js/TestGroup.js' %}"></script>
-  <script>
-      // Query all input fields
-      var form_fields = document.getElementsByTagName('input')
-      // customization of form fields
-      for (var field in form_fields) {
-          if (form_fields[field].type == 'file') continue
-          form_fields[field].className += 'form-control form-control-sm'
-      }
-  </script>
+<script src="{% static 'js/SelectBox.js' %}"></script>
+<script src="{% static 'js/SelectFilter.js' %}"></script>
+<script src="{% static 'js/TestGroup.js' %}"></script>
+<script>
+    // Query all input fields
+    var form_fields = document.getElementsByTagName('input')
+    // customization of form fields
+    for (var field in form_fields) {
+        if (form_fields[field].type == 'file') continue
+        form_fields[field].className += 'form-control form-control-sm'
+    }
+</script>
 {% endblock %}

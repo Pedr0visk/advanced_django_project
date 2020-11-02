@@ -2,28 +2,17 @@
 {% load static %}
 {% load manager_extras %}
 
-{% block breadcrumb %}
-<div class="page-title">
-  <div class="container-fluid px-5">
-    <div class="page-title-wrapper-2">
-      <div class="page-title-heading-2">
-        {% if campaign %}
-        <a href="{% url 'campaigns:index' campaign.pk %}"><i class="fa fa-chevron-left"></i> Voltar</a>
-        {% else %}
-        <a href="{% url 'bops:index' bop_pk %}"><i class="fa fa-chevron-left"></i> Voltar</a>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
-
 {% block main %}
 
 <div class="section bg-white" id="app">
   <div class="container-fluid px-5">
     {% if campaign %}
-    <h4 class="title-1 mb-4">Change Campaign</h4>
+    <div class="d-flex flex-column">
+      <a href="{% url 'campaigns:index' campaign.pk %}" class="mb-3">
+        <i class="fa fa-arrow-left"></i> back
+      </a>
+      <h4 class="title-1 mb-4">Update campaign</h4>
+    </div>
     {% else %}
     <h4 class="title-1 mb-4">Add Campaign</h4>
     {% endif %}
@@ -105,11 +94,11 @@
               <div class="d-flex">
                 <div class="ml-auto">
                   {% if campaign %}
-                  <a href="{% url 'campaigns:index' campaign.pk %}" class="btn btn-danger">
+                  <a href="{% url 'campaigns:index' campaign.pk %}" class="btn">
                     cancel
                   </a>
                   {% else %}
-                  <a href="{% url 'bops:index' bop_pk %}" class="btn btn-danger">
+                  <a href="{% url 'bops:index' bop_pk %}" class="btn">
                     cancel
                   </a>
                   {% endif %}
