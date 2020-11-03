@@ -30,17 +30,14 @@
             <small>phase name</small>
           </div>
           <!-- datetime picker -->
-          <div class="col-3">
-            <datetime-picker
-                placeholder="start date"
-                :dayStr="dayStr"
-                :btnStr="btnStr"
-                timeType="hour"
-                v-model="phase.start_date"
-                :popperProps="popperProps"
-                :timeStr="timeStr"
-            />
-            <small>format: Year-Month-Day Hour</small>
+          <div class="col-2">
+            <input type="date" v-model="phase.start.date"/>
+            <small>mm/dd/YYYY</small>
+          </div>
+          <div class="col-1">
+            <select v-model="phase.start.time" name="" id="" class="form-control form-control-sm">
+              <option v-for="hour in 24" :value="hour-1">{{ ("0" + (hour - 1)).slice(-2) }}:00</option>
+            </select>
           </div>
 
           <!-- duration -->
@@ -48,24 +45,14 @@
             <input
                 v-model="phase.duration"
                 type="number"
-                :disabled="phase.start_date == ''"
+                :disabled="phase.start.date == ''"
                 class="form-control form-control-sm">
             <small>duration (h)</small>
           </div>
 
           <!-- datetime picker -->
-          <div class="col-3">
-            <datetime-picker
-                placeholder="end date"
-                :dayStr="dayStr"
-                :btnStr="btnStr"
-                timeType="hour"
-                :canEdit="false"
-                v-model="phase.end_date"
-                :popperProps="popperProps"
-                :timeStr="timeStr"
-            />
-            <small>format: Year-Month-Day Hour</small>
+          <div class="col-auto">
+            <input type="text" disabled :value="formatDate(phase.end.date, phase.end.time)">
           </div>
           <!-- has_test -->
           <div class="col-auto">
@@ -94,7 +81,7 @@
           <!-- actions -->
           <div class="col-1">
             <button
-               v-show="!isUpdate"
+                v-show="!isUpdate"
                 type="submit"
                 class="btn-standard"
                 :disabled="isUpdate"
@@ -142,8 +129,8 @@
               :key="key"
               v-bind:class="{selected: item._id === phase._id }">
             <td>{{ item.name }}</td>
-            <td>{{ item.start_date }}:00h</td>
-            <td>{{ item.end_date }}:00h</td>
+            <td>{{ formatDate(item.start.date, item.start.time) }}</td>
+            <td>{{ formatDate(item.end.date, item.end.time) }}</td>
             <td>{{ item.duration }}h</td>
             <td><img v-if="item.has_test" src="/static/img/icon-yes.svg" alt=""></td>
             <td><img v-if="item.is_drilling" src="/static/img/icon-yes.svg" alt=""></td>
@@ -191,48 +178,22 @@
 </template>
 
 <script>
+/**
+ *
+ * @param start_date:Date
+ * @param time:Int
+ * @param duration:Int
+ * @return new_date:Date
+ */
 
-const popperProps = {
-  popperOptions: {
-    modifiers: {
-      preventOverflow: {
-        padding: 20
-      }
-    },
-    // onUpdate: function (data) {
-    //   console.log(JSON.stringify(data.attributes))
-    // }
-  }
+function calcDateTime(start_date, hour, duration) {
+  let delay = (parseInt(duration) + parseInt(hour)) * 60 ** 2 * 1000
+  let new_date = new Date(new Date(start_date.split('-')).getTime() + delay)
+  return new_date
 }
 
-const parseDateTime = (datetime) => {
-  let full_date = datetime.split(' ')
-  let date = full_date[0].split('-')
-  const year = parseInt(date[0]),
-      month = parseInt(date[1]),
-      day = parseInt(date[2]),
-      hour = parseInt(full_date[1])
-
-  return new Date(year, month, day, hour)
-}
-
-const formatDate = (date) => {
-  let nextYear = date.getFullYear()
-  let nextMonth = ("0" + (date.getMonth() + 1)).slice(-2)
-  let nextDay = ("0" + (date.getDate())).slice(-2)
-  let nextHour = ("0" + (date.getHours())).slice(-2)
-
-  return `${nextYear}-${nextMonth}-${nextDay} ${nextHour}`
-}
-
-const calcNextDate = (date, duration) => {
-  return new Date(date.getTime() + (duration * 60 * 60 * 1000))
-}
-
-const nextDate = (start_date, duration) => {
-  const parsed_date = parseDateTime(start_date)
-  let next_date = calcNextDate(parsed_date, duration)
-  return formatDate(next_date)
+function toDateString(date) {
+  return `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${("0" + (date.getDate())).slice(-2)}`
 }
 
 export default {
@@ -241,13 +202,8 @@ export default {
     return {
       isLoading: true,
       errors: [],
-      timeStr: ['hour'],
-      isM: false,
       isUpdate: false,
-      popperProps: popperProps,
       testGroups: [],
-      btnStr: 'pick',
-      dayStr: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
       phases: [],
       schema: {
         name: ''
@@ -258,8 +214,8 @@ export default {
         has_test: false,
         is_drilling: false,
         duration: null,
-        start_date: '',
-        end_date: '',
+        start: {date: '', time: 12},
+        end: {date: '', time: 0},
         test_groups: []
       }
     };
@@ -275,20 +231,33 @@ export default {
         .get(`/api/schemas/${schemaId}/`)
         .then(response => {
           this.schema.name = response.data.name
-          console.log(response.data)
-          this.phases = response.data.phases.map(phase => ({
-            _id: this.$uuid.v1(),
-            name: phase.name,
-            has_test: phase.has_test,
-            is_drilling: phase.is_drilling,
-            duration: phase.duration,
-            start_date: formatDate(new Date(phase.start_date)),
-            end_date: formatDate(calcNextDate(new Date(phase.start_date), phase.duration)),
-            test_groups: phase.test_groups
-          }))
+          this.phases = response.data.phases.map(phase => {
+            let start = {
+              date: toDateString(new Date(phase.start_date)),
+              time: new Date(phase.start_date).getHours()
+            }
+
+            let d = calcDateTime(start.date, start.time, phase.duration)
+
+            let end = {
+              date: toDateString(d),
+              time: d.getHours()
+            }
+
+            return {
+              _id: this.$uuid.v1(),
+              name: phase.name,
+              has_test: phase.has_test,
+              is_drilling: phase.is_drilling,
+              duration: phase.duration,
+              start: start,
+              end: end,
+              test_groups: phase.test_groups
+            }
+          })
 
           this.isLoading = false
-          this.phase.start_date = this.phases[this.phases.length - 1].end_date
+          this.phase.start = this.phases[this.phases.length - 1].end
         })
   },
   methods: {
@@ -305,8 +274,8 @@ export default {
             has_test: phase.has_test,
             is_drilling: phase.is_drilling,
             duration: phase.duration,
-            start_date: phase.start_date + ':00:00',
-            end_date: phase.end_date + ':00:00',
+            start_date: this.formatDate(phase.start.date, phase.start.time),
+            end_date: this.formatDate(phase.end.date, phase.end.time),
             test_groups: phase.test_groups
           }
         })
@@ -337,17 +306,12 @@ export default {
           })
     },
     add() {
-      if (!this.checkForm())
-        return
-
       this.phase._id = this.$uuid.v1()
       let newPhases = [...this.phases, this.phase]
       this.phases = newPhases
       this.clear()
     },
     update(id) {
-      if (!this.checkForm())
-        return
 
       let index = this.phases.findIndex(phase => phase._id == id)
       this.phases[index] = this.phase
@@ -360,8 +324,17 @@ export default {
       for (index; index < length; index++) {
         prevPhase = this.phases[index - 1]
         phase = this.phases[index]
-        phase.start_date = nextDate(prevPhase.start_date, prevPhase.duration)
-        phase.end_date = nextDate(phase.start_date, phase.duration)
+
+        let {date, time} = prevPhase.start
+        let d = calcDateTime(date, time, prevPhase.duration)
+
+        phase.start.date = toDateString(d)
+        phase.start.time = d.getHours()
+
+        d = calcDateTime(phase.start.date, phase.start.time, phase.duration)
+        phase.end.date = toDateString(d)
+        phase.end.time = d.getHours()
+
         this.phases[index] = phase
       }
       this.toggleAction()
@@ -370,7 +343,7 @@ export default {
       let prevPhase = this.phases[index - 1]
       this.phases.splice(index, 0, Object.assign(this.phase, {
         _id: this.$uuid.v1(),
-        start_date: prevPhase.end_date
+        start: prevPhase.end
       }))
       this.select(index)
     },
@@ -378,12 +351,11 @@ export default {
       let prevPhase = this.phases[index]
       this.phases.splice(index + 1, 0, Object.assign(this.phase, {
         _id: this.$uuid.v1(),
-        start_date: prevPhase.end_date
+        start: prevPhase.end
       }))
       this.select(index + 1)
     },
     remove(id) {
-      console.log('deleting')
       this.phases = this.phases.filter(phase => phase._id != id)
     },
     select(index) {
@@ -399,15 +371,13 @@ export default {
     },
     clear() {
       const lastPhase = this.phases[this.phases.length - 1]
-      const {start_date, duration} = lastPhase
-      const next_date = nextDate(start_date, duration)
 
       this.phase = {
         _id: '',
         name: '',
         duration: null,
-        start_date: next_date,
-        end_date: '',
+        start: lastPhase.end,
+        end: {date: '', time: 0},
         test_groups: [],
         has_test: false,
         is_drilling: false,
@@ -432,12 +402,29 @@ export default {
       if (this.errors.length > 0)
         return false;
       return true;
+    },
+    formatDate(date, hour) {
+      let d = new Date(date.split('-')),
+          month = '' + (d.getMonth() + 1),
+          day = '' + d.getDate(),
+          year = d.getFullYear();
+
+      if (month.length < 2)
+        month = '0' + month;
+      if (day.length < 2)
+        day = '0' + day;
+
+      return `${[year, month, day].join('-')} ${("0" + hour).slice(-2)}:00:00`;
     }
   },
   watch: {
     'phase.duration': function (val, oldVal) {
-      if (val !== null && oldVal !== null) {
-        this.phase.end_date = nextDate(this.phase.start_date, this.phase.duration)
+      let {date, time} = this.phase.start
+      let d = calcDateTime(date, time, this.phase.duration)
+
+      this.phase.end = {
+        date: `${d.getFullYear()}-${("0" + (d.getMonth() + 1)).slice(-2)}-${("0" + (d.getDate())).slice(-2)}`,
+        time: d.getHours()
       }
     }
   }
