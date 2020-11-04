@@ -346,7 +346,7 @@
 
 
                     chart: {
-                        type: 'spline',
+                        type: 'area',
                         height: '450',
                     },
 
@@ -427,7 +427,11 @@
 
                     plotOptions: {
 
+
+
                         series: {
+
+
                             pointStart: Date.UTC({{campaign.start_date.year}}, {{campaign.start_date.month}} -1, {{campaign.start_date.day}}), // start date
                             pointInterval: 3600 * 1000 // one hour in miliseconds
                         }
@@ -437,20 +441,12 @@
                         color: '#337ab7',
                         name: 'Normal',
                         tooltip: {},
-
+                        dashStyle: 'shortdash',
                         data: {{data.result | safe}},
 
 
                     },
-                        {
-                            color: '#337ab7',
-                            name: 'Average',
-                            tooltip: {},
-                            dashStyle: 'shortdash',
-                            data: {{data.average_to_chart | safe}},
 
-
-                        },
 
 
                     ],
@@ -539,3 +535,4 @@
         </script>
     {% endblock %}
 {% endblock %}
+    </div>
