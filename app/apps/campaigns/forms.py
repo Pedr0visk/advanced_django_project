@@ -8,15 +8,7 @@ class CampaignForm(ModelForm):
         fields = ['name',
                   'description',
                   'active',
-                  'well_name',
-                  'start_date',
-                  'end_date']
-        widgets = {
-            'start_date': DateInput(format='%Y-%m-%d',
-                                    attrs={'placeholder': 'Select a date', 'type': 'date'}),
-            'end_date': DateInput(format='%Y-%m-%d',
-                                  attrs={'placeholder': 'Select a date', 'type': 'date'}),
-        }
+                  'well_name']
 
 
 class PhaseForm(ModelForm):
@@ -26,7 +18,6 @@ class PhaseForm(ModelForm):
         widgets = {
             'start_date': DateTimeInput(format='%Y-%m-%d',
                                         attrs={'placeholder': 'Select a date', 'type': 'date'}),
-
         }
 
 
