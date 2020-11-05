@@ -39,21 +39,23 @@ class Bop(models.Model):
 
     @property
     def components(self):
-        subsystem_qs = self.subsystems.prefetch_related('components').all()
+        subsystem_qs = self.subsystems.prefetch_related('components')
         components = []
         for subsystem in subsystem_qs:
             components += subsystem.components.all()
 
+        components.sort(key=lambda item: item.code)
         return components
 
     @property
     def failure_modes(self):
-        subsystem_qs = self.subsystems.prefetch_related('components__failure_modes').all()
+        subsystem_qs = self.subsystems.prefetch_related('components__failure_modes').order_by('code')
         failure_modes = []
         for subsystem in subsystem_qs:
             for component in subsystem.components.all():
                 failure_modes += component.failure_modes.all()
 
+        failure_modes.sort(key=lambda item: item.code)
         return failure_modes
 
 

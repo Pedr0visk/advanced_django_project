@@ -8,7 +8,7 @@ from django.core.cache import cache
 
 
 def certification_list(request, bop_pk):
-    bop = cache.get_or_set('bop', Bop.objects.get(pk=bop_pk))
+    bop = Bop.objects.get(pk=bop_pk)
 
     certifications = bop.certifications.all()
 
@@ -17,7 +17,7 @@ def certification_list(request, bop_pk):
 
 
 def certification_update(request, bop_pk, cert_pk):
-    bop = cache.get_or_set('bop', Bop.objects.get(pk=bop_pk))
+    bop = Bop.objects.get(pk=bop_pk)
     certification = Certification.objects.get(pk=cert_pk)
     form = CertificationForm(request.POST or None, instance=certification)
 

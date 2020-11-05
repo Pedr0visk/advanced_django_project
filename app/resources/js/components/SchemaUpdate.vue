@@ -404,18 +404,24 @@ export default {
     },
     checkForm() {
       this.errors = []
-      let {name, duration, start_date} = this.phase
+      let {name, duration, start: {date, time} } = this.phase
 
+      let phaseEndDate = calcDateTime(date, time, duration)
+      let certExpiryDate = calcDateTime(this.bop.last_certification.end_date, 23, 1)
+
+      if(phaseEndDate > certExpiryDate)
+        this.errors.push('this phase duration exceed the bop\'s certification period')
       if (!name)
         this.errors.push('the field name is required')
       if (!duration)
         this.errors.push('the field duration is required')
-      if (!start_date)
+      if (!date || !time)
         this.errors.push('the field start date is required')
 
       if (this.errors.length > 0)
         return false;
-      return true;
+
+      return true
     },
     formatDate(date, hour) {
       let d = new Date(date.split('-')),

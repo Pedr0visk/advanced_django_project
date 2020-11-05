@@ -6,6 +6,7 @@ class BopSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bop
         fields = (
-            'name', 'testgroup'
+            'name',
+            'model',
         )
 

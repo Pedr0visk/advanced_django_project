@@ -44,7 +44,7 @@
 
           <!-- datetime picker -->
           <div class="col-2">
-            <input type="date" v-model="phase.start.date"/>
+            <input type="date" v-model="phase.start.date" :max="bop.last_certification.end_date" />
             <small>mm/dd/YYYY</small>
           </div>
           <div class="col-1">
@@ -196,6 +196,7 @@ export default {
 
   data() {
     return {
+      bop: {name: '', model: '', last_certification: {end_date: undefined}},
       errors: [],
       isUpdate: false,
       testGroups: [],
@@ -218,8 +219,16 @@ export default {
   mounted() {
     let bopId = document.getElementById('bopId').value
     axios
+      .get(`/api/bops/${bopId}/`)
+      .then(response => {
+        console.log(response.data)
+        this.bop = response.data
+      })
+
+    axios
         .get(`/api/bops/${bopId}/test-groups/`)
         .then(response => this.testGroups = response.data)
+
   },
   methods: {
     createSchema() {
@@ -268,6 +277,7 @@ export default {
           })
     },
     add() {
+      if (!this.checkForm()) return
       this.phase._id = this.$uuid.v1()
       let newPhases = [...this.phases, this.phase]
       this.phases = newPhases
@@ -334,13 +344,18 @@ export default {
     checkForm() {
       console.log('checking fields...')
       this.errors = []
-      let {name, duration, start_date} = this.phase
+      let {name, duration, start: {date, time} } = this.phase
 
+      let phaseEndDate = calcDateTime(date, time, duration)
+      let certExpiryDate = calcDateTime(this.bop.last_certification.end_date, 23, 1)
+
+      if(phaseEndDate > certExpiryDate)
+        this.errors.push('this phase duration exceed the bop\'s certification period')
       if (!name)
         this.errors.push('the field name is required')
       if (!duration)
         this.errors.push('the field duration is required')
-      if (!start_date)
+      if (!date || !time)
         this.errors.push('the field start date is required')
 
       if (this.errors.length > 0)

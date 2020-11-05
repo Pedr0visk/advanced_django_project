@@ -181,11 +181,10 @@ def event_create(request, campaign_pk):
     form = EventForm(request.POST or None)
     failure_modes = bop.failure_modes
     components = bop.components
-    subsystems = bop.subsystems.all()
+    subsystems = bop.subsystems.order_by('code')
 
     if request.method == 'POST':
         if form.is_valid():
-            print(request.POST)
             new_event = form.save(commit=False)
             new_event.campaign_id = campaign_pk
             new_event.save()
