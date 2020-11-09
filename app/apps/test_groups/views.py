@@ -50,7 +50,7 @@ def test_group_delete(request, tg_pk):
         test_group_raw.delete()
 
         messages.success(request, f'Test Group "{test_group_id}" deleted successfully!')
-        return redirect('test_planner_raw', bop_pk)
+        return redirect('bops:test_planner_raw', bop_pk)
 
     context = {'test_group': test_group_raw}
     return render(request, 'test_groups/test_group_confirm_delete.html', context)

@@ -4,7 +4,6 @@ from django.shortcuts import redirect
 
 from apps.bops.models import Bop
 from apps.failuremodes.models import FailureMode
-from apps.tests.models import Test
 from datetime import date
 
 
