@@ -8,6 +8,7 @@ urlpatterns = [
     path('<int:pk>/dashboard/', views.index, name='index'),
     path('<int:pk>/change/', views.bop_update, name='update'),
     path('<int:pk>/delete/', views.bop_delete, name='delete'),
+    path('<int:pk>/results/', views.bop_result, name='results'),
 
     # test planner
     path('<int:pk>/test-planner/', views.test_planner, name='test_planner'),

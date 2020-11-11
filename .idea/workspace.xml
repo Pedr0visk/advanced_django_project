@@ -56,6 +56,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Vue Single File Component" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -70,6 +71,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns" />
@@ -175,7 +177,7 @@
       <workItem from="1603807897541" duration="497000" />
       <workItem from="1603821893156" duration="22910000" />
       <workItem from="1603976036955" duration="1599000" />
-      <workItem from="1604682271695" duration="11951000" />
+      <workItem from="1604682271695" duration="35370000" />
     </task>
     <servers />
   </component>

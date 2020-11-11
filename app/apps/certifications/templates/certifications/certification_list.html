@@ -1,23 +1,8 @@
-{% extends 'manager/base.html' %}
+{% extends 'base.html' %}
 
-{% block breadcrumb %}
-  <!-- breadcrumb -->
-  <div class="page-title">
-    <div class="container-fluid px-5">
-      <div class="page-title-wrapper-2">
-        <div class="page-title-heading-2">
-          <a href="{% url 'manager' %}">Home</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'manager' %}">Bops</a>
-          <span class="fa fa-chevron-right"></span>
-          <span class="fa fa-chevron-right"></span>
-          <span class="current-page">Certifications </span>
-        </div>
-      </div>
-    </div>
-  </div>
+{% block extra_menu %}
+{% include 'common/bop_menu.html' %}
 {% endblock %}
-
 
 {% block main %}
   {% for message in messages %}
@@ -53,7 +38,7 @@
                 {% for object in objects %}
                   <tr>
                   <td>{{ object.id }}</td>
-                  <td><a href="{% url 'update_certification' bop.pk object.pk %}">{{ object.code }}</a></td>
+                  <td><a href="">{{ object.code }}</a></td>
                   <td>{{ object.start_date }}</td>
                   <td>{{ object.end_date }}</td>
                   </tr>

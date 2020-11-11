@@ -17,6 +17,7 @@ urlpatterns = [
     path('cuts/', include('apps.cuts.urls')),
     path('admin/', admin.site.urls),
     path('manager/', include('apps.managers.urls')),
+    path('certifications/', include('apps.certifications.urls')),
     path('', include('apps.campaigns.urls')),
     path('test-groups/', include('apps.test_groups.urls')),
     # api
