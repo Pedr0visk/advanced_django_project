@@ -234,3 +234,17 @@ def summary_results(request, pk):
 
 def list_subsystems(request, pk):
     pass
+
+
+def bop_result(request, pk):
+    bop = Bop.objects.get(pk=pk)
+    campaign = bop.active_campaign()
+    schemas = campaign.schemas.all()
+
+    context = {
+        'bop': bop,
+        'campaign': campaign,
+        'schemas': schemas
+    }
+
+    return render(request, 'bops/bop_results.html', context)

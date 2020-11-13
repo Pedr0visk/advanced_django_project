@@ -11,6 +11,17 @@
     </div>
     <hr/>
 
+    <div class="form-group row">
+      <label class="col-sm-1 col-form-label col-form-label-sm">Default:</label>
+      <div class="col-sm-3">
+        <input type="checkbox" v-model="schema.is_default">
+        <small class="form-text text-muted">
+          Required.
+        </small>
+      </div>
+    </div>
+    <hr/>
+
     <fieldset class="form-fieldset">
       <h4>Phases</h4>
       <div v-if="errors.length">
@@ -206,7 +217,8 @@ export default {
       testGroups: [],
       phases: [],
       schema: {
-        name: ''
+        name: '',
+        is_default: false,
       },
       phase: {
         _id: null,
@@ -231,6 +243,7 @@ export default {
         .get(`/api/schemas/${schemaId}/`)
         .then(response => {
           this.schema.name = response.data.name
+          this.schema.is_default = response.data.is_default
           this.phases = response.data.phases.map(phase => {
             let start = {
               date: toDateString(new Date(phase.start_date)),
@@ -268,6 +281,7 @@ export default {
       const payload = {
         campaign: parseInt(document.getElementById('campaignId').value),
         name: this.schema.name,
+        is_default: this.schema.is_default,
         phases: this.phases.map(phase => {
           return {
             name: phase.name,
@@ -390,18 +404,24 @@ export default {
     },
     checkForm() {
       this.errors = []
-      let {name, duration, start_date} = this.phase
+      let {name, duration, start: {date, time} } = this.phase
 
+      let phaseEndDate = calcDateTime(date, time, duration)
+      let certExpiryDate = calcDateTime(this.bop.last_certification.end_date, 23, 1)
+
+      if(phaseEndDate > certExpiryDate)
+        this.errors.push('this phase duration exceed the bop\'s certification period')
       if (!name)
         this.errors.push('the field name is required')
       if (!duration)
         this.errors.push('the field duration is required')
-      if (!start_date)
+      if (!date || !time)
         this.errors.push('the field start date is required')
 
       if (this.errors.length > 0)
         return false;
-      return true;
+
+      return true
     },
     formatDate(date, hour) {
       let d = new Date(date.split('-')),

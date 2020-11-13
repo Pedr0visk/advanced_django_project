@@ -3,7 +3,7 @@ from .models import Campaign, Phase, Schema
 
 
 class CampaignAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'status', 'active', 'start_date', 'end_date')
+    list_display = ('id', 'name', 'status', 'active')
     list_display_links = ('id', 'name')
     search_fields = ('name',)
     list_per_page = 25

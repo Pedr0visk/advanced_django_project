@@ -26,20 +26,29 @@
 {% if form.errors %}
 {{ form.errors }}
 {% endif %}
-<div class="section container-fluid px-5">
+
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  <li
+  {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+<div class="section container-fluid px-5" id="app">
   <div class="section-title mb-4 d-flex">
     <div class="d-flex flex-column">
-    {% if test_group %}
+      {% if test_group %}
       <a href="{% url 'bops:test_planner' test_group.bop.pk %}" class="mb-3">
         <i class="fa fa-arrow-left"></i> back
       </a>
       <p class="current-page">Change Test Group {{ test_group.id }}</p>
-    {% else %}
+      {% else %}
       <a href="{% url 'bops:test_planner' bop_pk%}" class="mb-3">
         <i class="fa fa-arrow-left"></i> back
       </a>
       <p class="current-page">Add new test group</p>
-    {% endif %}
+      {% endif %}
     </div>
   </div>
   <div class="section-content bg-white">
@@ -61,7 +70,7 @@
           </div>
           <hr/>
 
-          <!-- name field -->
+          <!-- start date field -->
           <div class="form-group row">
             <label class="col-sm-2 col-form-label col-form-label-sm">Start
               date:</label>
@@ -75,7 +84,6 @@
             </div>
           </div>
           <hr/>
-
 
           <!-- failure modes field -->
           <div class="form-group row">
@@ -129,30 +137,8 @@
 
           <fieldset class="form-fieldset" id="testsWrapper">
             <h4>Tests</h4>
-            <button id="addLevelBtn" class="" type="button">add test</button>
-            <hr>
-            {% for test in test_group.tests %}
-            <div class="form-group row px-3">
-              <label class="col-sm-2 col-form-label col-form-label-sm">Test level {{ forloop.counter }}:</label>
-
-              <div class="col-sm-1">
-                <input type="text" data-level="{{ forloop.counter }}" class="form-control form-control-sm"
-                       value="{{ test.interval }}"
-                       name="interval_{{ forloop.counter }}"/>
-                <small>Interval</small>
-              </div>
-
-              <div class="col-sm-1">
-                <input type="text" data-level="{{ forloop.counter }}" class="testcoverage " value=
-                    "{{ test.coverage }}"
-                       name="coverage_{{ forloop.counter }}"/>
-                <small>Coverage</small>
-              </div>
-            </div>
-            <hr/>
-            {% endfor %}
-
-            <input type="hidden" name="tests">
+            {{ form.tests }}
+            <test-group-form></test-group-form>
           </fieldset>
 
           <div class="card">
@@ -173,9 +159,9 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'js/SelectBox.js' %}"></script>
 <script src="{% static 'js/SelectFilter.js' %}"></script>
-<script src="{% static 'js/TestGroup.js' %}"></script>
+<script src="{% static 'js/SelectBox.js' %}"></script>
+<script src="{% static 'build/app.js' %}"></script>
 <script>
     // Query all input fields
     var form_fields = document.getElementsByTagName('input')

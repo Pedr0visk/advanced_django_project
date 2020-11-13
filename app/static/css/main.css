@@ -10562,7 +10562,7 @@ h3 {
 |-----------------|
 */
 .header-top-bar {
-  background-color: #2a5e77;
+  background-color: #277aa2;
 }
 .header-top-bar .navbar {
   padding: 0.2rem 0;
@@ -11101,6 +11101,19 @@ ul.errorlist li {
 
 .font-bold {
   font-weight: bold;
+}
+
+ul.messages {
+  list-style: none;
+  padding: 0;
+}
+ul.messages li.error {
+  padding: 10px 10px 10px 65px;
+  color: #333;
+  background: rgba(186, 33, 33, 0.2) url(../img/icon-no.svg) 40px 12px no-repeat;
+  background-size: 16px auto;
+  font-size: 13px;
+  display: block;
 }
 
 /*# sourceMappingURL=main.css.map */

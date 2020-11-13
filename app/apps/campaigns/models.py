@@ -26,9 +26,6 @@ class Campaign(models.Model):
         default=StatusCampaign.GREEN
     )
 
-    start_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -58,11 +55,12 @@ class Campaign(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['-active', '-start_date']
+        ordering = ['-active']
 
 
 class Schema(models.Model):
     name = models.CharField(max_length=255)
+    is_default = models.BooleanField(default=False)
     campaign = models.ForeignKey(Campaign,
                                  on_delete=models.CASCADE,
                                  related_name='schemas')

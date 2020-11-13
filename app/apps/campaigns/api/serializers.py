@@ -20,7 +20,7 @@ class SchemaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Schema
-        fields = ('name', 'phases', 'campaign')
+        fields = ('name', 'phases', 'campaign', 'is_default')
 
     def create(self, validated_data):
         phases_data = validated_data.pop('phases')
@@ -37,6 +37,7 @@ class SchemaSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         phases_data = validated_data.pop('phases')
         instance.name = validated_data.get('name', instance.name)
+        instance.is_default = validated_data.get('is_default', instance.name)
         instance.save()
         instance.phases.all().delete()
 

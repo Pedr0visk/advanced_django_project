@@ -63,6 +63,11 @@
                 <td>
                   <a href="{% url 'campaigns:update_schema' schema.pk %}">{{ schema.name }}</a>
                 </td>
+                <td>
+                  {% if schema.is_default %}
+                  <small><b>DEFAULT</b></small>
+                  {% endif %}
+                </td>
                 <td width="10%">
                   <a href="{% url 'campaigns:delete_schema' schema.pk %}"><i
                       class="fa fa-times text-danger"></i></a>

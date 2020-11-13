@@ -5,7 +5,6 @@ import {uuid} from 'vue-uuid';
 import Axios from "axios";
 import VueSweetalert2 from 'vue-sweetalert2';
 import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
-import {DatetimePicker} from '@livelybone/vue-datepicker';
 
 // Install BootstrapVue
 Vue.use(BootstrapVue)
@@ -49,11 +48,6 @@ window.axios.interceptors.response.use(function (response) {
 });
 
 // import components
-Vue.component('datetime-picker', DatetimePicker);
-Vue.component(
-    "demo-component",
-    require("./components/DemoComponent.vue").default
-);
 Vue.component(
     "schema-form",
     require("./components/SchemaForm.vue").default
@@ -65,6 +59,10 @@ Vue.component(
 Vue.component(
     "cuts-table",
     require("./components/CutsTable.vue").default
+);
+Vue.component(
+    "test-group-form",
+    require("./components/TestGroupForm.vue").default
 );
 
 /*
@@ -84,7 +82,5 @@ let vue = new Vue({
         return {
             bus: bus
         }
-    },
-    components: {DatetimePicker},
-
+    }
 }).$mount("#app");
