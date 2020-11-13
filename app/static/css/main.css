@@ -11116,4 +11116,17 @@ ul.messages li.error {
   display: block;
 }
 
+table.table-results thead tr th.title {
+  border-spacing: 10px;
+  background-color: #277aa2;
+  color: white;
+}
+table.table-results thead tr td.cell {
+  background-color: #f8f9fa;
+  font-size: 11px;
+}
+table.table-results tbody tr td {
+  font-size: 11px;
+}
+
 /*# sourceMappingURL=main.css.map */
