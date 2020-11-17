@@ -1,40 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block breadcrumb %}
-<!-- breadcrumb -->
-<div class="page-title">
-  <div class="container-fluid px-5">
-    <div class="page-title-wrapper-2">
-      <div class="page-title-heading-2">
-        {% if test_group %}
-        <a href="{% url 'bops:test_planner' test_group.bop.pk %}">Test Planner</a>
-        <span class=" fa fa-chevron-right"></span>
-        <span class="current-page">Change Test Group {{ test_group.id }}</span>
-        {% else %}
-        <a href="{% url 'bops:test_planner' bop_pk %}">Test Planner</a>
-        <span class=" fa fa-chevron-right"></span>
-        <span class="current-page">Add new Test Group</span>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
-
 {% block main %}
-{% if form.errors %}
-{{ form.errors }}
-{% endif %}
 
-{% if messages %}
-<ul class="messages">
-  {% for message in messages %}
-  <li
-  {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-  {% endfor %}
-</ul>
-{% endif %}
+{% include "snippets/form_snippet.html" with form=form messages=messages %}
+
 <div class="section container-fluid px-5" id="app">
   <div class="section-title mb-4 d-flex">
     <div class="d-flex flex-column">

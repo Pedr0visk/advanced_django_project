@@ -3,10 +3,10 @@
 {% load manager_extras %}
 
 {% block main %}
-{% if form.errors %}
-{{ form.errors }}
-{% endif %}
-<div class="section bg-white">
+
+{% include "snippets/form_snippet.html" with form=form messages=messages %}
+
+<div class="section">
   <div class="container-fluid px-5">
     <div class="section-title mb-4 d-flex">
       {% if event %}

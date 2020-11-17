@@ -11,6 +11,7 @@ urlpatterns = [
     path('campaigns/<int:campaign_pk>/dashboard/', views.campaign_index, name="index"),
     path('campaigns/<int:campaign_pk>/change/', views.campaign_update, name="update"),
     path('campaigns/<int:campaign_pk>/delete/', views.campaign_delete, name="delete"),
+    path('campaigns/<int:campaign_pk>/compare/', views.schema_compare, name="compare"),
 
     # schemas
     path('schemas/<int:schema_pk>/run/', views.campaign_metrics, name="run"),

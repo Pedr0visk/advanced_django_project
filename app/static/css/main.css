@@ -10593,7 +10593,7 @@ h3 {
 }
 
 .main-header {
-  border-bottom: 2px solid #277aa2;
+  box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.25);
 }
 .main-header .navbar {
   padding: 0;
@@ -10604,7 +10604,7 @@ h3 {
 }
 .main-header .navbar .navbar-nav .nav-item .nav-link {
   font-size: 14px;
-  color: #222;
+  color: #6c757d;
 }
 
 .footer {
@@ -11066,7 +11066,7 @@ ul.errorlist {
 ul.errorlist li {
   padding: 10px 10px 10px 65px;
   color: #333;
-  background: #dfd url(../img/icon-no.svg) 40px 12px no-repeat;
+  background: rgba(186, 33, 33, 0.2) url(../img/icon-no.svg) 40px 12px no-repeat;
   background-size: 16px auto;
   font-size: 13px;
   display: block;
@@ -11123,10 +11123,14 @@ table.table-results thead tr th.title {
 }
 table.table-results thead tr td.cell {
   background-color: #f8f9fa;
-  font-size: 11px;
+  font-size: 10px;
 }
 table.table-results tbody tr td {
-  font-size: 11px;
+  font-size: 10px;
+}
+
+.table th, .table td {
+  padding: 0.35rem;
 }
 
 /*# sourceMappingURL=main.css.map */

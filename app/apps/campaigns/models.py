@@ -5,6 +5,8 @@ from django.urls import reverse
 from ..bops.models import Bop
 from ..test_groups.models import TestGroup
 from django.utils.translation import gettext_lazy as _
+from datetime import datetime as dt, timedelta
+from django.utils import timezone
 
 
 class Campaign(models.Model):
@@ -28,6 +30,25 @@ class Campaign(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def start_date(self):
+        schema = self.schemas.filter(is_default=True).first()
+        if schema:
+            return schema.phases.first().start_date
+        else:
+            return
+
+    @property
+    def end_date(self):
+        schema = self.schemas.filter(is_default=True).first()
+        if schema:
+            start_date = schema.phases.latest('updated_at').start_date
+            duration = schema.phases.latest('updated_at').duration
+            end_date = start_date + timedelta(hours=duration)
+            return end_date
+        else:
+            return None
 
     def get_period(self):
         """
@@ -61,6 +82,7 @@ class Campaign(models.Model):
 class Schema(models.Model):
     name = models.CharField(max_length=255)
     is_default = models.BooleanField(default=False)
+    result = models.TextField(blank=True, null=True)
     campaign = models.ForeignKey(Campaign,
                                  on_delete=models.CASCADE,
                                  related_name='schemas')
@@ -77,6 +99,9 @@ class Phase(models.Model):
     duration = models.FloatField()
     has_test = models.BooleanField(default=False)
     is_drilling = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Event(models.Model):
