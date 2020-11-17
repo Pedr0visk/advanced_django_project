@@ -7,6 +7,7 @@ import copy
 import csv
 from django.db.models import Max, Q
 import datetime
+from datetime import timedelta
 import string
 import math
 import numpy as np
@@ -141,19 +142,37 @@ def get_m_matrix(bop):
     return m
 
 
+def get_dates(schema):
+    flag = 0
+    try:
+        first = schema.phases.all().order_by('start_date').first()
+        print("first", first)
+        start_date = first.start_date
+        print("start_date", start_date)
+        last = schema.phases.all().order_by('start_date').last()
+        print("last", last)
+        end_date = last.start_date + timedelta(hours=last.duration)
+        print("datas", end_date)
+
+    except:
+        start_date = 0
+        end_date = 0
+
+    return start_date, end_date
+
+
 def calculate_SF_PFDS(schema, m):
     flag = 1
     dt = 1
-    # count_camps = count_Campaings(bop)  # contagem de campanhas
+
     # number_fails = getUserInputTotalFailures(bop)  # contagem de falhas
-    # t_start_recert = getStartCampaignDate(bop.id, flag)
+
     t_start_recert = 0
 
-    # t_end_camp = getEndCampaignDate(bop.id, count_camps)
-    # t_start_camp = getStartCampaignDate(bop.id, 1)
-    t_start_camp = schema.campaign.start_date
-    t_end_camp = schema.campaign.end_date
+    t_start_camp, t_end_camp = get_dates(schema)
+
     current_date = datetime.datetime.today()
+
     # tf_integracao = (t_end_camp - t_start_recert).days
     # ti_integracao = (current_date - t_start_recert).days
 
@@ -204,7 +223,6 @@ def calculate_SF_PFDS(schema, m):
             corte = corte + 1
 
         # print(datetime.datetime.today(), "Inicio do calculo PFD, com steps ", steps)
-        print("matrix de index", matriz_index)
 
         for i in range(1, steps):
             result_each_sf_integrate[i][0] = i * dt
@@ -221,13 +239,14 @@ def calculate_SF_PFDS(schema, m):
 def get_t(t_op):
     t = []
     count = 0
-    for i in range(1, len(t_op)):
-        if t_op[i - 1][1] == t_op[i][1]:
-            count = 0
-            t.append(count)
-        else:
-            count = count + 1
-            t.append(count)
+    for i in range(0, len(t_op) - 1):
+        #        if t_op[i-1][1] == t_op[i][1]:
+        #            count = 0
+        t.append(t_op[i][1])
+
+    #        else:
+    #            count = count + 1
+    #            t.append(count)
 
     return t
 
@@ -296,12 +315,10 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
                 xlambda = float(m[j][24])
 
 
-
-
             elif m[j][23] == "Weibull":
+
                 xlambda = 1 / int(m[j][25])
                 eta = float(m[j][26])
-                print(eta)
 
             elif m[j][23] == "Step":
 
@@ -310,46 +327,46 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
 
             # get test time for each test
 
-            for i in range(1, step_max):
-
+            for i in range(0, step_max - 1):
                 tempo = t[i]
+                if tempo:
+                    # Calculate normal PFD fractions
+                    if m[j][23] == "Exponential":
 
-                # Calculate normal PFD fractions
-                if m[j][23] == "Exponential":
+                        try:
+                            pol_falha = 1 - math.exp((-1) * xlambda * tempo * coverage)
+                        except:
+                            pol_falha = 0
 
-                    try:
-                        pol_falha = 1 - math.exp((-1) * xlambda * tempo * coverage)
-                    except:
-                        pol_falha = 0
+                    if m[j][23] == "Weibull":
+                        # treplace = t[j][i][11]
+                        # tltk = t[j][i][6 + k]
+                        # t_op_replace = t_op[treplace][1]
+                        # t_op_ltk = t_op[tltk][1]
+                        t_op_replace = 0
+                        t_op_ltk = 0
 
-                if m[j][23] == "Weibull":
-                    # treplace = t[j][i][11]
-                    # tltk = t[j][i][6 + k]
-                    # t_op_replace = t_op[treplace][1]
-                    # t_op_ltk = t_op[tltk][1]
-                    t_op_replace = 0
-                    t_op_ltk = 0
+                        t_op_atual = t_op[i][1]
+                        p1 = float(xlambda) ** float(eta)
 
-                    t_op_atual = t_op[i][1]
-                    p1 = float(xlambda) ** float(eta)
-                    p2 = (t_op_atual - t_op_replace) ** eta
-                    p3 = (t_op_ltk - t_op_replace) ** eta
-                    lambda_effetivo = p1 * (abs(p2 - p3))
+                        p2 = (t_op_atual - t_op_replace) ** eta
+                        p3 = (t_op_ltk - t_op_replace) ** eta
+                        lambda_effetivo = p1 * (abs(p2 - p3))
 
-                    pol_falha = 1 - math.exp(((-1) * coverage * (lambda_effetivo)))
+                        pol_falha = 1 - math.exp(((-1) * coverage * (lambda_effetivo)))
 
-                if m[j][23] == "Step":
-                    # Cintegrated = t[j][i][6 + k]
-                    Cintegrated = tempo
-                    l_ = xlambda
-                    c_ = coverage
-                    t_ = tempo * (dt)
-                    i_ = increase
-                    Cin_ = Cintegrated
+                    if m[j][23] == "Step":
+                        # Cintegrated = t[j][i][6 + k]
+                        Cintegrated = tempo
+                        l_ = xlambda
+                        c_ = coverage
+                        t_ = tempo * (dt)
+                        i_ = increase
+                        Cin_ = Cintegrated
 
-                    pol_falha = 1 - math.exp(c_ * ((((-1) * l_) * i_ * t_) + (((-1) * l_) * t_)))
+                        pol_falha = 1 - math.exp(c_ * ((((-1) * l_) * i_ * t_) + (((-1) * l_) * t_)))
 
-                v_integrate[j][i] = 1 - (1 - pol_falha)
+                    v_integrate[j][i] = 1 - (1 - pol_falha)
 
     return v_integrate
 
@@ -467,7 +484,8 @@ def get_t_op(start, end, schema, dt):
     count = 0
     flag = 0
     tmax = (abs((end - start).days)) * 24
-    t_op = [[None for i in range(2)] for j in range(tmax + 1)]
+    print("tmax", tmax)
+    t_op = [[None for i in range(2)] for j in range(tmax)]
     work = 1
     t_op[0][0] = 0
     t_op[0][1] = 0
@@ -488,7 +506,13 @@ def get_t_op(start, end, schema, dt):
             for i in range(0, int(phase.duration)):
                 count = count + 1
                 t_op[count][0] = count
-                t_op[count][1] = t_op[count - 1][1]
+                t_op[count][1] = t_op[count - 1][1] + dt
+
+                if i == phase.duration - 1:
+                    t_op[count][0] = count
+                    t_op[count][1] = 0
+                    print(" avaliar aqui", phase, count, i)
+
         else:
 
             for i in range(0, int(phase.duration)):
@@ -496,6 +520,7 @@ def get_t_op(start, end, schema, dt):
                 t_op[count][0] = count
                 t_op[count][1] = t_op[count - 1][1]
 
+    print("t_op", t_op)
     return t_op
 
     """
@@ -549,7 +574,7 @@ def Fail_line(failmode, v_integrate):
         if failmode == v_integrate[i][0]:
             line = i
             return line
-    print("não encontrou", failmode)
+
     return line
 
 

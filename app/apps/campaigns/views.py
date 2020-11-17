@@ -1,3 +1,5 @@
+import ast
+import numpy as np
 from . import metrics
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -89,8 +91,6 @@ def campaign_metrics(request, schema_pk):
     average = []
     maxi = []
 
-    print("veiws number sf", number_Sf, tempo)
-
     for j in range(1, number_Sf):
         result_sf = []
         average_to_chart = []
@@ -115,13 +115,26 @@ def campaign_metrics(request, schema_pk):
         desc = "safety Function" + " " + str(j)
         average.append(avg)
         maxi.append(maximo)
+        cont = 0
+        result_teste_sf = []
+        phases = schema.phases.all().order_by('start_date')
+        for phase in phases:
+            if phase.has_test:
+                for i in range(0, int(phase.duration)):
+                    result_teste_sf.append(result_sf[cont])
+                    cont = cont + 1
+            else:
+                for i in range(0, int(phase.duration)):
+                    result_teste_sf.append(0)
+                    cont = cont + 1
+
         for i in range(0, tempo):
             average_to_chart.append(avg)
-        print("a", average_to_chart)
-        print("desc", desc, soma, tempo)
+
         data_to_charts.append({
             'average': avg,
             'average_to_chart': average_to_chart,
+            'result_teste_sf': result_teste_sf,
             'result': result_sf,
             'max': maximo,
             'desc': desc,
@@ -172,6 +185,39 @@ def schema_delete(request, schema_pk):
     schema.delete()
     messages.success(request, f'Schema "{schema.name}" deleted successfully')
     return redirect('campaigns:index', campaign_pk)
+
+
+def schema_compare(request, campaign_pk):
+    campaign = Campaign.objects.get(pk=campaign_pk)
+    schemas = campaign.schemas.all()
+    average_camp = []
+
+    for s in schemas:
+        soma = 0
+        avg = 0
+        average_schema = []
+        result = ast.literal_eval(s.result)
+        tempo = len(result) - 1
+        number_sf = len(result[0])
+
+        for j in range(1, number_sf):
+            soma = 0
+            for i in range(2,
+                           tempo):  # começando no tempo = 2 conforme excel, eliminar os 2 primeiros elementos do resultado
+                soma = soma + float(result[i][j])
+            avg = soma / tempo
+            average_schema.append(avg)
+        average_camp.append(average_schema)
+
+    print("average das camps", average_camp)
+
+    av = np.array(average_camp)
+    print("av", av)
+    av = av.T
+    print("av", av)
+
+    context = {'campaign': campaign, 'average': av}
+    return render(request, 'schemas/schema_compare.html', context)
 
 
 def event_create(request, campaign_pk):

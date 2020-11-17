@@ -407,7 +407,7 @@ export default {
       let {name, duration, start: {date, time} } = this.phase
 
       let phaseEndDate = calcDateTime(date, time, duration)
-      let certExpiryDate = calcDateTime(this.bop.last_certification.end_date, 23, 1)
+      let certExpiryDate = calcDateto tentTime(this.bop.last_certification.end_date, 23, 1)
 
       if(phaseEndDate > certExpiryDate)
         this.errors.push('this phase duration exceed the bop\'s certification period')
