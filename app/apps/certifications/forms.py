@@ -8,8 +8,9 @@ class CertificationForm(ModelForm):
         fields = ['start_date', 'end_date']
 
         widgets = {
-            'start_date': DateInput(format='%Y-%m-%d',
-                                    attrs={'placeholder': 'Select a date', 'type': 'date'}),
+            'end_date': DateInput(format='%Y-%m-%d',
+                                  attrs={'class': 'form-control datetimepicker-input',
+                                         'data-target': '#datetimepicker1'}),
             'end_date': DateInput(format='%Y-%m-%d',
                                   attrs={'placeholder': 'Select a date', 'type': 'date'}),
         }

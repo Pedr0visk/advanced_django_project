@@ -1,144 +1,156 @@
 {% extends 'base.html' %}
 
 {% block main %}
-  {{ cert_form.errors }}
-  <div class="section">
-    <div class="container-fluid px-5">
-      <div class="section-title mb-4 d-flex">
-        {% if bop %}
-          <div class="d-flex flex-column">
-            <a href="{% url 'bops:index' bop.pk %}" class="mb-3"><i class="fa fa-arrow-left"></i> back</a>
-            <p>Change bop "{{ bop.name }}"</p>
-          </div>
-        {% else %}
-          <div class="d-flex flex-column">
-            <a href="{% url 'dashboard' %}" class="mb-3"><i class="fa fa-arrow-left"></i> back</a>
-            <p>Add new bop</p>
-          </div>
-        {% endif %}
+{{ cert_form.errors }}
+<div class="section">
+  <div class="container-fluid px-5">
+    <div class="section-title mb-4 d-flex">
+      {% if bop %}
+      <div class="d-flex flex-column">
+        <a href="{% url 'bops:index' bop.pk %}" class="mb-3"><i class="fa fa-arrow-left"></i> back</a>
+        <p>Change bop "{{ bop.name }}"</p>
       </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
+      {% else %}
+      <div class="d-flex flex-column">
+        <a href="{% url 'dashboard' %}" class="mb-3"><i class="fa fa-arrow-left"></i> back</a>
+        <p>Add new bop</p>
+      </div>
+      {% endif %}
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
 
-            <!-- name field -->
-            <div class="form-group row">
-              <label class="col-sm-2 col-form-label col-form-label-sm">Name:</label>
-              <div class="col-sm-3">
-                {{ form.name }}
-              </div>
-              <div class="col-sm-10 offset-2">
-                <small class="form-text text-muted">
-                  Required
-                </small>
-              </div>
+          <!-- name field -->
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label col-form-label-sm">Name:</label>
+            <div class="col-sm-3">
+              {{ form.name }}
             </div>
-            <hr/>
-
-            <!-- rig field -->
-            <div class="form-group row">
-              <label class="col-sm-2 col-form-label col-form-label-sm">Rig:</label>
-              <div class="col-sm-3">
-                {{ form.rig }}
-              </div>
-              <div class="col-sm-10 offset-2">
-                <small class="form-text text-muted">
-                  Required
-                </small>
-              </div>
+            <div class="col-sm-10 offset-2">
+              <small class="form-text text-muted">
+                Required
+              </small>
             </div>
-            <hr/>
+          </div>
+          <hr/>
 
-            <!-- rig field -->
-            <div class="form-group row ">
-              <label class="col-sm-2 col-form-label col-form-label-sm">Model:</label>
-              <div class="col-sm-3">
-                {{ form.model }}
-              </div>
-              <div class="col-sm-10 offset-2">
-                <small class="form-text text-muted">
-                  Required
-                </small>
-              </div>
+          <!-- rig field -->
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label col-form-label-sm">Rig:</label>
+            <div class="col-sm-3">
+              {{ form.rig }}
             </div>
-            <hr/>
+            <div class="col-sm-10 offset-2">
+              <small class="form-text text-muted">
+                Required
+              </small>
+            </div>
+          </div>
+          <hr/>
 
-            {% if not bop %}
-              <!-- File field -->
-              <div class="row">
-                <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">File:</label>
-                <div class="col-sm-5">
-                  <input name="file" type="file" class="">
-                  <small class="form-text text-muted">
-                    Required.
-                  </small>
-                </div>
-              </div>
-              <hr/>
-              <!-- certification -->
-              <fieldset class="form-fieldset">
-                <h4>Last Certification</h4>
+          <!-- rig field -->
+          <div class="form-group row ">
+            <label class="col-sm-2 col-form-label col-form-label-sm">Model:</label>
+            <div class="col-sm-3">
+              {{ form.model }}
+            </div>
+            <div class="col-sm-10 offset-2">
+              <small class="form-text text-muted">
+                Required
+              </small>
+            </div>
+          </div>
+          <hr/>
 
-                <div class="form-group row px-2">
-                  <label class="col-sm-2 col-form-label col-form-label-sm">start date:</label>
-                  <div class="col-sm-2">
-                    {{ cert_form.start_date }}
+          {% if not bop %}
+          <!-- File field -->
+          <div class="row">
+            <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">File:</label>
+            <div class="col-sm-5">
+              <input name="file" type="file" class="">
+              <small class="form-text text-muted">
+                Required.
+              </small>
+            </div>
+          </div>
+          <hr/>
+          <!-- certification -->
+          <fieldset class="form-fieldset">
+            <h4>Last Certification</h4>
+
+            <div class="form-group row px-2">
+              <label class="col-sm-2 col-form-label col-form-label-sm">start date:</label>
+              <div class="col-sm-2">
+                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                  {{ cert_form.start_date }}
+                  <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                   </div>
                 </div>
-                <hr/>
-
-                <div class="form-group row px-2">
-                  <label class="col-sm-2 col-form-label col-form-label-sm">end date:</label>
-                  <div class="col-sm-2">
-                    {{ cert_form.end_date }}
-                  </div>
-                </div>
-                <hr/>
-
-              </fieldset>
-            {% endif %}
-
-            <!-- actions -->
-            <div class="card">
-              <div class="bg-light text-right p-2">
-                {% if bop %}
-                <a href="{% url 'bops:index' bop.pk %}" class=" btn btn-default">
-                  Cancel
-                </a>
-                {% else %}
-                <a href="{% url 'dashboard' %}" class=" btn btn-default">
-                  Cancel
-                </a>.
-                {% endif %}
-
-                <button type="submit" class="px-4 btn btn-secondary">
-                  Save
-                </button>
               </div>
             </div>
-          </form>
-        </div>
+            <hr/>
+
+            <div class="form-group row px-2">
+              <label class="col-sm-2 col-form-label col-form-label-sm">end date:</label>
+              <div class="col-sm-2">
+                {{ cert_form.end_date }}
+              </div>
+            </div>
+            <hr/>
+
+          </fieldset>
+          {% endif %}
+
+          <!-- actions -->
+          <div class="card">
+            <div class="bg-light text-right p-2">
+              {% if bop %}
+              <a href="{% url 'bops:index' bop.pk %}" class=" btn btn-default">
+                Cancel
+              </a>
+              {% else %}
+              <a href="{% url 'dashboard' %}" class=" btn btn-default">
+                Cancel
+              </a>.
+              {% endif %}
+
+              <button type="submit" class="px-4 btn btn-secondary">
+                Save
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
-  <script>
-      // Query all input fields
-      var form_fields = document.getElementsByTagName('input')
-      // customization of form fields
-      for (var field in form_fields) {
-          if (form_fields[field].type == 'file') continue
-          form_fields[field].className += 'form-control form-control-sm'
-      }
+<script>
+  $(function () {
+    $("#datetimepicker1").datetimepicker({
+      format: 'YYYY-MM-DD',
+    });
+  });
+</script>
+<script>
+    // Query all input fields
+    var form_fields = document.getElementsByTagName('input')
+    // customization of form fields
+    for (var field in form_fields) {
+        if (form_fields[field].type == 'file') continue
+        form_fields[field].className += 'form-control form-control-sm'
+    }
 
-      // Query all selects fields
-      var form_fields = document.getElementsByTagName('select')
-      // customization of form fields
-      for (var field in form_fields) {
-          form_fields[field].className += 'form-control form-control-sm'
-      }
-  </script>
+    // Query all selects fields
+    var form_fields = document.getElementsByTagName('select')
+    // customization of form fields
+    for (var field in form_fields) {
+        form_fields[field].className += 'form-control form-control-sm'
+    }
+</script>
 {% endblock %}
