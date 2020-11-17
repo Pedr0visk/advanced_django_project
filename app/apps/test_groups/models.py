@@ -14,7 +14,7 @@ class CommonInfo(models.Model):
     failure_modes = models.ManyToManyField(FailureMode,
                                            related_name="%(class)s",
                                            related_query_name="%(class)s", )
-    tests = JSONField(blank=True, null=True)
+    tests = JSONField()
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
