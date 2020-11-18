@@ -47,27 +47,27 @@
               {% for coluna in schema %}
 
               {% if coluna > 0.01 %}
-              <td>
-                {{ coluna  | stringformat:".2e" }}
-              </td>
-              <td style="color:black;background-color: #993333;opacity: 0.6; text-align: center;"> 1</td>
-              {% elif coluna > 0.001 %}
-              <td>
-                {{ coluna  | stringformat:".2e" }}
-              </td>
-              <td style="color:black;background-color: orange;opacity: 0.6; text-align: center;"> 2
-              </td>
-              {% else %}
-              <td>
-                {{ coluna  | stringformat:".2e" }}
-              </td>
-              <td style="color:black; background-color:  lime;opacity: 0.6; text-align: center">
-                3
-              </td>
-
+                <td>
+                  {{ coluna  | stringformat:".2e" }}
+                </td>
+                <td style="color:black;background-color: #993333;opacity: 0.6; text-align: center;"> 1</td>
+                {% elif coluna > 0.001 %}
+                <td>
+                  {{ coluna  | stringformat:".2e" }}
+                </td>
+                <td style="color:black;background-color: orange;opacity: 0.6; text-align: center;"> 2
+                </td>
+                {% else %}
+                <td>
+                  {{ coluna  | stringformat:".2e" }}
+                </td>
+                <td style="color:black; background-color:  lime;opacity: 0.6; text-align: center">
+                  3
+                </td>
               {% endif %}
-              <td>1,00E+00</td>
-              <td></td>
+
+                <td></td>
+                <td></td>
               {% endfor %}
             </tr>
             {% endfor %}

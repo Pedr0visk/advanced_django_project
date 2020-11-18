@@ -132,6 +132,8 @@ def campaign_metrics(request, schema_pk):
 
         for i in range(0, tempo):
             average_to_chart.append(avg)
+
+
         print("chegou", j)
         data_to_charts.append({
             'average': avg,
@@ -214,14 +216,14 @@ def schema_compare(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
     schemas = campaign.schemas.all()
     average_camp = []
-
+    relative_comp = []
     for s in schemas:
         soma = 0
         avg = 0
         average_schema = []
         result = ast.literal_eval(s.result)
         tempo = len(result) - 1
-        print("tempo do schema",tempo, s.id)
+
         number_sf = len(result[0])
 
         for j in range(1, number_sf):
@@ -229,17 +231,29 @@ def schema_compare(request, campaign_pk):
             for i in range(2,tempo):  # começando no tempo = 2 conforme excel, eliminar os 2 primeiros elementos do resultado
                 soma = soma + float(result[i][j])
             avg = soma / tempo
-            print("avg", avg, j)
+
             average_schema.append(avg)
 
         average_camp.append(average_schema)
 
+    for j in range(0,len(average_camp)):
+        relativ_intermediario = []
+        for i in range(0,len(average_camp[0])):
+            relativo = average_camp[j][i] / average_camp[0][i]
+            print("relativo", relativo)
+            relativ_intermediario.append(relativo)
+            # [[1.0, 0.09345345345], [1.0, 0.08456453646]]
+        relative_comp.append(relativ_intermediario)
 
+    print("relativ_comp", relative_comp)
 
     av = np.array(average_camp)
+    rc = np.array(relative_comp)
+    rc = rc.T
 
 
     context = {
+        'relative_comp':relative_comp,
         'safety_functions': campaign.bop.safety_functions.all(),
         'campaign': campaign,
         'averages': av,
