@@ -14,9 +14,7 @@ import numpy as np
 
 
 def run(schema, **kwargs):
-    print("schema", schema)
 
-    print(datetime.datetime.today(), "incio do calculo")
     bop = schema.campaign.bop
     m = get_m_matrix(bop)
 
@@ -168,37 +166,40 @@ def calculate_SF_PFDS(schema, m):
     # number_fails = getUserInputTotalFailures(bop)  # contagem de falhas
 
     t_start_recert = 0
-
-    t_start_camp, t_end_camp = get_dates(schema)
-
-    current_date = datetime.datetime.today()
+    print(schema.name)
+    t_start_camp = schema.start_date
+    t_end_camp = schema.end_date
+    camp_period = t_end_camp - t_start_camp
 
     # tf_integracao = (t_end_camp - t_start_recert).days
     # ti_integracao = (current_date - t_start_recert).days
-
-    steps = abs((t_end_camp - t_start_camp).days) * 24
+    steps = int(camp_period.total_seconds() / 60 ** 2)
     print("steps", steps)
     failure_modes = len(m)
 
     dt = 1  # passo horario
 
-    t_op = get_t_op(t_start_camp, t_end_camp, schema, dt)
+    t_op = get_t_op(steps, schema, dt)
     v_integrate = calculate_failure_modes(m, failure_modes, False, dt, False, steps, t_op)
     # print("v integrate",v_integrate)
 
     safety_function_numbers = SafetyFunction.objects.filter(bop=schema.campaign.bop).count()
     sf = SafetyFunction.objects.filter(bop=schema.campaign.bop)
+    print("sf", sf)
 
     result_each_sf_integrate = gerar_matriz(steps + 1, safety_function_numbers + 1)
     result_each_sf_integrate_falho = gerar_matriz(steps + 1, safety_function_numbers + 1)
 
     fl = 0
     for safety_function in sf:
+        print("safety",safety_function.id)
         fl += 1
         print(datetime.datetime.today(), "Inicio do calculo da Sf: ", safety_function)
 
-        cuts = Cut.objects.filter(safety_function=safety_function)
-        max_cuts = Cut.objects.filter(safety_function=safety_function).count()
+        cuts = safety_function.cuts.all()
+        print("cuts", cuts)
+        max_cuts = len(cuts)
+        print("max_cuts", max_cuts)
         corte = 0
 
         # matriz_index = gerar_matriz(max_cuts, 4)
@@ -222,7 +223,7 @@ def calculate_SF_PFDS(schema, m):
 
             corte = corte + 1
 
-        # print(datetime.datetime.today(), "Inicio do calculo PFD, com steps ", steps)
+
 
         for i in range(1, steps):
             result_each_sf_integrate[i][0] = i * dt
@@ -368,6 +369,8 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
 
                     v_integrate[j][i] = 1 - (1 - pol_falha)
 
+
+
     return v_integrate
 
 
@@ -480,12 +483,11 @@ def calc_integral_ciclos(t_tests, nivel, tempo, dt):
     return t_tests[tempo - 1][10 + nivel] + t_tests[tempo][6] * dt
 
 
-def get_t_op(start, end, schema, dt):
+def get_t_op(steps, schema, dt):
     count = 0
     flag = 0
-    tmax = (abs((end - start).days)) * 24
-    print("tmax", tmax)
-    t_op = [[None for i in range(2)] for j in range(tmax)]
+    tmax = int(steps)
+    t_op = [[None for i in range(2)] for j in range(tmax + 1)]
     work = 1
     t_op[0][0] = 0
     t_op[0][1] = 0
@@ -493,25 +495,21 @@ def get_t_op(start, end, schema, dt):
     phases = schema.phases.all().order_by('start_date')
 
     for phase in phases:
-
         if phase.is_drilling:
-
             for i in range(0, int(phase.duration)):
                 count = count + 1
                 t_op[count][0] = count
                 t_op[count][1] = t_op[count - 1][1] + dt
 
         elif phase.has_test:
-
             for i in range(0, int(phase.duration)):
                 count = count + 1
                 t_op[count][0] = count
                 t_op[count][1] = t_op[count - 1][1] + dt
 
-                if i == phase.duration - 1:
+                if i == int(phase.duration) - 1:
                     t_op[count][0] = count
                     t_op[count][1] = 0
-                    print(" avaliar aqui", phase, count, i)
 
         else:
 
@@ -520,7 +518,7 @@ def get_t_op(start, end, schema, dt):
                 t_op[count][0] = count
                 t_op[count][1] = t_op[count - 1][1]
 
-    print("t_op", t_op)
+
     return t_op
 
     """

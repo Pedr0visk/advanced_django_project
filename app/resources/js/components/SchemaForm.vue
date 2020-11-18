@@ -44,12 +44,12 @@
 
           <!-- datetime picker -->
           <div class="col-2">
-            <input type="date" v-model="phase.start.date" :max="bop.last_certification.end_date" />
+            <input type="date" v-model="phase.start.date" :max="bop.last_certification.end_date"/>
             <small>mm/dd/YYYY</small>
           </div>
           <div class="col-1">
             <select v-model="phase.start.time" name="" id="" class="form-control form-control-sm">
-              <option v-for="hour in 24" :value="hour-1">{{("0" + (hour-1)).slice(-2)}}:00</option>
+              <option v-for="hour in 24" :value="hour-1">{{ ("0" + (hour - 1)).slice(-2) }}:00</option>
             </select>
           </div>
 
@@ -210,8 +210,8 @@ export default {
         has_test: false,
         is_drilling: false,
         duration: null,
-        start: {date: '', time: 12},
-        end: {date: '', time: 0},
+        start: {date: undefined, time: 12},
+        end: {date: undefined, time: 0},
         test_groups: []
       }
     };
@@ -219,11 +219,11 @@ export default {
   mounted() {
     let bopId = document.getElementById('bopId').value
     axios
-      .get(`/api/bops/${bopId}/`)
-      .then(response => {
-        console.log(response.data)
-        this.bop = response.data
-      })
+        .get(`/api/bops/${bopId}/`)
+        .then(response => {
+          console.log(response.data)
+          this.bop = response.data
+        })
 
     axios
         .get(`/api/bops/${bopId}/test-groups/`)
@@ -344,12 +344,12 @@ export default {
     checkForm() {
       console.log('checking fields...')
       this.errors = []
-      let {name, duration, start: {date, time} } = this.phase
+      let {name, duration, start: {date, time}} = this.phase
 
       let phaseEndDate = calcDateTime(date, time, duration)
       let certExpiryDate = calcDateTime(this.bop.last_certification.end_date, 23, 1)
 
-      if(phaseEndDate > certExpiryDate)
+      if (phaseEndDate > certExpiryDate)
         this.errors.push('this phase duration exceed the bop\'s certification period')
       if (!name)
         this.errors.push('the field name is required')
@@ -364,6 +364,8 @@ export default {
       return true
     },
     formatDate(date, hour) {
+      if (!date) return
+
       let d = new Date(date.split('-')),
           month = '' + (d.getMonth() + 1),
           day = '' + d.getDate(),
