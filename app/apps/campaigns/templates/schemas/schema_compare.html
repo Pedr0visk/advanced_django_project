@@ -25,7 +25,7 @@
               <!-- SF's -->
               {% for sf in safety_functions %}
               <th class="title" colspan="3" style="text-align: center">{{ sf.name }}</th>
-              <th></th>
+              <th ><a href="{% url 'campaigns:compare_sf' campaign.pk 1 %}">compare SF</a></th>
               {% endfor %}
             </tr>
 
