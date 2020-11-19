@@ -214,51 +214,56 @@ def schema_delete(request, schema_pk):
 
 def schema_compare(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
-    schemas = campaign.schemas.all()
+    schemas = campaign.schemas.order_by('-name')
     average_camp = []
     relative_comp = []
+    intermediario = []
+    fl = 0
+    schemas_names = []
     for s in schemas:
-        soma = 0
-        avg = 0
+        schemas_names.append(s.name)
+
         average_schema = []
         result = ast.literal_eval(s.result)
-        tempo = len(result) - 1
 
+        tempo = len(result) - 1
         number_sf = len(result[0])
 
         for j in range(1, number_sf):
+            intermediario = []
             soma = 0
             for i in range(2,tempo):  # começando no tempo = 2 conforme excel, eliminar os 2 primeiros elementos do resultado
                 soma = soma + float(result[i][j])
             avg = soma / tempo
 
-            average_schema.append(avg)
+            if fl == 0:
+                compare = 1
+                relative_comp.append(avg)
+                print("adcionou", number_sf)
+            else:
+                print("relative_comp",relative_comp, fl)
+                compare = avg/relative_comp[j-1]
 
+
+            intermediario.append(avg)
+            intermediario.append(compare)
+            average_schema.append(intermediario)
+        fl = 1
         average_camp.append(average_schema)
 
-    for j in range(0,len(average_camp)):
-        relativ_intermediario = []
-        for i in range(0,len(average_camp[0])):
-            relativo = average_camp[j][i] / average_camp[0][i]
-            print("relativo", relativo)
-            relativ_intermediario.append(relativo)
-            # [[1.0, 0.09345345345], [1.0, 0.08456453646]]
-        relative_comp.append(relativ_intermediario)
-
-    print("relativ_comp", relative_comp)
+    print("relativ_comp", average_camp)
 
     av = np.array(average_camp)
-    rc = np.array(relative_comp)
-    rc = rc.T
+
 
 
     context = {
-        'relative_comp':relative_comp,
         'safety_functions': campaign.bop.safety_functions.all(),
         'campaign': campaign,
         'averages': av,
         'bop': campaign.bop,
-        'number_sf': number_sf
+        'number_sf': number_sf,
+        'schemas_names':schemas_names
     }
 
     return render(request, 'schemas/schema_compare.html', context)

@@ -144,13 +144,13 @@ def get_dates(schema):
     flag = 0
     try:
         first = schema.phases.all().order_by('start_date').first()
-        print("first", first)
+
         start_date = first.start_date
-        print("start_date", start_date)
+
         last = schema.phases.all().order_by('start_date').last()
-        print("last", last)
+
         end_date = last.start_date + timedelta(hours=last.duration)
-        print("datas", end_date)
+
 
     except:
         start_date = 0
@@ -173,6 +173,7 @@ def calculate_SF_PFDS(schema, m):
 
     # tf_integracao = (t_end_camp - t_start_recert).days
     # ti_integracao = (current_date - t_start_recert).days
+    print("segundos", int(camp_period.total_seconds()))
     steps = int(camp_period.total_seconds() / 60 ** 2)
     print("steps", steps)
     failure_modes = len(m)
@@ -192,14 +193,13 @@ def calculate_SF_PFDS(schema, m):
 
     fl = 0
     for safety_function in sf:
-        print("safety",safety_function.id)
         fl += 1
         print(datetime.datetime.today(), "Inicio do calculo da Sf: ", safety_function)
 
         cuts = safety_function.cuts.all()
-        print("cuts", cuts)
+
         max_cuts = len(cuts)
-        print("max_cuts", max_cuts)
+
         corte = 0
 
         # matriz_index = gerar_matriz(max_cuts, 4)

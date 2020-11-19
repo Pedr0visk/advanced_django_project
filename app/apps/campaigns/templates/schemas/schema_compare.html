@@ -32,7 +32,7 @@
             <tr>
               <th colspan="3"></th>
               {% for sf in safety_functions %}
-              <td class="cell">Num. Value</td>
+              <td class="cell">Average</td>
               <td class="cell">SIL Value</td>
               <td class="cell">Rel. Compar</td>
               <td></td>
@@ -43,30 +43,30 @@
             <tbody>
             {% for schema in averages %}
             <tr>
-              <td colspan="3"><b>schema {{ forloop.counter }}</b></td>
+              <td colspan="3"><b>{{schemas_names}}</b></td>
               {% for coluna in schema %}
 
-              {% if coluna > 0.01 %}
+              {% if coluna.0 > 0.01 %}
                 <td>
-                  {{ coluna  | stringformat:".2e" }}
+                  {{ coluna.0  | stringformat:".2e" }}
                 </td>
                 <td style="color:black;background-color: #993333;opacity: 0.6; text-align: center;"> 1</td>
-                {% elif coluna > 0.001 %}
+                {% elif coluna.0 > 0.001 %}
                 <td>
-                  {{ coluna  | stringformat:".2e" }}
+                  {{ coluna.0  | stringformat:".2e" }}
                 </td>
                 <td style="color:black;background-color: orange;opacity: 0.6; text-align: center;"> 2
                 </td>
                 {% else %}
                 <td>
-                  {{ coluna  | stringformat:".2e" }}
+                  {{ coluna.0  | stringformat:".2e" }}
                 </td>
                 <td style="color:black; background-color:  lime;opacity: 0.6; text-align: center">
                   3
                 </td>
               {% endif %}
 
-                <td></td>
+                <td>{{ coluna.1  | floatformat:2 }}</td>
                 <td></td>
               {% endfor %}
             </tr>
