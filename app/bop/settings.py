@@ -28,6 +28,8 @@ ALLOWED_HOSTS = []
 ALLOWED_HOSTS_ENV = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost')
 if ALLOWED_HOSTS_ENV:
     ALLOWED_HOSTS = ALLOWED_HOSTS_ENV.split(" ")
+else:
+    ALLOWED_HOSTS = ['localhost']
 
 # Application definition
 
@@ -102,11 +104,11 @@ WSGI_APPLICATION = 'bop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get("DATABASE_ENGINE", "django.db.backends.sqlite3"),
-        'NAME': os.environ.get('DATABASE_NAME', 'bop_database'),
+        'ENGINE': os.environ.get("DATABASE_ENGINE", "django.db.backends.postgresql"),
+        'NAME': os.environ.get('DATABASE_NAME', 'bop-database'),
         'USER': os.environ.get('DATABASE_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'secret'),
-        'HOST': os.environ.get('DATABASE_HOST', 'db'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', '1234'),
+        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
         'PORT': os.environ.get('DATABASE_PORT', '5432')
     }
 }
