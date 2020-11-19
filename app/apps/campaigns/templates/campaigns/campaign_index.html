@@ -5,14 +5,9 @@
 {% endblock %}
 
 {% block main %}
-{% if messages %}
-<ul class="messagelist">
-  {% for message in messages %}
-  <li class="success">{{ message }}</li>
-  {% endfor %}
-</ul>
-{% endif %}
-<!-- main -->
+
+{% include 'snippets/form_snippet.html' with messages=messages %}
+
 <!-- section 2 -->
 <div class="section">
   <div class="container-fluid px-5">
@@ -25,8 +20,11 @@
         <p>Bop name: <b>{{ campaign.bop }}</b> > Campaign name: <b>{{ campaign }}</b></p>
       </div>
       <div>
+        <a href="{% url 'campaigns:compare' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
+          <small>COMPARE <i class="fa fa-check"></i></small>
+        </a>
         <a href="{% url 'campaigns:run' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
-          <small>RUN</small>
+          <small>RUN <i class="fa fa-cogs"></i></small>
         </a>
         <a href="{% url 'campaigns:update' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
           <small>EDIT
@@ -55,6 +53,7 @@
               <th scope="col">name</th>
               <th></th>
               <th></th>
+              <th>See Graphs</th>
             </tr>
             </thead>
             <tbody>
@@ -71,6 +70,9 @@
               <td width="10%">
                 <a href="{% url 'campaigns:delete_schema' schema.pk %}"><i
                     class="fa fa-times text-danger"></i></a>
+              </td>
+              <td width="30%">
+                <a href="{% url 'campaigns:schema_run' schema.pk %}">Click here</a>
               </td>
             </tr>
             {% endfor %}
@@ -127,8 +129,8 @@
           <h4>Info</h4>
           <ul class="info-list">
             <li>name: <b>{{ campaign.name }}</b></li>
-            <li>start date: <b>{{ campaign.start_date }}</b></li>
-            <li>end date: <b>{{ campaign.end_date }}</b></li>
+            <li>start date: <b>{{ campaign.start_date|date:"Y-m-d" }}</b></li>
+            <li>end date: <b>{{ campaign.end_date|date:"Y-m-d" }}</b></li>
           </ul>
         </div>
       </div>

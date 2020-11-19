@@ -5,7 +5,7 @@ from django.urls import reverse
 from ..bops.models import Bop
 from ..test_groups.models import TestGroup
 from django.utils.translation import gettext_lazy as _
-from datetime import datetime as dt, timedelta
+from datetime import timedelta
 from django.utils import timezone
 
 
@@ -37,7 +37,7 @@ class Campaign(models.Model):
         if schema:
             return schema.phases.first().start_date
         else:
-            return
+            return None
 
     @property
     def end_date(self):
@@ -86,6 +86,18 @@ class Schema(models.Model):
     campaign = models.ForeignKey(Campaign,
                                  on_delete=models.CASCADE,
                                  related_name='schemas')
+
+    @property
+    def start_date(self):
+        return self.phases.first().start_date
+
+    @property
+    def end_date(self):
+        start_date = self.phases.latest('updated_at').start_date
+        duration = self.phases.latest('updated_at').duration
+        end_date = start_date + timedelta(hours=duration)
+
+        return end_date
 
 
 class Phase(models.Model):

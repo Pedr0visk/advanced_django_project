@@ -79,13 +79,14 @@ def phase_update(request, pk):
 
 def campaign_metrics(request, schema_pk):
     schema = Schema.objects.get(pk=schema_pk)
+    results = schema.result
     campaign = schema.campaign
-    results = metrics.run(schema)
-    schema.result = results
-    schema.save()
 
+    results = ast.literal_eval(results)
     time = []
+
     number_Sf = len(results[0])
+
     tempo = len(results) - 1
     data_to_charts = []
     average = []
@@ -121,7 +122,8 @@ def campaign_metrics(request, schema_pk):
         for phase in phases:
             if phase.has_test:
                 for i in range(0, int(phase.duration)):
-                    result_teste_sf.append(result_sf[cont])
+                    print('cont',cont)
+                    result_teste_sf.append(result_sf[cont-1])
                     cont = cont + 1
             else:
                 for i in range(0, int(phase.duration)):
@@ -131,6 +133,8 @@ def campaign_metrics(request, schema_pk):
         for i in range(0, tempo):
             average_to_chart.append(avg)
 
+
+        print("chegou", j)
         data_to_charts.append({
             'average': avg,
             'average_to_chart': average_to_chart,
@@ -139,9 +143,11 @@ def campaign_metrics(request, schema_pk):
             'max': maximo,
             'desc': desc,
         })
+        print("data", data_to_charts)
 
-    context = {'campaign': campaign, 'schema': Schema, 'results': results, 'average': average, 'maxi': maxi,
+    context = {'campaign': campaign, 'schema': Schema, 'average': average, 'maxi': maxi,
                'data_to_charts': data_to_charts}
+
     return render(request, 'campaigns/campaign_charts.html', context)
 
 
@@ -159,6 +165,26 @@ def campaign_delete(request, campaign_pk):
     return render(request, 'campaigns/campaign_confirm_delete.html', context)
 
 
+def campaign_run(request, campaign_pk):
+    campaign = Campaign.objects.get(pk=campaign_pk)
+    schemas = campaign.schemas.all()
+
+    try:
+        for schema in schemas:
+            results = metrics.run(schema)
+            schema.result = results
+
+
+            schema.save()
+    except:
+        messages.error(request, 'Sorry, some error occurr when trying to run schemas.')
+        return campaign.success_url()
+
+    messages.success(request, 'Operation successfully done!')
+    return redirect('campaigns:index', campaign_pk)
+
+
+# SCHEMAS
 def schema_create(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
     context = {'campaign': campaign}
@@ -178,7 +204,6 @@ def schema_index(request, schema_pk):
     context = {'schema': schema, 'campaign_pk': campaign_pk}
     return render(request, 'schemas/schema_index.html', context)
 
-
 def schema_delete(request, schema_pk):
     schema = Schema.objects.get(pk=schema_pk)
     campaign_pk = schema.campaign.pk
@@ -189,34 +214,58 @@ def schema_delete(request, schema_pk):
 
 def schema_compare(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
-    schemas = campaign.schemas.all()
+    schemas = campaign.schemas.order_by('-name')
     average_camp = []
-
+    relative_comp = []
+    intermediario = []
+    fl = 0
+    schemas_names = []
     for s in schemas:
-        soma = 0
-        avg = 0
+        schemas_names.append(s.name)
+
         average_schema = []
         result = ast.literal_eval(s.result)
+
         tempo = len(result) - 1
         number_sf = len(result[0])
 
         for j in range(1, number_sf):
+            intermediario = []
             soma = 0
-            for i in range(2,
-                           tempo):  # começando no tempo = 2 conforme excel, eliminar os 2 primeiros elementos do resultado
+            for i in range(2,tempo):  # começando no tempo = 2 conforme excel, eliminar os 2 primeiros elementos do resultado
                 soma = soma + float(result[i][j])
             avg = soma / tempo
-            average_schema.append(avg)
+
+            if fl == 0:
+                compare = 1
+                relative_comp.append(avg)
+                print("adcionou", number_sf)
+            else:
+                print("relative_comp",relative_comp, fl)
+                compare = avg/relative_comp[j-1]
+
+
+            intermediario.append(avg)
+            intermediario.append(compare)
+            average_schema.append(intermediario)
+        fl = 1
         average_camp.append(average_schema)
 
-    print("average das camps", average_camp)
+    print("relativ_comp", average_camp)
 
     av = np.array(average_camp)
-    print("av", av)
-    av = av.T
-    print("av", av)
 
-    context = {'campaign': campaign, 'average': av}
+
+
+    context = {
+        'safety_functions': campaign.bop.safety_functions.all(),
+        'campaign': campaign,
+        'averages': av,
+        'bop': campaign.bop,
+        'number_sf': number_sf,
+        'schemas_names':schemas_names
+    }
+
     return render(request, 'schemas/schema_compare.html', context)
 
 

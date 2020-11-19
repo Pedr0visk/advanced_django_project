@@ -11107,13 +11107,18 @@ ul.messages {
   list-style: none;
   padding: 0;
 }
-ul.messages li.error {
-  padding: 10px 10px 10px 65px;
-  color: #333;
-  background: rgba(186, 33, 33, 0.2) url(../img/icon-no.svg) 40px 12px no-repeat;
+ul.messages li {
   background-size: 16px auto;
-  font-size: 13px;
   display: block;
+  font-size: 13px;
+  color: #333;
+  padding: 10px 10px 10px 65px;
+}
+ul.messages li.error {
+  background: rgba(186, 33, 33, 0.2) url(../img/icon-no.svg) 40px 12px no-repeat;
+}
+ul.messages li.success {
+  background: #dfd url(../img/icon-yes.svg) 40px 12px no-repeat;
 }
 
 table.table-results thead tr th.title {
