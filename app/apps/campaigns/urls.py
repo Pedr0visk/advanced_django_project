@@ -12,12 +12,12 @@ urlpatterns = [
     path('campaigns/<int:campaign_pk>/change/', views.campaign_update, name="update"),
     path('campaigns/<int:campaign_pk>/delete/', views.campaign_delete, name="delete"),
     path('campaigns/<int:campaign_pk>/compare/', views.schema_compare, name="compare"),
-    path('campaigns/<int:campaing_pk>/<int:number_sf>/compare_sf/', views.compare_sf, name="compare_sf"),
+    path('campaigns/<int:campaign_pk>/<int:sf_number>/compare_sf/', views.compare_sf, name="compare_sf"),
     path('campaigns/<int:campaign_pk>/run/', views.campaign_run, name="run"),
 
     # schemas
     path('schemas/<int:schema_pk>/run/', views.campaign_metrics, name="schema_run"),
-
+    path('schemas/<int:schema_pk>/change/', views.schema_update, name="update_schema"),
     path('schemas/add/<int:campaign_pk>/', views.schema_create, name="create_schema"),
     path('schemas/<int:schema_pk>/delete/', views.schema_delete, name="delete_schema"),
 

@@ -326,8 +326,8 @@ def event_delete(request, event_pk):
         return redirect('campaigns:index', campaign_pk)
 
 
-def compare_sf(request, campaing_pk, sf_number):
-    campaign = Campaign.objects.get(pk=campaing_pk)
+def compare_sf(request, campaign_pk, sf_number):
+    campaign = Campaign.objects.get(pk=campaign_pk)
     schemas = campaign.schemas.order_by('-name')
 
     for s in schemas:
@@ -348,33 +348,35 @@ def compare_sf(request, campaing_pk, sf_number):
         soma = 0
         avg = 0
         for i in range(1, tempo):
-            if j == 1:
+            if i == 1:
                 time.append(results[i][0])
+
 
             result_sf.append(results[i][sf_number])
             soma = soma + results[i][sf_number]
 
         avg = soma / tempo
 
-        desc = "safety Function" + " " + str(j)
+        desc = "safety Function" + " " + str(1)
         average.append(avg)
         cont = 0
         result_teste_sf = []
 
         for i in range(0, tempo):
             average_to_chart.append(avg)
-
+        print("append", avg)
         data_to_charts.append({
             'average': avg,
             'average_to_chart': average_to_chart,
             'result_teste_sf': result_teste_sf,
             'result': result_sf,
-            'max': maximo,
             'desc': desc,
         })
-        print("data", data_to_charts)
 
-    context = {'campaign': campaign, 'schema': Schema, 'average': average, 'maxi': maxi,
+    print("data to charts", len(data_to_charts))
+
+
+    context = {'campaign': campaign, 'schema': Schema, 'average': average,
                'data_to_charts': data_to_charts}
 
     return render(request, 'campaigns/campaign_charts.html', context)
