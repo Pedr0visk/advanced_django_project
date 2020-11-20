@@ -78,6 +78,7 @@ def phase_update(request, pk):
 
 
 def campaign_metrics(request, schema_pk):
+    print("campaing _metrics")
     schema = Schema.objects.get(pk=schema_pk)
     results = schema.result
     campaign = schema.campaign
@@ -93,6 +94,7 @@ def campaign_metrics(request, schema_pk):
     maxi = []
 
     for j in range(1, number_Sf):
+
         result_sf = []
         average_to_chart = []
         # result_sf_falho = []
@@ -111,10 +113,11 @@ def campaign_metrics(request, schema_pk):
 
         avg = soma / tempo
 
-        maximo = max(result_sf)
+
 
         desc = "safety Function" + " " + str(j)
         average.append(avg)
+        maximo = max(result_sf)
         maxi.append(maximo)
         cont = 0
         result_teste_sf = []
@@ -134,7 +137,7 @@ def campaign_metrics(request, schema_pk):
             average_to_chart.append(avg)
 
 
-        print("chegou", j)
+
         data_to_charts.append({
             'average': avg,
             'average_to_chart': average_to_chart,
@@ -143,7 +146,8 @@ def campaign_metrics(request, schema_pk):
             'max': maximo,
             'desc': desc,
         })
-        print("data", data_to_charts)
+
+
 
     context = {'campaign': campaign, 'schema': Schema, 'average': average, 'maxi': maxi,
                'data_to_charts': data_to_charts}
@@ -168,7 +172,7 @@ def campaign_delete(request, campaign_pk):
 def campaign_run(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
     schemas = campaign.schemas.all()
-
+    print("run do camping _ run")
     try:
         for schema in schemas:
             results = metrics.run(schema)
@@ -329,7 +333,9 @@ def event_delete(request, event_pk):
 def compare_sf(request, campaign_pk, sf_number):
     campaign = Campaign.objects.get(pk=campaign_pk)
     schemas = campaign.schemas.order_by('-name')
-
+    data_to_charts = []
+    average = []
+    maxi = []
     for s in schemas:
         results = s.result
 
@@ -337,9 +343,8 @@ def compare_sf(request, campaign_pk, sf_number):
         time = []
 
         tempo = len(results) - 1
-        data_to_charts = []
-        average = []
-        maxi = []
+
+
 
         #for j in range(1, number_Sf):
         result_sf = []
@@ -357,14 +362,16 @@ def compare_sf(request, campaign_pk, sf_number):
 
         avg = soma / tempo
 
-        desc = "safety Function" + " " + str(1)
+        desc = s.name + " - Safety Functions" + str(sf_number)
         average.append(avg)
         cont = 0
         result_teste_sf = []
+        maximo = max(result_sf)
+        maxi.append(maximo)
 
         for i in range(0, tempo):
             average_to_chart.append(avg)
-        print("append", avg)
+
         data_to_charts.append({
             'average': avg,
             'average_to_chart': average_to_chart,
@@ -373,11 +380,11 @@ def compare_sf(request, campaign_pk, sf_number):
             'desc': desc,
         })
 
-    print("data to charts", len(data_to_charts))
+    print("data to charts",maxi)
 
 
     context = {'campaign': campaign, 'schema': Schema, 'average': average,
-               'data_to_charts': data_to_charts}
+               'data_to_charts': data_to_charts, 'maxi':maxi, 'average': average}
 
     return render(request, 'campaigns/campaign_charts.html', context)
 

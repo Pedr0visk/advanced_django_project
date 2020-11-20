@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
-{% block breadcrumb %}
-    <!-- breadcrumb -->
+
+{% block main %}
+
+  <!-- breadcrumb -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://code.highcharts.com/stock/highstock.js"></script>
     <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
@@ -24,9 +26,6 @@
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block main %}
     {% if messages %}
         <ul class="messagelist">
             {% for message in messages %}
