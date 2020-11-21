@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 
+{% block extra_menu %}
+{% include 'common/bop_menu.html' with bop=campaign.bop %}
+{% endblock %}
 
 {% block main %}
 
-  <!-- breadcrumb -->
+    <!-- breadcrumb -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://code.highcharts.com/stock/highstock.js"></script>
     <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
@@ -16,57 +19,33 @@
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
     <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 
-
-
-    <div class="page-title">
-        <div class="container-fluix px-5">
-            <div class="page-title-wrapper-2">
-                <div class="page-title-heading-2">
-                </div>
-            </div>
-        </div>
-    </div>
-    {% if messages %}
-        <ul class="messagelist">
-            {% for message in messages %}
-                <li class="success">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    <!-- main -->
-    <div class="main">
     <!-- section 2 -->
     <div class="section">
         <div class="container-fluid px-5">
             <!-- section title -->
-            <div class="section-title mb-3">
-                <p>Dashboard for Schema</p>
-                <div>
-                    <a href="{% url 'campaigns:index' campaign.pk %}" class="btn btn-sm btn-success mr-2">
-                        <small>Back</small>
-                    </a>
-                    <a href="" class="btn btn-sm btn-warning mr-2">
-                        <small>EDIT
-                            <i class="fa fa-pencil-alt"></i></small>
-                    </a>
-                    <a href="" class="btn btn-sm btn-danger"><small>DELETE <i
-                            class="fa fa-times"></i></small>
-                    </a>
-                </div>
+            <div class="section-title">
+              <div class="d-flex flex-column">
+                <a href="{% url 'campaigns:index' campaign.pk %}" class="mb-3">
+                  <i class="fa fa-arrow-left"></i> back to campaign
+                </a>
+                <p>
+                  Bop name: <b>{{ campaign.bop }}</b>
+                  > Campaign name: <b>{{ campaign }}</b>
+                  > Schema name: <b>{{ schema.name }}</b>
+                </p>
+              </div>
             </div>
             <hr>
-
             <!-- section content -->
             <div class="row">
                 <div class="col-6">
-
                     <div id="container1"></div>
 
                     <p>
                         <a class="btn btn-secondary" style="float: right; color: white" role="button"
                            onclick="showresults1()">View Max and Averages &#8650; </a></p>
 
-                    <div id="result1" ; style="display: none;">
+                    <div id="result1" ; style="display: none;" class="row">
                         <div style="width: 45%;float:right;">
 
                             <table class="table thead-dark table-striped "
@@ -534,4 +513,3 @@
         </script>
     {% endblock %}
 {% endblock %}
-</div>

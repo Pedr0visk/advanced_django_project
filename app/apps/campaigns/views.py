@@ -113,8 +113,6 @@ def campaign_metrics(request, schema_pk):
 
         avg = soma / tempo
 
-
-
         desc = "safety Function" + " " + str(j)
         average.append(avg)
         maximo = max(result_sf)
@@ -125,8 +123,8 @@ def campaign_metrics(request, schema_pk):
         for phase in phases:
             if phase.has_test:
                 for i in range(0, int(phase.duration)):
-                    print('cont',cont)
-                    result_teste_sf.append(result_sf[cont-1])
+                    print('cont', cont)
+                    result_teste_sf.append(result_sf[cont - 1])
                     cont = cont + 1
             else:
                 for i in range(0, int(phase.duration)):
@@ -136,8 +134,6 @@ def campaign_metrics(request, schema_pk):
         for i in range(0, tempo):
             average_to_chart.append(avg)
 
-
-
         data_to_charts.append({
             'average': avg,
             'average_to_chart': average_to_chart,
@@ -146,8 +142,6 @@ def campaign_metrics(request, schema_pk):
             'max': maximo,
             'desc': desc,
         })
-
-
 
     context = {'campaign': campaign, 'schema': Schema, 'average': average, 'maxi': maxi,
                'data_to_charts': data_to_charts}
@@ -178,7 +172,6 @@ def campaign_run(request, campaign_pk):
             results = metrics.run(schema)
             schema.result = results
 
-
             schema.save()
     except:
         messages.error(request, 'Sorry, some error occurr when trying to run schemas.')
@@ -208,6 +201,7 @@ def schema_index(request, schema_pk):
     context = {'schema': schema, 'campaign_pk': campaign_pk}
     return render(request, 'schemas/schema_index.html', context)
 
+
 def schema_delete(request, schema_pk):
     schema = Schema.objects.get(pk=schema_pk)
     campaign_pk = schema.campaign.pk
@@ -236,7 +230,8 @@ def schema_compare(request, campaign_pk):
         for j in range(1, number_sf):
             intermediario = []
             soma = 0
-            for i in range(2,tempo):  # começando no tempo = 2 conforme excel, eliminar os 2 primeiros elementos do resultado
+            for i in range(2,
+                           tempo):  # começando no tempo = 2 conforme excel, eliminar os 2 primeiros elementos do resultado
                 soma = soma + float(result[i][j])
             avg = soma / tempo
 
@@ -245,9 +240,8 @@ def schema_compare(request, campaign_pk):
                 relative_comp.append(avg)
                 print("adcionou", number_sf)
             else:
-                print("relative_comp",relative_comp, fl)
-                compare = avg/relative_comp[j-1]
-
+                print("relative_comp", relative_comp, fl)
+                compare = avg / relative_comp[j - 1]
 
             intermediario.append(avg)
             intermediario.append(compare)
@@ -259,15 +253,13 @@ def schema_compare(request, campaign_pk):
 
     av = np.array(average_camp)
 
-
-
     context = {
         'safety_functions': campaign.bop.safety_functions.all(),
         'campaign': campaign,
         'averages': av,
         'bop': campaign.bop,
         'number_sf': number_sf,
-        'schemas_names':schemas_names
+        'schemas_names': schemas_names
     }
 
     return render(request, 'schemas/schema_compare.html', context)
@@ -344,9 +336,7 @@ def compare_sf(request, campaign_pk, sf_number):
 
         tempo = len(results) - 1
 
-
-
-        #for j in range(1, number_Sf):
+        # for j in range(1, number_Sf):
         result_sf = []
         average_to_chart = []
         # result_sf_falho = []
@@ -355,7 +345,6 @@ def compare_sf(request, campaign_pk, sf_number):
         for i in range(1, tempo):
             if i == 1:
                 time.append(results[i][0])
-
 
             result_sf.append(results[i][sf_number])
             soma = soma + results[i][sf_number]
@@ -380,11 +369,14 @@ def compare_sf(request, campaign_pk, sf_number):
             'desc': desc,
         })
 
-    print("data to charts",maxi)
+    print("data to charts", maxi)
 
-
-    context = {'campaign': campaign, 'schema': Schema, 'average': average,
-               'data_to_charts': data_to_charts, 'maxi':maxi, 'average': average}
+    context = {
+        'campaign': campaign,
+        'schema': Schema,
+        'average': average,
+        'data_to_charts': data_to_charts,
+        'maxi': maxi, 'average': average
+    }
 
     return render(request, 'campaigns/campaign_charts.html', context)
-
