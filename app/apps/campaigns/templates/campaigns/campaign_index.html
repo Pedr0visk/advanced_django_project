@@ -20,7 +20,7 @@
         </a>
         <p>Bop name: <b>{{ campaign.bop }}</b> > Campaign name: <b>{{ campaign }}</b></p>
       </div>
-      
+
       <div>
         <a href="{% url 'campaigns:compare' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
           <small>COMPARE <i class="fa fa-check"></i></small>
@@ -33,7 +33,7 @@
             <i class="fa fa-pencil-alt"></i></small>
         </a>
         <a href="{% url 'campaigns:delete' campaign.pk %}" class="btn btn-sm btn-primary"><small>DELETE <i
-            class="fa fa-times"></i></small>
+              class="fa fa-times"></i></small>
         </a>
       </div>
     </div>
@@ -47,11 +47,11 @@
           <ul class="info-list">
             <li>name: <b>{{ campaign.name }}</b></li>
             <li class="d-flex align-items-center">
-              base schema: <b>{{ campaign.schema_active.name }}</b> 
+              base schema: <b>{{ campaign.schema_active.name }}</b>
               <a href="" class="ml-auto btn btn-standard"><small>edit</small></a>
             </li>
             <li>
-              status: 
+              status:
               {% if campaign.active %}
               <b>Active</b> <img src="{% static 'img/icon-yes.svg' %}" alt="">
               {% else %}
@@ -74,39 +74,38 @@
 
           <table class="table dnv-table m-0">
             <thead class="bg-white-50">
-            <tr>
-              <th scope="col">name</th>
-              <th scope="col">type</th>
-              <th scope="col">object id</th>
-              <th scope="col">date</th>
-              <th scope="col"></th>
-            </tr>
+              <tr>
+                <th scope="col">name</th>
+                <th scope="col">type</th>
+                <th scope="col">object id</th>
+                <th scope="col">date</th>
+                <th scope="col"></th>
+              </tr>
             </thead>
             <tbody>
-            {% for e in campaign.events.all %}
-            <tr>
-              <td><a href="">{{ e.name }}</a></td>
-              <td><a href="">{{ e.type }}</a></td>
-              <td><a href="">{{ e.object_code }}</a></td>
-              <td><a href="">
-                {{ e.date }}
-              </a></td>
-              <td width="10%">
-                <form method="post" action="{% url 'campaigns:delete_event' e.pk %}">
-                  {% csrf_token %}
-                  <button type="submit" class="btn"><i
-                      class="fa fa-times text-danger"></i></button>
-                </form>
-              </td>
-            </tr>
-            {% endfor %}
+              {% for e in campaign.events.all %}
+              <tr>
+                <td><a href="">{{ e.name }}</a></td>
+                <td><a href="">{{ e.type }}</a></td>
+                <td><a href="">{{ e.object_code }}</a></td>
+                <td><a href="">
+                    {{ e.date }}
+                  </a></td>
+                <td width="10%">
+                  <form method="post" action="{% url 'campaigns:delete_event' e.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn"><i class="fa fa-times text-danger"></i></button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
             </tbody>
           </table>
 
         </div>
       </div>
 
-      
+
     </div>
   </div>
 </div>

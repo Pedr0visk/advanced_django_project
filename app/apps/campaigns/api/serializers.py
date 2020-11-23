@@ -5,7 +5,8 @@ from apps.test_groups.models import TestGroup
 
 
 class PhaseSerializer(serializers.ModelSerializer):
-    test_groups = serializers.PrimaryKeyRelatedField(many=True, queryset=TestGroup.objects.all())
+    test_groups = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=TestGroup.objects.all())
 
     class Meta:
         model = Phase
@@ -40,6 +41,10 @@ class SchemaSerializer(serializers.ModelSerializer):
         instance.is_default = validated_data.get('is_default', instance.name)
         instance.save()
         instance.phases.all().delete()
+
+        # toggle default in schemas table
+        if instance.is_default:
+           Schema.toggle_schema_default(instance.name)
 
         for phase_data in phases_data:
             test_groups = phase_data.pop('test_groups')

@@ -106,6 +106,16 @@ class Schema(models.Model):
 
         return end_date
 
+    @staticmethod
+    def toggle_schema_default(schema_name):
+        objects = Schema.objects.exclude(name=schema_name)
+        for obj in objects:
+            obj.is_default = False
+            obj.save()
+
+    def __str__(self):
+        return self.name
+
 
 class Phase(models.Model):
     name = models.CharField(max_length=255)
@@ -121,6 +131,12 @@ class Phase(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['start_date']
 
 
 class Event(models.Model):

@@ -57,7 +57,13 @@ def campaign_index(request, campaign_pk):
     campaign = Campaign.objects.prefetch_related(
         'schemas', 'events').get(pk=campaign_pk)
 
+    # activate campaign and set a base schema
     if request.method == 'POST':
+        schema = Schema.objects.get(name=request.POST.get('schema_name'))
+        schema.is_default = True
+        schema.save()
+        Schema.toggle_schema_default(schema_name=schema.name)
+
         campaign.created = True
         campaign.save()
         messages.success(
@@ -268,8 +274,6 @@ def schema_compare(request, campaign_pk):
         t.append(average_schema)
         final.append(t)
 
-
-
     #av = np.array(average_camp)
 
     context = {
@@ -277,7 +281,7 @@ def schema_compare(request, campaign_pk):
         'campaign': campaign,
         'averages': final,
         'bop': campaign.bop,
-        'number_sf': number_sf,
+        'number_sf': number_sf
     }
 
     return render(request, 'schemas/schema_compare.html', context)
