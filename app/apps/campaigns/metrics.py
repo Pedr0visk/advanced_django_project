@@ -160,8 +160,9 @@ def get_dates(schema):
 
 
 def calculate_SF_PFDS(schema, m):
+
     flag = 1
-    dt = 1
+
 
     # number_fails = getUserInputTotalFailures(bop)  # contagem de falhas
 
@@ -173,9 +174,9 @@ def calculate_SF_PFDS(schema, m):
 
     # tf_integracao = (t_end_camp - t_start_recert).days
     # ti_integracao = (current_date - t_start_recert).days
-    print("segundos", int(camp_period.total_seconds()))
+
     steps = int(camp_period.total_seconds() / 60 ** 2)
-    print("steps", steps)
+
     failure_modes = len(m)
 
     dt = 1  # passo horario
@@ -186,7 +187,7 @@ def calculate_SF_PFDS(schema, m):
 
     safety_function_numbers = SafetyFunction.objects.filter(bop=schema.campaign.bop).count()
     sf = SafetyFunction.objects.filter(bop=schema.campaign.bop)
-    print("sf", sf)
+
 
     result_each_sf_integrate = gerar_matriz(steps + 1, safety_function_numbers + 1)
     result_each_sf_integrate_falho = gerar_matriz(steps + 1, safety_function_numbers + 1)

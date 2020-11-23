@@ -43,8 +43,8 @@
             <tbody>
             {% for schema in averages %}
             <tr>
-              <td colspan="3"><b>{{schemas_names}}</b></td>
-              {% for coluna in schema %}
+              <td colspan="3"><b>{{schema.0}}</b></td>
+              {% for coluna in schema.1 %}
 
               {% if coluna.0 > 0.01 %}
                 <td>

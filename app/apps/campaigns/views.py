@@ -213,15 +213,14 @@ def schema_delete(request, schema_pk):
 def schema_compare(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
     schemas = campaign.schemas.order_by('-name')
-    average_camp = []
     relative_comp = []
-    intermediario = []
     fl = 0
-    schemas_names = []
+    final = []
     for s in schemas:
-        schemas_names.append(s.name)
-
+        t = []
+        t.append(s.name)
         average_schema = []
+
         result = ast.literal_eval(s.result)
 
         tempo = len(result) - 1
@@ -238,28 +237,27 @@ def schema_compare(request, campaign_pk):
             if fl == 0:
                 compare = 1
                 relative_comp.append(avg)
-                print("adcionou", number_sf)
             else:
-                print("relative_comp", relative_comp, fl)
                 compare = avg / relative_comp[j - 1]
 
             intermediario.append(avg)
             intermediario.append(compare)
+
             average_schema.append(intermediario)
         fl = 1
-        average_camp.append(average_schema)
+        t.append(average_schema)
+        final.append(t)
 
-    print("relativ_comp", average_camp)
 
-    av = np.array(average_camp)
+
+    #av = np.array(average_camp)
 
     context = {
         'safety_functions': campaign.bop.safety_functions.all(),
         'campaign': campaign,
-        'averages': av,
+        'averages': final,
         'bop': campaign.bop,
         'number_sf': number_sf,
-        'schemas_names': schemas_names
     }
 
     return render(request, 'schemas/schema_compare.html', context)
