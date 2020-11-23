@@ -45,7 +45,8 @@ def campaign_create(request, bop_pk):
         campaign = form.save(commit=False)
         campaign.bop_id = bop_pk
         campaign.save()
-        messages.success(request, f'Campaign "{campaign.name}" successfully created!')
+        messages.success(
+            request, f'Campaign "{campaign.name}" successfully created!')
         return redirect(campaign.success_url())
 
     context = {'form': form, 'bop_pk': bop_pk}
@@ -53,9 +54,21 @@ def campaign_create(request, bop_pk):
 
 
 def campaign_index(request, campaign_pk):
-    campaign = Campaign.objects.prefetch_related('schemas', 'events').get(pk=campaign_pk)
+    campaign = Campaign.objects.prefetch_related(
+        'schemas', 'events').get(pk=campaign_pk)
+
+    if request.method == 'POST':
+        campaign.created = True
+        campaign.save()
+        messages.success(
+            request, f'Campaign "{campaign.name}" started successfully!')
+
     context = {'campaign': campaign, 'bop': campaign.bop}
-    return render(request, 'campaigns/campaign_index.html', context)
+
+    if campaign.created:
+        return render(request, 'campaigns/campaign_index.html', context)
+    else:
+        return render(request, 'campaigns/campaign_planner.html', context)
 
 
 def phase_update(request, pk):
@@ -143,8 +156,13 @@ def campaign_metrics(request, schema_pk):
             'desc': desc,
         })
 
-    context = {'campaign': campaign, 'schema': Schema, 'average': average, 'maxi': maxi,
-               'data_to_charts': data_to_charts}
+    context = {
+        'campaign': campaign,
+        'schema': Schema,
+        'average': average,
+        'maxi': maxi,
+        'data_to_charts': data_to_charts
+    }
 
     return render(request, 'campaigns/campaign_charts.html', context)
 
@@ -174,7 +192,8 @@ def campaign_run(request, campaign_pk):
 
             schema.save()
     except:
-        messages.error(request, 'Sorry, some error occurr when trying to run schemas.')
+        messages.error(
+            request, 'Sorry, some error occurr when trying to run schemas.')
         return campaign.success_url()
 
     messages.success(request, 'Operation successfully done!')
@@ -196,7 +215,8 @@ def schema_update(request, schema_pk):
 
 
 def schema_index(request, schema_pk):
-    schema = Schema.objects.prefetch_related('phases', 'phases__test_groups').get(pk=schema_pk)
+    schema = Schema.objects.prefetch_related(
+        'phases', 'phases__test_groups').get(pk=schema_pk)
     campaign_pk = schema.campaign.pk
     context = {'schema': schema, 'campaign_pk': campaign_pk}
     return render(request, 'schemas/schema_index.html', context)
@@ -279,7 +299,8 @@ def event_create(request, campaign_pk):
             new_event = form.save(commit=False)
             new_event.campaign_id = campaign_pk
             new_event.save()
-            messages.success(request, f'Event "{new_event.name}" created successfully!')
+            messages.success(
+                request, f'Event "{new_event.name}" created successfully!')
             return redirect(new_event.success_url())
 
     context = {
@@ -301,7 +322,8 @@ def event_update(request, event_pk):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            messages.success(request, f'Event "{event.name}" updated successfully!')
+            messages.success(
+                request, f'Event "{event.name}" updated successfully!')
             return redirect(event.success_url())
 
     context = {'form': event, 'form': form, 'campaign_pk': event.campaign.pk}
@@ -318,7 +340,8 @@ def event_delete(request, event_pk):
 
     if request.method == 'POST':
         event.delete()
-        messages.success(request, f'Schema "{event.name}" deleted successfully')
+        messages.success(
+            request, f'Schema "{event.name}" deleted successfully')
         return redirect('campaigns:index', campaign_pk)
 
 

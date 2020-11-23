@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block extra_menu %}
 {% include 'common/bop_menu.html' %}
@@ -19,6 +20,7 @@
         </a>
         <p>Bop name: <b>{{ campaign.bop }}</b> > Campaign name: <b>{{ campaign }}</b></p>
       </div>
+      
       <div>
         <a href="{% url 'campaigns:compare' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
           <small>COMPARE <i class="fa fa-check"></i></small>
@@ -39,46 +41,26 @@
 
     <!-- section content -->
     <div class="row">
-      <div class="col-sm-4 col-12">
-        <div class="results">
-          <div class="d-flex  px-1">
-            <h4 class="title-1 mr-auto">Schemas</h4>
-            <a href="{% url 'campaigns:create_schema' campaign.pk %}" class="">add schema <i class="fa fa-plus
-                text-success"></i></a>
-          </div>
-
-          <table class="table dnv-table m-0">
-            <thead class="bg-white-50">
-            <tr>
-              <th scope="col">name</th>
-              <th></th>
-              <th></th>
-              <th>See Graphs</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for schema in campaign.schemas.all %}
-            <tr>
-              <td>
-                <a href="{% url 'campaigns:update_schema' schema.pk %}">{{ schema.name }}</a>
-              </td>
-              <td>
-                {% if schema.is_default %}
-                <small><b>DEFAULT</b></small>
-                {% endif %}
-              </td>
-              <td width="10%">
-                <a href="{% url 'campaigns:delete_schema' schema.pk %}"><i
-                    class="fa fa-times text-danger"></i></a>
-              </td>
-              <td width="30%">
-                <a href="{% url 'campaigns:schema_run' schema.pk %}">Click here</a>
-              </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-          </table>
-
+      <div class="col-sm-3">
+        <div class="info">
+          <h4>Info</h4>
+          <ul class="info-list">
+            <li>name: <b>{{ campaign.name }}</b></li>
+            <li class="d-flex align-items-center">
+              base schema: <b>{{ campaign.schema_active.name }}</b> 
+              <a href="" class="ml-auto btn btn-standard"><small>edit</small></a>
+            </li>
+            <li>
+              status: 
+              {% if campaign.active %}
+              <b>Active</b> <img src="{% static 'img/icon-yes.svg' %}" alt="">
+              {% else %}
+              <b>Inactive</b> <img src="{% static 'img/icon-no.svg' %}" alt="">
+              {% endif %}
+            </li>
+            <li>start date: <b>{{ campaign.start_date|date:"Y-m-d" }}</b></li>
+            <li>end date: <b>{{ campaign.end_date|date:"Y-m-d" }}</b></li>
+          </ul>
         </div>
       </div>
 
@@ -124,16 +106,7 @@
         </div>
       </div>
 
-      <div class="col-sm-3">
-        <div class="info">
-          <h4>Info</h4>
-          <ul class="info-list">
-            <li>name: <b>{{ campaign.name }}</b></li>
-            <li>start date: <b>{{ campaign.start_date|date:"Y-m-d" }}</b></li>
-            <li>end date: <b>{{ campaign.end_date|date:"Y-m-d" }}</b></li>
-          </ul>
-        </div>
-      </div>
+      
     </div>
   </div>
 </div>
