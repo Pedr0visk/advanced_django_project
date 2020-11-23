@@ -27,6 +27,10 @@ class SchemaSerializer(serializers.ModelSerializer):
         phases_data = validated_data.pop('phases')
         schema = Schema.objects.create(**validated_data)
 
+        # toggle default in schemas table
+        if schema.is_default:
+           Schema.toggle_schema_default(schema.name)
+
         for phase_data in phases_data:
             test_groups = phase_data.pop('test_groups')
             phase = Phase.objects.create(schema=schema, **phase_data)
