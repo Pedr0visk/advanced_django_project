@@ -9,96 +9,142 @@
 <div class="section container-fluid px-5">
   <!-- section title -->
   <div class="section-title mb-3">
-    <p>Results for bop: "{{ bop }}"</p>
+    <div class="d-flex flex-column">
+      <a href="{% url 'campaigns:index' campaign.pk %}" class="mb-3">
+        <i class="fa fa-arrow-left"></i> back to campaign planner
+      </a>
+      <p>Comparing schemas for campaign <b>{{campaign}}</b></p>
+    </div>
+    <div>
+      <a href="" class="btn btn-sm btn-primary mr-2" data-toggle="modal" data-target="#confirmChanges">
+        Save Changes <i class="fas fa-lock-open"></i>
+      </a>
+      
+    </div>
   </div>
-  <hr>
 
-  <div class="section-content">
-
-    <div class="row">
-      <div class="col-12">
-        <div class="table-responsive text-nowrap table-fixed">
-          <table class="table table-results">
-            <thead>
-            <tr>
-              <th colspan="3"></th>
-              <!-- SF's -->
+  <div class="row">
+    <div class="col-sm-12 col-12">
+      <div class="toolbar ml-auto px-3 py-2 mb-3">
+        <div class="search-bar">
+          <form class="form-inline my-2 my-lg-0" method="get">
+            <label for="" class="mr-2">Select safety function: </label>
+            
+            <select name="" id="" class="form-control form-control-sm mr-2">
+              <option value="">--</option>
               {% for sf in safety_functions %}
-              <th class="title" colspan="3" style="text-align: center">{{ sf.name }}</th>
-              <th ><a href="{% url 'campaigns:compare_sf' campaign.pk 1 %}">compare SF</a></th>
+              <option value="{{sf.pk}}">{{sf.name}}</option>
               {% endfor %}
-            </tr>
-
-            <tr>
-              <th colspan="3"></th>
-              {% for sf in safety_functions %}
-              <td class="cell">Average</td>
-              <td class="cell" align="center">SIL Value</td>
-              <td class="cell" align="center">Rel. Compar</td>
-              <td></td>
-              {% endfor %}
-            </tr>
-
-            </thead>
-            <tbody>
-            {% for schema in averages %}
-            <tr>
-              <td colspan="3"><b>{{schema.0}}</b></td>
-              {% for coluna in schema.1 %}
-
-              {% if coluna.0 > 0.01 %}
-                <td>
-                  {{ coluna.0  | stringformat:".2e" }}
-                </td>
-                <td style="color:black;background-color: red;opacity: 0.6; text-align: center;"> 1</td>
-                {% elif coluna.0 > 0.001 %}
-                <td>
-                  {{ coluna.0  | stringformat:".2e" }}
-                </td>
-                <td style="color:black;background-color: orange;opacity: 0.6; text-align: center;"> 2
-                </td>
-                {% else %}
-                <td>
-                  {{ coluna.0  | stringformat:".2e" }}
-                </td>
-                <td style="color:black; background-color:  lime;opacity: 0.6; text-align: center">
-                  3
-                </td>
-              {% endif %}
-
-                <td style="text-align: center;">{{ coluna.1  | floatformat:2 }}</td>
-                <td></td>
-              {% endfor %}
-            </tr>
-            {% endfor %}
-            </tbody>
-          </table>
+            </select>
+            <button class="" type="submit">
+              Compare
+            </button>
+          </form>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- compare -->
-  <div class="container">
+  <div class="section-content">
 
-    <!-- modal 1 -->
-    <div id="modalSf1">
-      <!-- codigo aqui -->
-      <div id="chart-compare-sf-1"></div>
-    </div>
+    <div class="row">
+      <div class="col-12">
+        <form action="">
+          <div class="table-responsive text-nowrap table-fixed">
+            <table class="table table-results">
+              <thead>
+              <tr>
+                <th colspan="3"></th>
+                <!-- SF's -->
+                {% for sf in safety_functions %}
+                <th class="title" colspan="3" style="text-align: center">{{ sf.name }}</th>
+                <th></th>
+                {% endfor %}
+              </tr>
+  
+              <tr>
+                <th colspan="3"></th>
+                {% for sf in safety_functions %}
+                <td class="cell">Average</td>
+                <td class="cell" align="center">SIL Value</td>
+                <td class="cell" align="center">Rel. Compar</td>
+                <td></td>
+                {% endfor %}
+              </tr>
+  
+              </thead>
+              <tbody>
+              {% for schema in averages %}
+              <tr>
+                <td colspan="3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="schema{{forloop.counter}}" value="{{forloop.counter}}" checked>
+                    <label class="form-check-label" for="schema{{forloop.counter}}">
+                      {{schema.0}}
+                    </label>
+                  </div>
+                </td>
 
-    <!-- modal 2 -->
-    <div id="modalSf2">
-      <!-- codigo aqui -->
-      <div id="chart-compare-sf-2"></div>
-    </div>
-
-    <!-- modal 3 -->
-    <div id="modalSf3">
-      <!-- codigo aqui -->
-      <div id="chart-compare-sf-3"></div>
+                {% for coluna in schema.1 %}
+                {% if coluna.0 > 0.01 %}
+                  <td>
+                    {{ coluna.0  | stringformat:".2e" }}
+                  </td>
+                  <td style="color:black;background-color: red;opacity: 0.6; text-align: center;"> 1</td>
+                  {% elif coluna.0 > 0.001 %}
+                  <td>
+                    {{ coluna.0  | stringformat:".2e" }}
+                  </td>
+                  <td style="color:black;background-color: orange;opacity: 0.6; text-align: center;"> 2
+                  </td>
+                  {% else %}
+                  <td>
+                    {{ coluna.0  | stringformat:".2e" }}
+                  </td>
+                  <td style="color:black; background-color:  lime;opacity: 0.6; text-align: center">
+                    3
+                  </td>
+                {% endif %}
+  
+                  <td style="text-align: center;">{{ coluna.1  | floatformat:2 }}</td>
+                  <td></td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
+      
+      <div class="col-12 my-2">
+        <hr>
+      </div>
     </div>
   </div>
+</div>
 
+<!-- Modal -->
+<div class="modal fade" id="confirmChanges" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm Changes</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        If you click on "Save Changes" button the Campaign {{campaign}} will get started.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <form method="POST" action="{% url 'campaigns:index' campaign.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -17,8 +17,9 @@ class Campaign(models.Model):
         RED = 'Red'
 
     name = models.CharField(max_length=100)
-    bop = models.ForeignKey(Bop, on_delete=models.CASCADE, related_name='campaigns')
-    active = models.BooleanField(default=True)
+    bop = models.ForeignKey(
+        Bop, on_delete=models.CASCADE, related_name='campaigns')
+    active = models.BooleanField(default=False)
     well_name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
 
@@ -27,6 +28,8 @@ class Campaign(models.Model):
         choices=StatusCampaign.choices,
         default=StatusCampaign.GREEN
     )
+
+    created = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -60,6 +63,9 @@ class Campaign(models.Model):
         hours = days * 24
         return days, hours
 
+    def schema_active(self):
+        return self.schemas.filter(is_default=True).first()
+
     def success_url(self):
         return reverse('campaigns:index', args=[self.pk])
 
@@ -69,7 +75,8 @@ class Campaign(models.Model):
     def with_counts(self):
         collector = NestedObjects(using='default')
         collector.collect([self])
-        model_count = {model._meta.verbose_name_plural: len(objs) for model, objs in collector.model_objs.items()}
+        model_count = {model._meta.verbose_name_plural: len(
+            objs) for model, objs in collector.model_objs.items()}
         return model_count.items()
 
     def __str__(self):

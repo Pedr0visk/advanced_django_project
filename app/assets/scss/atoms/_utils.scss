@@ -1,0 +1,36 @@
+.box-shadow {
+  box-shadow: rgba($color: $dark, $alpha: 0.1) 0 5px 4px 0;
+}
+
+.card-shadow {
+  box-shadow: rgba($color: $dark, $alpha: 0.1) 0 3px 4px 0,
+  rgba($color: $dark, $alpha: 0.1) 1px 0px 4px 0,
+  rgba($color: $dark, $alpha: 0.1) -1px 1px 4px 0;
+}
+
+.status-pointer {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+}
+
+.status-active {
+  background-color: $success;
+}
+
+.status-inactive {
+  background-color: $gray-500;
+}
+
+
+.page-item {
+  .page-link {
+    color: $dark;
+  }
+  &.active {
+    .page-link {
+      background-color: $primary;
+      border-color: $primary;
+    }
+  }
+}

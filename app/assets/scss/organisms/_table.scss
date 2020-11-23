@@ -1,0 +1,79 @@
+table.dnv-table {
+
+    border-bottom: 2px solid #dee2e6;
+
+    thead {
+        padding: 1rem 0;
+        background-color: #f8f8f8;
+    }
+
+    thead, th {
+        color: #6c757d;
+        font-weight: 600;
+        font-size: 11px;
+        border-bottom: 1px solid #eee;
+        border-top: 1px solid #eee;
+        padding: 0.5rem;
+    }
+
+    td {
+        border-top: 0;
+        border-bottom: 1px solid #eee;
+        font-size: 13px;
+        padding: 8px;
+    }
+
+    &.dnv-table-sm {
+        td {
+            padding: 4px;
+            font-size: 12px;
+        }
+    }
+
+    tr:nth-of-type(even) {
+        background-color: #f9f9f9;
+    }
+}
+
+table.dnv-table-admin {
+    thead {
+        background-color: $secondary;
+        th {
+            color: white;
+        }
+    }
+
+    tbody {
+        td {
+            i.fa-plus {
+                color: $success;
+            }
+
+            i.fa-pencil-alt {
+                color: $yellow;
+            }
+
+            i.fa-times {
+                color: $red;
+            }
+        }
+    }
+}
+
+.table-scroll {
+    max-height: 70vh;
+    overflow-y: scroll;
+    position: relative;
+    border-bottom: 2px solid #eee;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $gray-500;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: $gray-300;
+    }
+}

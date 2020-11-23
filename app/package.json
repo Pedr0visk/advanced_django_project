@@ -6,6 +6,7 @@
   "author": "Pedro Henrique <pedro357bm@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "sass": "sass --watch assets/scss:static/css/",
     "dev": "npm run development",
     "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch": "npm run development -- --watch",

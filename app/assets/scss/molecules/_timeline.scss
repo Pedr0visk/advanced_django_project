@@ -1,0 +1,42 @@
+.timeline {
+  position: relative;
+
+  &:before {
+    position: absolute;
+    content: '';
+    left: 6px;
+    top: 0;
+    width: 4px;
+    bottom: 0;
+    background-color: $gray-50;
+  }
+
+  .timeline-item {
+    display: flex;
+    position: relative;
+    margin-bottom: 1.3rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .timeline-badge {
+    flex-shrink: 0;
+    display: flex;
+    width: 13px;
+    height: 13px;
+    background:white;
+    align-items: center;
+    justify-content: center;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+    border: 6px solid white;
+    padding: 3px;
+  }
+
+}
+
+.icon-xl {
+  font-size: 1rem !important;
+}

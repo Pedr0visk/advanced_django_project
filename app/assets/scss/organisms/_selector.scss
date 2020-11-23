@@ -1,0 +1,98 @@
+.selector {
+  display: flex;
+  align-items: center;
+  h4 {
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 4px 4px 0 0;
+    padding: 8px;
+    text-align: left;
+    margin-bottom: 0;
+  }
+
+  .selector-available,
+  .selector-chosen {
+    width: 380px;
+    text-align: center;
+
+    select {
+      border: 1px solid #ccc;
+    }
+  }
+
+  .selector-available {
+    h4 {
+      background: #f8f8f8;
+      color: #666;
+    }
+    > select {
+      height: 250px;
+    }
+  }
+
+  .selector-chosen {
+    h4 {
+      background-color: $secondary;
+      color: white;
+    }
+    > select {
+      height: 292px;
+    }
+  }
+
+  select {
+    font-size: 12px;
+    padding: 0 10px;
+    margin: 0 0 10px;
+    border-radius: 0 0 4px 4px;
+    width: 380px;
+  }
+  
+  select[multiple] {
+    min-height: 150px;
+  }
+
+  .selector-filter {
+    background: white;
+    border: 1px solid #ccc;
+    border-width: 0 1px;
+    padding: 8px;
+    color: #999;
+    font-size: 10px;
+    margin: 0;
+    text-align: left;
+    
+    label {
+      overflow: hidden;
+      font-size: 14px;
+      height: 24px;
+      width: 24px; 
+    }
+    input {
+      width: 320px;
+    }
+  }
+
+  .selector-chooser {
+    display: flex;
+    flex-direction: column;
+    background: #eee;
+    border-radius: 10px;
+    padding: 4px;
+    margin: 0 10px;
+
+    i.fa {
+      color: rgba($primary, $alpha: 0.3);
+      font-size: 16px;
+    }
+
+    a.active,
+    a.active {
+      i.fa {
+        color: rgba($primary, $alpha: 1);
+      }
+    }
+  }
+}
+
+
