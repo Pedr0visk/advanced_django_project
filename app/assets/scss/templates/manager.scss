@@ -1,0 +1,49 @@
+.dashboard-welcome {
+  position: relative;
+  .welcome-header {
+    color: white;
+
+    h4 {
+      font-size: 2.5rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+
+  }
+
+}
+
+.widget {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  &-title {
+    color: $dark;
+    font-size: 1.25rem;
+  }
+
+  &-desc {
+    color: $gray-500;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  &-count {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  &-icon {
+    
+    position: relative;
+    top: 15px;
+
+    i.fa {
+      font-size: 4rem;
+      color: $gray-500;
+    }
+  }
+}

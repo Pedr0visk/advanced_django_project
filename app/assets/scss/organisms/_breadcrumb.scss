@@ -1,0 +1,31 @@
+.page-title {
+  $this: &;
+
+  background-color: $secondary;
+  border-bottom: 1px solid $gray-50;
+
+  #{$this}-wrapper-2 {
+    display: flex;
+    justify-content: flex-start;
+    font-size: 14px;
+    padding: 8px 0;
+    color: $gray-600;
+
+    .page-title-heading-2 {
+      .current-page {
+        color: rgba(255, 255, 255, 0.6);
+      }
+      > a {
+        color: $white;
+        &:hover {
+          color: $dark;
+          text-decoration: none;
+        }
+      }
+      > span.fa {
+        color: $white;
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
