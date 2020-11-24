@@ -7,10 +7,13 @@
 
 {% block main %}
 
-{% include 'snippets/form_snippet.html' with messages=messages %}
-<div id="breadcrumb" class="alert-success py-3 text-center">
-  <p>You are in planner mode</p>
+<div id="breadcrumb" class="alert-success py-3 text-center mt-1">
+  <p>You are in planner mode, to start the campaign please, compare the schemas, select one to default and click on
+    the button "Save Changes".</p>
 </div>
+
+{% include 'snippets/form_snippet.html' with messages=messages %}
+
 <!-- section 2 -->
 <div class="section">
   <div class="container-fluid px-5">
@@ -87,6 +90,7 @@
           <ul class="info-list">
             <li>name: <b>{{ campaign.name }}</b></li>
             <li>base schema: <b>{{ campaign.schema_active.name }}</b></li>
+            <li>BOP name: <b>{{ campaign.bop.name }}</b></li>
             <li>
               status:
               {% if campaign.active %}

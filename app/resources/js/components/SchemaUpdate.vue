@@ -12,7 +12,7 @@
     <hr/>
 
     <div class="form-group row">
-      <label class="col-sm-1 col-form-label col-form-label-sm">Default:</label>
+      <label class="col-sm-1 col-form-label col-form-label-sm">Base Case:</label>
       <div class="col-sm-3">
         <input type="checkbox" v-model="schema.is_default">
         <small class="form-text text-muted">

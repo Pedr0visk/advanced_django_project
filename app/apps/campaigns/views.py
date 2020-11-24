@@ -67,7 +67,7 @@ def campaign_index(request, campaign_pk):
         campaign.created = True
         campaign.save()
         messages.success(
-            request, f'Campaign "{campaign.name}" started successfully!')
+            request, f'Schema "{schema.name}" has been choosen for the f{campaign.name}')
 
     context = {'campaign': campaign, 'bop': campaign.bop}
 
