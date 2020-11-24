@@ -289,6 +289,7 @@ def schema_compare(request, campaign_pk):
         t.append(average_schema)
         final.append(t)
 
+    messages.success(request, 'All schemas had theirs results updated!')
     context = {
         'safety_functions': campaign.bop.safety_functions.all(),
         'campaign': campaign,
@@ -360,9 +361,11 @@ def event_delete(request, event_pk):
         return redirect('campaigns:index', campaign_pk)
 
 
-def compare_sf(request, campaign_pk, sf_number):
+def compare_sf(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
     schemas = campaign.schemas.order_by('-name')
+    sf_number = int(request.GET.get('sf_number'))
+
     data_to_charts = []
     average = []
     maxi = []

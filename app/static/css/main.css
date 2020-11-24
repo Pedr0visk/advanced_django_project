@@ -11108,6 +11108,11 @@ ul.messages li.success {
   background: #dfd url(../img/icon-yes.svg) 40px 12px no-repeat;
 }
 
+/*
+|--------------------|
+|      TABLE         |
+|--------------------|
+*/
 table.table-results thead tr th.title {
   border-spacing: 10px;
   background-color: #277aa2;
@@ -11123,6 +11128,23 @@ table.table-results tbody tr td {
 
 .table th, .table td {
   padding: 0.35rem;
+}
+
+#modalLoading {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(112, 191, 43, 0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+#modalLoading > p {
+  color: white;
+  font-size: 20px;
 }
 
 /*# sourceMappingURL=main.css.map */

@@ -14,7 +14,7 @@ urlpatterns = [
          views.campaign_delete, name="delete"),
     path('campaigns/<int:campaign_pk>/compare/',
          views.schema_compare, name="compare"),
-    path('campaigns/<int:campaign_pk>/<int:sf_number>/compare_sf/',
+    path('campaigns/<int:campaign_pk>/compare_sf/',
          views.compare_sf, name="compare_sf"),
     path('campaigns/<int:campaign_pk>/run/', views.campaign_run, name="run"),
 

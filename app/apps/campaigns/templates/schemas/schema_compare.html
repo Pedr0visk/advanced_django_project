@@ -6,6 +6,9 @@
 {% endblock %}
 
 {% block main %}
+
+{% include 'snippets/form_snippet.html' with messages=messages %}
+
 <div class="section container-fluid px-5">
   <!-- section title -->
   <div class="section-title mb-3">
@@ -27,13 +30,13 @@
     <div class="col-sm-12 col-12">
       <div class="toolbar ml-auto px-3 py-2 mb-3">
         <div class="search-bar">
-          <form class="form-inline my-2 my-lg-0" method="get">
+          <form class="form-inline my-2 my-lg-0" method="get" action="{% url 'campaigns:compare_sf' campaign.pk %}">
             <label for="" class="mr-2">Select safety function: </label>
 
-            <select name="" id="" class="form-control form-control-sm mr-2">
+            <select name="sf_number" id="" class="form-control form-control-sm mr-2">
               <option value="">--</option>
               {% for sf in safety_functions %}
-              <option value="{{sf.pk}}">{{sf.name}}</option>
+              <option value="1">{{sf.name}}</option>
               {% endfor %}
             </select>
             <button class="" type="submit">

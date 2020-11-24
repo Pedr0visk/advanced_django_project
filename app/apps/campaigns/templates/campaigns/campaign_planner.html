@@ -1,10 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block styles %}
-<link rel="stylesheet" href="{% static 'css/campaign.css' %}">
-{% endblock %}
-
 {% block extra_menu %}
 {% include 'common/bop_menu.html' with bop=campaign.bop %}
 {% endblock %}
@@ -27,7 +23,7 @@
         <p>Bop name: <b>{{ campaign.bop }}</b> > Campaign name: <b>{{ campaign }}</b></p>
       </div>
       <div>
-        <a href="{% url 'campaigns:compare' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
+        <a href="{% url 'campaigns:compare' campaign.pk %}" id="toggleLoading" class="btn btn-sm btn-primary mr-2">
           <small>COMPARE <i class="fa fa-check"></i></small>
         </a>
         <a href="{% url 'campaigns:update' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
@@ -108,6 +104,21 @@
   </div>
 </div>
 
-<div id="modalCompare"></div>
+<div id="modalLoading">
+  <img src="{% static 'img/loading.gif' %}" width="30" alt="">
+  <p>Calculating...</p>
+</div>
 
+{% endblock %}
+
+{% block scripts %}
+<script type="application/javascript">
+  const btn = document.getElementById("toggleLoading");
+  const modal = document.getElementById("modalLoading");
+
+  btn.addEventListener('click', function () {
+      modal.style.display = "flex";
+  });
+
+</script>
 {% endblock %}
