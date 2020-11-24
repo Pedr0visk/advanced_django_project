@@ -18,16 +18,14 @@
       <a href="{% url 'campaigns:index' campaign.pk %}" class="mb-3">
         <i class="fa fa-arrow-left"></i> back to campaign planner
       </a>
-      <p>Comparing schemas for campaign <b>{{campaign}}</b></p>
+      <p>Comparing schemas for campaign <b>{{ campaign }}</b></p>
     </div>
     <div>
       <a href="" class="btn btn-sm btn-primary mr-2" data-toggle="modal" data-target="#confirmChanges">
         Save Changes <i class="fas fa-lock-open"></i>
       </a>
-
     </div>
-    <a type="button" class="btn btn-info" style="font-size: 12px" onclick="showmax()">Compare by Max</a>
-    <a type="button" class="btn btn-info" style="font-size: 12px" onclick="showavg()">Compare by average</a>
+
   </div>
 
   <div class="row">
@@ -40,7 +38,7 @@
             <select name="sf_number" id="" class="form-control form-control-sm mr-2">
               <option value="">--</option>
               {% for sf in safety_functions %}
-              <option value="1">{{sf.name}}</option>
+              <option value="1">{{ sf.name }}</option>
               {% endfor %}
             </select>
             <button class="" type="submit">
@@ -49,35 +47,122 @@
           </form>
         </div>
 
+        <div class="ml-auto btn-group" role="group" aria-label="...">
+          <a type="button" class="btn btn-success" style="font-size: 12px" onclick="showmax()">Compare by Max</a>
+          <a type="button" class="btn btn-info" style="font-size: 12px" onclick="showavg()">Compare by average</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="section-content">
+
+    <div class="row">
+      <div class="col-12">
         <div id="max" style="display: none" class="table-responsive text-nowrap table-fixed">
           <table class="table table-results">
             <thead>
+            <tr>
+              <th colspan="3"></th>
+              <!-- SF's -->
+              {% for sf in safety_functions %}
+              <th class="title" colspan="3" style="text-align: center">{{ sf.name }}</th>
+              {% endfor %}
+            </tr>
+
+            <tr>
+              <th colspan="3"></th>
+              {% for sf in safety_functions %}
+              <td class="cell">Maximo</td>
+              <td class="cell" align="center">SIL Value</td>
+              <td class="cell" align="center">Rel. Compar</td>
+              <td></td>
+              {% endfor %}
+            </tr>
+
+            </thead>
+            <tbody>
+            {% for schema in maxi %}
+            <tr>
+              <td colspan="3"><b>{{ schema.0 }}</b></td>
+              {% for coluna in schema.1 %}
+
+              {% if coluna.0 > 0.01 %}
+              <td>
+                {{ coluna.0  | stringformat:".2e" }}
+              </td>
+              <td style="color:black;background-color: red;opacity: 0.6; text-align: center;"> 1</td>
+              {% elif coluna.0 > 0.001 %}
+              <td>
+                {{ coluna.0  | stringformat:".2e" }}
+              </td>
+              <td style="color:black;background-color: orange;opacity: 0.6; text-align: center;"> 2
+              </td>
+              {% else %}
+              <td>
+                {{ coluna.0  | stringformat:".2e" }}
+              </td>
+              <td style="color:black; background-color:  lime;opacity: 0.6; text-align: center">
+                3
+              </td>
+              {% endif %}
+
+              <td style="text-align: center;">{{ coluna.1  | floatformat:2 }}</td>
+              <td></td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- start form -->
+        <form method="POST" action="{% url 'campaigns:index' campaign.pk %}">
+          {% csrf_token %}
+
+          <!-- table cotent -->
+          <div class="table-responsive text-nowrap table-fixed">
+            <table class="table table-results">
+              <thead>
               <tr>
                 <th colspan="3"></th>
                 <!-- SF's -->
                 {% for sf in safety_functions %}
                 <th class="title" colspan="3" style="text-align: center">{{ sf.name }}</th>
-                <th><a href="{% url 'campaigns:compare_sf' campaign.pk 1 %}">compare SF Max</a></th>
+                <th></th>
                 {% endfor %}
               </tr>
 
               <tr>
                 <th colspan="3"></th>
                 {% for sf in safety_functions %}
-                <td class="cell">Maximo</td>
+                <td class="cell">Average</td>
                 <td class="cell" align="center">SIL Value</td>
                 <td class="cell" align="center">Rel. Compar</td>
                 <td></td>
                 {% endfor %}
               </tr>
 
-            </thead>
-            <tbody>
-              {% for schema in maxi %}
+              </thead>
+              <tbody>
+              {% for schema in averages %}
               <tr>
-                <td colspan="3"><b>{{schema.0}}</b></td>
-                {% for coluna in schema.1 %}
+                <td colspan="3">
+                  <div class="form-check">
+                    {% if campaign.schema_active.name == schema.0 %}
+                    <input class="form-check-input" type="radio" name="schema_name" id="schema{{forloop.counter}}"
+                           value="{{schema.0}}" checked>
+                    {% else %}
+                    <input class="form-check-input" type="radio" name="schema_name" id="schema{{forloop.counter}}"
+                           value="{{schema.0}}">
+                    {% endif %}
+                    <label class="form-check-label" for="schema{{forloop.counter}}">
+                      {{ schema.0 }}
+                    </label>
+                  </div>
+                </td>
 
+                {% for coluna in schema.1 %}
                 {% if coluna.0 > 0.01 %}
                 <td>
                   {{ coluna.0  | stringformat:".2e" }}
@@ -103,89 +188,6 @@
                 {% endfor %}
               </tr>
               {% endfor %}
-            </tbody>
-          </table>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <div class="section-content">
-
-    <div class="row">
-      <div class="col-12">
-        <form method="POST" action="{% url 'campaigns:index' campaign.pk %}">
-          {% csrf_token %}
-
-          <!-- table cotent -->
-          <div class="table-responsive text-nowrap table-fixed">
-            <table class="table table-results">
-              <thead>
-                <tr>
-                  <th colspan="3"></th>
-                  <!-- SF's -->
-                  {% for sf in safety_functions %}
-                  <th class="title" colspan="3" style="text-align: center">{{ sf.name }}</th>
-                  <th></th>
-                  {% endfor %}
-                </tr>
-
-                <tr>
-                  <th colspan="3"></th>
-                  {% for sf in safety_functions %}
-                  <td class="cell">Average</td>
-                  <td class="cell" align="center">SIL Value</td>
-                  <td class="cell" align="center">Rel. Compar</td>
-                  <td></td>
-                  {% endfor %}
-                </tr>
-
-              </thead>
-              <tbody>
-                {% for schema in averages %}
-                <tr>
-                  <td colspan="3">
-                    <div class="form-check">
-                      {% if campaign.schema_active.name == schema.0 %}
-                      <input class="form-check-input" type="radio" name="schema_name" id="schema{{forloop.counter}}"
-                        value="{{schema.0}}" checked>
-                      {% else %}
-                      <input class="form-check-input" type="radio" name="schema_name" id="schema{{forloop.counter}}"
-                        value="{{schema.0}}">
-                      {% endif %}
-                      <label class="form-check-label" for="schema{{forloop.counter}}">
-                        {{schema.0}}
-                      </label>
-                    </div>
-                  </td>
-
-                  {% for coluna in schema.1 %}
-                  {% if coluna.0 > 0.01 %}
-                  <td>
-                    {{ coluna.0  | stringformat:".2e" }}
-                  </td>
-                  <td style="color:black;background-color: red;opacity: 0.6; text-align: center;"> 1</td>
-                  {% elif coluna.0 > 0.001 %}
-                  <td>
-                    {{ coluna.0  | stringformat:".2e" }}
-                  </td>
-                  <td style="color:black;background-color: orange;opacity: 0.6; text-align: center;"> 2
-                  </td>
-                  {% else %}
-                  <td>
-                    {{ coluna.0  | stringformat:".2e" }}
-                  </td>
-                  <td style="color:black; background-color:  lime;opacity: 0.6; text-align: center">
-                    3
-                  </td>
-                  {% endif %}
-
-                  <td style="text-align: center;">{{ coluna.1  | floatformat:2 }}</td>
-                  <td></td>
-                  {% endfor %}
-                </tr>
-                {% endfor %}
               </tbody>
             </table>
           </div>
@@ -193,7 +195,7 @@
 
           <!-- Modal -->
           <div class="modal fade" id="confirmChanges" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
+               aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -203,7 +205,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  If you click on "Save Changes" button the Campaign {{campaign}} will get started.
+                  If you click on "Save Changes" button the Campaign {{ campaign }} will get started.
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -227,32 +229,32 @@
 <script>
 
 
-  function showavg() {
-    var x = document.getElementById("average");
-    var y = document.getElementById("max");
+    function showavg() {
+        var x = document.getElementById("average");
+        var y = document.getElementById("max");
 
-    if (x.style.display === "none") {
-      x.style.display = "block";
-      y.style.display = "none";
-    } else {
-      x.style.display = "none";
-      y.style.display = "visible";
+        if (x.style.display === "none") {
+            x.style.display = "block";
+            y.style.display = "none";
+        } else {
+            x.style.display = "none";
+            y.style.display = "visible";
+        }
     }
-  }
 
 
-  function showmax() {
-    var x = document.getElementById("max");
-    var y = document.getElementById("average");
+    function showmax() {
+        var x = document.getElementById("max");
+        var y = document.getElementById("average");
 
-    if (x.style.display === "none") {
-      x.style.display = "block";
-      y.style.display = "none";
-    } else {
-      x.style.display = "none";
-      y.style.display = "visible";
+        if (x.style.display === "none") {
+            x.style.display = "block";
+            y.style.display = "none";
+        } else {
+            x.style.display = "none";
+            y.style.display = "visible";
+        }
     }
-  }
 
 </script>
 

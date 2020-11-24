@@ -1,6 +1,7 @@
 import ast
 import numpy as np
 from . import metrics
+from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -309,6 +310,7 @@ def schema_compare(request, campaign_pk):
         final_max.append(t_max)
 
     messages.success(request, 'All schemas had theirs results updated!')
+
     context = {
         'safety_functions': campaign.bop.safety_functions.all(),
         'campaign': campaign,
