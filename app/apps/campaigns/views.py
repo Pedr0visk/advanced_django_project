@@ -239,6 +239,18 @@ def schema_delete(request, schema_pk):
 def schema_compare(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
     schemas = campaign.schemas.order_by('-name')
+
+    # run all results for each schema
+    try:
+        for schema in schemas:
+            results = metrics.run(schema)
+            schema.result = results
+            schema.save()
+    except:
+        messages.error(
+            request, 'Sorry, some error occurr when trying to run schemas.')
+        return campaign.success_url()
+
     relative_comp = []
     fl = 0
     final = []
@@ -255,9 +267,12 @@ def schema_compare(request, campaign_pk):
         for j in range(1, number_sf):
             intermediario = []
             soma = 0
-            for i in range(2,
-                           tempo):  # começando no tempo = 2 conforme excel, eliminar os 2 primeiros elementos do resultado
+
+            # começando no tempo = 2 conforme excel,
+            # eliminar os 2 primeiros elementos do resultado
+            for i in range(2, tempo):
                 soma = soma + float(result[i][j])
+
             avg = soma / tempo
 
             if fl == 0:
