@@ -259,7 +259,7 @@ def schema_compare(request, campaign_pk):
         t.append(s.name)
         average_schema = []
 
-        result = ast.literal_eval(s.result)
+        result = s.result
 
         tempo = len(result) - 1
         number_sf = len(result[0])
@@ -288,8 +288,6 @@ def schema_compare(request, campaign_pk):
         fl = 1
         t.append(average_schema)
         final.append(t)
-
-    #av = np.array(average_camp)
 
     context = {
         'safety_functions': campaign.bop.safety_functions.all(),
