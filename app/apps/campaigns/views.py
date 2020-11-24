@@ -252,12 +252,17 @@ def schema_compare(request, campaign_pk):
         return campaign.success_url()
 
     relative_comp = []
+    relative_comp_max = []
     fl = 0
     final = []
+    final_max = []
     for s in schemas:
         t = []
+        t_max = []
         t.append(s.name)
+        t_max.append(s.name)
         average_schema = []
+        max_schema = []
 
         result = s.result
 
@@ -266,34 +271,49 @@ def schema_compare(request, campaign_pk):
 
         for j in range(1, number_sf):
             intermediario = []
+            intermediario_max = []
+            m = []
             soma = 0
 
             # começando no tempo = 2 conforme excel,
             # eliminar os 2 primeiros elementos do resultado
             for i in range(2, tempo):
                 soma = soma + float(result[i][j])
+                m.append(float(result[i][j]))
 
             avg = soma / tempo
+            maximo = max(m)
+
+            print("maximo", maximo)
 
             if fl == 0:
                 compare = 1
+                compare_max = 1
                 relative_comp.append(avg)
+                relative_comp_max.append(maximo)
             else:
                 compare = avg / relative_comp[j - 1]
+                compare_max = maximo / relative_comp_max[j - 1]
 
             intermediario.append(avg)
             intermediario.append(compare)
+            intermediario_max.append(maximo)
+            intermediario_max.append(compare_max)
 
             average_schema.append(intermediario)
+            max_schema.append(intermediario_max)
         fl = 1
         t.append(average_schema)
+        t_max.append(max_schema)
         final.append(t)
+        final_max.append(t_max)
 
     messages.success(request, 'All schemas had theirs results updated!')
     context = {
         'safety_functions': campaign.bop.safety_functions.all(),
         'campaign': campaign,
         'averages': final,
+        'maxi': final_max,
         'bop': campaign.bop,
         'number_sf': number_sf
     }
