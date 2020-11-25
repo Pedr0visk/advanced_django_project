@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'debug_toolbar',
+    'django_celery_results'
 ]
 
 MIDDLEWARE = [
@@ -156,6 +157,17 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# Celery Configuration Options
+CELERY_CACHE_BACKEND = 'default'
+CELERY_BROKER_URL = ['redis://bop-cache:6379/1']
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TIMEZONE = "America/Sao_Paulo"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
