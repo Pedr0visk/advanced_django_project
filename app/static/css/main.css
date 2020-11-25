@@ -10504,6 +10504,26 @@ h3 {
   cursor: pointer;
   color: #333;
 }
+.btn-standard:hover {
+  background-color: #f1f1f1;
+  text-decoration: none;
+  color: inherit;
+}
+
+.btn-group {
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+.btn-group > .btn-standard {
+  border-radius: 0;
+  border: 0;
+}
+.btn-group > .btn-standard:first-child {
+  border-right: inherit;
+}
+.btn-group > .btn-standard.active {
+  background-color: #f1f1f1;
+}
 
 .timeline {
   position: relative;
