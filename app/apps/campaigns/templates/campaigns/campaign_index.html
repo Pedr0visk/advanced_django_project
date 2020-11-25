@@ -18,11 +18,12 @@
         <a href="{% url 'bops:index' campaign.bop.pk %}" class="mb-3">
           <i class="fa fa-arrow-left"></i> back to bop
         </a>
+        <h2>Campaign Dashboard</h2>
         <p>Bop name: <b>{{ campaign.bop }}</b> > Campaign name: <b>{{ campaign }}</b></p>
       </div>
 
       <div>
-        <a href="{% url 'campaigns:compare' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
+        <a href="{% url 'campaigns:planner' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
           <small>CAMPAIGN PLANNER <i class="fa fa-chart-area"></i></small>
         </a>
         <a href="{% url 'campaigns:compare' campaign.pk %}" class="btn btn-sm btn-primary mr-2">

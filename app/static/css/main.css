@@ -10691,6 +10691,10 @@ table.bop-table tbody tr td.description {
   font-size: 20px;
   font-weight: 300;
 }
+.section-title h2 {
+  color: #6c757d;
+  font-weight: 300;
+}
 
 .bop-tools a {
   font-size: 12px;

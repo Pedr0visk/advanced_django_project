@@ -78,6 +78,12 @@ def campaign_index(request, campaign_pk):
         return render(request, 'campaigns/campaign_planner.html', context)
 
 
+def campaign_planner(request, campaign_pk):
+    campaign = Campaign.objects.prefetch_related('schemas').get(pk=campaign_pk)
+    context = {'campaign': campaign, 'bop': campaign.bop}
+    return render(request, 'campaigns/campaign_planner.html', context)
+
+
 def phase_update(request, pk):
     phase = get_object_or_404(Phase, pk=pk)
     form = PhaseForm(request.POST or None, instance=phase)
