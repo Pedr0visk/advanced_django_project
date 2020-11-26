@@ -1,10 +1,13 @@
-from apps.bops import metrics
+import asyncio
 
 from django.http import HttpResponse
 from django.contrib import messages
 from django.core.exceptions import RequestAborted
 from django.db import transaction
 from django.shortcuts import render, redirect
+
+from . import metrics
+from .decorators import query_debugger
 from .models import Bop, SafetyFunction
 from .forms import BopForm, SafetyFunctionForm
 from .load_bop import Loader as BopLoader
@@ -14,7 +17,7 @@ from ..certifications.forms import CertificationForm
 from ..managers.decorators import allowed_users
 from ..failuremodes.models import FailureMode
 
-from .decorators import query_debugger
+from asgiref.sync import sync_to_async
 
 
 @transaction.atomic
@@ -90,7 +93,7 @@ def bop_delete(request, pk):
 def index(request, pk):
     bop = Bop.objects.prefetch_related('campaigns').get(pk=pk)
     request.session['bop_pk'] = bop.pk
-
+    print(bop.campaigns.all())
     context = {'bop': bop}
     return render(request, 'bops/index.html', context)
 

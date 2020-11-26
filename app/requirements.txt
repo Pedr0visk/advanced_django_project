@@ -53,3 +53,4 @@ txaio==20.4.1
 vine==5.0.0
 wcwidth==0.2.5
 zope.interface==5.2.0
+numpy==1.19.4

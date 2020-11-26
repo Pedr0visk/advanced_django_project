@@ -18,7 +18,8 @@ def update_test_group(sender, instance, raw, **kwargs):
             fm_list_id = original.failure_modes.values_list('id', flat=True)
             TestGroupHistory.objects.create(test_group=original,
                                             start_date=original.start_date,
-                                            failure_modes=','.join([str(i) for i in fm_list_id]),
+                                            failure_modes=','.join(
+                                                [str(i) for i in fm_list_id]),
                                             created_at=date.today(),
                                             event=TestGroupHistory.Actions.UPDATED,
                                             tests=original.tests)
@@ -43,7 +44,8 @@ def delete_test_group(sender, instance, created, **kwargs):
         fm_list_id = instance.failure_modes.values_list('id', flat=True)
         TestGroupHistory.objects.create(test_group=instance,
                                         start_date=instance.start_date,
-                                        failure_modes=','.join([str(i) for i in fm_list_id]),
+                                        failure_modes=','.join(
+                                            [str(i) for i in fm_list_id]),
                                         created_at=date.today(),
                                         event=TestGroupHistory.Actions.DELETED,
                                         tests=instance.tests)

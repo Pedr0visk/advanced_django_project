@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from apps.campaigns.models import Campaign, Phase, Schema
 from apps.test_groups.models import TestGroup
+from ..tasks import calc_results
 
 
 class PhaseSerializer(serializers.ModelSerializer):
@@ -29,7 +30,7 @@ class SchemaSerializer(serializers.ModelSerializer):
 
         # toggle default in schemas table
         if schema.is_default:
-           Schema.toggle_schema_default(schema.name)
+            Schema.toggle_schema_default(schema.name)
 
         for phase_data in phases_data:
             test_groups = phase_data.pop('test_groups')
@@ -48,7 +49,7 @@ class SchemaSerializer(serializers.ModelSerializer):
 
         # toggle default in schemas table
         if instance.is_default:
-           Schema.toggle_schema_default(instance.name)
+            Schema.toggle_schema_default(instance.name)
 
         for phase_data in phases_data:
             test_groups = phase_data.pop('test_groups')
@@ -56,6 +57,8 @@ class SchemaSerializer(serializers.ModelSerializer):
             if phase.has_test:
                 phase.test_groups.set(test_groups)
 
+        # using celery to schedule the calc for schema results
+        calc_results(instance)
         return instance
 
 
