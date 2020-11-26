@@ -64,7 +64,10 @@ Vue.component(
     "test-group-form",
     require("./components/TestGroupForm.vue").default
 );
-
+Vue.component(
+  "failure-mode-list",
+  require("./components/FailureModeList.vue").default
+);
 /*
  * By extending the Vue prototype with a new '$bus' property
  * we can easily access our global event bus from any child component.

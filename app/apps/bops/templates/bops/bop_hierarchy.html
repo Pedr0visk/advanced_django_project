@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_menu %}
+{% include 'common/bop_menu.html' %}
+{% endblock %}
+
+{% block breadcrumb %}
+<!-- breadcrumb -->
+<div class="page-title">
+  <div class="container-fluix px-5">
+    <div class="page-title-wrapper-2">
+      <div class="page-title-heading-2">
+        <a href="{% url 'bops:list' %}">Bops</a>
+        <span class="fa fa-chevron-right"></span>
+        <span class="current-page">{{ bop.name }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block main %}
+{% if messages %}
+<ul class="messagelist">
+  {% for message in messages %}
+  <li class="success">{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+<!-- main -->
+<div class="main">
+
+  <!-- section 2 -->
+  <div class="section" id="app">
+    <div class="container-fluid px-5">
+      <!-- section title -->
+      <div class="section-title mb-3">
+        <div class="d-flex flex-column">
+          <a href="{% url 'bops:index' bop.pk %}" class="mb-3">
+            <i class="fa fa-arrow-left"></i> back to dashboard
+          </a>
+          <h2>Hierarchy</h2>
+          <p>Bop name: <b>{{ bop }}</b></p>
+        </div>
+      </div>
+      <hr>
+
+      <!-- section content -->
+      <div class="row">
+        <div class="col-12">
+          <h2 class="title-1 text-primary"><i class="fa fa-list"></i> Mode List</h2>
+          {{ json_data|json_script:"json_data" }}
+          <failure-mode-list></failure-mode-list>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+<!-- main -->
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'build/app.js' %}"></script>
+{% endblock %}
