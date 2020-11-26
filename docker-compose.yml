@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   app:
@@ -6,7 +6,7 @@ services:
     build: ./app
     command: sh -c "python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - ./app/:/app/
+      - ./app/:/usr/src/app/
     ports:
       - 8001:8000
     env_file:
