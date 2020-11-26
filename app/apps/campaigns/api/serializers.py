@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from apps.campaigns.models import Campaign, Phase, Schema
 from apps.test_groups.models import TestGroup
-from ..tasks import calc_results
 
 
 class PhaseSerializer(serializers.ModelSerializer):
@@ -58,7 +57,6 @@ class SchemaSerializer(serializers.ModelSerializer):
                 phase.test_groups.set(test_groups)
 
         # using celery to schedule the calc for schema results
-        calc_results(instance)
         return instance
 
 

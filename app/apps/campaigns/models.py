@@ -106,6 +106,10 @@ class Schema(models.Model):
 
         return end_date
 
+    @property
+    def result(self):
+        return self.results.latest('created_at').values
+
     @staticmethod
     def toggle_schema_default(schema_name):
         objects = Schema.objects.exclude(name=schema_name)
@@ -172,3 +176,12 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Result(models.Model):
+    schema = models.ForeignKey(Schema,
+                               on_delete=models.CASCADE,
+                               related_name='results')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    values = models.TextField(blank=True, null=True)

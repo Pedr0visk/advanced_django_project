@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'apps.test_groups',
     'apps.tests',
     'apps.managers',
-    'apps.campaigns',
+    'apps.campaigns.apps.CampaignsConfig',
     'apps.accounts',
     'apps.certifications',
     'rest_framework',
