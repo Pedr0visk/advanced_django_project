@@ -57,15 +57,17 @@ class Bop(models.Model):
 
         failure_modes.sort(key=lambda item: item.code)
         return failure_modes
+
     @staticmethod
     def get_m_matrix(bop):
-        failure_modes = getTotalFailMode(bop)
+        def gerar_matriz(n_linhas, n_colunas):
+            return [[0] * n_colunas for _ in range(n_linhas)]
 
-        m = gerar_matriz(failure_modes, 32)
-        fmodes = FailureMode.objects.filter(component__subsystem__bop__exact=bop).all()
+        failure_modes = bop.failure_modes
+        m = gerar_matriz(len(failure_modes), 32)
 
         index = 0
-        for f in fmodes:
+        for f in failure_modes:
             m[index][0] = index
 
             if f.component is not None:
