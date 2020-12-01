@@ -10,6 +10,6 @@ def generate_matrix_on_bop_created(sender, **kwargs):
 
     if created:
         instance.matrix = Bop.get_matrix(instance)
-        instance.save
+        instance.save()
 
     return
