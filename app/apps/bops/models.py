@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 from django.contrib.admin.utils import NestedObjects
 from django.urls import reverse
 
@@ -7,6 +8,7 @@ class Bop(models.Model):
     name = models.CharField(max_length=100)
     rig = models.CharField(max_length=255)
     model = models.CharField(max_length=255)
+    matrix = JSONField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -59,11 +61,12 @@ class Bop(models.Model):
         return failure_modes
 
     @staticmethod
-    def get_m_matrix(bop):
+    def get_matrix(bop):
         def gerar_matriz(n_linhas, n_colunas):
             return [[0] * n_colunas for _ in range(n_linhas)]
 
         failure_modes = bop.failure_modes
+        print('all fms', len(failure_modes))
         m = gerar_matriz(len(failure_modes), 32)
 
         index = 0
