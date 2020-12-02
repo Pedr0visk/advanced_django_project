@@ -454,12 +454,13 @@ def cut_list(request, schema_pk, sf_pk):
     safety = SafetyFunction.objects.prefetch_related('cuts').get(id=sf_pk)
     cuts = safety.cuts.all()
     max_cuts = Cut.objects.filter(safety_function=safety).count()
-    print("numero de cortes", max_cuts)
+
+
     corte = 0
-    matriz_index = [[' ' for i in range(4)] for j in range(max_cuts)]
+    matriz_index = [[' ' for i in range(5)] for j in range(max_cuts)]
 
     v_integrate = ast.literal_eval(schema.cuts_contribution)
-    print("v", v_integrate[2])
+
 
     for cut in cuts:
         fails = cut.failure_modes.split(",")
@@ -473,13 +474,21 @@ def cut_list(request, schema_pk, sf_pk):
             falha = falha + 1
         corte = corte + 1
 
-    result = metrics.calc_cuts_contribuition_this_timestep(3, v_integrate, matriz_index)
+    result = metrics.calc_cuts_contribuition_this_timestep(5, v_integrate, matriz_index)
+    mi = []
 
+    for i in range(0,len(result)):
+        for j in range(0,4):
+            if result[i][j] == ' ':
+                result[i][j] = ' '
+            else:
+                result[i][j] = v_integrate[result[i][j]][0]
+
+    mi = sorted(matriz_index, key=lambda matriz_index: matriz_index[4], reverse=True)
 
     context = {
-        'result': result,
+        'result': mi,
         'schema': schema,
-
     }
 
     return render(request, 'schemas/cut_list.html', context)

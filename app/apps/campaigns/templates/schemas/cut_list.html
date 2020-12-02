@@ -50,17 +50,36 @@
             <table class="table dnv-table m-0">
               <thead class="bg-white-50">
               <tr>
+                <th scope="col">#</th>
+                <th scope="col">Component</th>
+                <th scope="col">Component</th>
+                <th scope="col">Component</th>
+                <th scope="col">Component</th>
 
-                <th scope="col">value</th>
+                <th scope="col">Contribuition</th>
               </tr>
-              </thead>
+            </thead>
               <tbody>
               {% for res in result %}
               <tr>
-                <td>{{ res }}</td>
+                <td>{{ forloop.counter }}</td>
+                {% for component in res %}
+                  {% if component > 0 %}
+
+                                       <td>{{ component | stringformat:".2e" }}</td>
+
+
+                 {% else %}
+
+                                        <td>{{ component  }}</td>
+
+
+                                {% endif %}
+
 
                   {% endfor %}
                 </td>
+              {% endfor %}
 
               </tbody>
             </table>

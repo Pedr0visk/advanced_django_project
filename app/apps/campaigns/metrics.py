@@ -592,7 +592,7 @@ def calc_PFD_this_timestep(step, v_integrate, matriz_index):
 
 
 def calc_cuts_contribuition_this_timestep(step, v_integrate, matriz_index):
-    prod_sf = 1
+
     contr = []
 
     for corte in range(0, len(matriz_index)):
@@ -601,13 +601,13 @@ def calc_cuts_contribuition_this_timestep(step, v_integrate, matriz_index):
 
             if matriz_index[corte][falha] != ' ':
                 try:
-                    print(" tentativa v_integrate[matriz_index[corte][falha]][step]",
-                          matriz_index[corte][falha], corte, falha, step)
                     produtorio = produtorio * float(v_integrate[matriz_index[corte][falha]][step])
+
                 except:
                     print("errro v_integrate[matriz_index[corte][falha]][step]",
                           matriz_index[corte][falha], corte, falha, step)
 
-        contr.append(produtorio)
+        matriz_index[corte][falha+1] = produtorio
 
-    return contr
+
+    return matriz_index
