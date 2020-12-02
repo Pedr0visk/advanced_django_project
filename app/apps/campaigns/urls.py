@@ -15,10 +15,16 @@ urlpatterns = [
     path('campaigns/<int:campaign_pk>/run/', views.campaign_run, name="run"),
 
     # schemas
-    path('schemas/<int:schema_pk>/run/', views.campaign_metrics, name="schema_run"),
-    path('schemas/<int:schema_pk>/change/', views.schema_update, name="update_schema"),
-    path('schemas/add/<int:campaign_pk>/', views.schema_create, name="create_schema"),
-    path('schemas/<int:schema_pk>/delete/', views.schema_delete, name="delete_schema"),
+    path('schemas/<int:schema_pk>/run/',
+         views.campaign_metrics, name="schema_run"),
+    path('schemas/<int:schema_pk>/change/',
+         views.schema_update, name="update_schema"),
+    path('schemas/add/<int:campaign_pk>/',
+         views.schema_create, name="create_schema"),
+    path('schemas/<int:schema_pk>/delete/',
+         views.schema_delete, name="delete_schema"),
+    path('schemas/<int:schema_pk>/<int:sf_pk>/cut_list/',
+         views.cut_list, name="cut_list"),
 
     # events
     path('events/add/<int:campaign_pk>/', views.event_create, name="create_event"),

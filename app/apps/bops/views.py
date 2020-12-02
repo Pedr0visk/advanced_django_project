@@ -1,4 +1,4 @@
-from apps.bops import metrics
+from .signals import bop_created
 
 from django.contrib import messages
 from django.core.exceptions import RequestAborted
@@ -43,6 +43,8 @@ def bop_upload(request):
                 certification.bop = new_bop
                 certification.save()
 
+            print('send signal')
+            bop_created.send(sender=Bop.__class__, instance=new_bop, created=True)
             messages.success(request, 'Bop created successfully')
             return redirect(new_bop.success_url())
 
@@ -81,7 +83,7 @@ def bop_delete(request, pk):
         name = bop.name
         bop.delete()
         messages.success(request, f'Bop "{name}" successfully deleted')
-        return redirect('bops:list')
+        return redirect('dashboard')
     return render(request, 'bops/bop_confirm_delete.html', context)
 
 

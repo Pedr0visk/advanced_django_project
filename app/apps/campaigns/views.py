@@ -1,19 +1,19 @@
 import ast
-import numpy as np
+import datetime
 from . import metrics
 from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
-
+from apps.bops.models import *
+from apps.cuts.models import *
 from .models import Campaign, Phase, Schema, Event
 from .forms import CampaignForm, PhaseForm, EventForm
 from .filters import campaign_filter
-
 from django.shortcuts import get_object_or_404
-
 from ..test_groups.models import TestGroup
+from .metrics import Fail_line
 
 
 def campaign_update(request, campaign_pk):
@@ -171,10 +171,11 @@ def campaign_metrics(request, schema_pk):
 
     context = {
         'campaign': campaign,
-        'schema': Schema,
+        'schema': schema_pk,
         'average': average,
         'maxi': maxi,
-        'data_to_charts': data_to_charts
+        'data_to_charts': data_to_charts,
+        'safety_functions': campaign.bop.safety_functions.all()
     }
 
     return render(request, 'campaigns/campaign_charts.html', context)
@@ -244,13 +245,16 @@ def schema_delete(request, schema_pk):
 
 
 def schema_compare(request, campaign_pk):
+    print(datetime.datetime.today(), "Chamou o compare")
     campaign = Campaign.objects.get(pk=campaign_pk)
     schemas = campaign.schemas.order_by('-name')
 
     # run all results for each schema
     try:
         for schema in schemas:
+            print(datetime.datetime.today(), "Inicio Do Schema ", schema.name)
             results = metrics.run(schema)
+
             schema.result = results
             schema.save()
     except:
@@ -291,7 +295,7 @@ def schema_compare(request, campaign_pk):
             avg = soma / tempo
             maximo = max(m)
 
-            print("maximo", maximo)
+
 
             if fl == 0:
                 compare = 1
@@ -325,7 +329,7 @@ def schema_compare(request, campaign_pk):
         'bop': campaign.bop,
         'number_sf': number_sf
     }
-
+    print(datetime.datetime.today(), "Fim ")
     return render(request, 'schemas/schema_compare.html', context)
 
 
@@ -438,7 +442,6 @@ def compare_sf(request, campaign_pk):
             'desc': desc,
         })
 
-    print("data to charts", maxi)
 
     context = {
         'campaign': campaign,
@@ -449,3 +452,49 @@ def compare_sf(request, campaign_pk):
     }
 
     return render(request, 'campaigns/campaign_charts.html', context)
+
+
+def cut_list(request, schema_pk, sf_pk):
+
+    schema = Schema.objects.get(pk=schema_pk)
+    safety = SafetyFunction.objects.prefetch_related('cuts').get(id=sf_pk)
+    cuts = safety.cuts.all()
+    max_cuts = Cut.objects.filter(safety_function=safety).count()
+
+
+    corte = 0
+    matriz_index = [[' ' for i in range(5)] for j in range(max_cuts)]
+
+    v_integrate = ast.literal_eval(schema.cuts_contribution)
+
+
+    for cut in cuts:
+        fails = cut.failure_modes.split(",")
+        falha = 0
+        for fail in fails:
+            if fail:
+                fail_line = Fail_line(fail, v_integrate)
+                matriz_index[corte][falha] = fail_line
+            else:
+                matriz_index[corte][falha] = ' '
+            falha = falha + 1
+        corte = corte + 1
+
+    result = metrics.calc_cuts_contribuition_this_timestep(5, v_integrate, matriz_index)
+    mi = []
+
+    for i in range(0,len(result)):
+        for j in range(0,4):
+            if result[i][j] == ' ':
+                result[i][j] = ' '
+            else:
+                result[i][j] = v_integrate[result[i][j]][0]
+
+    mi = sorted(matriz_index, key=lambda matriz_index: matriz_index[4], reverse=True)
+
+    context = {
+        'result': mi,
+        'schema': schema,
+    }
+
+    return render(request, 'schemas/cut_list.html', context)
