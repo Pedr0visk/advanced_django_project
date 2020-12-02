@@ -31,9 +31,10 @@ def getTotalFailMode(bop):
 
 
 def get_m_matrix(bop):
-    failure_modes = getTotalFailMode(bop)
-
-    m = gerar_matriz(failure_modes, 32)
+    failure_modes = bop.failure_modes
+    print('bop matrix', bop.matrix)
+    m = bop.matrix
+    print(m)
     fmodes = FailureMode.objects.filter(component__subsystem__bop__exact=bop).all()
 
     index = 0
