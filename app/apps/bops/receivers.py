@@ -3,13 +3,10 @@ from .signals import *
 from .models import Bop
 
 
-@receiver(bop_created)
+@receiver(bop_created_or_updated)
 def generate_matrix_on_bop_created(sender, **kwargs):
-    created = kwargs['created']
     instance = kwargs['instance']
-
-    if created:
-        instance.matrix = Bop.get_matrix(instance)
-        instance.save()
+    instance.matrix = Bop.get_matrix(instance)
+    instance.save()
 
     return
