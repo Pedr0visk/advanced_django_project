@@ -7,7 +7,8 @@ from .filters import subsystem_filter
 
 def subsystem_list(request):
     dataset = subsystem_filter(request.GET)
-    context = {'dataset': dataset}
+    bops = Bop.objects.order_by('name')
+    context = {'dataset': dataset, 'bops': bops}
     return render(request, 'subsystems/subsystem_list.html', context)
 
 
