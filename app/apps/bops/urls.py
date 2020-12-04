@@ -6,13 +6,15 @@ urlpatterns = [
     # bop
     path('upload/', views.bop_upload, name='upload'),
     path('<int:pk>/dashboard/', views.index, name='index'),
+    path('<int:pk>/hierarchy/', views.bop_hierarchy, name='hierarchy'),
     path('<int:pk>/change/', views.bop_update, name='update'),
     path('<int:pk>/delete/', views.bop_delete, name='delete'),
     path('<int:pk>/results/', views.bop_result, name='results'),
 
     # test planner
     path('<int:pk>/test-planner/', views.test_planner, name='test_planner'),
-    path('<int:pk>/test-planner/raw/', views.test_planner_raw, name='test_planner_raw'),
+    path('<int:pk>/test-planner/raw/',
+         views.test_planner_raw, name='test_planner_raw'),
 
     # safety functions
     path('<int:bop_pk>/safety-functions/',
