@@ -1,0 +1,66 @@
+{% load manager_extras %}
+<div class="paginator p-3">
+  <div class="d-flex align-items-center">
+
+    <nav class="mr-3">
+      {% if dataset.has_other_pages %}
+      <ul class="pagination m-0">
+        {% if dataset.has_previous %}
+        <li class="page-item">
+          <a
+              class="page-link"
+              href="{% my_url dataset.previous_page_number 'page' request.GET.urlencode %}"
+              aria-label="Previous">
+            <span aria-hidden="true">&laquo; Prev</span>
+          </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" aria-label="Previous">
+            <span aria-hidden="true">&laquo; Prev</span>
+          </a>
+        </li>
+        {% endif %}
+
+        {% if dataset.end_index > 15 %}
+        {% for i in dataset.paginator.page_range %}
+        {% if dataset.number == i %}
+        <li class="page-item active">
+          <a class="page-link">{{ i }}</a>
+        </li>
+        {% else %}
+        <li class="page-item">
+          <a class="page-link" href="{% my_url i 'page' request.GET.urlencode %}">{{ i }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+        {% if dataset.has_next %}
+        <li class="page-item">
+          <a class="page-link"
+             href="{% my_url dataset.next_page_number 'page' request.GET.urlencode %}"
+             aria-label="Next">
+            <span aria-hidden="true">Next &raquo;</span>
+          </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" aria-label="Next">
+            <span aria-hidden="true">Next &raquo;</span>
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+      {% endif %}
+    </nav>
+    <div class="paginator-footer d-flex">
+      <div class="mr-3">{{ dataset }}</div>
+      <div>
+        Total: {{ dataset.paginator.count }} Results
+      </div>
+    </div>
+
+  </div>
+
+</div>
