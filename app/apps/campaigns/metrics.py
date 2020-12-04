@@ -14,8 +14,10 @@ import json
 def run(schema, **kwargs):
 
     bop = schema.campaign.bop
+    print('antes de printar matrix')
+    print('pritando matrix', bop.matrix)
     print(datetime.datetime.today(), "Vai chamar Matriz M")
-    m = get_m_matrix(bop)
+    m = bop.matrix
     print(datetime.datetime.today(), "Terminou Matriz M ")
     sf_pfds = calculate_SF_PFDS(schema, m)
 

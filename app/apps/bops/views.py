@@ -1,20 +1,19 @@
-from .signals import bop_created
-
-from django.http import HttpResponse
 from django.contrib import messages
 from django.core.exceptions import RequestAborted
 from django.db import transaction
 from django.shortcuts import render, redirect
+
 from .models import Bop, SafetyFunction
 from .forms import BopForm, SafetyFunctionForm
 from .load_bop import Loader as BopLoader
 from .load_safety_function import Loader as SafetyFunctionLoader
+from .decorators import query_debugger
+from .signals import bop_created_or_updated
 
 from ..certifications.forms import CertificationForm
 from ..managers.decorators import allowed_users
 from ..failuremodes.models import FailureMode
 
-from .decorators import query_debugger
 
 
 @transaction.atomic
@@ -44,8 +43,7 @@ def bop_upload(request):
                 certification.bop = new_bop
                 certification.save()
 
-            print('send signal')
-            bop_created.send(sender=Bop.__class__, instance=new_bop, created=True)
+            bop_created_or_updated.send(sender=Bop.__class__, instance=new_bop, created=True)
             messages.success(request, 'Bop created successfully')
             return redirect(new_bop.success_url())
 
@@ -68,6 +66,7 @@ def bop_update(request, pk):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
+            bop_created_or_updated.send(sender=Bop.__class__, instance=bop, created=False)
             messages.success(
                 request, f'Successfully updated bop "{bop.name}" ')
             return redirect(bop.success_url())
