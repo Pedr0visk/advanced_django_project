@@ -1,17 +1,13 @@
-from django.http.response import HttpResponse
 from django.shortcuts import render
 
 from apps.bops.models import Bop
 from .models import Subsystem
 from .filters import subsystem_filter
-from ..components.models import Component
 
 
-def subsystem_list(request, bop_pk):
-    bop = Bop.objects.get(pk=bop_pk)
-    subsystems = subsystem_filter(request.GET)
-
-    context = {'bop': bop, 'subsystems': subsystems}
+def subsystem_list(request):
+    dataset = subsystem_filter(request.GET)
+    context = {'dataset': dataset}
     return render(request, 'subsystems/subsystem_list.html', context)
 
 

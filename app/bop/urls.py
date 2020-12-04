@@ -21,6 +21,7 @@ urlpatterns = [
     path('manager/', include('apps.managers.urls')),
     path('certifications/', include('apps.certifications.urls')),
     path('test-groups/', include('apps.test_groups.urls')),
+    path('subsystems/', include('apps.subsystems.urls')),
     # api
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
