@@ -5,15 +5,25 @@ from .models import FailureMode
 from .filters import failure_mode_filter
 from .forms import FailureModeForm
 
+# Don't forget to find a way to removed these
+# classes bellow to reduce the acoplament
 from apps.bops.models import Bop
+from apps.subsystems.models import Subsystem
+from apps.components.models import Component
 
 
-def failuremode_list(request, bop_pk):
-    bop = Bop.objects.get(pk=bop_pk)
-    failure_modes = FailureMode.objects.filter(component__subsystem__bop=bop)
-    query_set = failure_mode_filter(failure_modes, request.GET)
+def failuremode_list(request):
+    bops = Bop.objects.order_by('name')
+    subsystems = Subsystem.objects.order_by('name')
+    components = Component.objects.order_by('name')
+    dataset = failure_mode_filter(request.GET)
 
-    context = {'bop': bop, 'failuremodes': query_set}
+    context = {
+        'dataset': dataset,
+        'bops': bops,
+        'subsystems': subsystems,
+        'components': components
+    }
     return render(request, 'failuremodes/failuremode_list.html', context)
 
 

@@ -4,7 +4,6 @@ from django.contrib.admin.utils import NestedObjects
 from django.urls import reverse
 
 
-
 class Bop(models.Model):
     name = models.CharField(max_length=100)
     rig = models.CharField(max_length=255)

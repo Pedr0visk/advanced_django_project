@@ -45,16 +45,42 @@
         </div>
       </div>
       <hr>
-
       <!-- section content -->
       <div class="row">
-        <div class="col-12">
-          <h2 class="title-1 text-primary"><i class="fa fa-list"></i> Mode List</h2>
-          {{ json_data|json_script:"json_data" }}
-          <failure-mode-list></failure-mode-list>
+        <div class="col-sm-5 col-12">
+          <table class="table dnv-table dnv-table-admin">
+            <thead>
+            <th>Bop System</th>
+            <th></th>
+            <th></th>
+            </thead>
+            <tbody>
+            <tr>
+              <td><a href="">Subsystems</a></td>
+              <td width="25%"
+                  align="center"><a href="{% url 'subsystems:list' %}?bop={{bop.id}}"><i
+                  class="fa fa-clipboard-list text-warning"></i> view
+                list</a></td>
+              <td width="25%" align="center"><a href=""><i class="fa fa-plus"></i> add new one</a></td>
+            </tr>
+            <tr>
+              <td><a href="">Components</a></td>
+              <td width="25%"
+                  align="center"><a href="{% url 'components:list' %}?bop={{bop.id}}"><i
+                  class="fa fa-clipboard-list text-warning"></i> view list</a></td>
+              <td width="25%" align="center"><a href=""><i class="fa fa-plus"></i> add new one</a></td>
+            </tr>
+            <tr>
+              <td><a href="">Failure Modes</a></td>
+              <td width="25%"
+                  align="center"><a href="{% url 'failuremodes:list' %}?bop={{bop.id}}"><i
+                  class="fa fa-clipboard-list text-warning"></i> view list</a></td>
+              <td width="25%" align="center"><a href=""><i class="fa fa-plus"></i> add new one</a></td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-
     </div>
   </div>
 

@@ -29,9 +29,9 @@
     <div class="row">
       <div class="col-sm-12 col-12">
         <div class="toolbar ml-auto px-3 py-2 mb-3 d-flex">
-          <!-- SEARCH BAR -->
-          <div class="search-bar mr-4">
-            <form class="form-inline my-2 my-lg-0" method="get">
+          <form class="form-inline my-2 my-lg-0" method="get">
+            <!-- SEARCH BAR -->
+            <div class="search-bar mr-4 form-group">
               <label for="" class="mr-2"><i class="fa fa-search"></i></label>
               <input
                   name="q"
@@ -42,13 +42,12 @@
               <button class="" type="submit">
                 Search
               </button>
-            </form>
-          </div>
-          <!-- FILTERS -->
-          <div class="filters">
-            <form class="form-inline my-2 my-lg-0" method="get">
-              <label for="" class="mr-2">Filter by bop: </label>
+            </div>
+            <!-- FILTERS -->
+            <div class="filters form-group">
 
+              <label for="" class="mr-2">bop: </label>
+              <!-- filter by bop -->
               <select name="bop" id="" class="form-control form-control-sm mr-2">
                 <option value="">--</option>
                 {% for bop in bops %}
@@ -59,11 +58,13 @@
                 {% endif %}
                 {% endfor %}
               </select>
+
+
               <button class="btn-standard" type="submit">
                 select
               </button>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -72,6 +73,7 @@
       <!-- BOP's table list -->
       <div class="col-sm-12 col-12">
         <div class="results">
+          <small class="text-muted">Found {{ dataset.paginator.count }} Results</small>
           <table class="table dnv-table m-0">
             <thead class="bg-white-50">
             <tr>

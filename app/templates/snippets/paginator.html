@@ -22,7 +22,7 @@
         </li>
         {% endif %}
 
-        {% if dataset.end_index > 15 %}
+        {% if dataset.paginator.count < 1000 %}
         {% for i in dataset.paginator.page_range %}
         {% if dataset.number == i %}
         <li class="page-item active">
@@ -34,6 +34,10 @@
         </li>
         {% endif %}
         {% endfor %}
+        {% else %}
+        <li class="page-item active">
+          <a class="page-link">{{ dataset.number }}</a>
+        </li>
         {% endif %}
 
         {% if dataset.has_next %}

@@ -1,25 +1,4 @@
-{% extends 'manager/base.html' %}
-
-{% block breadcrumb %}
-  <!-- breadcrumb -->
-  <div class="page-title">
-    <div class="container-fluix px-5">
-      <div class="page-title-wrapper-2">
-        <div class="page-title-heading-2">
-          <a href="{% url 'manager' %}">Home</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'list_bops' %}">Bops</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'list_subsystems' bop.pk %}">Subsystems</a>
-          <span class="fa fa-chevron-right"></span>
-          <span class="current-page">{{ subsystem.name }}</span>
-        </div>
-      </div>
-    </div>
-  </div>
-{% endblock %}
+{% extends 'base.html' %}
 
 {% block main %}
   <!-- main -->

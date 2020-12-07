@@ -1,161 +1,106 @@
-{% extends 'manager/base.html' %}
+{% extends 'base.html' %}
 {% load manager_extras %}
 
-{% block breadcrumb %}
-  <!-- breadcrumb -->
-  <div class="page-title">
-    <div class="container-fluid px-5">
-      <div class="page-title-wrapper-2">
-        <div class="page-title-heading-2">
-          <a href="{% url 'manager' %}">Home</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'list_bops' %}">Bops</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
-          {% if request.GET.subsystem %}
-            <span class="fa fa-chevron-right"></span>
-            <a href="{% url 'list_subsystems' bop.pk %}">Subsystems</a>
-            <span class="fa fa-chevron-right"></span>
-            <a href="{% url 'index_subsystem' bop.pk components.0.subsystem.pk %}">{{ components.0.subsystem.name }}</a>
-          {% endif %}
-          <span class="fa fa-chevron-right"></span>
-          <span class="current-page">components</span>
-        </div>
-      </div>
-    </div>
-  </div>
-{% endblock %}
-
 {% block main %}
-  {% for message in messages %}
-    <ul class="messagelist">
-      <li class="success">{{ message }}</li>
-    </ul>
-  {% endfor %}
-  <!-- main -->
-  <div class="main">
-    <!-- section bop list -->
-    <div class="section" id="home">
-      <div class="container-fluid px-5">
-        {% if request.GET.subsystem %}
-          <div class="filter-helper mb-2">
-            <p>FILTERED COMPONENTS FOR <span class="text-highlight"><b>{{ components.0.subsystem.name }}</b></span> SUBSYSTEM</p>
-          </div>
-        {% endif %}
-        <div class="section-title mb-3">
-          <p>Select component to manage</p>
-          <a href="{% url 'register_account' %}" class="btn btn-sm btn-success"><small>ADD COMPONENT <i
-              class="fa fa-plus"></i></small> </a>
-        </div>
+{% for message in messages %}
+<ul class="messagelist">
+  <li class="success">{{ message }}</li>
+</ul>
+{% endfor %}
+<!-- section bop list -->
+<div class="section" id="home">
+  <div class="container-fluid px-5">
+    <!-- section title -->
+    <div class="section-title mb-3">
+      <div class="d-flex flex-column">
+        <a href="" class="mb-3">
+          <i class="fa fa-arrow-left"></i> back to bop
+        </a>
+        <h2>Components</h2>
+        <p></p>
+      </div>
 
-        <div class="row">
-          <div class="col-sm-12 col-12">
-            <div class="toolbar ml-auto px-3 py-2 mb-3">
-              <div class="search-bar">
-                <form class="form-inline my-2 my-lg-0" method="get">
-                  <label for="" class="mr-2"><i class="fa fa-search"></i></label>
-                  <input
-                      name="q"
-                      class="form-control form-control-sm mr-sm-2"
-                      type="search"
-                      value="{{ request.GET.q }}"
-                  >
-                  <button class="" type="submit">
-                    Search
-                  </button>
-                </form>
-              </div>
+      <!-- actions -->
+      <div>
+      </div>
+    </div>
+    <hr>
+
+    <div class="row">
+      <div class="col-sm-12 col-12">
+        <div class="toolbar ml-auto px-3 py-2 mb-3 d-flex">
+          <form class="form-inline my-2 my-lg-0" method="get">
+            <!-- SEARCH BAR -->
+            <div class="search-bar mr-4 form-group">
+              <label for="" class="mr-2"><i class="fa fa-search"></i></label>
+              <input
+                  name="q"
+                  class="form-control form-control-sm mr-sm-2"
+                  type="search"
+                  value="{{ request.GET.q }}"
+              >
+              <button class="" type="submit">
+                Search
+              </button>
             </div>
-          </div>
-        </div>
+            <!-- FILTERS -->
+            <div class="filters form-group">
 
-        <div class="row">
-          <!-- BOP's table list -->
-          <div class="col-sm-12 col-12">
-            <div class="results">
-              <table class="table dnv-table m-0">
-                <thead class="bg-white-50">
-                <tr>
-                  <th scope="col">CODE</th>
-                  <th scope="col">name</th>
-                  <th scope="col">subsystem</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for c in components %}
-                  <tr>
-                    <td scope="row" width="4%">{{ c.pk }}</td>
-                    <td><a href="{% url 'index_component' bop.pk c.pk %}">{{ c.name }}</a></td>
-                    <td>{{ c.subsystem.name }}</td>
-                  </tr>
+              <label for="" class="mr-2">bop: </label>
+              <!-- filter by bop -->
+              <select name="bop" id="" class="form-control form-control-sm mr-2">
+                <option value="">--</option>
+                {% for bop in bops %}
+                {% if request.GET.bop == bop.id|stringformat:"i" %}
+                <option value="{{bop.id}}" selected>{{ bop.name }}</option>
+                {% else %}
+                <option value="{{bop.id}}">{{ bop.name }}</option>
+                {% endif %}
                 {% endfor %}
-                </tbody>
-              </table>
-              <div class="paginator p-3">
-                <div class="d-flex align-items-center">
-                  <nav class="mr-3">
-                    {% if components.has_other_pages %}
-                      <ul class="pagination m-0">
-                        {% if components.has_previous %}
-                          <li class="page-item">
-                            <a
-                                class="page-link"
-                                href="{% my_url components.previous_page_number 'page' request.GET.urlencode %}"
-                                aria-label="Previous">
-                              <span aria-hidden="true">&laquo;</span>
-                            </a>
-                          </li>
-                        {% else %}
-                          <li class="page-item disabled">
-                            <a class="page-link" aria-label="Previous">
-                              <span aria-hidden="true">&laquo;</span>
-                            </a>
-                          </li>
-                        {% endif %}
+              </select>
 
-                        {% for i in components.paginator.page_range %}
-                          {% if components.number == i %}
-                            <li class="page-item active">
-                              <a class="page-link">{{ i }}</a>
-                            </li>
-                          {% else %}
-                            <li class="page-item">
-                              <a class="page-link" href="{% my_url i 'page' request.GET.urlencode %}">{{ i }}</a>
-                            </li>
-                          {% endif %}
-                        {% endfor %}
 
-                        {% if components.has_next %}
-                          <li class="page-item">
-                            <a class="page-link"
-                               href="{% my_url components.next_page_number 'page' request.GET.urlencode %}"
-                               aria-label="Next">
-                              <span aria-hidden="true">&raquo;</span>
-                            </a>
-                          </li>
-                        {% else %}
-                          <li class="page-item disabled">
-                            <a class="page-link" aria-label="Next">
-                              <span aria-hidden="true">&raquo;</span>
-                            </a>
-                          </li>
-                        {% endif %}
-                      </ul>
-                    {% endif %}
-                  </nav>
-                  <small class="counter">
-                    {{ components.count }} Components
-                  </small>
-                </div>
-
-              </div>
+              <button class="btn-standard" type="submit">
+                select
+              </button>
             </div>
-          </div>
-          <!-- end cols -->
+          </form>
         </div>
       </div>
-      <!-- ./ container -->
     </div>
-    <!-- ./ section -->
+
+    <div class="row">
+      <!-- BOP's table list -->
+      <div class="col-sm-12 col-12">
+        <div class="results">
+          <small class="text-muted">Found {{ dataset.paginator.count }} Results</small>
+          <table class="table dnv-table m-0">
+            <thead class="bg-white-50">
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">code</th>
+              <th scope="col">name</th>
+              <th scope="col">Subsystem</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in dataset.object_list %}
+            <tr>
+              <td scope="row" width="4%">{{ object.id }}</td>
+              <td scope="row" width="4%">{{ object.code }}</td>
+              <td><a href="">{{ object.name }}</a></td>
+              <td><a href="">{{ object.subsystem }}</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+          {% include 'snippets/paginator.html' with dataset=dataset %}
+        </div>
+      </div>
+      <!-- end cols -->
+    </div>
   </div>
+  <!-- ./ container -->
+</div>
+<!-- ./ section -->
 {% endblock %}
