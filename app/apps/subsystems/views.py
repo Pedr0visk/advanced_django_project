@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from apps.bops.models import Bop
@@ -17,15 +17,44 @@ def subsystem_list(request):
 
 
 def subsystem_create(request):
-    form = SubsystemForm(request.POST or None, query_params=request.GET)
+    bop = request.GET.get('bop', '')
+    form = SubsystemForm(request.POST or None, bop=bop)
 
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            return '%s?bop%s' % (reverse('subsystems:list'), bop.id)
+            messages.success(request, 'Subsystem successfully added!')
+
+            return redirect('%s?bop=%s' % (reverse('subsystems:list'), bop))
 
     context = {'form': form}
     return render(request, 'subsystems/subsystem_form.html', context)
+
+
+def subsystem_update(request, subsystem_pk):
+    bop = request.GET.get('bop', '')
+    subsystem = Subsystem.objects.get(pk=subsystem_pk)
+    form = SubsystemForm(request.POST or None, instance=subsystem, bop=bop)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Subsystem successfully updated!')
+
+            return redirect('%s?bop=%s' % (reverse('subsystems:list'), bop))
+
+    context = {'form': form}
+    return render(request, 'subsystems/subsystem_form.html', context)
+
+
+def subsystem_delete(request, subsystem_pk):
+    bop = request.GET.get('bop', '')
+    subsystem = Subsystem.objects.get(pk=subsystem_pk)
+
+    if request.method == 'POST':
+        subsystem.delete()
+        messages.success(request, 'Subsystem successfully deleted!')
+        return redirect('%s?bop=%s' % (reverse('subsystems:list'), bop))
 
 
 def index(request, bop_pk, s_pk):

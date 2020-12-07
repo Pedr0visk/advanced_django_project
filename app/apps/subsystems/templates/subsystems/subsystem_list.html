@@ -2,19 +2,17 @@
 {% load manager_extras %}
 
 {% block main %}
-{% for message in messages %}
-<ul class="messagelist">
-  <li class="success">{{ message }}</li>
-</ul>
-{% endfor %}
+
+{% include 'snippets/messages.html' with messages=messages %}
+
 <!-- section bop list -->
 <div class="section" id="home">
   <div class="container-fluid px-5">
     <!-- section title -->
     <div class="section-title mb-3">
       <div class="d-flex flex-column">
-        <a href="" class="mb-3">
-          <i class="fa fa-arrow-left"></i> back to bop
+        <a href="{% url 'bops:hierarchy' request.GET.bop %}" class="mb-3">
+          <i class="fa fa-arrow-left"></i> back to bop hierarchy
         </a>
         <h2>Subsystems</h2>
         <p></p>
@@ -22,6 +20,7 @@
 
       <!-- actions -->
       <div>
+        <a href="{% url 'subsystems:create' %}" class="btn btn-primary"><i class="fa fa-plus"></i> add subsystem</a>
       </div>
     </div>
     <hr>
@@ -81,15 +80,23 @@
               <th scope="col">code</th>
               <th scope="col">name</th>
               <th scope="col">bop</th>
+              <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
-            {% for s in dataset.object_list %}
+            {% for object in dataset.object_list %}
             <tr>
-              <td scope="row" width="4%">{{ s.pk }}</td>
-              <td scope="row" width="4%">{{ s.code }}</td>
-              <td><a href="">{{ s.name }}</a></td>
-              <td><a href="">{{ s.bop }}</a></td>
+              <td scope="row" width="4%">{{ object.pk }}</td>
+              <td scope="row" width="4%">{{ object.code }}</td>
+              <td><a href="{% url 'subsystems:update' object.id %}">{{ object.name }}</a></td>
+              <td><a href="">{{ object.bop }}</a></td>
+              <td width="7%">
+                <form method="POST" action="{% url 'subsystems:delete' object.pk %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-standard text-danger">
+                    <i class="fa fa-times"></i> delete</button>
+                </form>
+              </td>
             </tr>
             {% endfor %}
             </tbody>

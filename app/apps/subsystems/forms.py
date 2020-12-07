@@ -5,9 +5,9 @@ from apps.subsystems.models import Subsystem
 
 class SubsystemForm(ModelForm):
     def __init__(self, *args, **kwargs):
-        query_params = kwargs.pop('query_params')
+        bop = kwargs.pop('bop')
         super(SubsystemForm, self).__init__(*args, **kwargs)
-        self.fields['bop'].initial = query_params['bop']
+        self.fields['bop'].initial = bop
 
     class Meta:
         model = Subsystem
