@@ -1,6 +1,10 @@
+from django.contrib import messages
 from django.shortcuts import render
+from django.urls import reverse
 
 from apps.bops.models import Bop
+
+from .forms import SubsystemForm
 from .models import Subsystem
 from .filters import subsystem_filter
 
@@ -10,6 +14,18 @@ def subsystem_list(request):
     bops = Bop.objects.order_by('name')
     context = {'dataset': dataset, 'bops': bops}
     return render(request, 'subsystems/subsystem_list.html', context)
+
+
+def subsystem_create(request):
+    form = SubsystemForm(request.POST or None, query_params=request.GET)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return '%s?bop%s' % (reverse('subsystems:list'), bop.id)
+
+    context = {'form': form}
+    return render(request, 'subsystems/subsystem_form.html', context)
 
 
 def index(request, bop_pk, s_pk):

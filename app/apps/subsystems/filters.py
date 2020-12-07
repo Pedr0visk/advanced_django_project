@@ -13,7 +13,8 @@ def subsystem_filter(query_params={}):
 
     if 'bop' in query_params:
         query = query_params['bop']
-        queryset = queryset.filter(bop_id=query)
+        if len(query) > 0:
+            queryset = queryset.filter(bop_id=query)
 
     paginator = Paginator(queryset, 15)
     page = query_params.get('page')

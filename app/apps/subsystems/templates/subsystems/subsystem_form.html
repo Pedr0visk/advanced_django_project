@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block main %}
+{% include 'snippets/messages.html' with form=form messages=messages %}
+
+<div class="section bg-white">
+  <div class="container-fluid px-5">
+    <div class="d-flex flex-column">
+      <a href="" class="mb-3">
+        <i class="fa fa-arrow-left"></i> back
+      </a>
+      <h4 class="title-1 mb-4">Add Subsystem</h4>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <form method="POST">
+          {% csrf_token %}
+
+          <!-- bop field -->
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label col-form-label-sm">Bop *:</label>
+            <div class="col-sm-3">
+              {{ form.bop }}
+            </div>
+          </div>
+          <hr/>
+
+          <!-- Code field -->
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label col-form-label-sm">Code *:</label>
+            <div class="col-sm-3">
+              {{ form.code }}
+            </div>
+          </div>
+          <hr/>
+
+          <!-- name field -->
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label col-form-label-sm">Name *:</label>
+            <div class="col-sm-3">
+              {{ form.name }}
+            </div>
+          </div>
+          <hr/>
+
+
+          <div class="card">
+            <div class="bg-light text-right p-2">
+              {% if object %}
+              <a href="" class=" btn btn-default">
+                Cancel
+              </a>
+              {% else %}
+              <a href="" class=" btn btn-default">
+                Cancel
+              </a>
+              {% endif %}
+
+              <button type="submit" class="px-4 btn btn-secondary">
+                Save
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Query all input fields
+    var form_fields = document.getElementsByTagName('input')
+    // customization of form fields
+    for (var field in form_fields) {
+        if (form_fields[field].type == 'file') continue
+        form_fields[field].className += 'form-control form-control-sm'
+    }
+
+    // Query all selects fields
+    var form_fields = document.getElementsByTagName('select')
+    // customization of form fields
+    for (var field in form_fields) {
+        form_fields[field].className += 'form-control form-control-sm'
+    }
+</script>
+{% endblock %}
+

@@ -57,11 +57,14 @@
             <tbody>
             <tr>
               <td><a href="">Subsystems</a></td>
-              <td width="25%"
-                  align="center"><a href="{% url 'subsystems:list' %}?bop={{bop.id}}"><i
-                  class="fa fa-clipboard-list text-warning"></i> view
-                list</a></td>
-              <td width="25%" align="center"><a href=""><i class="fa fa-plus"></i> add new one</a></td>
+              <td width="25%" align="center">
+                <a href="{% url 'subsystems:list' %}?bop={{bop.id}}"><i
+                    class="fa fa-clipboard-list text-warning"></i> view list</a>
+              </td>
+              <td width="25%" align="center">
+                <a href="{% url 'subsystems:create' %}?bop={{bop.id}}"><i
+                    class="fa fa-plus"></i> add new one</a>
+              </td>
             </tr>
             <tr>
               <td><a href="">Components</a></td>

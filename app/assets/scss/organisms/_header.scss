@@ -30,6 +30,7 @@
 .main-header {
   font-size: 12px;
   text-transform: capitalize;
+  margin-bottom: 0.5rem;
 
   @include media-breakpoint-up(lg) {
     .navbar-expand-lg {
