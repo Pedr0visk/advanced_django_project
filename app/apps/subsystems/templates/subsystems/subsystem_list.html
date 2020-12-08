@@ -11,9 +11,15 @@
     <!-- section title -->
     <div class="section-title mb-3">
       <div class="d-flex flex-column">
+        {% if request.GET.bop %}
         <a href="{% url 'bops:hierarchy' request.GET.bop %}" class="mb-3">
           <i class="fa fa-arrow-left"></i> back to bop hierarchy
         </a>
+        {% else %}
+        <a href="{% url 'dashboard' %}" class="mb-3">
+          <i class="fa fa-arrow-left"></i> back to main page
+        </a>
+        {% endif %}
         <h2>Subsystems</h2>
         <p></p>
       </div>

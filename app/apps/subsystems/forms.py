@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from apps.subsystems.models import Subsystem
+from .models import Subsystem
 
 
 class SubsystemForm(ModelForm):

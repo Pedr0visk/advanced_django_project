@@ -2,26 +2,34 @@
 {% load manager_extras %}
 
 {% block main %}
-{% for message in messages %}
-<ul class="messagelist">
-  <li class="success">{{ message }}</li>
-</ul>
-{% endfor %}
+
+{% include 'snippets/messages.html' with form=form messages=messages %}
+
 <!-- section bop list -->
 <div class="section" id="home">
   <div class="container-fluid px-5">
     <!-- section title -->
     <div class="section-title mb-3">
       <div class="d-flex flex-column">
-        <a href="" class="mb-3">
-          <i class="fa fa-arrow-left"></i> back to bop
+        {% if request.GET.bop %}
+        <a href="{% url 'bops:hierarchy' request.GET.bop %}" class="mb-3">
+          <i class="fa fa-arrow-left"></i> back to bop hierarchy
         </a>
+        {% else %}
+        <a href="{% url 'dashboard' %}" class="mb-3">
+          <i class="fa fa-arrow-left"></i> back to main page
+        </a>
+        {% endif %}
+
         <h2>Components</h2>
         <p></p>
       </div>
 
       <!-- actions -->
       <div>
+        <a href="{% url 'components:create' %}?bop={{request.GET.bop}}" class="btn btn-primary"><i
+            class="fa fa-plus"></i> add
+          component</a>
       </div>
     </div>
     <hr>
@@ -77,19 +85,25 @@
           <table class="table dnv-table m-0">
             <thead class="bg-white-50">
             <tr>
-              <th scope="col">ID</th>
               <th scope="col">code</th>
               <th scope="col">name</th>
               <th scope="col">Subsystem</th>
+              <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
             {% for object in dataset.object_list %}
             <tr>
-              <td scope="row" width="4%">{{ object.id }}</td>
               <td scope="row" width="4%">{{ object.code }}</td>
-              <td><a href="">{{ object.name }}</a></td>
+              <td><a href="{% url 'components:update' object.id %}">{{ object.name }}</a></td>
               <td><a href="">{{ object.subsystem }}</a></td>
+              <td width="7%">
+                <form method="POST" action="{% url 'components:delete' object.pk %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-standard text-danger">
+                    <i class="fa fa-times"></i> delete</button>
+                </form>
+              </td>
             </tr>
             {% endfor %}
             </tbody>
