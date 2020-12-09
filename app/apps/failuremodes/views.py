@@ -27,8 +27,14 @@ def failuremode_list(request):
     return render(request, 'failuremodes/failuremode_list.html', context)
 
 
-def failuremode_update(request, bop_pk, fm_pk):
-    bop = Bop.objects.get(pk=bop_pk)
+def failuremode_create(request):
+    form = FailureModeForm(request.POST or None)
+
+    context = {'form': form}
+    return render(request, 'failuremodes/failuremode_form.html', context)
+
+
+def failuremode_update(request, fm_pk):
     failuremode = get_object_or_404(FailureMode, pk=fm_pk)
     form = FailureModeForm(request.POST or None, instance=failuremode)
 
@@ -37,5 +43,5 @@ def failuremode_update(request, bop_pk, fm_pk):
             fm = form.save()
             return JsonResponse({'failuremode': model_to_dict(fm), 'message': 'successfully updated!'})
 
-    context = {'bop': bop, 'failuremode': failuremode, 'form': form}
+    context = {'failuremode': failuremode, 'form': form}
     return render(request, 'failuremodes/failuremode_form.html', context)

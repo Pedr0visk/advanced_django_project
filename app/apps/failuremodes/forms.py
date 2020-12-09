@@ -5,4 +5,4 @@ from .models import FailureMode
 class FailureModeForm(ModelForm):
     class Meta:
         model = FailureMode
-        fields = ['name', 'distribution', 'diagnostic_coverage', 'component']
+        fields = ['code', 'name', 'distribution', 'diagnostic_coverage', 'component']

@@ -43,6 +43,10 @@ class FailureMode(models.Model):
             rate = d['exponential_failure_rate']
             self.exponential(rate, coverage, dt)
 
+    @property
+    def distribution_type(self):
+        return self.distribution['type']
+
     @staticmethod
     def exponential(rate, coverage, time):
         return rate * coverage * time
