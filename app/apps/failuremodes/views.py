@@ -28,6 +28,10 @@ def failuremode_list(request):
 
 
 def failuremode_create(request):
+    bop = request.GET.get('bop', None)
+    if bop is None:
+        return redirect('failuremodes:list')
+
     form = FailureModeForm(request.POST or None)
 
     context = {'form': form}
@@ -37,7 +41,9 @@ def failuremode_create(request):
 def failuremode_update(request, fm_pk):
     failuremode = get_object_or_404(FailureMode, pk=fm_pk)
     form = FailureModeForm(request.POST or None, instance=failuremode)
-
+    print('printado', request.POST)
+    context = {'failuremode': failuremode, 'form': form}
+    return render(request, 'failuremodes/failuremode_form.html', context)
     if request.method == 'POST':
         if form.is_valid():
             fm = form.save()

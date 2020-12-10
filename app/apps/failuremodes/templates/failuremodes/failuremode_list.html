@@ -98,16 +98,19 @@
               <td width="18%"><a href="{% url 'failuremodes:update' object.id %}">{{ object.name }}</a></td>
               <td width="15%"><a href="">{{ object.component }}</a></td>
               <td align="center"><a href="">{{ object.diagnostic_coverage }}</a></td>
-              <td align="center">{{object.distribution_type}}</td>
-              <td align="center">{{object.distribution.exponential_failure_rate|default:"--"}}</td>
-              <td align="center">{{object.distribution.probability|default:"--"}}</td>
-              <td align="center">{{object.distribution.scale|default:"--"}}</td>
-              <td align="center">{{object.distribution.form|default:"--"}}</td>
-              <td align="center">{{object.distribution.cycle|default:"--"}}</td>
-              <td align="center">
-                <a href="" class="text-warning p-2"><i
-              class="fa fa-pencil-alt"></i></a>
-                <a href="" class="text-danger p-2"><i class="fa fa-times"></i></a>
+              <td align="center">{{ object.distribution_type }}</td>
+              <td align="center">{{ object.distribution.exponential_failure_rate|default:"--" }}</td>
+              <td align="center">{{ object.distribution.probability|default:"--" }}</td>
+              <td align="center">{{ object.distribution.scale|default:"--" }}</td>
+              <td align="center">{{ object.distribution.form|default:"--" }}</td>
+              <td align="center">{{ object.distribution.cycle|default:"--" }}</td>
+              <td width="7%" align="center">
+                <a
+                    href="{% url 'failuremodes:update' object.id %}?bop={{request.GET.bop}}" class="btn-standard"
+                    data-toggle="tooltip"
+                    data-placement="left"
+                    title="click to edit">
+                  <i class="fa fa-pencil-alt text-warning "></i> edit</a>
               </td>
             </tr>
             {% endfor %}
@@ -122,4 +125,12 @@
   <!-- ./ container -->
 </div>
 <!-- ./ section -->
+{% endblock %}
+{% block scripts %}
+<script>
+    $(function () {
+        console.log('here')
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
 {% endblock %}

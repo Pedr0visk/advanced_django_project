@@ -6,83 +6,95 @@
 <div class="section bg-white">
   <div class="container-fluid px-5">
     <div class="section-title mb-4 d-flex">
-      <p clas>Change Failure Mode</p>
+      <div class="d-flex flex-column">
+        <a href="{% url 'failuremodes:list' %}?bop={{request.GET.bop}}" class="mb-3"><i
+            class="fa fa-arrow-left"></i> back</a>
+        <p clas>Change Failure Mode</p>
+      </div>
     </div>
     <div class="row">
       <div class="col-sm-12">
-       <form method="post">
+        <form method="post">
           {% csrf_token %}
-          <table class="table-form">
-            {{ form.as_table }}
-            <tr>
-              <td></td>
-              <td><button type="submit" class="btn-standard">Save</button></td>
-            </tr>
-          </table>
+          <!-- code field -->
+          <div class="form-group row">
+            <label class="col-1 col-form-label col-form-label-sm">Bop:</label>
+            <div class="col-sm-3">
+              <input type="text" disabled value="{{failuremode.component.subsystem.bop}}">
+            </div>
+          </div>
+          <hr/>
+
+          <!-- code field -->
+          <div class="form-group row">
+            <label class="col-1 col-form-label col-form-label-sm">Component:</label>
+            <div class="col-sm-3">
+              {{ form.component }}
+            </div>
+          </div>
+          <hr/>
+
+          <!-- code field -->
+          <div class="form-group row">
+            <label class="col-1 col-form-label col-form-label-sm">Code:</label>
+            <div class="col-sm-3">
+              {{ form.code }}
+            </div>
+          </div>
+          <hr/>
+
+          <!-- name field -->
+          <div class="form-group row">
+            <label class="col-1 col-form-label col-form-label-sm">Name:</label>
+            <div class="col-sm-3">
+              {{ form.name }}
+            </div>
+          </div>
+          <hr/>
+
+          <!-- diagnostic coverage field -->
+          <div class="form-group row">
+            <label class="col-1 col-form-label col-form-label-sm">Diagnostic Coverage:</label>
+            <div class="col-sm-1">
+              {{ form.diagnostic_coverage }}
+            </div>
+          </div>
+          <hr/>
+
+          <!-- distribution type field -->
+          <div class="form-group row">
+            <label class="col-1 col-form-label col-form-label-sm">Distribution Type:</label>
+            <div class="col-auto">
+              <select name="" id="distribution_type" class="selectchooser form-control-sm">
+              </select>
+            </div>
+            <div class="col-sm-9">
+              <div id="distribution_fields" class="d-flex"></div>
+            </div>
+          </div>
+          <hr/>
+
+          <!-- actions -->
+          <div class="card">
+            <div class="bg-light text-right p-2">
+              <button type="submit" class="px-4 btn btn-primary">
+                Save
+              </button>
+            </div>
+          </div>
+
         </form>
       </div>
     </div>
   </div>
 </div>
+{{failuremode.distribution|json_script:"distribution"}}
 {% endblock %}
 
 {% block scripts %}
+<script src="{% static 'js/SelectDistribution.js' %}"></script>
+
 <script>
-    document.getElementById("fmForm").onsubmit = function (e) {
-        e.preventDefault();
-
-        const request = new XMLHttpRequest();
-        let formData = new FormData();
-        let distribution = {};
-
-        formData.append('csrfmiddlewaretoken', this.csrfmiddlewaretoken.value)
-        formData.append('name', this.name.value)
-        formData.append('component', this.component.value)
-        formData.append('diagnostic_coverage', this.diagnostic_coverage.value)
-
-        let type = this.type.value
-        distribution.type = type
-
-        switch (type) {
-            case 'Probability':
-                distribution.probability = this.probability.value
-                break;
-            case 'Exponential':
-                distribution.exponential_failure_rate = this.exponential_failure_rate.value
-                break;
-            case 'Step':
-                distribution.cycle = {}
-                distribution.cycle.limit = this.cycle_limit.value
-                distribution.cycle.size = this.cycle_size.value
-                distribution.cycle.value = this.cycle_value.value
-                distribution.initial_failure_rate = this.initial_failure_rate.value
-                break;
-            case 'Weibull':
-                distribution.form = this.form.value;
-                distribution.scale = this.scale.value;
-                break;
-            default:
-                break;
-        }
-
-        formData.append('distribution', JSON.stringify(distribution))
-
-        request.open("post", "{{ request.path }}")
-        request.send(formData)
-
-        request.onreadystatechange = function () {
-            console.log(this.response)
-            let res = JSON.parse(this.response)
-            if (this.readyState == 4 && this.status == 200) {
-                let messageList = document.getElementById("messageList")
-                messageList.innerHTML = `<li class='success'>${res.message}</li>`
-                window.scrollTo(0, 0);
-            }
-        };
-
-    }
-
-
     // Query all input fields
     var form_fields = document.getElementsByTagName('input')
     // customization of form fields
@@ -91,11 +103,5 @@
         form_fields[field].className += 'form-control form-control-sm'
     }
 
-    // Query all selects fields
-    var form_fields = document.getElementsByTagName('select')
-    // customization of form fields
-    for (var field in form_fields) {
-        form_fields[field].className += 'form-control form-control-sm'
-    }
 </script>
 {% endblock %}

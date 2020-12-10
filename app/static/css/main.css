@@ -11172,4 +11172,19 @@ table.table-results tbody tr td {
   font-size: 20px;
 }
 
+/*
+|--------------------|
+|      ACCORDION     |
+|--------------------|
+*/
+.dnv-accordion .card-header {
+  padding: 0;
+  background-color: #79aec8;
+  border-radius: 0;
+}
+.dnv-accordion .card-header button.btn-link {
+  color: white;
+  font-size: 14px;
+}
+
 /*# sourceMappingURL=main.css.map */

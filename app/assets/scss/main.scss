@@ -302,3 +302,21 @@ table.table-results {
     font-size: 20px;
   }
 }
+
+/*
+|--------------------|
+|      ACCORDION     |
+|--------------------|
+*/
+.dnv-accordion {
+  .card-header {
+    padding: 0;
+    background-color: $secondary;
+    border-radius: 0;
+    button.btn-link {
+      color: white;
+      font-size: 14px;
+
+    }
+  }
+}

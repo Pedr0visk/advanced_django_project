@@ -99,17 +99,7 @@ def index(request, pk):
 def bop_hierarchy(request, pk):
     bop = Bop.objects.get(pk=pk)
 
-    def serializer(failuremode):
-        return {
-            'id': failuremode.pk,
-            'code': failuremode.code,
-            'name': failuremode.name,
-            'distribution': failuremode.distribution,
-            'component': failuremode.component.name
-        }
-
-    failuremodes = [serializer(fm) for fm in bop.failure_modes]
-    context = {'bop': bop, 'json_data': failuremodes}
+    context = {'bop': bop}
     return render(request, 'bops/bop_hierarchy.html', context)
 
 

@@ -84,6 +84,110 @@
           </table>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col-12">
+          <!-- SUBSYSTEMS ACCORDION -->
+          <p class="title-1"><i class="fa fa-list"></i> Subsystem List </p>
+          <div id="subsystem_accordion" class="dnv-accordion">
+            {% for subsystem in bop.subsystems.all %}
+            <div class="card">
+              <!-- card header -->
+              <div class="card-header d-flex align-items-center justify-content-between" id="headingOne">
+                <h5 class="mb-0">
+                  <button class="btn btn-link" data-toggle="collapse" data-target="#{{subsystem.code}}"
+                          aria-expanded="false"
+                          aria-controls="{{subsystem.code}}">
+                    Subsystem code: <span class="text-monospace"><b>{{ subsystem.code }}</b></span> |
+                    Subsystem name: <span class="text-monospace"><b>{{ subsystem.name }}</b></span>
+                  </button>
+                </h5>
+                <span class="px-3">
+                  <i class="fa fa-chevron-down text-white"></i>
+                </span>
+              </div>
+              <!-- card body -->
+              <div id="{{subsystem.code}}" class="collapse" aria-labelledby="headingOne"
+                   data-parent="#subsystem_accordion">
+                <div class="card-body">
+                  <!-- COMOPONENTS ACCORDION -->
+                  <p class="title-1">Component List</p>
+                  <div id="component_accordion">
+                    {% for component in subsystem.components.all %}
+                    <div class="card">
+                      <div class="card-header" id="">
+                        <h5 class="mb-0">
+                          <button class="btn btn-link" data-toggle="collapse" data-target="#{{component.name}}"
+                                  aria-expanded="false"
+                                  aria-controls="{{component.name}}">
+                            Component code: <span class="text-monospace"><b>{{ component.code }}</b></span> |
+                            Component name: <span class="text-monospace"><b>{{ component.name }}</b></span>
+                          </button>
+                        </h5>
+                      </div>
+
+                      <div id="{{component.name}}" class="collapse" aria-labelledby=""
+                           data-parent="#component_accordion">
+                        <div class="card-body">
+                          <!-- FAILURE MODES ACCORDION -->
+                          <p class="title-1">Failure Mode List</p>
+                          <table class="table dnv-table m-0">
+                            <thead class="bg-white-50">
+                            <tr>
+                              <th scope="col">code</th>
+                              <th scope="col">name</th>
+                              <th scope="col">component</th>
+                              <th scope="col" class="text-center">coverage</th>
+                              <th scope="col" class="text-center">type</th>
+                              <th scope="col" class="text-center">failure rate</th>
+                              <th scope="col" class="text-center">probability</th>
+                              <th scope="col" class="text-center">scale</th>
+                              <th scope="col" class="text-center">form</th>
+                              <th scope="col" class="text-center">cycle</th>
+                              <th scope="col" class="text-center">actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for object in component.failure_modes.all %}
+                            <tr>
+                              <td width="7%" scope="row"><small>{{ object.code }}</small></td>
+                              <td width="18%"><a href="{% url 'failuremodes:update' object.id %}">{{ object.name }}</a>
+                              </td>
+                              <td width="15%"><a href="">{{ object.component }}</a></td>
+                              <td align="center"><a href="">{{ object.diagnostic_coverage }}</a></td>
+                              <td align="center">{{ object.distribution.type }}</td>
+                              <td align="center">{{ object.distribution.exponential_failure_rate|default:"--" }}</td>
+                              <td align="center">{{ object.distribution.probability|default:"--" }}</td>
+                              <td align="center">{{ object.distribution.scale|default:"--" }}</td>
+                              <td align="center">{{ object.distribution.form|default:"--" }}</td>
+                              <td align="center">{{ object.distribution.cycle|default:"--" }}</td>
+                              <td width="7%" align="center">
+                                <a
+                                    href="{% url 'failuremodes:update' object.id %}"
+                                    class="btn-standard"
+                                    data-toggle="tooltip"
+                                    data-placement="left"
+                                    title="click to edit">
+                                  <i class="fa fa-pencil-alt text-warning "></i> edit</a>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                          </table>
+
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
