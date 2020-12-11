@@ -1,6 +1,8 @@
+import json
+
 from django.forms.models import model_to_dict
 from django.http.response import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from .models import FailureMode
 from .filters import failure_mode_filter
 from .forms import FailureModeForm
@@ -40,13 +42,18 @@ def failuremode_create(request):
 
 def failuremode_update(request, fm_pk):
     bop = request.GET.get('bop', None)
+    if bop is None:
+        return redirect('failuremodes:list')
+
     failuremode = get_object_or_404(FailureMode, pk=fm_pk)
     form = FailureModeForm(request.POST or None, instance=failuremode)
 
     if request.method == 'POST':
         if form.is_valid():
             fm = form.save(commit=False)
-            return render(request, 'failuremodes/failuremode_form.html', context)
+            fm.distribution = FailureMode.format_distribution(fm.distribution)
+            fm.save()
+            return redirect('failuremodes:list')
 
     context = {'failuremode': failuremode, 'form': form}
     return render(request, 'failuremodes/failuremode_form.html', context)

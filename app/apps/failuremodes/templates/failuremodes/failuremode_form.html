@@ -7,8 +7,7 @@
   <div class="container-fluid px-5">
     <div class="section-title mb-4 d-flex">
       <div class="d-flex flex-column">
-        <a href="{% url 'bops:hierarchy' request.GET.bop %}" class="mb-3"><i
-            class="fa fa-arrow-left"></i> back</a>
+        <a href="{% url 'bops:hierarchy' request.GET.bop %}" class="mb-3"><i class="fa fa-arrow-left"></i> back</a>
         <p clas>Change Failure Mode</p>
       </div>
     </div>
@@ -23,7 +22,7 @@
               <input type="text" disabled value="{{failuremode.component.subsystem.bop}}">
             </div>
           </div>
-          <hr/>
+          <hr />
 
           <!-- code field -->
           <div class="form-group row">
@@ -32,7 +31,7 @@
               {{ form.component }}
             </div>
           </div>
-          <hr/>
+          <hr />
 
           <!-- code field -->
           <div class="form-group row">
@@ -41,7 +40,7 @@
               {{ form.code }}
             </div>
           </div>
-          <hr/>
+          <hr />
 
           <!-- name field -->
           <div class="form-group row">
@@ -50,7 +49,7 @@
               {{ form.name }}
             </div>
           </div>
-          <hr/>
+          <hr />
 
           <!-- diagnostic coverage field -->
           <div class="form-group row">
@@ -59,7 +58,7 @@
               {{ form.diagnostic_coverage }}
             </div>
           </div>
-          <hr/>
+          <hr />
 
           <!-- distribution type field -->
           <div class="form-group row">
@@ -73,7 +72,7 @@
               <div id="distribution_fields" class="d-flex"></div>
             </div>
           </div>
-          <hr/>
+          <hr />
 
           <!-- actions -->
           <div class="card">
@@ -96,14 +95,14 @@
 <script src="{% static 'js/SelectDistribution.js' %}"></script>
 
 <script>
-    // Query all input fields
-    var form_fields = document.getElementsByTagName('input')
-    // customization of form fields
-    for (var field in form_fields) {
-        if (form_fields[field].type == 'file') continue
-        form_fields[field].className += 'form-control form-control-sm'
-    }
+  // Query all input fields
+  var form_fields = document.getElementsByTagName('input')
+  // customization of form fields
+  for (var field in form_fields) {
+    if (form_fields[field].type == 'file') continue
+    form_fields[field].className += 'form-control form-control-sm'
+  }
 
-    $("#id_distribution").addClass('d-none')
+  $("#id_distribution").addClass('d-none')
 </script>
 {% endblock %}

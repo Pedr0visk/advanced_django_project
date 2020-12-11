@@ -5,6 +5,7 @@
         let distribution_field = document.getElementById('id_distribution')
         distribution_field.textContent = JSON.stringify(SelectDistribution.distribution)
     }
+    
     function getDistribution() {
         return {
             type: '',
