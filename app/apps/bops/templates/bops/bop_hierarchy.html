@@ -111,7 +111,9 @@
                    data-parent="#subsystem_accordion">
                 <div class="card-body">
                   <!-- COMOPONENTS ACCORDION -->
-                  <p class="title-1">Component List</p>
+                  <p class="title-1 mb-2">Subsystem name:
+                    <span class="text-monospace"><b>{{ subsystem.name }}</b></span></p>
+                  <p class="text-muted"><i class="fa fa-list"></i> Component List</p>
                   <div id="component_accordion">
                     {% for component in subsystem.components.all %}
                     <div class="card">
@@ -121,7 +123,8 @@
                                   aria-expanded="false"
                                   aria-controls="{{component.name}}">
                             Component code: <span class="text-monospace"><b>{{ component.code }}</b></span> |
-                            Component name: <span class="text-monospace"><b>{{ component.name }}</b></span>
+                            Component name: <span class="text-monospace"><b>{{ component.name }}</b></span> |
+
                           </button>
                         </h5>
                       </div>
@@ -130,7 +133,11 @@
                            data-parent="#component_accordion">
                         <div class="card-body">
                           <!-- FAILURE MODES ACCORDION -->
-                          <p class="title-1">Failure Mode List</p>
+                          <p class="title-1">Subsystem name:
+                            <span class="text-monospace"><b>{{ component.subsystem }}</b></span></p>
+                          <p class="title-1 mb-2">Component name:
+                            <span class="text-monospace"><b>{{ component }}</b></span></p>
+                          <p class="text-muted"><i class="fa fa-list"></i> Failure Mode List</p>
                           <table class="table dnv-table m-0">
                             <thead class="bg-white-50">
                             <tr>
@@ -151,7 +158,8 @@
                             {% for object in component.failure_modes.all %}
                             <tr>
                               <td width="7%" scope="row"><small>{{ object.code }}</small></td>
-                              <td width="18%"><a href="{% url 'failuremodes:update' object.id %}">{{ object.name }}</a>
+                              <td width="18%">
+                                <a href="{% url 'failuremodes:update' object.id %}?bop={{bop.id}}">{{object.name}}</a>
                               </td>
                               <td width="15%"><a href="">{{ object.component }}</a></td>
                               <td align="center"><a href="">{{ object.diagnostic_coverage }}</a></td>
@@ -163,7 +171,7 @@
                               <td align="center">{{ object.distribution.cycle|default:"--" }}</td>
                               <td width="7%" align="center">
                                 <a
-                                    href="{% url 'failuremodes:update' object.id %}"
+                                    href="{% url 'failuremodes:update' object.id %}?bop={{bop.id}}"
                                     class="btn-standard"
                                     data-toggle="tooltip"
                                     data-placement="left"
@@ -195,6 +203,3 @@
 <!-- main -->
 {% endblock %}
 
-{% block scripts %}
-<script src="{% static 'build/app.js' %}"></script>
-{% endblock %}

@@ -95,7 +95,7 @@
             {% for object in dataset.object_list %}
             <tr>
               <td width="7%" scope="row"><small>{{ object.code }}</small></td>
-              <td width="18%"><a href="{% url 'failuremodes:update' object.id %}">{{ object.name }}</a></td>
+              <td width="18%"><a href="{% url 'failuremodes:update' object.id %}?bop={{request.GET.bop}}">{{ object.name }}</a></td>
               <td width="15%"><a href="">{{ object.component }}</a></td>
               <td align="center"><a href="">{{ object.diagnostic_coverage }}</a></td>
               <td align="center">{{ object.distribution_type }}</td>

@@ -1,6 +1,10 @@
 (function ($) {
     'use strict';
-
+    function changeState(event) {
+        SelectDistribution.distribution[event.target.name] = event.target.value
+        let distribution_field = document.getElementById('id_distribution')
+        distribution_field.textContent = JSON.stringify(SelectDistribution.distribution)
+    }
     function getDistribution() {
         return {
             type: '',
@@ -8,6 +12,12 @@
             form: '',
             scale: '',
             exponential_failure_rate: '',
+            initial_failure_rate: '',
+            cycle: {
+                size: '',
+                limit: '',
+                value: ''
+            }
         }
     }
 
@@ -26,18 +36,19 @@
     }
 
     function inputField(name, type, parent, value) {
-        let wrapper = quickElement('div', parent, null, 'class', 'd-flex flex-column')
+        let wrapper = quickElement('div', parent, null, 'class', 'd-flex flex-column');
 
-        quickElement(
+        let input = quickElement(
             'input', wrapper, null, 'name', name,
             'placeholder', name, 'value', value,
             'style', 'width: 100px;margin-right: 0.5rem', 'type', type
-        )
+        );
+        input.addEventListener('change', function(e) {changeState(e)});
 
         let helper = quickElement('small', wrapper, null);
-        helper.textContent = name.replace('_', ' ')
+        helper.textContent = name.replace('_', ' ');
 
-        return wrapper
+        return wrapper;
     }
 
     window.SelectDistribution = {
@@ -67,7 +78,6 @@
 
         redisplay_distribution_fields: function () {
             let {distribution} = SelectDistribution;
-            console.log(distribution)
             let wrapper = document.getElementById('distribution_fields')
             wrapper.innerHTML = '';
 

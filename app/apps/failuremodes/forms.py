@@ -1,4 +1,5 @@
 from django.forms import ModelForm
+from django.contrib.postgres.fields import JSONField
 from .models import FailureMode
 
 

@@ -39,15 +39,14 @@ def failuremode_create(request):
 
 
 def failuremode_update(request, fm_pk):
+    bop = request.GET.get('bop', None)
     failuremode = get_object_or_404(FailureMode, pk=fm_pk)
     form = FailureModeForm(request.POST or None, instance=failuremode)
-    print('printado', request.POST)
-    context = {'failuremode': failuremode, 'form': form}
-    return render(request, 'failuremodes/failuremode_form.html', context)
+
     if request.method == 'POST':
         if form.is_valid():
-            fm = form.save()
-            return JsonResponse({'failuremode': model_to_dict(fm), 'message': 'successfully updated!'})
+            fm = form.save(commit=False)
+            return render(request, 'failuremodes/failuremode_form.html', context)
 
     context = {'failuremode': failuremode, 'form': form}
     return render(request, 'failuremodes/failuremode_form.html', context)
