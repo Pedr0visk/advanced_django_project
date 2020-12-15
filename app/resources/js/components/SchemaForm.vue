@@ -330,6 +330,7 @@ export default {
       this.clear()
     },
     update(id) {
+      if (!this.checkForm()) return
       let index = this.phases.findIndex(phase => phase._id == id)
       this.phases[index] = this.phase
 
@@ -403,6 +404,9 @@ export default {
         this.errors.push('the field duration is required')
       if (!date)
         this.errors.push('the field start date is required')
+      if (is_drilling && has_test)
+        this.errors.push('The phase cannot be set as both drilling and test, you \
+        can choose just one.')
 
       if (this.errors.length > 0)
         return false;

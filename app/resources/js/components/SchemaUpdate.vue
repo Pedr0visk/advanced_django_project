@@ -351,12 +351,15 @@ export default {
           })
     },
     add() {
+      if (!this.checkForm()) return
+      
       this.phase._id = this.$uuid.v1()
       let newPhases = [...this.phases, this.phase]
       this.phases = newPhases
       this.clear()
     },
     update(id) {
+      if (!this.checkForm()) return
 
       let index = this.phases.findIndex(phase => phase._id == id)
       this.phases[index] = this.phase
@@ -382,6 +385,10 @@ export default {
 
         this.phases[index] = phase
       }
+
+      if (this.phase.is_drilling)
+        this.phase.test_groups = []
+
       this.toggleAction()
     },
     addBefore(index) {
@@ -435,7 +442,7 @@ export default {
     },
     checkForm() {
       this.errors = []
-      let {name, duration, start: {date, time} } = this.phase
+      let {name, duration, start: {date, time}, is_drilling, has_test } = this.phase
 
       let phaseEndDate = calcDateTime(date, time, duration)
       let certExpiryDate = calcDateTime(this.bop.last_certification.end_date, 23, 1)
@@ -448,6 +455,9 @@ export default {
         this.errors.push('the field duration is required')
       if (!date || !time)
         this.errors.push('the field start date is required')
+      if (is_drilling && has_test)
+        this.errors.push('The phase cannot be set as both drilling and test, you \
+        can choose just one.')
 
       if (this.errors.length > 0)
         return false;
