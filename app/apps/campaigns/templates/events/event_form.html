@@ -4,7 +4,7 @@
 
 {% block main %}
 
-{% include "snippets/form_snippet.html" with form=form messages=messages %}
+{% include "snippets/messages.html" with form=form messages=messages %}
 
 <div class="section">
   <div class="container-fluid px-5">
@@ -48,7 +48,7 @@
                 </small>
               </div>
             </div>
-            <hr/>
+            <hr />
             <div class="form-group row">
               <label class="col-sm-1 col-form-label col-form-label-sm">Name:</label>
               <div class="col-sm-3">
@@ -58,7 +58,7 @@
                 </small>
               </div>
             </div>
-            <hr/>
+            <hr />
 
             <div class="form-group row">
               <label class="col-sm-1 col-form-label col-form-label-sm">Description:</label>
@@ -79,7 +79,7 @@
                 </small>
               </div>
             </div>
-            <hr/>
+            <hr />
 
             <div class="form-group row">
               <label class="col-sm-1 col-form-label col-form-label-sm">Select Code:</label>
@@ -107,7 +107,7 @@
                 </small>
               </div>
             </div>
-            <hr/>
+            <hr />
 
             <div class="form-group row">
               <label class="col-sm-1 col-form-label col-form-label-sm">Date:</label>
@@ -118,7 +118,7 @@
                 </small>
               </div>
             </div>
-            <hr/>
+            <hr />
 
             <div class="card p-2 bg-light text-right">
               <div class="d-flex">
@@ -143,105 +143,105 @@
 
 {% block scripts %}
 <script>
-    // Query all input fields
-    var form_fields = document.getElementsByTagName('input')
-    // customization of form fields
-    for (var field in form_fields) {
-        if (form_fields[field].type == 'checkbox') continue
-        form_fields[field].className += 'form-control form-control-sm'
+  // Query all input fields
+  var form_fields = document.getElementsByTagName('input')
+  // customization of form fields
+  for (var field in form_fields) {
+    if (form_fields[field].type == 'checkbox') continue
+    form_fields[field].className += 'form-control form-control-sm'
+  }
+
+  // Query all textarea fields
+  var form_fields = document.getElementsByTagName('textarea')
+  for (var field in form_fields) {
+    form_fields[field].className += 'form-control form-control-sm'
+  }
+
+  // Query all select fields
+  var form_fields = document.getElementsByTagName('select')
+  for (var field in form_fields) {
+    form_fields[field].className += 'form-control form-control-sm'
+  }
+
+  function hideElements() {
+    for (let index in arguments) {
+      let el = document.getElementById(arguments[index])
+      if (!el.classList.contains('d-none')) {
+        el.classList.add('d-none')
+      }
     }
+  }
 
-    // Query all textarea fields
-    var form_fields = document.getElementsByTagName('textarea')
-    for (var field in form_fields) {
-        form_fields[field].className += 'form-control form-control-sm'
+  function displayElements() {
+    for (let index in arguments) {
+      let el = document.getElementById(arguments[index])
+      if (el.classList.contains('d-none')) {
+        el.classList.remove('d-none')
+      }
     }
+  }
 
-    // Query all select fields
-    var form_fields = document.getElementsByTagName('select')
-    for (var field in form_fields) {
-        form_fields[field].className += 'form-control form-control-sm'
+  function getObjectId(type) {
+    switch (type) {
+      case 'WAW':
+      case 'RLL':
+        return null;
+        break;
+      case 'CRIR':
+      case 'CRCE':
+      case 'CIL':
+        return $('#component_codes').val()
+        break;
+      case 'SRIR':
+      case 'SRCE':
+      case 'SIL':
+        return $('#subsystem_codes').val()
+        break;
+      case 'FIL':
+        return $('#failure_mode_codes').val()
+        break;
+      default:
+        break
     }
+  }
 
-    function hideElements() {
-        for (let index in arguments) {
-            let el = document.getElementById(arguments[index])
-            if (!el.classList.contains('d-none')) {
-                el.classList.add('d-none')
-            }
-        }
+  const type = document.getElementById('id_type')
+  const form = document.getElementById('eventForm')
+  const submitBtn = document.getElementById('submitBtn')
+
+  hideElements('failure_mode_codes', 'component_codes', 'subsystem_codes')
+
+  type.addEventListener('change', function () {
+    switch (this.value) {
+      case 'WAW':
+      case 'RLL':
+        hideElements('failure_mode_codes', 'component_codes', 'subsystem_codes')
+        break;
+      case 'CRIR':
+      case 'CRCE':
+      case 'CIL':
+        displayElements('component_codes')
+        hideElements('failure_mode_codes', 'subsystem_codes')
+        break;
+      case 'SRIR':
+      case 'SRCE':
+      case 'SIL':
+        displayElements('subsystem_codes')
+        hideElements('component_codes', 'failure_mode_codes')
+        break;
+      case 'FIL':
+        displayElements('failure_mode_codes')
+        hideElements('component_codes', 'subsystem_codes')
+        break;
+      default:
+        break
     }
+  })
 
-    function displayElements() {
-        for (let index in arguments) {
-            let el = document.getElementById(arguments[index])
-            if (el.classList.contains('d-none')) {
-                el.classList.remove('d-none')
-            }
-        }
-    }
-
-    function getObjectId(type) {
-        switch (type) {
-            case 'WAW':
-            case 'RLL':
-                return null;
-                break;
-            case 'CRIR':
-            case 'CRCE':
-            case 'CIL':
-                return $('#component_codes').val()
-                break;
-            case 'SRIR':
-            case 'SRCE':
-            case 'SIL':
-                return $('#subsystem_codes').val()
-                break;
-            case 'FIL':
-                return $('#failure_mode_codes').val()
-                break;
-            default:
-                break
-        }
-    }
-
-    const type = document.getElementById('id_type')
-    const form = document.getElementById('eventForm')
-    const submitBtn = document.getElementById('submitBtn')
-
-    hideElements('failure_mode_codes', 'component_codes', 'subsystem_codes')
-
-    type.addEventListener('change', function () {
-        switch (this.value) {
-            case 'WAW':
-            case 'RLL':
-                hideElements('failure_mode_codes', 'component_codes', 'subsystem_codes')
-                break;
-            case 'CRIR':
-            case 'CRCE':
-            case 'CIL':
-                displayElements('component_codes')
-                hideElements('failure_mode_codes', 'subsystem_codes')
-                break;
-            case 'SRIR':
-            case 'SRCE':
-            case 'SIL':
-                displayElements('subsystem_codes')
-                hideElements('component_codes', 'failure_mode_codes')
-                break;
-            case 'FIL':
-                displayElements('failure_mode_codes')
-                hideElements('component_codes', 'subsystem_codes')
-                break;
-            default:
-                break
-        }
-    })
-
-    submitBtn.addEventListener('click', function (e) {
-        e.preventDefault()
-        form.object_code.value = getObjectId(form.type.value)
-        form.submit()
-    })
+  submitBtn.addEventListener('click', function (e) {
+    e.preventDefault()
+    form.object_code.value = getObjectId(form.type.value)
+    form.submit()
+  })
 </script>
 {% endblock %}

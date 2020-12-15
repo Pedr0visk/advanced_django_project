@@ -12,6 +12,8 @@ from .models import Bop, SafetyFunction
 from .forms import BopForm, SafetyFunctionForm
 from .load_bop import Loader as BopLoader
 from .load_safety_function import Loader as SafetyFunctionLoader
+from .decorators import query_debugger
+from .signals import bop_created_or_updated
 
 from ..certifications.forms import CertificationForm
 from ..managers.decorators import allowed_users
@@ -47,6 +49,7 @@ def bop_upload(request):
                 certification.bop = new_bop
                 certification.save()
 
+            bop_created_or_updated.send(sender=Bop.__class__, instance=new_bop, created=True)
             messages.success(request, 'Bop created successfully')
             return redirect(new_bop.success_url())
 
@@ -69,6 +72,7 @@ def bop_update(request, pk):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
+            bop_created_or_updated.send(sender=Bop.__class__, instance=bop, created=False)
             messages.success(
                 request, f'Successfully updated bop "{bop.name}" ')
             return redirect(bop.success_url())
@@ -86,7 +90,7 @@ def bop_delete(request, pk):
         name = bop.name
         bop.delete()
         messages.success(request, f'Bop "{name}" successfully deleted')
-        return redirect('bops:list')
+        return redirect('dashboard')
     return render(request, 'bops/bop_confirm_delete.html', context)
 
 
@@ -101,17 +105,7 @@ def index(request, pk):
 def bop_hierarchy(request, pk):
     bop = Bop.objects.get(pk=pk)
 
-    def serializer(failuremode):
-        return {
-            'id': failuremode.pk,
-            'code': failuremode.code,
-            'name': failuremode.name,
-            'distribution': failuremode.distribution,
-            'component': failuremode.component.name
-        }
-
-    failuremodes = [serializer(fm) for fm in bop.failure_modes]
-    context = {'bop': bop, 'json_data': failuremodes}
+    context = {'bop': bop}
     return render(request, 'bops/bop_hierarchy.html', context)
 
 

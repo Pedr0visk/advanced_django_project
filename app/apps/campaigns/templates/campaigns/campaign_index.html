@@ -7,7 +7,7 @@
 
 {% block main %}
 
-{% include 'snippets/form_snippet.html' with messages=messages %}
+{% include 'snippets/messages.html' with messages=messages %}
 
 <!-- section 2 -->
 <div class="section">
@@ -26,15 +26,9 @@
         <a href="{% url 'campaigns:planner' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
           <small>CAMPAIGN PLANNER <i class="fa fa-chart-area"></i></small>
         </a>
-        <a href="{% url 'campaigns:compare' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
-          <small>COMPARE <i class="fa fa-check"></i></small>
-        </a>
         <a href="{% url 'campaigns:update' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
-          <small>EDIT
+          <small>EDIT CAMPAIGN
             <i class="fa fa-pencil-alt"></i></small>
-        </a>
-        <a href="{% url 'campaigns:delete' campaign.pk %}" class="btn btn-sm btn-primary"><small>DELETE <i
-              class="fa fa-times"></i></small>
         </a>
       </div>
     </div>
@@ -49,7 +43,8 @@
             <li>name: <b>{{ campaign.name }}</b></li>
             <li class="d-flex align-items-center">
               base schema: <b>{{ campaign.schema_active.name }}</b>
-              <a href="" class="ml-auto btn btn-standard"><small>edit</small></a>
+              <a href="{% url 'campaigns:update_schema' campaign.schema_active.pk %}"
+                class="ml-auto btn btn-standard"><small>edit</small></a>
             </li>
             <li>
               status:

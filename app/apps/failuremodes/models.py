@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from apps.components.models import Component
@@ -42,6 +44,42 @@ class FailureMode(models.Model):
         if d_type == self.DistributionsType.EXPONENTIAL:
             rate = d['exponential_failure_rate']
             self.exponential(rate, coverage, dt)
+
+    @staticmethod
+    def format_distribution(data):
+        distribution = {}
+        distribution['type'] = data['type']
+
+        # case exponential
+        if distribution['type'] == FailureMode.DistributionsType.EXPONENTIAL:
+            distribution['exponential_failure_rate'] = data['exponential_failure_rate']
+
+        # case probability
+        if distribution['type'] == FailureMode.DistributionsType.PROBABILITY:
+            distribution['probability'] = data['probability']
+
+        # case weibull
+        if distribution['type'] == FailureMode.DistributionsType.WEIBULL:
+            distribution['form'] = data['form']
+            distribution['scale'] = data['scale']
+
+        # case step
+        if distribution['type'] == FailureMode.DistributionsType.STEP:
+            distribution['cycle'] = {}
+            distribution['cycle']['size'] = data['cycle']['size']
+            distribution['cycle']['value'] = data['cycle']['value']
+            distribution['cycle']['limit'] = data['cycle']['limit']
+            distribution['initial_failure_rate'] = data['initial_failure_rate']
+
+        return distribution
+
+    @property
+    def bop(self):
+        return self.component.subsystem.bop
+
+    @property
+    def distribution_type(self):
+        return self.distribution['type']
 
     @staticmethod
     def exponential(rate, coverage, time):

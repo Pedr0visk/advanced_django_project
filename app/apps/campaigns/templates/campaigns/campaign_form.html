@@ -14,7 +14,12 @@
       <h4 class="title-1 mb-4">Update campaign</h4>
     </div>
     {% else %}
-    <h4 class="title-1 mb-4">Add Campaign</h4>
+    <div class="d-flex flex-column">
+      <a href="{% url 'bops:index' bop_pk %}" class="mb-3">
+        <i class="fa fa-arrow-left"></i> back to bop dashboard
+      </a>
+      <h4 class="title-1 mb-4">Add campaign</h4>
+    </div>
     {% endif %}
     <div class="section-content">
       <div class="row">
@@ -32,7 +37,7 @@
                 </small>
               </div>
             </div>
-            <hr/>
+            <hr />
 
             <div class="form-group row">
               <label class="col-sm-1 col-form-label col-form-label-sm">Description:</label>
@@ -43,18 +48,7 @@
                 </small>
               </div>
             </div>
-            <hr/>
-
-            <div class="form-group row">
-              <label class="col-sm-1 col-form-label col-form-label-sm">Active:</label>
-              <div class="col-sm-3">
-                {{ form.active }}
-                <small class="form-text text-muted">
-                  Required.
-                </small>
-              </div>
-            </div>
-            <hr/>
+            <hr />
 
             <div class="form-group row">
               <label class="col-sm-1 col-form-label col-form-label-sm">Well Name:</label>
@@ -65,7 +59,7 @@
                 </small>
               </div>
             </div>
-            <hr/>
+            <hr />
 
             <div class="card p-2 bg-light text-right">
               <div class="d-flex">
@@ -93,4 +87,3 @@
   </div>
 </div>
 {% endblock %}
-

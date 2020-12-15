@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.postgres',
-    'apps.bops',
+    'apps.bops.apps.BopsConfig',
     'apps.subsystems',
     'apps.components',
     'apps.cuts',

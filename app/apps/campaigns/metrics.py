@@ -3,21 +3,22 @@ from apps.components.models import Component
 from apps.bops.models import *
 from apps.cuts.models import *
 from .models import *
-import copy
-import csv
-from django.db.models import Max, Q
+from django.db.models import Max
 import datetime
 from datetime import timedelta
 import string
 import math
-import numpy as np
+import json
 
 
 def run(schema, **kwargs):
 
     bop = schema.campaign.bop
-    m = get_m_matrix(bop)
-
+    print('antes de printar matrix')
+    print('pritando matrix', bop.matrix)
+    print(datetime.datetime.today(), "Vai chamar Matriz M")
+    m = bop.matrix
+    print(datetime.datetime.today(), "Terminou Matriz M ")
     sf_pfds = calculate_SF_PFDS(schema, m)
 
     return sf_pfds
@@ -32,10 +33,12 @@ def getTotalFailMode(bop):
 
 
 def get_m_matrix(bop):
-    failure_modes = getTotalFailMode(bop)
-
-    m = gerar_matriz(failure_modes, 32)
-    fmodes = FailureMode.objects.filter(component__subsystem__bop__exact=bop).all()
+    failure_modes = bop.failure_modes
+    print('bop matrix', bop.matrix)
+    m = bop.matrix
+    print(m)
+    fmodes = FailureMode.objects.filter(
+        component__subsystem__bop__exact=bop).all()
 
     index = 0
     for f in fmodes:
@@ -151,7 +154,6 @@ def get_dates(schema):
 
         end_date = last.start_date + timedelta(hours=last.duration)
 
-
     except:
         start_date = 0
         end_date = 0
@@ -159,18 +161,20 @@ def get_dates(schema):
     return start_date, end_date
 
 
+def log(*args, **kwargs):
+    print('[LOGGER]', args)
+
+
 def calculate_SF_PFDS(schema, m):
-
-    flag = 1
-
-
+    print(datetime.datetime.today(), "Entrou no calculo ")
     # number_fails = getUserInputTotalFailures(bop)  # contagem de falhas
-
     t_start_recert = 0
-    print(schema.name)
+
     t_start_camp = schema.start_date
     t_end_camp = schema.end_date
     camp_period = t_end_camp - t_start_camp
+
+    log(t_start_camp, t_end_camp, camp_period)
 
     # tf_integracao = (t_end_camp - t_start_recert).days
     # ti_integracao = (current_date - t_start_recert).days
@@ -178,62 +182,55 @@ def calculate_SF_PFDS(schema, m):
     steps = int(camp_period.total_seconds() / 60 ** 2)
 
     failure_modes = len(m)
-
+    log('len', failure_modes)
     dt = 1  # passo horario
 
     t_op = get_t_op(steps, schema, dt)
-    v_integrate = calculate_failure_modes(m, failure_modes, False, dt, False, steps, t_op)
-    # print("v integrate",v_integrate)
+    v_integrate = calculate_failure_modes(
+        m, failure_modes, False, dt, False, steps, t_op)
+    schema.cuts_contribution = v_integrate
+    schema.save()
+    print(datetime.datetime.today(), "Terminou o V integrate ")
 
-    safety_function_numbers = SafetyFunction.objects.filter(bop=schema.campaign.bop).count()
+    safety_function_numbers = SafetyFunction.objects.filter(
+        bop=schema.campaign.bop).count()
     sf = SafetyFunction.objects.filter(bop=schema.campaign.bop)
 
-
-    result_each_sf_integrate = gerar_matriz(steps + 1, safety_function_numbers + 1)
-    result_each_sf_integrate_falho = gerar_matriz(steps + 1, safety_function_numbers + 1)
-
+    result_each_sf_integrate = gerar_matriz(
+        steps + 1, safety_function_numbers + 1)
+    result_each_sf_integrate_falho = gerar_matriz(
+        steps + 1, safety_function_numbers + 1)
     fl = 0
+
     for safety_function in sf:
         fl += 1
-        print(datetime.datetime.today(), "Inicio do calculo da Sf: ", safety_function)
-
+        print(datetime.datetime.today(),
+              "Inicio do calculo da Sf: ", safety_function)
         cuts = safety_function.cuts.all()
-
         max_cuts = len(cuts)
-
         corte = 0
-
         # matriz_index = gerar_matriz(max_cuts, 4)
         matriz_index = [[' ' for i in range(4)] for j in range(max_cuts)]
-
         # print(datetime.datetime.today(), "Inicio da organização da sf ")
-
         for cut in cuts:
-
             fails = cut.failure_modes.split(",")
             falha = 0
-
             for fail in fails:
                 if fail:
                     fail_line = Fail_line(fail, v_integrate)
-
                     matriz_index[corte][falha] = fail_line
                 else:
                     matriz_index[corte][falha] = ' '
                 falha = falha + 1
-
             corte = corte + 1
-
-
 
         for i in range(1, steps):
             result_each_sf_integrate[i][0] = i * dt
-            result_each_sf_integrate[i][fl] = calc_PFD_this_timestep(i, v_integrate, matriz_index)
+            result_each_sf_integrate[i][fl] = calc_PFD_this_timestep(
+                i, v_integrate, matriz_index)
 
-        # print("resultado ", result)
-        # print(datetime.datetime.today(), "Fim do calculo da Sf: ", safety_function)
-
-        # print("total de steps calculados:", i)
+        print(datetime.datetime.today(),
+              "Fim do calculo da Sf: ", safety_function)
 
     return result_each_sf_integrate
 
@@ -316,7 +313,6 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
             if m[j][23] == "Exponential":
                 xlambda = float(m[j][24])
 
-
             elif m[j][23] == "Weibull":
 
                 xlambda = 1 / int(m[j][25])
@@ -329,14 +325,15 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
 
             # get test time for each test
 
-            for i in range(0, step_max - 1):
+            for i in range(1, step_max - 1):
                 tempo = t[i]
                 if tempo:
                     # Calculate normal PFD fractions
                     if m[j][23] == "Exponential":
 
                         try:
-                            pol_falha = 1 - math.exp((-1) * xlambda * tempo * coverage)
+                            pol_falha = 1 - \
+                                math.exp((-1) * xlambda * tempo * coverage)
                         except:
                             pol_falha = 0
 
@@ -355,7 +352,8 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
                         p3 = (t_op_ltk - t_op_replace) ** eta
                         lambda_effetivo = p1 * (abs(p2 - p3))
 
-                        pol_falha = 1 - math.exp(((-1) * coverage * (lambda_effetivo)))
+                        pol_falha = 1 - \
+                            math.exp(((-1) * coverage * (lambda_effetivo)))
 
                     if m[j][23] == "Step":
                         # Cintegrated = t[j][i][6 + k]
@@ -366,11 +364,11 @@ def calculate_failure_modes(m, failure_modes, delay, dt, falha, step_max, t_op):
                         i_ = increase
                         Cin_ = Cintegrated
 
-                        pol_falha = 1 - math.exp(c_ * ((((-1) * l_) * i_ * t_) + (((-1) * l_) * t_)))
+                        pol_falha = 1 - \
+                            math.exp(
+                                c_ * ((((-1) * l_) * i_ * t_) + (((-1) * l_) * t_)))
 
                     v_integrate[j][i] = 1 - (1 - pol_falha)
-
-
 
     return v_integrate
 
@@ -435,7 +433,6 @@ def calc_op_time_each_test_recert(m, T1, T2, T3, T4, t_op, stagger, cycle_size, 
                         t_tests[ii][6 + j] = t_tests[ii - 1][6 + j]
 
                 t_tests[ii][10 + j] = calc_integral_ciclos(t_tests, j, ii, 24)
-
 
         else:
             if tipo == "Weibull":
@@ -519,7 +516,6 @@ def get_t_op(steps, schema, dt):
                 t_op[count][0] = count
                 t_op[count][1] = t_op[count - 1][1]
 
-
     return t_op
 
     """
@@ -582,14 +578,17 @@ def calc_PFD_this_timestep(step, v_integrate, matriz_index):
 
     for corte in range(0, len(matriz_index)):
         produtorio = 1
-        for falha in range(0, 4):
+        for falha in range(0, 4):  # travado em ordem 4, fazer o for em len do corte
+
             if matriz_index[corte][falha] != ' ':
                 try:
-                    produtorio = produtorio * float(v_integrate[matriz_index[corte][falha]][step])
+                    produtorio = produtorio * \
+                        float(v_integrate[matriz_index[corte][falha]][step])
                 except:
                     print("v_integrate[matriz_index[corte][falha]][step]",
-                          v_integrate[matriz_index[corte][falha]][step], corte, falha, step)
+                          v_integrate[matriz_index[corte][falha]][step], matriz_index[corte][falha], corte, falha, step)
         try:
+
             prod_sf = prod_sf * (1.0 - produtorio)
         except:
             print("prod", prod_sf, produtorio)
@@ -600,3 +599,25 @@ def calc_PFD_this_timestep(step, v_integrate, matriz_index):
         prod_sf = 10 ** -40
 
     return prod_sf
+
+
+def calc_cuts_contribuition_this_timestep(step, v_integrate, matriz_index):
+
+    contr = []
+
+    for corte in range(0, len(matriz_index)):
+        produtorio = 1
+        for falha in range(0, 4):
+
+            if matriz_index[corte][falha] != ' ':
+                try:
+                    produtorio = produtorio * \
+                        float(v_integrate[matriz_index[corte][falha]][step])
+
+                except:
+                    print("errro v_integrate[matriz_index[corte][falha]][step]",
+                          matriz_index[corte][falha], corte, falha, step)
+
+        matriz_index[corte][falha+1] = produtorio
+
+    return matriz_index

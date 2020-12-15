@@ -1,28 +1,5 @@
 {% extends 'manager/base.html' %}
 
-{% block breadcrumb %}
-  <!-- breadcrumb -->
-  <div class="page-title">
-    <div class="container-fluid px-5">
-      <div class="page-title-wrapper-2">
-        <div class="page-title-heading-2">
-          <a href="{% url 'dashboard' %}">Home</a>
-          <span class="fa fa-chevron-right"></span>
-          <a href="{% url 'list_bops' %}">Bops</a>
-          <span class="fa fa-chevron-right"></span>
-          {% if object %}
-            <a href="{% url 'index_bop' bop.pk %}">{{ bop.name }}</a>
-            <span class="fa fa-chevron-right"></span>
-            <span class="current-page">{{ object }}</span>
-          {% else %}
-            <span class="current-page">Add new certification</span>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
-{% endblock %}
-
 {% block main %}
   {{ cert_form.errors }}
   <div class="section bg-white">

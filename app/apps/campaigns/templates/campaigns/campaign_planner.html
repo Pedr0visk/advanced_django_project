@@ -14,8 +14,8 @@
 </div>
 {% else %}
 <div class="alert alert-warning alert-dismissible fade show mt-1" role="alert">
-  <strong>Warning!</strong> You should be careful in editing this page, whatever changes made in this
-  page can modify the <strong>campaign status</strong>, may you will can not undone this changes later on.
+  <strong>Warning!</strong> Warning! Be careful when editing this page. Any change you make may modify the campaign
+  status and you will not be able to undo it later.
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -23,7 +23,7 @@
 {% endif %}
 
 
-{% include 'snippets/form_snippet.html' with messages=messages %}
+{% include 'snippets/messages.html' with messages=messages %}
 
 <!-- section 2 -->
 <div class="section">
@@ -31,13 +31,13 @@
     <!-- section title -->
     <div class="section-title mb-3">
       <div class="d-flex flex-column">
-        {% if campaign.active %}
+        {% if campaign.created %}
         <a href="{% url 'campaigns:index' campaign.pk %}" class="mb-3">
           <i class="fa fa-arrow-left"></i> back to campaign dashboard
         </a>
         {% else %}
         <a href="{% url 'bops:index' campaign.bop.pk %}" class="mb-3">
-          <i class="fa fa-arrow-left"></i> back to bop
+          <i class="fa fa-arrow-left"></i> back to bop dashboard
         </a>
         {% endif %}
 
@@ -51,9 +51,6 @@
         <a href="{% url 'campaigns:update' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
           <small>EDIT
             <i class="fa fa-pencil-alt"></i></small>
-        </a>
-        <a href="{% url 'campaigns:delete' campaign.pk %}" class="btn btn-sm btn-primary"><small>DELETE <i
-              class="fa fa-times"></i></small>
         </a>
       </div>
     </div>

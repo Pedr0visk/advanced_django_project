@@ -10586,6 +10586,7 @@ h3 {
 .main-header {
   font-size: 12px;
   text-transform: capitalize;
+  margin-bottom: 0.5rem;
 }
 @media (min-width: 992px) {
   .main-header .navbar-expand-lg .navbar-nav .nav-item:not(:last-child) {
@@ -11169,6 +11170,21 @@ table.table-results tbody tr td {
 #modalLoading > p {
   color: white;
   font-size: 20px;
+}
+
+/*
+|--------------------|
+|      ACCORDION     |
+|--------------------|
+*/
+.dnv-accordion .card-header {
+  padding: 0;
+  background-color: #79aec8;
+  border-radius: 0;
+}
+.dnv-accordion .card-header button.btn-link {
+  color: white;
+  font-size: 14px;
 }
 
 /*# sourceMappingURL=main.css.map */

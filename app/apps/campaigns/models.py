@@ -90,6 +90,7 @@ class Schema(models.Model):
     name = models.CharField(max_length=255)
     is_default = models.BooleanField(default=False)
     result = models.TextField(blank=True, null=True)
+    cuts_contribution = models.TextField(blank=True, null=True)
     campaign = models.ForeignKey(Campaign,
                                  on_delete=models.CASCADE,
                                  related_name='schemas')

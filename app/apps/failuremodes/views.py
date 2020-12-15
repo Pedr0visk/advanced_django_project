@@ -1,31 +1,55 @@
+import json
+
 from django.forms.models import model_to_dict
 from django.http.response import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from .models import FailureMode
 from .filters import failure_mode_filter
 from .forms import FailureModeForm
 
+# Don't forget to find a way to removed these
+# classes bellow to reduce the acoplament
 from apps.bops.models import Bop
+from apps.subsystems.models import Subsystem
+from apps.components.models import Component
 
 
-def failuremode_list(request, bop_pk):
-    bop = Bop.objects.get(pk=bop_pk)
-    failure_modes = FailureMode.objects.filter(component__subsystem__bop=bop)
-    query_set = failure_mode_filter(failure_modes, request.GET)
+def failuremode_list(request):
+    bops = Bop.objects.order_by('name')
+    subsystems = Subsystem.objects.order_by('name')
+    components = Component.objects.order_by('name')
+    dataset = failure_mode_filter(request.GET)
 
-    context = {'bop': bop, 'failuremodes': query_set}
+    context = {
+        'dataset': dataset,
+        'bops': bops,
+        'subsystems': subsystems,
+        'components': components
+    }
     return render(request, 'failuremodes/failuremode_list.html', context)
 
 
-def failuremode_update(request, bop_pk, fm_pk):
-    bop = Bop.objects.get(pk=bop_pk)
+def failuremode_create(request):
+    bop = request.GET.get('bop', None)
+    if bop is None:
+        return redirect('failuremodes:list')
+
+    form = FailureModeForm(request.POST or None)
+
+    context = {'form': form}
+    return render(request, 'failuremodes/failuremode_form.html', context)
+
+
+def failuremode_update(request, fm_pk):
     failuremode = get_object_or_404(FailureMode, pk=fm_pk)
     form = FailureModeForm(request.POST or None, instance=failuremode)
 
     if request.method == 'POST':
         if form.is_valid():
-            fm = form.save()
-            return JsonResponse({'failuremode': model_to_dict(fm), 'message': 'successfully updated!'})
+            fm = form.save(commit=False)
+            fm.distribution = FailureMode.format_distribution(fm.distribution)
+            fm.save()
+            return redirect('failuremodes:list')
 
-    context = {'bop': bop, 'failuremode': failuremode, 'form': form}
+    context = {'failuremode': failuremode, 'form': form}
     return render(request, 'failuremodes/failuremode_form.html', context)
