@@ -12,7 +12,7 @@
     <hr/>
 
     <div class="form-group row">
-      <label class="col-sm-1 col-form-label col-form-label-sm">Base Case:</label>
+      <label class="col-sm-1 col-form-label col-form-label-sm">Default:</label>
       <div class="col-sm-3">
         <input type="checkbox" v-model="schema.is_default">
         <small class="form-text text-muted">
@@ -26,38 +26,50 @@
       <h4>Phases</h4>
       <div v-if="errors.length">
         <ul>
-          <li v-for="error in errors" class="text-danger">{{ error }}</li>
+          <li :key="index" v-for="(error, index) in errors" class="text-danger">{{ error }}</li>
         </ul>
       </div>
       <div class="px-3">
-        <div class="form-add-phase row">
+        <div class="form-add-phase row mb-3">
           <!-- name -->
-          <div class="col-2">
+          <div class="col-4">
             <input
                 v-model="phase.name"
                 placeholder="phase name"
                 type="text"
-                class="form-control form-control-sm">
+                class="form-control form-control-sm ">
             <small>phase name</small>
           </div>
+
           <!-- datetime picker -->
-          <div class="col-2">
-            <input type="date" v-model="phase.start.date"/>
-            <small>mm/dd/YYYY</small>
+          <div class="col-auto">
+            <div class="d-flex flex-column">
+              <input 
+              :disabled="phases.length > 0"
+              type="date" 
+              v-model="phase.start.date" 
+              :max="bop.last_certification.end_date"/>
+              <small>mm/dd/YYYY</small>
+            </div>
           </div>
+
+           <!-- time select -->
           <div class="col-1">
-            <select v-model="phase.start.time" name="" id="" class="form-control form-control-sm">
-              <option v-for="hour in 24" :value="hour-1">{{ ("0" + (hour - 1)).slice(-2) }}:00</option>
+            <select 
+            :disabled=" phases.length > 0"
+            v-model="phase.start.time" 
+            class="form-control form-control-sm">
+              <option :key="hour" v-for="hour in 24" :value="hour-1">{{ ("0" + (hour - 1)).slice(-2) }}:00</option>
             </select>
           </div>
 
           <!-- duration -->
           <div class="col-1">
             <input
-                v-model="phase.duration"
-                type="number"
-                :disabled="phase.start.date == ''"
-                class="form-control form-control-sm">
+              v-model="phase.duration"
+              type="number"
+              :disabled="phase.start.date == ''"
+              class="form-control form-control-sm">
             <small>duration (h)</small>
           </div>
 
@@ -65,23 +77,33 @@
           <div class="col-auto">
             <input type="text" disabled :value="formatDate(phase.end.date, phase.end.time)">
           </div>
-          <!-- has_test -->
-          <div class="col-auto">
-            <input type="checkbox" v-model="phase.has_test">
-            <small>Test</small>
+        </div>
+        <div class="row">
+          <!-- test -->
+          <div class="col-12">
+            <div class="form-group">
+              <div class="form-check">
+                <input 
+                  v-model="phase.has_test"
+                  class="form-check-input" 
+                  type="checkbox" 
+                  id="gridCheck">
+                <label class="form-check-label" for="gridCheck">
+                  Test
+                </label>
+              </div>
+            </div>
           </div>
-          <!-- is_drilling -->
-          <div class="col-auto">
-            <input type="checkbox" v-model="phase.is_drilling">
-            <small>drilling</small>
-          </div>
-          <div class="col-2" v-show="phase.has_test">
+
+          <div class="col-6" v-show="phase.has_test">
+            <label for="">Select one or more Test Groups bellow.</label>
             <select
                 v-model="phase.test_groups"
                 multiple
                 class="form-control form-control-sm">
               <option
                   v-for="group in testGroups"
+                  :key="group.id"
                   :value="group.id"
               >{{ group.name }}
               </option>
@@ -89,32 +111,45 @@
             <small>test groups</small>
           </div>
 
-          <!-- actions -->
-          <div class="col-1">
+          <!-- drilling -->
+          <div class="col-12">
+            <div class="form-group">
+              <div class="form-check">
+                <input 
+                  v-model="phase.is_drilling"
+                  class="form-check-input" 
+                  type="checkbox" 
+                  id="gridCheck">
+                <label class="form-check-label" for="gridCheck">
+                  Drilling
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
             <button
                 v-show="!isUpdate"
                 type="submit"
                 class="btn-standard"
-                :disabled="isUpdate"
-                @click.prevent="add">save
+                @click.prevent="add">add
             </button>
             <div class="d-flex">
               <button
                   v-show="isUpdate"
                   type="submit"
                   class="btn-standard mr-2"
-                  :disabled="!isUpdate"
                   @click.prevent="update(phase._id)">update
               </button>
               <button
                   v-show="isUpdate"
                   type="submit"
                   class="btn-standard"
-                  :disabled="!isUpdate"
                   @click.prevent="toggleAction">cancel
               </button>
             </div>
           </div>
+
         </div>
         <hr>
         <table class="phase-list table m-0 dnv-table">
@@ -129,23 +164,23 @@
             <th>test groups</th>
             <th></th>
             <th></th>
-            <th></th>
-            <th></th>
           </tr>
           </thead>
           <tbody>
 
-          <tr
-              v-for="(item, key) in phases"
-              :key="key"
-              v-bind:class="{selected: item._id === phase._id }">
+          <tr v-for="(item, key) in phases" :key="key">
             <td>{{ item.name }}</td>
             <td>{{ formatDate(item.start.date, item.start.time) }}</td>
             <td>{{ formatDate(item.end.date, item.end.time) }}</td>
             <td>{{ item.duration }}h</td>
             <td><img v-if="item.has_test" src="/static/img/icon-yes.svg" alt=""></td>
             <td><img v-if="item.is_drilling" src="/static/img/icon-yes.svg" alt=""></td>
-            <td>{{ item.test_groups }}</td>
+            <td>
+              <span 
+              :key="tg.code"
+              v-for="tg in item.test_groups" 
+              class="badge badge-success mr-1 text-uppercase">{{ showTestGroup(tg) }}</span>
+            </td>
             <td width="5%">
               <a
                   @click.prevent="select(key)"
@@ -156,19 +191,6 @@
                   @click.prevent="remove(item._id)"
                   href="" class="px-2"><i class="fa fa-times text-danger"></i></a>
             </td>
-            <td width="10%">
-              <a
-                  @click.prevent="addBefore(key)"
-                  href="" class="px-2">add before</a>
-            </td>
-            <td width="10%">
-              <a
-                  @click.prevent="addAfter(key)"
-                  href="" class="px-2">add after</a>
-            </td>
-          </tr>
-          <tr v-if="isLoading">
-            <td colspan="11" align="center"><h3>Loading...</h3></td>
           </tr>
           </tbody>
         </table>
@@ -177,8 +199,13 @@
 
     <div class="card p-2 bg-light text-right">
       <div class="d-flex">
+        <div>
+          <a href="{% url 'bops:index' bop_pk %}" class="btn btn-danger">Cancel</a>
+        </div>
         <div class="ml-auto">
-          <a href="" class="btn">Cancel</a>
+          <button type="submit" class="btn btn-secondary">
+            Save and add another
+          </button>
           <button @click.prevent="updateSchema" type="submit" class="btn btn-primary">
             SAVE
           </button>
@@ -211,6 +238,7 @@ export default {
 
   data() {
     return {
+      bop: {name: '', model: '', last_certification: {end_date: ''}},
       isLoading: true,
       errors: [],
       isUpdate: false,
@@ -237,7 +265,10 @@ export default {
     let schemaId = document.getElementById('schemaId').value
     this.$http
         .get(`/api/bops/${bopId}/test-groups/`)
-        .then(response => this.testGroups = response.data)
+        .then(response => {
+          console.log(response.data)
+          this.testGroups = response.data
+        })
 
     this.$http
         .get(`/api/schemas/${schemaId}/`)
@@ -437,6 +468,12 @@ export default {
         day = '0' + day;
 
       return `${[year, month, day].join('-')} ${("0" + hour).slice(-2)}:00:00`;
+    },
+    showTestGroup(id) {
+      let items = this.testGroups.filter((item) => item.id == id)
+      if (items.length > 0) 
+        return `${items[0].name}`
+      return ''
     }
   },
   watch: {
@@ -447,6 +484,22 @@ export default {
       this.phase.end = {
         date: `${d.getFullYear()}-${("0" + (d.getMonth() + 1)).slice(-2)}-${("0" + (d.getDate())).slice(-2)}`,
         time: d.getHours()
+      }
+    },
+    'phase.start.time': function (val, oldVal) {
+      if (val !== null && oldVal !== null) {
+        let {date, time} = this.phase.start
+        let {duration} = this.phase
+
+        if (duration == '' || duration == null) 
+          return
+          
+        let d = calcDateTime(date, time, duration)
+
+        this.phase.end = {
+          date: `${d.getFullYear()}-${("0" + (d.getMonth() + 1)).slice(-2)}-${("0" + (d.getDate())).slice(-2)}`,
+          time: d.getHours()
+        }
       }
     }
   }

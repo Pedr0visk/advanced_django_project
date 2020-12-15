@@ -3,7 +3,7 @@
 
 {% block main %}
 
-{% include "snippets/form_snippet.html" with form=form messages=messages %}
+{% include "snippets/messages.html" with form=form messages=messages %}
 
 <div class="section container-fluid px-5" id="app">
   <div class="section-title mb-4 d-flex">
@@ -38,7 +38,7 @@
               </small>
             </div>
           </div>
-          <hr/>
+          <hr />
 
           <!-- start date field -->
           <div class="form-group row">
@@ -53,7 +53,7 @@
               </small>
             </div>
           </div>
-          <hr/>
+          <hr />
 
           <!-- failure modes field -->
           <div class="form-group row">
@@ -103,7 +103,7 @@
               </small>
             </div>
           </div>
-          <hr/>
+          <hr />
 
           <fieldset class="form-fieldset" id="testsWrapper">
             <h4>Tests</h4>
@@ -133,12 +133,12 @@
 <script src="{% static 'js/SelectBox.js' %}"></script>
 <script src="{% static 'build/app.js' %}"></script>
 <script>
-    // Query all input fields
-    var form_fields = document.getElementsByTagName('input')
-    // customization of form fields
-    for (var field in form_fields) {
-        if (form_fields[field].type == 'file') continue
-        form_fields[field].className += 'form-control form-control-sm'
-    }
+  // Query all input fields
+  var form_fields = document.getElementsByTagName('input')
+  // customization of form fields
+  for (var field in form_fields) {
+    if (form_fields[field].type == 'file') continue
+    form_fields[field].className += 'form-control form-control-sm'
+  }
 </script>
 {% endblock %}

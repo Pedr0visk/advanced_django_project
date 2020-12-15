@@ -66,6 +66,7 @@ def campaign_index(request, campaign_pk):
         Schema.toggle_schema_default(schema_name=schema.name)
 
         campaign.created = True
+        campaign.active = True
         campaign.save()
         messages.success(
             request, f'Schema "{schema.name}" has been choosen for the f{campaign.name}')

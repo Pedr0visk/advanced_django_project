@@ -26,40 +26,50 @@
       <h4>Phases</h4>
       <div v-if="errors.length">
         <ul>
-          <li v-for="error in errors" class="text-danger">{{ error }}</li>
+          <li :key="index" v-for="(error, index) in errors" class="text-danger">{{ error }}</li>
         </ul>
       </div>
       <div class="px-3">
-        <div class="form-add-phase row">
+        <div class="form-add-phase row mb-3">
           <!-- name -->
-          <div class="col-2">
+          <div class="col-4">
             <input
                 v-model="phase.name"
                 placeholder="phase name"
                 type="text"
                 class="form-control form-control-sm ">
             <small>phase name</small>
-
           </div>
 
           <!-- datetime picker -->
-          <div class="col-2">
-            <input type="date" v-model="phase.start.date" :max="bop.last_certification.end_date"/>
-            <small>mm/dd/YYYY</small>
+          <div class="col-auto">
+            <div class="d-flex flex-column">
+              <input 
+              :disabled="phases.length > 0"
+              type="date" 
+              v-model="phase.start.date" 
+              :max="bop.last_certification.end_date"/>
+              <small>mm/dd/YYYY</small>
+            </div>
           </div>
+
+           <!-- time select -->
           <div class="col-1">
-            <select v-model="phase.start.time" name="" id="" class="form-control form-control-sm">
-              <option v-for="hour in 24" :value="hour-1">{{ ("0" + (hour - 1)).slice(-2) }}:00</option>
+            <select 
+            :disabled=" phases.length > 0"
+            v-model="phase.start.time" 
+            class="form-control form-control-sm">
+              <option :key="hour" v-for="hour in 24" :value="hour-1">{{ ("0" + (hour - 1)).slice(-2) }}:00</option>
             </select>
           </div>
 
           <!-- duration -->
           <div class="col-1">
             <input
-                v-model="phase.duration"
-                type="number"
-                :disabled="phase.start.date == ''"
-                class="form-control form-control-sm">
+              v-model="phase.duration"
+              type="number"
+              :disabled="phase.start.date == ''"
+              class="form-control form-control-sm">
             <small>duration (h)</small>
           </div>
 
@@ -67,30 +77,57 @@
           <div class="col-auto">
             <input type="text" disabled :value="formatDate(phase.end.date, phase.end.time)">
           </div>
+        </div>
+        <div class="row">
+          <!-- test -->
+          <div class="col-12">
+            <div class="form-group">
+              <div class="form-check">
+                <input 
+                  v-model="phase.has_test"
+                  class="form-check-input" 
+                  type="checkbox" 
+                  id="gridCheck">
+                <label class="form-check-label" for="gridCheck">
+                  Test
+                </label>
+              </div>
+            </div>
+          </div>
 
-          <!-- has_test -->
-          <div class="col-auto">
-            <input type="checkbox" v-model="phase.has_test">
-            <small>Test</small>
-          </div>
-          <div class="col-auto">
-            <input type="checkbox" v-model="phase.is_drilling">
-            <small>is drilling</small>
-          </div>
-          <div class="col-2" v-show="phase.has_test">
+          <div class="col-6" v-show="phase.has_test">
+            <label for="">Select one or more Test Groups bellow.</label>
             <select
                 v-model="phase.test_groups"
                 multiple
                 class="form-control form-control-sm">
               <option
                   v-for="group in testGroups"
+                  :key="group.id"
                   :value="group.id"
               >{{ group.name }}
               </option>
             </select>
             <small>test groups</small>
           </div>
-          <div class="col-1">
+
+          <!-- drilling -->
+          <div class="col-12">
+            <div class="form-group">
+              <div class="form-check">
+                <input 
+                  v-model="phase.drilling"
+                  class="form-check-input" 
+                  type="checkbox" 
+                  id="gridCheck">
+                <label class="form-check-label" for="gridCheck">
+                  Drilling
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
             <button
                 v-show="!isUpdate"
                 type="submit"
@@ -112,6 +149,7 @@
               </button>
             </div>
           </div>
+
         </div>
         <hr>
         <table class="phase-list table m-0 dnv-table">
@@ -137,7 +175,12 @@
             <td>{{ item.duration }}h</td>
             <td><img v-if="item.has_test" src="/static/img/icon-yes.svg" alt=""></td>
             <td><img v-if="item.is_drilling" src="/static/img/icon-yes.svg" alt=""></td>
-            <td>{{ item.test_groups }}</td>
+            <td>
+              <span 
+              :key="tg.code"
+              v-for="tg in item.test_groups" 
+              class="badge badge-success mr-1 text-uppercase">{{ showTestGroup(tg) }}</span>
+            </td>
             <td width="5%">
               <a
                   @click.prevent="select(key)"
@@ -196,7 +239,7 @@ export default {
 
   data() {
     return {
-      bop: {name: '', model: '', last_certification: {end_date: undefined}},
+      bop: {name: '', model: '', last_certification: {end_date: ''}},
       errors: [],
       isUpdate: false,
       testGroups: [],
@@ -210,8 +253,8 @@ export default {
         has_test: false,
         is_drilling: false,
         duration: null,
-        start: {date: undefined, time: 12},
-        end: {date: undefined, time: 0},
+        start: {date: '', time: 12},
+        end: {date: '', time: 0},
         test_groups: []
       }
     };
@@ -227,7 +270,10 @@ export default {
 
     axios
         .get(`/api/bops/${bopId}/test-groups/`)
-        .then(response => this.testGroups = response.data)
+        .then(response => {
+          console.log(response.data)
+          this.testGroups = response.data
+        })
 
   },
   methods: {
@@ -355,7 +401,7 @@ export default {
         this.errors.push('the field name is required')
       if (!duration)
         this.errors.push('the field duration is required')
-      if (!date || !time)
+      if (!date)
         this.errors.push('the field start date is required')
 
       if (this.errors.length > 0)
@@ -378,6 +424,12 @@ export default {
 
       return `${[year, month, day].join('-')} ${("0" + hour).slice(-2)}:00:00`;
     },
+    showTestGroup(id) {
+      let items = this.testGroups.filter((item) => item.id == id)
+      if (items.length > 0) 
+        return `${items[0].name}`
+      return ''
+    }
   },
   watch: {
     'phase.duration': function (val, oldVal) {
@@ -390,7 +442,38 @@ export default {
           time: d.getHours()
         }
       }
-    }
+    },
+    'phase.start.time': function (val, oldVal) {
+      if (val !== null && oldVal !== null) {
+        let {date, time} = this.phase.start
+        let {duration} = this.phase
+
+        if (duration == '' || duration == null) 
+          return
+
+        let d = calcDateTime(date, time, duration)
+
+        this.phase.end = {
+          date: `${d.getFullYear()}-${("0" + (d.getMonth() + 1)).slice(-2)}-${("0" + (d.getDate())).slice(-2)}`,
+          time: d.getHours()
+        }
+      }
+    },
+    'phase.has_test': function (val, oldVal) {
+      if (val !== null && oldVal !== null) {
+        if (this.phase.has_test) {
+          this.phase.is_drilling = false
+        }
+      }
+    },
+    'phase.is_drilling': function (val, oldVal) {
+      if (val !== null && oldVal !== null) {
+        if (this.phase.is_drilling) {
+          this.phase.has_test = false
+          this.phase.test_groups = []
+        }
+      }
+    },
   }
 };
 </script>

@@ -7,7 +7,6 @@ class CampaignForm(ModelForm):
         model = Campaign
         fields = ['name',
                   'description',
-                  'active',
                   'well_name']
 
 

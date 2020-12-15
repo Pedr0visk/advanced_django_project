@@ -1,7 +1,13 @@
 (function ($) {
     'use strict';
     function changeState(event) {
-        SelectDistribution.distribution[event.target.name] = event.target.value
+				
+        if (SelectDistribution.distribution.type == 'Step') {
+					SelectDistribution.distribution['cycle'][event.target.name] = event.target.value
+				} else {
+					SelectDistribution.distribution[event.target.name] = event.target.value
+				}
+        
         let distribution_field = document.getElementById('id_distribution')
         distribution_field.textContent = JSON.stringify(SelectDistribution.distribution)
     }

@@ -74,6 +74,10 @@ class FailureMode(models.Model):
         return distribution
 
     @property
+    def bop(self):
+        return self.component.subsystem.bop
+
+    @property
     def distribution_type(self):
         return self.distribution['type']
 

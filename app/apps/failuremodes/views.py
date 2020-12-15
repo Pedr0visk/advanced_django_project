@@ -41,10 +41,6 @@ def failuremode_create(request):
 
 
 def failuremode_update(request, fm_pk):
-    bop = request.GET.get('bop', None)
-    if bop is None:
-        return redirect('failuremodes:list')
-
     failuremode = get_object_or_404(FailureMode, pk=fm_pk)
     form = FailureModeForm(request.POST or None, instance=failuremode)
 
