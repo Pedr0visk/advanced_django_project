@@ -1,12 +1,7 @@
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+import django.dispatch
 
-from . import metrics
-from .tasks import calc_results
-from .models import Schema
+schemas_compare_event = django.dispatch.Signal(
+    providing_args=["instance", "created", "user"])
 
-
-@receiver(post_save, sender=Schema)
-def created_or_updated_schema(sender, instance, created, **kwargs):
-    calc_results.delay(instance.pk)
-    return
+schemas_compare_calc_done = django.dispatch.Signal(
+    providing_args=["instance", "created", "user"])

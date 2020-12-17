@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from apps.campaigns.models import Campaign, Phase, Schema
 from apps.test_groups.models import TestGroup
+from ..signals import *
 
 
 class PhaseSerializer(serializers.ModelSerializer):
@@ -37,6 +38,8 @@ class SchemaSerializer(serializers.ModelSerializer):
             if phase.has_test:
                 phase.test_groups.set(test_groups)
 
+        schema_created_or_updated.send(sender=Schema.__class__,
+                                       instance=schema, created=True)
         return schema
 
     def update(self, instance, validated_data):
@@ -45,6 +48,11 @@ class SchemaSerializer(serializers.ModelSerializer):
         instance.is_default = validated_data.get('is_default', instance.name)
         instance.save()
         instance.phases.all().delete()
+
+        user = None
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            user = request.user
 
         # toggle default in schemas table
         if instance.is_default:
@@ -56,7 +64,11 @@ class SchemaSerializer(serializers.ModelSerializer):
             if phase.has_test:
                 phase.test_groups.set(test_groups)
 
-        # using celery to schedule the calc for schema results
+        schemas_compare_event.send(sender=Schema.__class__,
+                                   user=user,
+                                   instance=instance,
+                                   created=False)
+
         return instance
 
 

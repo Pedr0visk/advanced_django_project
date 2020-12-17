@@ -14,8 +14,6 @@ import json
 def run(schema, **kwargs):
 
     bop = schema.campaign.bop
-    print('antes de printar matrix')
-    print('pritando matrix', bop.matrix)
     print(datetime.datetime.today(), "Vai chamar Matriz M")
     m = bop.matrix
     print(datetime.datetime.today(), "Terminou Matriz M ")
@@ -174,15 +172,12 @@ def calculate_SF_PFDS(schema, m):
     t_end_camp = schema.end_date
     camp_period = t_end_camp - t_start_camp
 
-    log(t_start_camp, t_end_camp, camp_period)
-
     # tf_integracao = (t_end_camp - t_start_recert).days
     # ti_integracao = (current_date - t_start_recert).days
 
     steps = int(camp_period.total_seconds() / 60 ** 2)
 
     failure_modes = len(m)
-    log('len', failure_modes)
     dt = 1  # passo horario
 
     t_op = get_t_op(steps, schema, dt)

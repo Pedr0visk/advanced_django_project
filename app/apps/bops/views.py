@@ -6,7 +6,6 @@ from django.core.exceptions import RequestAborted
 from django.db import transaction
 from django.shortcuts import render, redirect
 
-from . import metrics
 from .decorators import query_debugger
 from .models import Bop, SafetyFunction
 from .forms import BopForm, SafetyFunctionForm
@@ -49,7 +48,8 @@ def bop_upload(request):
                 certification.bop = new_bop
                 certification.save()
 
-            bop_created_or_updated.send(sender=Bop.__class__, instance=new_bop, created=True)
+            bop_created_or_updated.send(
+                sender=Bop.__class__, instance=new_bop, created=True)
             messages.success(request, 'Bop created successfully')
             return redirect(new_bop.success_url())
 
@@ -72,7 +72,8 @@ def bop_update(request, pk):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            bop_created_or_updated.send(sender=Bop.__class__, instance=bop, created=False)
+            bop_created_or_updated.send(
+                sender=Bop.__class__, instance=bop, created=False)
             messages.success(
                 request, f'Successfully updated bop "{bop.name}" ')
             return redirect(bop.success_url())

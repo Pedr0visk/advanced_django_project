@@ -9,4 +9,4 @@ class CampaignsConfig(AppConfig):
     name = 'apps.campaigns'
 
     def ready(self):
-        import apps.campaigns.signals
+        import apps.campaigns.receivers

@@ -6,12 +6,18 @@ urlpatterns = [
     # schemas
     path('campaigns/', views.campaign_list, name="list"),
     path('campaigns/add/<int:bop_pk>/', views.campaign_create, name="create"),
-    path('campaigns/<int:campaign_pk>/dashboard/', views.campaign_index, name="index"),
-    path('campaigns/<int:campaign_pk>/planner/', views.campaign_planner, name="planner"),
-    path('campaigns/<int:campaign_pk>/change/', views.campaign_update, name="update"),
-    path('campaigns/<int:campaign_pk>/delete/', views.campaign_delete, name="delete"),
-    path('campaigns/<int:campaign_pk>/compare/',  views.schema_compare, name="compare"),
-    path('campaigns/<int:campaign_pk>/compare_sf/', views.compare_sf, name="compare_sf"),
+    path('campaigns/<int:campaign_pk>/dashboard/',
+         views.campaign_index, name="index"),
+    path('campaigns/<int:campaign_pk>/planner/',
+         views.campaign_planner, name="planner"),
+    path('campaigns/<int:campaign_pk>/change/',
+         views.campaign_update, name="update"),
+    path('campaigns/<int:campaign_pk>/delete/',
+         views.campaign_delete, name="delete"),
+    path('campaigns/<int:campaign_pk>/compare/',
+         views.schema_compare, name="compare"),
+    path('campaigns/<int:campaign_pk>/compare_sf/',
+         views.compare_sf, name="compare_sf"),
     path('campaigns/<int:campaign_pk>/run/', views.campaign_run, name="run"),
 
     # schemas
@@ -27,6 +33,8 @@ urlpatterns = [
          views.cut_list, name="cut_list"),
 
     # events
-    path('events/add/<int:campaign_pk>/', views.event_create, name="create_event"),
-    path('events/delete/<int:event_pk>', views.event_delete, name="delete_event"),
+    path('events/add/<int:campaign_pk>/',
+         views.event_create, name="create_event"),
+    path('events/delete/<int:event_pk>',
+         views.event_delete, name="delete_event"),
 ]

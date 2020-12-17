@@ -391,7 +391,7 @@ export default {
     checkForm() {
       console.log('checking fields...')
       this.errors = []
-      let {name, duration, start: {date, time}} = this.phase
+      let {name, duration, start: {date, time}, is_drilling, has_test} = this.phase
 
       let phaseEndDate = calcDateTime(date, time, duration)
       let certExpiryDate = calcDateTime(this.bop.last_certification.end_date, 23, 1)

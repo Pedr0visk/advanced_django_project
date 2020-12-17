@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'apps.bops.apps.BopsConfig',
+    'apps.notifications.apps.NotificationsConfig',
     'apps.subsystems',
     'apps.components',
     'apps.cuts',
@@ -105,7 +106,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [('bop-cache', 6379)],
         },
     },
 }
