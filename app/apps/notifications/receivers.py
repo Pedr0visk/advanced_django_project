@@ -17,14 +17,15 @@ def create_notification(*args, **kwargs):
         Notification.objects.create(
             assigned_to=user,
             group='d',
-            body=f"Calculus is done!",
+            body=f"We have finished, you can check the results by clicking in the compare button!",
             pk_relation=user.id
         )
     else:
         Notification.objects.create(
             assigned_to=user,
             group='c',
-            body=f"Hello {user.username}, we are doing some calculus, that take a few seconds.",
+            body=f"Hello {user.username}, a task has been created, wait a few seconds"
+                 f" while we compute the results for you.",
             pk_relation=user.id
         )
 
