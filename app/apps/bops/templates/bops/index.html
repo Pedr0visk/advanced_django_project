@@ -21,12 +21,15 @@
     <div class="container-fluid px-5">
       <!-- section title -->
       <div class="section-title mb-3">
-        <p>Dashboard for bop: "{{ bop }}"</p>
+        <div class="d-flex flex-column">
+          <h2>Campaign List</h2>
+          <p>Bop name: <b>{{ bop }}</b></p>
+        </div>
+
         <div>
-          <a href="{% url 'bops:update' bop.pk %}" class="btn btn-sm btn-primary mr-2"><small>EDIT <i
-                class="fa fa-pencil-alt"></i></small></a>
-          <a href="{% url 'bops:delete' bop.pk %}" class="btn btn-sm btn-primary"><small>DELETE <i
-                class="fa fa-times"></i></small>
+          <a href="" class="btn btn-sm btn-primary mr-2">
+            <small>EDIT BOP
+              <i class="fa fa-pencil-alt"></i></small>
           </a>
         </div>
       </div>
@@ -44,32 +47,32 @@
             </div>
             <table class="table dnv-table m-0">
               <thead class="bg-white-50">
-                <tr>
-                  <th scope="col">name</th>
-                  <th scope="col">well name</th>
-                  <th scope="col">rig name</th>
-                  <th scope="col">start date</th>
-                  <th scope="col">end date</th>
-                  <th scope="col">active</th>
-                </tr>
+              <tr>
+                <th scope="col">name</th>
+                <th scope="col">well name</th>
+                <th scope="col">rig name</th>
+                <th scope="col">start date</th>
+                <th scope="col">end date</th>
+                <th scope="col">active</th>
+              </tr>
               </thead>
               <tbody>
-                {% for campaign in bop.campaigns.all %}
-                <tr>
-                  <td><a href="{{ campaign.get_absolute_url }}">{{ campaign.name }}</a></td>
-                  <td>{{ campaign.well_name }}</td>
-                  <td>{{ campaign.bop.rig }}</td>
-                  <td><a href="">{{ campaign.start_date }}</a></td>
-                  <td><a href="">{{ campaign.end_date }}</a></td>
-                  <td>
-                    {% if campaign.active %}
-                    <img src="{% static 'img/icon-yes.svg' %}" />
-                    {% else %}
-                    <img src="{% static 'img/icon-no.svg' %}" />
-                    {% endif %}
-                  </td>
-                </tr>
-                {% endfor %}
+              {% for campaign in bop.campaigns.all %}
+              <tr>
+                <td><a href="{{ campaign.get_absolute_url }}">{{ campaign.name }}</a></td>
+                <td>{{ campaign.well_name }}</td>
+                <td>{{ campaign.bop.rig }}</td>
+                <td><a href="">{{ campaign.start_date }}</a></td>
+                <td><a href="">{{ campaign.end_date }}</a></td>
+                <td>
+                  {% if campaign.active %}
+                  <img src="{% static 'img/icon-yes.svg' %}"/>
+                  {% else %}
+                  <img src="{% static 'img/icon-no.svg' %}"/>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
               </tbody>
             </table>
           </div>

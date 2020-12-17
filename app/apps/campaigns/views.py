@@ -246,7 +246,6 @@ def schema_delete(request, schema_pk):
 
 
 def schema_compare(request, campaign_pk):
-    print(datetime.datetime.today(), "Chamou o compare")
     campaign = Campaign.objects.get(pk=campaign_pk)
     schemas = campaign.schemas.order_by('-name')
 

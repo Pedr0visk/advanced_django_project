@@ -9,4 +9,6 @@ from .models import Schema, Result
 
 @receiver(schemas_compare_event)
 def created_or_updated_schema(sender, instance, created, **kwargs):
+    print('initing calc')
     calc_results(instance.pk, user=kwargs['user'])
+    print('end calc')

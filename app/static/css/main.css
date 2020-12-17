@@ -10606,6 +10606,9 @@ h3 {
 .main-header .navbar {
   padding: 0;
 }
+.main-header .navbar .navbar-nav .nav-item:not(:last-child) {
+  margin-right: 0.5rem;
+}
 .main-header .navbar .navbar-nav .nav-item.active .nav-link, .main-header .navbar .navbar-nav .nav-item:hover .nav-link {
   transition: ease-in 0.1s;
   color: #277aa2;

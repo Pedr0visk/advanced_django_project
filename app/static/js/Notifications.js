@@ -91,7 +91,7 @@
             $('#task_alert').removeClass('d-flex')
           }
 
-          // Notification.createNotification(notification);
+          Notification.createNotification(notification);
         });
 
         $('.toast').toast('show');

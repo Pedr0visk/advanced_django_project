@@ -80,6 +80,11 @@
 
           <!-- menu -->
           <div class="collapse navbar-collapse" id="menu">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a href="{% url 'dashboard' %}" class="nav-link"><i class="fa fa-home"></i> Main</a>
+              </li>
+            </ul>
             <ul class="navbar-nav ml-auto mr-5">
               {% block extra_menu %}{% endblock %}
             </ul>

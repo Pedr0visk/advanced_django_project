@@ -32,14 +32,21 @@ class SchemaSerializer(serializers.ModelSerializer):
         if schema.is_default:
             Schema.toggle_schema_default(schema.name)
 
+        user = None
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            user = request.user
+
         for phase_data in phases_data:
             test_groups = phase_data.pop('test_groups')
             phase = Phase.objects.create(schema=schema, **phase_data)
             if phase.has_test:
                 phase.test_groups.set(test_groups)
 
-        schema_created_or_updated.send(sender=Schema.__class__,
-                                       instance=schema, created=True)
+        schemas_compare_event.send(sender=Schema.__class__,
+                                   user=user,
+                                   instance=schema,
+                                   created=False)
         return schema
 
     def update(self, instance, validated_data):
