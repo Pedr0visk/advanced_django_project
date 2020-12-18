@@ -7,9 +7,11 @@ from .signals import *
 
 @shared_task
 def calc_results(schema_pk, *args, **kwargs):
+    print('priting user from calc results', kwargs['user'])
+    # initing calc results and calling schema compare
     schema = Schema.objects.get(pk=schema_pk)
-    values = metrics.run(schema)
-    Result.objects.create(schema=schema, values=values)
+    # values = metrics.run(schema)
+    # Result.objects.create(schema=schema, values=values)
 
     schemas_compare_calc_done.send(sender=Schema.__class__,
                                    user=kwargs['user'],

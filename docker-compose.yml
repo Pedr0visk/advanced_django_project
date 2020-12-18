@@ -4,7 +4,7 @@ services:
   app:
     container_name: bop-app
     build: ./app
-    command: sh -c "python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./app/:/usr/src/app/
     ports:
@@ -28,5 +28,29 @@ services:
     container_name: bop-cache
     image: redis:latest
 
+  celery:
+    build: ./app
+    command: sh -c "celery -A bop worker -l info"
+    restart: always
+    volumes:
+      - ./app:/app
+    depends_on:
+      - db
+      - cache
+    env_file:
+      - .env.dev
+
+  celery-beat:
+    build: ./app
+    command: sh -c "celery -A proj beat -l info"
+    restart: always
+    volumes:
+      - ./app:/app
+    depends_on:
+      - db
+      - cache
+
+    env_file:
+      - .env.dev
 volumes:
   postgres_data:

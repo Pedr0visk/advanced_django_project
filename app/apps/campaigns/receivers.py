@@ -1,14 +1,15 @@
-from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core import serializers
 
-from . import metrics
 from .tasks import calc_results
 from .signals import *
-from .models import Schema, Result
 
 
 @receiver(schemas_compare_event)
 def created_or_updated_schema(sender, instance, created, **kwargs):
-    print('initing calc')
-    calc_results(instance.pk, user=kwargs['user'])
-    print('end calc')
+    # getting user obj from request
+    user = kwargs['user'].__dict__['_wrapped']
+    user = serializers.serialize('json', [user, ])
+    print('print user from campaign receivers', user)
+    # calling celery to run this task in background
+    calc_results.delay(instance.pk, user=user)

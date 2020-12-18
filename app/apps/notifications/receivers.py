@@ -12,6 +12,7 @@ from ..campaigns.signals import *
 @receiver(schemas_compare_calc_done)
 def create_notification(*args, **kwargs):
     user = kwargs['user']
+    print('printing user from create notification haha', user)
 
     if kwargs['created']:
         Notification.objects.create(
