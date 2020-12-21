@@ -72,7 +72,7 @@ class SchemaSerializer(serializers.ModelSerializer):
                 phase.test_groups.set(test_groups)
 
         schemas_compare_event.send(sender=Schema.__class__,
-                                   user=user,
+                                   user_id=user.id,
                                    instance=instance,
                                    created=False)
 

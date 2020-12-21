@@ -33,7 +33,7 @@ services:
     command: sh -c "celery -A bop worker -l info"
     restart: always
     volumes:
-      - ./app:/app
+      - ./app/:/usr/src/app/
     depends_on:
       - db
       - cache
@@ -45,10 +45,11 @@ services:
     command: sh -c "celery -A proj beat -l info"
     restart: always
     volumes:
-      - ./app:/app
+      - ./app/:/usr/src/app/
     depends_on:
       - db
       - cache
+      - celery
 
     env_file:
       - .env.dev

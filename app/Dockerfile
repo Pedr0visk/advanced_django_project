@@ -20,7 +20,12 @@ COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
 # copy project
-COPY . .
+COPY ./apps ./apps
+COPY ./bop ./bop
+COPY ./static ./static
+COPY ./templates ./templates
+COPY ./manage.py .
+
 
 COPY ./scripts /scripts
 RUN chmod +x /scripts/*
