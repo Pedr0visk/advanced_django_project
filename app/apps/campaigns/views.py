@@ -150,7 +150,6 @@ def campaign_metrics(request, schema_pk):
         for phase in phases:
             if phase.has_test:
                 for i in range(0, int(phase.duration)):
-                    print('cont', cont)
                     result_teste_sf.append(result_sf[cont - 1])
                     cont = cont + 1
             else:
@@ -197,10 +196,83 @@ def campaign_delete(request, campaign_pk):
 
 
 def campaign_run(request, campaign_pk):
-    campaign = Campaign.objects.get(pk=campaign_pk)
-    schema = campaign.schema_active
+    campaign = get_object_or_404(Campaign, pk=campaign_pk)
+    schema = campaign.get_schema_active()
+    print(schema.result.created_at)
+    print(campaign)
 
-    messages.success(request, 'Operation successfully done!')
+    # updating results
+    return 'Ok'
+
+    results = result.values
+    results = ast.literal_eval(results)
+    time = []
+
+    number_Sf = len(results[0])
+
+    tempo = len(results) - 1
+    data_to_charts = []
+    average = []
+    maxi = []
+
+    for j in range(1, number_Sf):
+
+        result_sf = []
+        average_to_chart = []
+        # result_sf_falho = []
+        soma = 0
+        avg = 0
+        for i in range(1, tempo):
+            if j == 1:
+                time.append(results[i][0])
+
+            result_sf.append(results[i][j])
+            soma = soma + results[i][j]
+            # if i+2 > inicio:
+            #    result_sf_falho.append(result_falho[i][j])
+            # else:
+            #    result_sf_falho.append("null")
+
+        avg = soma / tempo
+
+        desc = "safety Function" + " " + str(j)
+        average.append(avg)
+        maximo = max(result_sf)
+        maxi.append(maximo)
+        cont = 0
+        result_teste_sf = []
+        phases = schema.phases.all().order_by('start_date')
+        for phase in phases:
+            if phase.has_test:
+                for i in range(0, int(phase.duration)):
+                    result_teste_sf.append(result_sf[cont - 1])
+                    cont = cont + 1
+            else:
+                for i in range(0, int(phase.duration)):
+                    result_teste_sf.append(0)
+                    cont = cont + 1
+
+        for i in range(0, tempo):
+            average_to_chart.append(avg)
+
+        data_to_charts.append({
+            'average': avg,
+            'average_to_chart': average_to_chart,
+            'result_teste_sf': result_teste_sf,
+            'result': result_sf,
+            'max': maximo,
+            'desc': desc,
+        })
+
+    context = {
+        'campaign': campaign,
+        'schema': schema_pk,
+        'average': average,
+        'maxi': maxi,
+        'data_to_charts': data_to_charts,
+        'safety_functions': campaign.bop.safety_functions.all()
+    }
+
     return render(request, 'campaigns/campaign_charts.html', context)
 
 

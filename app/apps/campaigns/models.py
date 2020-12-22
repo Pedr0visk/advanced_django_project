@@ -64,7 +64,7 @@ class Campaign(models.Model):
         hours = days * 24
         return days, hours
 
-    def schema_active(self):
+    def get_schema_active(self):
         return self.schemas.filter(is_default=True).first()
 
     def success_url(self):
@@ -90,7 +90,6 @@ class Campaign(models.Model):
 class Schema(models.Model):
     name = models.CharField(max_length=255)
     is_default = models.BooleanField(default=False)
-    result = models.TextField(blank=True, null=True)
     cuts_contribution = models.TextField(blank=True, null=True)
     campaign = models.ForeignKey(Campaign,
                                  on_delete=models.CASCADE,
