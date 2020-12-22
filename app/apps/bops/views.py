@@ -263,13 +263,5 @@ def list_subsystems(request, pk):
 
 def bop_result(request, pk):
     bop = Bop.objects.get(pk=pk)
-    campaign = bop.active_campaign()
-    schemas = campaign.schemas.all()
-
-    context = {
-        'bop': bop,
-        'campaign': campaign,
-        'schemas': schemas
-    }
-
+    context = {'bop': bop}
     return render(request, 'bops/bop_results.html', context)

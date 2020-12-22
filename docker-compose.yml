@@ -42,7 +42,7 @@ services:
 
   celery-beat:
     build: ./app
-    command: sh -c "celery -A proj beat -l info"
+    command: sh -c "celery -A bop beat -l info"
     restart: always
     volumes:
       - ./app/:/usr/src/app/

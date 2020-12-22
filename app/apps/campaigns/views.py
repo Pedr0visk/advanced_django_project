@@ -198,21 +198,10 @@ def campaign_delete(request, campaign_pk):
 
 def campaign_run(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
-    schemas = campaign.schemas.all()
-    print("run do camping _ run")
-    try:
-        for schema in schemas:
-            results = metrics.run(schema)
-            schema.result = results
-
-            schema.save()
-    except:
-        messages.error(
-            request, 'Sorry, some error occurr when trying to run schemas.')
-        return campaign.success_url()
+    schema = campaign.schema_active
 
     messages.success(request, 'Operation successfully done!')
-    return redirect('campaigns:index', campaign_pk)
+    return render(request, 'campaigns/campaign_charts.html', context)
 
 
 # SCHEMAS
@@ -262,8 +251,7 @@ def schema_compare(request, campaign_pk):
         average_schema = []
         max_schema = []
 
-        result = s.result
-
+        result = ast.literal_eval(s.result)
         tempo = len(result) - 1
         number_sf = len(result[0])
 
@@ -305,7 +293,7 @@ def schema_compare(request, campaign_pk):
         final_max.append(t_max)
 
     messages.success(request, 'All schemas had theirs results updated!')
-
+    print(final, final_max)
     context = {
         'safety_functions': campaign.bop.safety_functions.all(),
         'campaign': campaign,

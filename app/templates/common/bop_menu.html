@@ -33,10 +33,10 @@
   <a href="{% url 'bops:hierarchy' bop.pk %}" class="nav-link"><i class="fa fa-sitemap"></i> Hierarchy</a>
 </li>
 
-{% if 'summary-results' in request.path %}
+{% if 'results' in request.path %}
 <li class="nav-item active">
   {% else %}
 <li class="nav-item ">
   {% endif %}
-  <a href="" class="nav-link"><i class="fa fa-chart-bar"></i> Results</a>
+  <a href="{% url 'bops:results' bop.pk %}" class="nav-link"><i class="fa fa-chart-bar"></i> Results</a>
 </li>
