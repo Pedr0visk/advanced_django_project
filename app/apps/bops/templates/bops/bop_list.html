@@ -2,92 +2,110 @@
 {% load static %}
 
 {% block breadcrumb %}
-  <!-- breadcrumb -->
-  <div class="page-title">
-    <div class="container-fluid px-5">
-      <div class="page-title-wrapper-2">
-        <div class="page-title-heading-2">
-          <span class="current-page">Bops </span>
-        </div>
+<!-- breadcrumb -->
+<div class="page-title">
+  <div class="container-fluid px-5">
+    <div class="page-title-wrapper-2">
+      <div class="page-title-heading-2">
+        <span class="current-page">Bops </span>
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
 
 
 {% block main %}
-  {% for message in messages %}
-    <ul class="messagelist">
-      <li class="success">{{ message }}</li>
-    </ul>
-  {% endfor %}
-  <!-- main -->
-  <div class="main">
-    <!-- section bop list -->
-    <div class="section" id="home">
-      <div class="container-fluid px-5">
-        <div class="section-title mb-3">
-          <p>Select bop to manage</p>
-          <a href="{% url 'bops:upload' %}" class="btn btn-sm btn-primary"><small>ADD BOP <i
-              class="fa fa-plus"></i></small> </a>
-        </div>
+{% for message in messages %}
+<ul class="messagelist">
+  <li class="success">{{ message }}</li>
+</ul>
+{% endfor %}
+<!-- main -->
+<div class="main">
+  <!-- section bop list -->
+  <div class="section" id="home">
+    <div class="container-fluid px-5">
+      <div class="section-title mb-3">
+        <p>Select bop to manage</p>
+        <a href="{% url 'bops:upload' %}" class="btn btn-sm btn-primary"><small>ADD BOP <i
+            class="fa fa-plus"></i></small> </a>
+      </div>
 
-        <div class="row">
-          <div class="col-sm-12 col-12">
-            <div class="toolbar ml-auto px-3 py-2 mb-3">
-              <div class="search-bar">
-                <form class="form-inline my-2 my-lg-0" method="get">
-                  <label for="" class="mr-2"><i class="fa fa-search"></i></label>
-                  <input name="username" class="form-control form-control-sm mr-sm-2" type="search">
-                  <button class="" type="submit">
-                    Search
-                  </button>
-                </form>
-              </div>
+      <div class="row">
+        <div class="col-sm-12 col-12">
+          <div class="toolbar ml-auto px-3 py-2 mb-3">
+            <div class="search-bar">
+              <form class="form-inline my-2 my-lg-0" method="get">
+                <label for="" class="mr-2"><i class="fa fa-search"></i></label>
+                <input name="username" class="form-control form-control-sm mr-sm-2" type="search">
+                <button class="" type="submit">
+                  Search
+                </button>
+              </form>
             </div>
           </div>
-        </div>
-
-        <div class="row">
-          <!-- BOP's table list -->
-          <div class="col-sm-12 col-12">
-            <div class="results">
-              <table class="table dnv-table m-0">
-                <thead class="bg-white-50">
-                <tr>
-                  <th scope="col">name</th>
-                  <th scope="col">rig</th>
-                  <th scope="col">last certification</th>
-                  <th scope="col">campaign active</th>
-                  <th scope="col" width="5%">active</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for bop in bops %}
-                  <tr>
-                    <td><a href="{% url 'bops:index' bop.pk %}">{{ bop.name }}</a></td>
-                    <td><a href="{% url 'bops:index' bop.pk %}">{{ bop.rig }}</a></td>
-                    <td>expiry at: {{ bop.last_certification.end_date}}</td>
-                    <td>{{ bop.active_campaign }}</td>
-                    <td align="center">
-                      {% if bop.active_campaign %}
-                      <img src="{% static 'img/icon-yes.svg' %}" alt="">
-                      {% else %}
-                      {% endif %}
-                    </td>
-
-                  </tr>
-                {% endfor %}
-                </tbody>
-              </table>
-
-            </div>
-          </div>
-          <!-- end cols -->
         </div>
       </div>
-      <!-- ./ container -->
+
+      <div class="row">
+        <!-- BOP's table list -->
+        <div class="col-sm-12 col-12">
+          <div class="results">
+            <table class="table dnv-table m-0">
+              <thead class="bg-white-50">
+              <tr>
+                <th scope="col">name</th>
+                <th scope="col">rig</th>
+                <th scope="col">last certification</th>
+                <th scope="col">campaign active</th>
+                <th scope="col" width="5%">active</th>
+                <th></th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for bop in bops %}
+              <tr>
+                <td><a href="{% url 'bops:index' bop.pk %}">{{ bop.name }}</a></td>
+                <td><a href="{% url 'bops:index' bop.pk %}">{{ bop.rig }}</a></td>
+                <td>expiry at: {{ bop.last_certification.end_date }}</td>
+                <td>{{ bop.active_campaign }}</td>
+                <td align="center">
+                  {% if bop.active_campaign %}
+                  <img src="{% static 'img/icon-yes.svg' %}" alt="">
+                  {% else %}
+                  {% endif %}
+                </td>
+                <td width="6%" align="center">
+                  <a
+                      href="{% url 'bops:update' bop.pk %}" class="btn-standard"
+                      data-toggle="tooltip"
+                      data-placement="left"
+                      title="click to edit">
+                    <i class="fa fa-pencil-alt text-warning "></i> edit</a>
+                </td>
+                 <td width="7%" align="center">
+                  <a
+                      href="{% url 'bops:delete' bop.pk %}" class="btn-standard"
+                      data-toggle="tooltip"
+                      data-placement="left"
+                      title="click to edit">
+                    <i class="fa fa-times text-danger "></i> delete</a>
+                </td>
+
+              </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+        <!-- end cols -->
+      </div>
     </div>
-    <!-- ./ section -->
+    <!-- ./ container -->
   </div>
+  <!-- ./ section -->
+</div>
 {% endblock %}

@@ -15,6 +15,7 @@ class CommonInfo(models.Model):
                                            related_name="%(class)s",
                                            related_query_name="%(class)s", )
     tests = JSONField()
+    pressure_test = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

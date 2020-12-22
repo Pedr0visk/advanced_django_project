@@ -26,7 +26,7 @@ class EventForm(ModelForm):
 
     class Meta:
         model = Event
-        fields = ['name', 'type', 'object_code', 'description', 'date']
+        fields = ['type', 'object_code', 'description', 'date']
 
         widgets = {
             'date': DateInput(format='%Y-%m-%d',

@@ -32,11 +32,6 @@
             <div class="col-sm-2">
               {{ form.name }}
             </div>
-            <div class="col-sm-10 offset-2">
-              <small class="form-text text-muted">
-                Required
-              </small>
-            </div>
           </div>
           <hr />
 
@@ -47,10 +42,14 @@
             <div class="col-sm-2">
               {{ form.start_date }}
             </div>
-            <div class="col-sm-10 offset-2">
-              <small class="form-text text-muted">
-                Required
-              </small>
+          </div>
+          <hr />
+
+          <!-- pressure test field -->
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label col-form-label-sm">Pressure Test:</label>
+            <div class="col-1">
+              {{ form.pressure_test }}
             </div>
           </div>
           <hr />
@@ -134,7 +133,7 @@
 <script src="{% static 'build/app.js' %}"></script>
 <script>
   // Query all input fields
-  var form_fields = document.getElementsByTagName('input')
+  var form_fields = document.querySelectorAll('input[type="text"]')
   // customization of form fields
   for (var field in form_fields) {
     if (form_fields[field].type == 'file') continue

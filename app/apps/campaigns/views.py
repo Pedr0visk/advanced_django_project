@@ -330,10 +330,11 @@ def event_create(request, campaign_pk):
     if request.method == 'POST':
         if form.is_valid():
             new_event = form.save(commit=False)
+            new_event.created_by = request.user
             new_event.campaign_id = campaign_pk
             new_event.save()
             messages.success(
-                request, f'Event "{new_event.name}" created successfully!')
+                request, 'Event created successfully!')
             return redirect(new_event.success_url())
 
     context = {

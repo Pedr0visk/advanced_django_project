@@ -23,6 +23,9 @@
       </div>
 
       <div>
+        <a href="{% url 'campaigns:run' campaign.pk %}" class="btn btn-success mr-2">
+          <small>RUN <i class="fa fa-cogs"></i></small>
+        </a>
         <a href="{% url 'campaigns:planner' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
           <small>CAMPAIGN PLANNER <i class="fa fa-chart-area"></i></small>
         </a>
@@ -60,7 +63,7 @@
         </div>
       </div>
 
-      <div class="col-sm-5 col-12">
+      <div class="col-sm-6 col-12">
         <div class="results">
           <div class="d-flex  px-1">
             <h4 class="title-1 mr-auto">Events</h4>
@@ -71,26 +74,26 @@
           <table class="table dnv-table m-0">
             <thead class="bg-white-50">
               <tr>
-                <th scope="col">name</th>
                 <th scope="col">type</th>
                 <th scope="col">object id</th>
-                <th scope="col">date</th>
+                <th scope="col">created at</th>
+                <th scope="col">created by</th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
               {% for e in campaign.events.all %}
               <tr>
-                <td><a href="">{{ e.name }}</a></td>
                 <td><a href="">{{ e.type }}</a></td>
                 <td><a href="">{{ e.object_code }}</a></td>
                 <td><a href="">
                     {{ e.date }}
                   </a></td>
-                <td width="10%">
+                <td>{{e.created_by.username}}</td>
+                <td width="15%">
                   <form method="post" action="{% url 'campaigns:delete_event' e.pk %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn"><i class="fa fa-times text-danger"></i></button>
+                    <button type="submit" class="btn-standard"><i class="fa fa-times text-danger"></i> delete</button>
                   </form>
                 </td>
               </tr>

@@ -1,12 +1,13 @@
-from django.contrib.admin.utils import NestedObjects
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
+from django.contrib.admin.utils import NestedObjects
+from django.utils.translation import gettext_lazy as _
+
+from datetime import timedelta
 
 from ..bops.models import Bop
 from ..test_groups.models import TestGroup
-from django.utils.translation import gettext_lazy as _
-from datetime import timedelta
-from django.utils import timezone
 
 
 class Campaign(models.Model):
@@ -156,7 +157,10 @@ class Event(models.Model):
         COMP_FAIL = 'CIL', _('Failure in Component')
         SUBSYS_FAIL = 'SIL', _('Failure in Subsystem')
 
-    name = models.CharField(max_length=255)
+    created_by = models.ForeignKey(User,
+                                   related_name='events_created',
+                                   null=True,
+                                   on_delete=models.SET_NULL)
     description = models.TextField(blank=True, null=True)
     object_code = models.CharField(blank=True, max_length=255)
     campaign = models.ForeignKey(Campaign,
@@ -176,7 +180,7 @@ class Event(models.Model):
         return reverse('campaigns:index', args=[self.campaign.pk])
 
     def __str__(self):
-        return self.name
+        return f'Event created by {self.created_by.username} at {self.date}'
 
 
 class Result(models.Model):

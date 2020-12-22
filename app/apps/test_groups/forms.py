@@ -25,7 +25,7 @@ class TestGroupDummyForm(ModelForm):
 
     class Meta:
         model = TestGroupDummy
-        fields = ['name', 'start_date', 'tests', 'failure_modes']
+        fields = ['name', 'start_date', 'tests', 'failure_modes', 'pressure_test']
 
         widgets = {
             'start_date': DateInput(format='%Y-%m-%d',
