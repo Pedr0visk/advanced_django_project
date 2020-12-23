@@ -1,14 +1,13 @@
 import ast
 import datetime
 from . import metrics
-from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from apps.bops.models import *
 from apps.cuts.models import *
-from .models import Campaign, Phase, Schema, Event
+from .models import Campaign, Phase, Schema, Event, Result
 from .forms import CampaignForm, PhaseForm, EventForm
 from .filters import campaign_filter
 from django.shortcuts import get_object_or_404
@@ -198,16 +197,14 @@ def campaign_delete(request, campaign_pk):
 def campaign_run(request, campaign_pk):
     campaign = get_object_or_404(Campaign, pk=campaign_pk)
     schema = campaign.get_schema_active()
-    print(schema.result.created_at)
-    print(campaign)
 
     # updating results
-    return 'Ok'
+    values = metrics.run(schema)
+    new_result = Result.objects.create(schema=schema, values=values)
+    print('new result created', new_result)
+    results = new_result.values
 
-    results = result.values
-    results = ast.literal_eval(results)
     time = []
-
     number_Sf = len(results[0])
 
     tempo = len(results) - 1
@@ -266,7 +263,7 @@ def campaign_run(request, campaign_pk):
 
     context = {
         'campaign': campaign,
-        'schema': schema_pk,
+        'schema': schema,
         'average': average,
         'maxi': maxi,
         'data_to_charts': data_to_charts,
@@ -309,7 +306,6 @@ def schema_delete(request, schema_pk):
 def schema_compare(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
     schemas = campaign.schemas.order_by('-name')
-
     relative_comp = []
     relative_comp_max = []
     fl = 0
@@ -323,7 +319,7 @@ def schema_compare(request, campaign_pk):
         average_schema = []
         max_schema = []
 
-        result = ast.literal_eval(s.result)
+        result = ast.literal_eval(s.last_result.values)
         tempo = len(result) - 1
         number_sf = len(result[0])
 
@@ -448,7 +444,7 @@ def compare_sf(request, campaign_pk):
     average = []
     maxi = []
     for s in schemas:
-        results = s.result
+        results = s.last_result.values
 
         results = ast.literal_eval(results)
         time = []

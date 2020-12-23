@@ -45,8 +45,8 @@
           <ul class="info-list">
             <li>name: <b>{{ campaign.name }}</b></li>
             <li class="d-flex align-items-center">
-              base schema: <b>{{ campaign.schema_active.name }}</b>
-              <a href="{% url 'campaigns:update_schema' campaign.schema_active.pk %}"
+              base schema: <b>{{ campaign.get_schema_active.name }}</b>
+              <a href="{% url 'campaigns:update_schema' campaign.get_schema_active.pk %}"
                 class="ml-auto btn btn-standard"><small>edit</small></a>
             </li>
             <li>

@@ -108,8 +108,8 @@ class Schema(models.Model):
         return end_date
 
     @property
-    def result(self):
-        return self.results.latest('created_at').values
+    def last_result(self):
+        return self.results.latest('created_at')
 
     @staticmethod
     def toggle_schema_default(schema_name):

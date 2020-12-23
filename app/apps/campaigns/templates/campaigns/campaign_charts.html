@@ -580,7 +580,8 @@
      <div>
                 {% for sf in safety_functions %}
             <a class="btn btn-secondary" style="float: right; color: white" role="button"
-                           href="{% url 'campaigns:cut_list' schema sf.pk %}"> view cutlist - SF {{forloop.counter}} </a>
+                           href="{% url 'campaigns:cut_list' schema.pk sf.pk %}"> view cutlist - SF {{forloop.counter}}
+            </a>
             {% endfor %}
             </div>
     </div>
