@@ -32,6 +32,10 @@ class SchemaSerializer(serializers.ModelSerializer):
         if schema.is_default:
             Schema.toggle_schema_default(schema.name)
 
+        if not schema.campaign.get_schema_active():
+            schema.is_default = True
+            schema.save()
+
         user = None
         request = self.context.get("request")
         if request and hasattr(request, "user"):

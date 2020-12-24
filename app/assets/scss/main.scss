@@ -40,7 +40,6 @@ p {
 |--------------------|
 */
 
-
 /*
 |--------------------|
 |  REBOOT BOOTSTRAP  |
@@ -88,7 +87,6 @@ table {
 }
 
 .btn-group-actions {
-  
   i.fa {
     width: 13px;
     height: 13px;
@@ -144,7 +142,7 @@ table {
 .results {
   .paginator {
     border-bottom: 1px solid #eee;
-    
+
     .counter {
       color: #6c757d;
       font-size: 12px;
@@ -170,7 +168,7 @@ table {
 ul.messagelist {
   list-style: none;
   padding: 0;
-  
+
   li.success {
     padding: 10px 10px 10px 65px;
     color: #333;
@@ -188,7 +186,8 @@ ul.errorlist {
   li {
     padding: 10px 10px 10px 65px;
     color: #333;
-    background: rgba($color: #ba2121, $alpha: .2) url(../img/icon-no.svg) 40px 12px no-repeat;
+    background: rgba($color: #ba2121, $alpha: 0.2) url(../img/icon-no.svg) 40px
+      12px no-repeat;
     background-size: 16px auto;
     font-size: 13px;
     display: block;
@@ -233,7 +232,7 @@ ul.errorlist {
 ul.messages {
   list-style: none;
   padding: 0;
-  
+
   li {
     background-size: 16px auto;
     display: block;
@@ -243,7 +242,8 @@ ul.messages {
   }
 
   li.error {
-    background: rgba($color: #ba2121, $alpha: .2) url(../img/icon-no.svg) 40px 12px no-repeat;
+    background: rgba($color: #ba2121, $alpha: 0.2) url(../img/icon-no.svg) 40px
+      12px no-repeat;
   }
 
   li.success {
@@ -281,7 +281,8 @@ table.table-results {
   }
 }
 
-.table th, .table td {
+.table th,
+.table td {
   padding: 0.35rem;
 }
 
@@ -316,7 +317,10 @@ table.table-results {
     button.btn-link {
       color: white;
       font-size: 14px;
-
     }
   }
+}
+
+.input-group-text {
+  padding: 0.2rem 0.75rem;
 }

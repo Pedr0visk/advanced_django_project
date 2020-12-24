@@ -306,12 +306,19 @@ def schema_delete(request, schema_pk):
 def schema_compare(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
     schemas = campaign.schemas.order_by('-name')
+    print(schemas)
+    if not campaign.get_schema_active():
+        messages.error(
+            request, 'You need create a base schema before comparing results')
+        return redirect('campaigns:index', campaign.pk)
+
     relative_comp = []
     relative_comp_max = []
     fl = 0
     final = []
     final_max = []
     for s in schemas:
+        print(s.last_result)
         t = []
         t_max = []
         t.append(s.name)

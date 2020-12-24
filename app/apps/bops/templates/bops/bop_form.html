@@ -34,7 +34,7 @@
               </small>
             </div>
           </div>
-          <hr/>
+          <hr />
 
           <!-- rig field -->
           <div class="form-group row">
@@ -48,7 +48,7 @@
               </small>
             </div>
           </div>
-          <hr/>
+          <hr />
 
           <!-- rig field -->
           <div class="form-group row ">
@@ -62,7 +62,7 @@
               </small>
             </div>
           </div>
-          <hr/>
+          <hr />
 
           {% if not bop %}
           <!-- File field -->
@@ -75,7 +75,7 @@
               </small>
             </div>
           </div>
-          <hr/>
+          <hr />
           <!-- certification -->
           <fieldset class="form-fieldset">
             <h4>Last Certification</h4>
@@ -91,15 +91,20 @@
                 </div>
               </div>
             </div>
-            <hr/>
+            <hr />
 
             <div class="form-group row px-2">
               <label class="col-sm-2 col-form-label col-form-label-sm">end date:</label>
               <div class="col-sm-2">
-                {{ cert_form.end_date }}
+                <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                  {{ cert_form.end_date }}
+                  <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
+                </div>
               </div>
             </div>
-            <hr/>
+            <hr />
 
           </fieldset>
           {% endif %}
@@ -135,22 +140,26 @@
     $("#datetimepicker1").datetimepicker({
       format: 'YYYY-MM-DD',
     });
+
+    $("#datetimepicker2").datetimepicker({
+      format: 'YYYY-MM-DD',
+    });
   });
 </script>
 <script>
-    // Query all input fields
-    var form_fields = document.getElementsByTagName('input')
-    // customization of form fields
-    for (var field in form_fields) {
-        if (form_fields[field].type == 'file') continue
-        form_fields[field].className += 'form-control form-control-sm'
-    }
+  // Query all input fields
+  var form_fields = document.getElementsByTagName('input')
+  // customization of form fields
+  for (var field in form_fields) {
+    if (form_fields[field].type == 'file') continue
+    form_fields[field].className += 'form-control form-control-sm'
+  }
 
-    // Query all selects fields
-    var form_fields = document.getElementsByTagName('select')
-    // customization of form fields
-    for (var field in form_fields) {
-        form_fields[field].className += 'form-control form-control-sm'
-    }
+  // Query all selects fields
+  var form_fields = document.getElementsByTagName('select')
+  // customization of form fields
+  for (var field in form_fields) {
+    form_fields[field].className += 'form-control form-control-sm'
+  }
 </script>
 {% endblock %}

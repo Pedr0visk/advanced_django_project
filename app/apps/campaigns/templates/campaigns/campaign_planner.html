@@ -7,20 +7,6 @@
 
 {% block main %}
 
-{% if not campaign.created %}
-<div class="alert-danger py-3 text-center mt-1">
-  <p>You are in planner mode, to start the campaign please, compare the schemas, select one to default and click on
-    the button "Save Changes".</p>
-</div>
-{% else %}
-<div class="alert alert-warning alert-dismissible fade show mt-1" role="alert">
-  <strong>Warning!</strong> Warning! Be careful when editing this page. Any change you make may modify the campaign
-  status and you will not be able to undo it later.
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-{% endif %}
 <div class="bg-success py-2 px-4" role="alert" id="task_alert" style="display: none">
   <img src="{% static 'img/loading.gif' %}" class="mr-2" alt="" width="20">
   <p class="text-white">Please wait a few seconds while we compare the schemas for you.</p>
@@ -78,7 +64,7 @@
                 <th scope="col">name</th>
                 <th></th>
                 <th></th>
-                <th>See Graphs</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -92,11 +78,12 @@
                   <small><b>DEFAULT</b></small>
                   {% endif %}
                 </td>
-                <td width="10%">
-                  <a href="{% url 'campaigns:delete_schema' schema.pk %}"><i class="fa fa-times text-danger"></i></a>
+                <td>
+                  <a class="btn-standard" href="{% url 'campaigns:delete_schema' schema.pk %}"><i
+                      class="fa fa-times text-danger"></i> delete</a>
                 </td>
-                <td width="30%">
-                  <a href="{% url 'campaigns:schema_run' schema.pk %}">Click here</a>
+                <td>
+                  <a href="{% url 'campaigns:schema_run' schema.pk %}">see graphs</a>
                 </td>
               </tr>
               {% endfor %}

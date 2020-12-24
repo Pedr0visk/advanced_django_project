@@ -39,8 +39,8 @@
                 <td>{{campaign.name}}</td>
                 <td>{{campaign.result.created_at}}</td>
                 <td width="10%" align="center">
-                  <a href="" class="btn-standard" data-toggle="tooltip" data-placement="left"
-                    title="click to see the last result">
+                  <a href="{% url 'campaigns:run' campaign.pk %}" class="btn-standard" data-toggle="tooltip"
+                    data-placement="left" title="click to see the last result">
                     <i class="fa fa-pencil-alt text-warning "></i> see results</a>
                 </td>
               </tr>

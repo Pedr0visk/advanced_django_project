@@ -319,6 +319,7 @@ export default {
                   this.phase = {}
                   this.phases = []
                   this.schema = {}
+                  window.location.href = '/'
                 });
           })
     },

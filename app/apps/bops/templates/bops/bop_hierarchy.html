@@ -50,36 +50,33 @@
         <div class="col-sm-5 col-12">
           <table class="table dnv-table dnv-table-admin">
             <thead>
-            <th>Bop System</th>
-            <th></th>
-            <th></th>
+              <th>Bop System</th>
+              <th></th>
+              <th></th>
             </thead>
             <tbody>
-            <tr>
-              <td><a href="">Subsystems</a></td>
-              <td width="25%" align="center">
-                <a href="{% url 'subsystems:list' %}?bop={{bop.id}}"><i
-                    class="fa fa-clipboard-list text-warning"></i> view list</a>
-              </td>
-              <td width="25%" align="center">
-                <a href="{% url 'subsystems:create' %}?bop={{bop.id}}"><i
-                    class="fa fa-plus"></i> add new one</a>
-              </td>
-            </tr>
-            <tr>
-              <td><a href="">Components</a></td>
-              <td width="25%"
-                  align="center"><a href="{% url 'components:list' %}?bop={{bop.id}}"><i
-                  class="fa fa-clipboard-list text-warning"></i> view list</a></td>
-              <td width="25%" align="center"><a href=""><i class="fa fa-plus"></i> add new one</a></td>
-            </tr>
-            <tr>
-              <td><a href="">Failure Modes</a></td>
-              <td width="25%"
-                  align="center"><a href="{% url 'failuremodes:list' %}?bop={{bop.id}}"><i
-                  class="fa fa-clipboard-list text-warning"></i> view list</a></td>
-              <td width="25%" align="center"><a href=""><i class="fa fa-plus"></i> add new one</a></td>
-            </tr>
+              <tr>
+                <td><a href="">Subsystems</a></td>
+                <td width="25%" align="center">
+                  <a href="{% url 'subsystems:list' %}?bop={{bop.id}}"><i class="fa fa-clipboard-list text-warning"></i>
+                    view list</a>
+                </td>
+                <td width="25%" align="center">
+                  <a href="{% url 'subsystems:create' %}?bop={{bop.id}}"><i class="fa fa-plus"></i> add new one</a>
+                </td>
+              </tr>
+              <tr>
+                <td><a href="">Components</a></td>
+                <td width="25%" align="center"><a href="{% url 'components:list' %}?bop={{bop.id}}"><i
+                      class="fa fa-clipboard-list text-warning"></i> view list</a></td>
+                <td width="25%" align="center"><a href=""><i class="fa fa-plus"></i> add new one</a></td>
+              </tr>
+              <tr>
+                <td><a href="">Failure Modes</a></td>
+                <td width="25%" align="center"><a href="{% url 'failuremodes:list' %}?bop={{bop.id}}"><i
+                      class="fa fa-clipboard-list text-warning"></i> view list</a></td>
+                <td width="25%" align="center"><a href=""><i class="fa fa-plus"></i> add new one</a></td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -93,11 +90,10 @@
             {% for subsystem in bop.subsystems.all %}
             <div class="card">
               <!-- card header -->
-              <div class="card-header d-flex align-items-center justify-content-between" id="headingOne">
+              <div class="card-header d-flex align-items-center justify-content-between">
                 <h5 class="mb-0">
                   <button class="btn btn-link" data-toggle="collapse" data-target="#{{subsystem.code}}"
-                          aria-expanded="false"
-                          aria-controls="{{subsystem.code}}">
+                    aria-expanded="false" aria-controls="{{subsystem.code}}">
                     Subsystem code: <span class="text-monospace"><b>{{ subsystem.code }}</b></span> |
                     Subsystem name: <span class="text-monospace"><b>{{ subsystem.name }}</b></span>
                   </button>
@@ -108,7 +104,7 @@
               </div>
               <!-- card body -->
               <div id="{{subsystem.code}}" class="collapse" aria-labelledby="headingOne"
-                   data-parent="#subsystem_accordion">
+                data-parent="#subsystem_accordion">
                 <div class="card-body">
                   <!-- COMOPONENTS ACCORDION -->
                   <p class="title-1 mb-2">Subsystem name:
@@ -119,9 +115,8 @@
                     <div class="card">
                       <div class="card-header" id="">
                         <h5 class="mb-0">
-                          <button class="btn btn-link" data-toggle="collapse" data-target="#{{component.name}}"
-                                  aria-expanded="false"
-                                  aria-controls="{{component.name}}">
+                          <button class="btn btn-link" data-toggle="collapse" data-target="#{{component.code}}"
+                            aria-expanded="false" aria-controls="{{component.code}}">
                             Component code: <span class="text-monospace"><b>{{ component.code }}</b></span> |
                             Component name: <span class="text-monospace"><b>{{ component.name }}</b></span> |
 
@@ -129,8 +124,8 @@
                         </h5>
                       </div>
 
-                      <div id="{{component.name}}" class="collapse" aria-labelledby=""
-                           data-parent="#component_accordion">
+                      <div id="{{component.code}}" class="collapse" aria-labelledby=""
+                        data-parent="#component_accordion">
                         <div class="card-body">
                           <!-- FAILURE MODES ACCORDION -->
                           <p class="title-1">Subsystem name:
@@ -140,46 +135,43 @@
                           <p class="text-muted"><i class="fa fa-list"></i> Failure Mode List</p>
                           <table class="table dnv-table m-0">
                             <thead class="bg-white-50">
-                            <tr>
-                              <th scope="col">code</th>
-                              <th scope="col">name</th>
-                              <th scope="col">component</th>
-                              <th scope="col" class="text-center">coverage</th>
-                              <th scope="col" class="text-center">type</th>
-                              <th scope="col" class="text-center">failure rate</th>
-                              <th scope="col" class="text-center">probability</th>
-                              <th scope="col" class="text-center">scale</th>
-                              <th scope="col" class="text-center">form</th>
-                              <th scope="col" class="text-center">cycle</th>
-                              <th scope="col" class="text-center">actions</th>
-                            </tr>
+                              <tr>
+                                <th scope="col">code</th>
+                                <th scope="col">name</th>
+                                <th scope="col">component</th>
+                                <th scope="col" class="text-center">coverage</th>
+                                <th scope="col" class="text-center">type</th>
+                                <th scope="col" class="text-center">failure rate</th>
+                                <th scope="col" class="text-center">probability</th>
+                                <th scope="col" class="text-center">scale</th>
+                                <th scope="col" class="text-center">form</th>
+                                <th scope="col" class="text-center">cycle</th>
+                                <th scope="col" class="text-center">actions</th>
+                              </tr>
                             </thead>
                             <tbody>
-                            {% for object in component.failure_modes.all %}
-                            <tr>
-                              <td width="7%" scope="row"><small>{{ object.code }}</small></td>
-                              <td width="18%">
-                                <a href="{% url 'failuremodes:update' object.id %}?bop={{bop.id}}">{{object.name}}</a>
-                              </td>
-                              <td width="15%"><a href="">{{ object.component }}</a></td>
-                              <td align="center"><a href="">{{ object.diagnostic_coverage }}</a></td>
-                              <td align="center">{{ object.distribution.type }}</td>
-                              <td align="center">{{ object.distribution.exponential_failure_rate|default:"--" }}</td>
-                              <td align="center">{{ object.distribution.probability|default:"--" }}</td>
-                              <td align="center">{{ object.distribution.scale|default:"--" }}</td>
-                              <td align="center">{{ object.distribution.form|default:"--" }}</td>
-                              <td align="center">{{ object.distribution.cycle|default:"--" }}</td>
-                              <td width="7%" align="center">
-                                <a
-                                    href="{% url 'failuremodes:update' object.id %}?bop={{bop.id}}"
-                                    class="btn-standard"
-                                    data-toggle="tooltip"
-                                    data-placement="left"
+                              {% for object in component.failure_modes.all %}
+                              <tr>
+                                <td width="7%" scope="row"><small>{{ object.code }}</small></td>
+                                <td width="18%">
+                                  <a href="{% url 'failuremodes:update' object.id %}?bop={{bop.id}}">{{object.name}}</a>
+                                </td>
+                                <td width="15%"><a href="">{{ object.component }}</a></td>
+                                <td align="center"><a href="">{{ object.diagnostic_coverage }}</a></td>
+                                <td align="center">{{ object.distribution.type }}</td>
+                                <td align="center">{{ object.distribution.exponential_failure_rate|default:"--" }}</td>
+                                <td align="center">{{ object.distribution.probability|default:"--" }}</td>
+                                <td align="center">{{ object.distribution.scale|default:"--" }}</td>
+                                <td align="center">{{ object.distribution.form|default:"--" }}</td>
+                                <td align="center">{{ object.distribution.cycle|default:"--" }}</td>
+                                <td width="7%" align="center">
+                                  <a href="{% url 'failuremodes:update' object.id %}?bop={{bop.id}}"
+                                    class="btn-standard" data-toggle="tooltip" data-placement="left"
                                     title="click to edit">
-                                  <i class="fa fa-pencil-alt text-warning "></i> edit</a>
-                              </td>
-                            </tr>
-                            {% endfor %}
+                                    <i class="fa fa-pencil-alt text-warning "></i> edit</a>
+                                </td>
+                              </tr>
+                              {% endfor %}
                             </tbody>
                           </table>
 
@@ -202,4 +194,3 @@
 </div>
 <!-- main -->
 {% endblock %}
-

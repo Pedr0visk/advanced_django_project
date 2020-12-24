@@ -8,9 +8,9 @@
 
 {% block main %}
 <style>
-    tr.selected {
-        background-color: rgba(248, 168, 37, 0.3) !important;
-    }
+  tr.selected {
+    background-color: rgba(248, 168, 37, 0.3) !important;
+  }
 </style>
 <div class="section" id="app">
   <div class="container-fluid px-5">
@@ -46,7 +46,7 @@
                 </select>
               </div>
             </div>
-            <hr/>
+            <hr />
             <!-- campaign field -->
             <div class="form-group row">
               <label class="col-sm-1 col-form-label col-form-label-sm">Campaign:</label>
@@ -56,7 +56,7 @@
                 </select>
               </div>
             </div>
-            <hr/>
+            <hr />
 
             {% if '/change/' in request.path %}
             <input type="hidden" id="schemaId" value="{{ schema.pk }}" name="schema">
@@ -74,8 +74,8 @@
 
 <div>
 
-{% endblock %}
+  {% endblock %}
 
-{% block scripts %}
-<script type="text/javascript" src="{% static 'build/app.js' %}"></script>
-{% endblock %}
+  {% block scripts %}
+  <script type="text/javascript" src="{% static 'build/app.js' %}"></script>
+  {% endblock %}

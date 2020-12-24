@@ -30,5 +30,6 @@ class EventForm(ModelForm):
 
         widgets = {
             'date': DateInput(format='%Y-%m-%d',
-                              attrs={'placeholder': 'Select a date', 'type': 'date'}),
+                              attrs={'class': 'form-control datetimepicker-input',
+                                     'data-target': '#datetimepicker1'}),
         }
