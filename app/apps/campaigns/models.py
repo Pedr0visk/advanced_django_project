@@ -65,6 +65,7 @@ class Campaign(models.Model):
         return days, hours
 
     def get_schema_active(self):
+        print('came here')
         return self.schemas.filter(is_default=True).first()
 
     def success_url(self):

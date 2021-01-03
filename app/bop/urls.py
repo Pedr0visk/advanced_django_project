@@ -14,6 +14,7 @@ router.register('bops', BopViewSet)
 urlpatterns = [
     path('', include('apps.accounts.urls')),
     path('', include('apps.campaigns.urls')),
+    path('notifications/', include('apps.notifications.urls')),
 
     path('bops/', include('apps.bops.urls')),
     path('cuts/', include('apps.cuts.urls')),
@@ -27,6 +28,6 @@ urlpatterns = [
     # api
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
-    #debug
+    # debug
     path('__debug__/', include(debug_toolbar.urls))
 ]

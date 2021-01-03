@@ -87,3 +87,22 @@
   </div>
 </div>
 {% endblock %}
+
+{% block scripts %}
+<script>
+  // Query all input fields
+  var form_fields = document.getElementsByTagName('input')
+  // customization of form fields
+  for (var field in form_fields) {
+    if (form_fields[field].type == 'file') continue
+    form_fields[field].className += 'form-control form-control-sm'
+  }
+
+  // Query all selects fields
+  var form_fields = document.getElementsByTagName('select')
+  // customization of form fields
+  for (var field in form_fields) {
+    form_fields[field].className += 'form-control form-control-sm'
+  }
+</script>
+{% endblock %}

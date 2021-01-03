@@ -98,7 +98,7 @@
           <h4>Info</h4>
           <ul class="info-list">
             <li>name: <b>{{ campaign.name }}</b></li>
-            <li>base schema: <b>{{ campaign.schema_active.name }}</b></li>
+            <li>base schema: <b>{{ campaign.get_schema_active.name }}</b></li>
             <li>BOP name: <b>{{ campaign.bop.name }}</b></li>
             <li>
               status:
@@ -122,11 +122,67 @@
   <p>Calculating...</p>
 </div>
 
-{{ request.user.id|json_script:"userId" }}
-{% include 'snippets/notifications.html' %}
-
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'js/Notifications.js' %}"></script>
+<script>
+  window.addEventListener('load', function (e) {
+    const userId = JSON.parse(document.getElementById('userId').textContent);
+
+    const chatSocket = new WebSocket(
+      'ws://'
+      + window.location.host
+      + '/ws/notifications/'
+      + userId
+      + '/'
+    );
+
+    chatSocket.onmessage = async function (e) {
+      const data = JSON.parse(e.data);
+
+      let old_notifications = JSON.parse(data.old_notifications);
+      let unreaded_notifications = JSON.parse(data.unreaded_notifications);
+      let unreaded_notification_count = JSON.parse(data.unreaded_notification_count);
+
+      unreaded_notifications.map(notification => {
+        if (notification.fields.group == 'c') {
+          let btn = document.getElementById('btnCompare');
+          let img = document.createElement('img');
+          let text = document.createElement('small');
+
+          btn.textContent = '';
+          btn.classList = 'btn btn-success';
+          btn.style = 'cursor: not-allowed';
+
+          img.src = '/static/img/loading.gif';
+          img.width = '15';
+          btn.appendChild(img);
+
+          text.textContent = 'COMPARING SCHEMAS...';
+          btn.appendChild(text);
+
+          $('#task_alert').addClass('d-flex')
+        }
+
+        if (notification.fields.group == 'd') {
+          let btn = document.getElementById('btnCompare');
+          let text = document.createElement('small');
+
+          btn.textContent = '';
+          btn.style = '';
+          btn.classList = 'btn btn-primary';
+
+          text.textContent = 'SEE SCHEMAS COMPARISON';
+          btn.appendChild(text);
+
+          $('#task_alert').removeClass('d-flex')
+        }
+      });
+    };
+
+    chatSocket.onclose = function (e) {
+      console.error('Chat socket closed unexpectedly');
+    };
+  });
+</script>
 {% endblock %}

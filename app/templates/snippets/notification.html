@@ -1,0 +1,82 @@
+<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+  aria-haspopup="true" aria-expanded="false">
+  <i class="fas fa-bell"></i>
+  Notifications
+  <span id="newNotificationCount" class="badge badge-warning text-white"></span>
+</a>
+<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" id="dropdownNotifications">
+
+</div>
+
+{{ request.user.id|json_script:"userId" }}
+{% load static %}
+
+{% block scripts %}
+<script src="{% static 'js/NotificationObj.js' %}"></script>
+<script>
+  $('#navbarDropdownMenuLink').click(function () {
+    const tmpObjsHTML = $('#newNotifications').html()
+    $.ajax({
+      method: 'post',
+      url: '{% url "AJAXMarkNotificationAsReaded" %}',
+      data: {
+        csrfmiddlewaretoken: '{{csrf_token}}'
+      },
+      success: function (data) {
+        console.log(data)
+        $('#newNotifications').html('')
+        $('#cheat').html(tmpObjsHTML)
+        $('#newNotificationCount').text(data.unreaded_notification_count)
+        $('#newNotificationCount').addClass('d-none')
+      },
+      error: function (data) {
+        console.log('ERR', data)
+      }
+    })
+  })
+
+  let userId = JSON.parse(document.getElementById('userId').textContent);
+
+  const notificationSocket = new WebSocket(
+    'ws://'
+    + window.location.host
+    + '/ws/notifications/'
+    + userId
+    + '/'
+  );
+
+  notificationSocket.onmessage = async function (e) {
+    const data = JSON.parse(e.data);
+
+    let old_notifications = JSON.parse(data.old_notifications);
+    let unreaded_notifications = JSON.parse(data.unreaded_notifications);
+    let unreaded_notification_count = JSON.parse(data.unreaded_notification_count);
+
+    unreaded_notifications.forEach(element => {
+      $('#newNotifications').html('');
+      var obj = new NotificationObj(element.fields)
+      $('#newNotifications').append(obj.drawNotification())
+    });
+
+    $('#dropdownNotifications').html('');
+    unreaded_notifications.forEach(element => {
+      var obj = `
+      <a class="dropdown-item" href="#">${element.fields.body}</a>
+      <div class="dropdown-divider"></div>
+      `;
+      $('#dropdownNotifications').append(obj)
+    });
+
+    $('.toast').toast('show');
+
+    if (parseInt(unreaded_notification_count) > 0) {
+      $('#newNotificationCount').text(unreaded_notification_count);
+      $('#newNotificationCount').removeClass('d-none')
+    }
+  };
+
+  notificationSocket.onclose = function (e) {
+    console.error('Chat socket closed unexpectedly');
+  };
+</script>
+{% endblock %}

@@ -324,3 +324,12 @@ table.table-results {
 .input-group-text {
   padding: 0.2rem 0.75rem;
 }
+
+.dropdown-menu {
+  overflow-y: scroll;
+  max-height: 40vh;
+}
+.dropdown-item {
+  white-space: unset;
+  font-size: 11px;
+}

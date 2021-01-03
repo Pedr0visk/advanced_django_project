@@ -199,13 +199,7 @@
 
     <div class="card p-2 bg-light text-right">
       <div class="d-flex">
-        <div>
-          <a href="{% url 'bops:index' bop_pk %}" class="btn btn-danger">Cancel</a>
-        </div>
         <div class="ml-auto">
-          <button type="submit" class="btn btn-secondary">
-            Save and add another
-          </button>
           <button @click.prevent="updateSchema" type="submit" class="btn btn-primary">
             SAVE
           </button>
