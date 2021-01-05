@@ -201,7 +201,6 @@ def campaign_run(request, campaign_pk):
     # updating results
     values = metrics.run(schema)
     new_result = Result.objects.create(schema=schema, values=values)
-    print('new result created', new_result)
     results = new_result.values
 
     time = []

@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'apps.managers',
     'apps.campaigns.apps.CampaignsConfig',
     'apps.accounts',
-    'apps.certifications',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',

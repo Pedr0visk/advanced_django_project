@@ -8,13 +8,12 @@ from django.shortcuts import render, redirect
 
 from .decorators import query_debugger
 from .models import Bop, SafetyFunction
-from .forms import BopForm, SafetyFunctionForm
+from .forms import BopForm, SafetyFunctionForm, CertificationForm
 from .load_bop import Loader as BopLoader
 from .load_safety_function import Loader as SafetyFunctionLoader
 from .decorators import query_debugger
 from .signals import bop_created_or_updated
 
-from ..certifications.forms import CertificationForm
 from ..managers.decorators import allowed_users
 from ..failuremodes.models import FailureMode
 
@@ -68,17 +67,24 @@ def bop_list(request):
 def bop_update(request, pk):
     bop = Bop.objects.get(pk=pk)
     form = BopForm(request.POST or None, instance=bop)
+    print('last certification', bop.get_last_certification())
+    cert_form = CertificationForm(request.POST or None,
+                                  instance=bop.get_last_certification())
 
     if request.method == 'POST':
+        if cert_form.is_valid():
+            cert_form.save()
+
         if form.is_valid():
             form.save()
-            bop_created_or_updated.send(
-                sender=Bop.__class__, instance=bop, created=False)
+            bop_created_or_updated.send(sender=Bop.__class__,
+                                        instance=bop,
+                                        created=False)
             messages.success(
                 request, f'Successfully updated bop "{bop.name}" ')
             return redirect(bop.success_url())
 
-    context = {'form': form, 'bop': bop}
+    context = {'form': form, 'bop': bop, 'cert_form': cert_form}
     return render(request, 'bops/bop_form.html', context)
 
 

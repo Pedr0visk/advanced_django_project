@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from apps.campaigns.models import Campaign, Phase, Schema
 from apps.test_groups.models import TestGroup
-from ..signals import *
+from ..tasks import *
 
 
 class PhaseSerializer(serializers.ModelSerializer):
@@ -47,10 +47,9 @@ class SchemaSerializer(serializers.ModelSerializer):
             if phase.has_test:
                 phase.test_groups.set(test_groups)
 
-        schemas_compare_event.send(sender=Schema.__class__,
-                                   user_id=user.id,
-                                   instance=schema,
-                                   created=False)
+        compare_schemas_for_campaign.delay(campaign_id=schema.campaign.id,
+                                           user_id=user.pk)
+
         return schema
 
     def update(self, instance, validated_data):
@@ -65,20 +64,21 @@ class SchemaSerializer(serializers.ModelSerializer):
         if request and hasattr(request, "user"):
             user = request.user
 
-        # toggle default in schemas table
-        if instance.is_default:
-            Schema.toggle_schema_default(instance.name)
-
         for phase_data in phases_data:
             test_groups = phase_data.pop('test_groups')
             phase = Phase.objects.create(schema=instance, **phase_data)
             if phase.has_test:
                 phase.test_groups.set(test_groups)
 
-        schemas_compare_event.send(sender=Schema.__class__,
-                                   user_id=user.id,
-                                   instance=instance,
-                                   created=False)
+        compare_schemas_for_campaign.delay(campaign_id=instance.campaign.id,
+                                           user_id=user.pk)
+
+        # toggle default in schemas table
+        if instance.is_default:
+            Schema.toggle_schema_default(instance.name)
+            # create new result for schema base
+            create_new_result_for_schema_base.delay(
+                campaign_id=instance.campaign.pk)
 
         return instance
 

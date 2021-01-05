@@ -1,7 +1,7 @@
 import django.dispatch
 
-schemas_compare_event = django.dispatch.Signal(
+schema_created_or_updated = django.dispatch.Signal(
     providing_args=["instance", "created", "user_id"])
 
-schemas_compare_calc_done = django.dispatch.Signal(
+event_created = django.dispatch.Signal(
     providing_args=["instance", "created", "user_id"])

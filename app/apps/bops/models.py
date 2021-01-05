@@ -21,9 +21,10 @@ class Bop(models.Model):
 
     def get_absolut_url(self):
         from django.urls import reverse
-        return reverse('apps.bops.views.index', args=[str(self.pk)])
+        return reverse('bops:index', args=[str(self.pk)])
 
-    def last_certification(self):
+    def get_last_certification(self):
+        print('[LOG]', self.certifications.last())
         return self.certifications.last()
 
     def active_campaign(self):
@@ -32,7 +33,8 @@ class Bop(models.Model):
     def with_counts(self):
         collector = NestedObjects(using='default')
         collector.collect([self])
-        model_count = {model._meta.verbose_name_plural: len(objs) for model, objs in collector.model_objs.items()}
+        model_count = {model._meta.verbose_name_plural: len(
+            objs) for model, objs in collector.model_objs.items()}
         return model_count.items()
 
     def schedule_tests(self, start_date, *args, **kwargs):
@@ -51,7 +53,8 @@ class Bop(models.Model):
 
     @property
     def failure_modes(self):
-        subsystem_qs = self.subsystems.prefetch_related('components__failure_modes').order_by('code')
+        subsystem_qs = self.subsystems.prefetch_related(
+            'components__failure_modes').order_by('code')
         failure_modes = []
         for subsystem in subsystem_qs:
             for component in subsystem.components.all():
@@ -182,7 +185,8 @@ class SafetyFunction(models.Model):
     def with_counts(self):
         collector = NestedObjects(using='default')
         collector.collect([self])
-        model_count = {model._meta.verbose_name_plural: len(objs) for model, objs in collector.model_objs.items()}
+        model_count = {model._meta.verbose_name_plural: len(
+            objs) for model, objs in collector.model_objs.items()}
         return model_count.items()
 
     def success_url(self):
@@ -190,3 +194,13 @@ class SafetyFunction(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Certification(models.Model):
+    bop = models.ForeignKey(Bop, on_delete=models.CASCADE,
+                            related_name='certifications')
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    def __str__(self):
+        return f'certification {self.id}'

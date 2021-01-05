@@ -274,6 +274,7 @@ export default {
     createSchema() {
       const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
       const payload = {
+        user: parseInt(document.getElementById('userId').value),
         campaign: parseInt(document.getElementById('campaignId').value),
         name: this.schema.name,
         is_default: this.schema.is_default,

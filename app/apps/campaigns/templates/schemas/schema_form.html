@@ -34,6 +34,7 @@
         <div class="col-sm-12">
           <form method="POST" id="schemaForm">
             {% csrf_token %}
+            <input type="hidden" id="userId" value="{{ request.user.pk }}" name="user">
             <input type="hidden" id="bopId" value="{{ campaign.bop.pk }}" name="bop">
             <input type="hidden" id="campaignId" value="{{ campaign.pk }}" name="campaign">
 
