@@ -3,7 +3,8 @@
   font-size: 13px;
 }
 
-.btn-primary, .btn-secondary {
+.btn-primary,
+.btn-secondary {
   color: white;
 }
 
@@ -27,11 +28,17 @@
   cursor: pointer;
   color: #333;
 
-  &:hover {
+  &:hover,
+  &.disabled {
     background-color: #f1f1f1;
     text-decoration: none;
     color: inherit;
   }
+}
+
+.btn-standard-lg {
+  @extend .btn-standard;
+  padding: 8px 16px;
 }
 
 .btn-group {

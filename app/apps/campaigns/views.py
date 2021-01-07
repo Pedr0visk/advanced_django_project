@@ -422,6 +422,12 @@ def event_update(request, event_pk):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
+
+            # creates a new results for schema base
+            # due the changes made on campaign
+            create_new_result_for_schema_base.delay(user_id=request.user.id,
+                                                    campaign_id=campaign.id)
+
             messages.success(
                 request, f'Event "{event.name}" updated successfully!')
             return redirect(event.success_url())

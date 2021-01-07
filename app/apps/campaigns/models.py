@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.admin.utils import NestedObjects
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 
 from datetime import timedelta
 
@@ -157,16 +158,17 @@ class Event(models.Model):
         COMP_FAIL = 'CIL', _('Failure in Component')
         SUBSYS_FAIL = 'SIL', _('Failure in Subsystem')
 
+    description = models.TextField(blank=True, default='')
+    object_code = models.CharField(blank=True, default='', max_length=255)
     created_by = models.ForeignKey(User,
                                    related_name='events_created',
                                    null=True,
                                    on_delete=models.SET_NULL)
-    description = models.TextField(blank=True, default='')
-    object_code = models.CharField(blank=True, default='', max_length=255)
     campaign = models.ForeignKey(Campaign,
                                  on_delete=models.CASCADE,
                                  null=True,
                                  related_name='events')
+    date = models.DateTimeField()
 
     type = models.CharField(
         max_length=14,
@@ -174,10 +176,16 @@ class Event(models.Model):
         default=TypeEvent.WITHDRAW
     )
 
-    date = models.DateTimeField()
-
     def success_url(self):
         return reverse('campaigns:index', args=[self.campaign.pk])
+
+    def clean(self):
+        # Don't allow creates a event before
+        # the last event created
+        if Event.objects.latest('date').date > self.date:
+            raise ValidationError({
+                'date': ValidationError(_('Invalid date'), code='invalid')
+            })
 
     def __str__(self):
         return f'Event created by {self.created_by.username} at {self.date}'

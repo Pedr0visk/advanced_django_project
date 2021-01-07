@@ -6,7 +6,7 @@ class NotificationObj {
   creationReminder() {
     var reminder = `
       <div aria-live="polite" aria-atomic="true" style="position: relative;">
-        <div class="toast" data-delay="5000" style="position: absolute; top: 0; right: 10px;">
+        <div id="toast" class="toast" data-delay="5000" style="position: absolute; top: 0; right: 10px;">
           <div class="toast-header">
             <img src="/static/img/icon-yes.svg" class="rounded mr-2" alt="...">
             <strong class="mr-auto">Notification </strong>

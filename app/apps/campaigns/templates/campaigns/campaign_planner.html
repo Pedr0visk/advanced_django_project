@@ -37,12 +37,13 @@
       </div>
       <div>
         <a id="btnCompare" href="{% url 'campaigns:compare' campaign.pk %}" id="toggleLoading"
-          class="btn btn-sm btn-primary mr-2">
+          class="btn-standard-lg mr-2">
           <small>SEE SCHEMAS COMPARISON</small>
+          <i class="fab fa-buffer  text-primary"></i>
         </a>
-        <a href="{% url 'campaigns:update' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
+        <a href="{% url 'campaigns:update' campaign.pk %}" class="btn-standard-lg mr-2">
           <small>EDIT
-            <i class="fa fa-pencil-alt"></i></small>
+            <i class="fa fa-pencil-alt text-warning"></i></small>
         </a>
       </div>
     </div>
@@ -168,10 +169,14 @@
 
           btn.textContent = '';
           btn.style = '';
-          btn.classList = 'btn btn-primary';
+          btn.classList = 'btn-standard-lg mr-2';
 
-          text.textContent = 'SEE SCHEMAS COMPARISON';
+          text.textContent = 'SEE SCHEMAS COMPARISON ';
           btn.appendChild(text);
+
+          let icon = document.createElement('i');
+          icon.classList = 'fab fa-buffer text-primary';
+          btn.appendChild(icon)
 
           $('#task_alert').removeClass('d-flex')
         }

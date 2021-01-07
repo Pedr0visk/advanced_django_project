@@ -23,15 +23,17 @@
       </div>
 
       <div>
-        <a id="btnRun" href="{% url 'campaigns:run' campaign.pk %}" class="btn btn-success mr-2">
-          <small>SAFETY FUNCTIONS HEALTH <i class="fas fa-heartbeat"></i></small>
+        <a id="btnRun" href="{% url 'campaigns:run' campaign.pk %}" class="btn-standard-lg text-danger mr-2">
+          <small>
+            SAFETY FUNCTIONS HEALTH <i class="fas fa-heartbeat"></i>
+          </small>
         </a>
-        <a href="{% url 'campaigns:planner' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
+        <a href="{% url 'campaigns:planner' campaign.pk %}" class="btn-standard-lg mr-2">
           <small>CAMPAIGN PLANNER <i class="fa fa-chart-area"></i></small>
         </a>
-        <a href="{% url 'campaigns:update' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
+        <a href="{% url 'campaigns:update' campaign.pk %}" class="btn-standard-lg mr-2">
           <small>EDIT CAMPAIGN
-            <i class="fa fa-pencil-alt"></i></small>
+            <i class="fa fa-pencil-alt text-warning"></i></small>
         </a>
       </div>
     </div>
@@ -136,7 +138,7 @@
           let text = document.createElement('small');
 
           btn.textContent = '';
-          btn.classList = 'btn btn-info';
+          btn.classList = 'btn-standard-lg mr-2 disabled';
           btn.style = 'cursor: not-allowed';
 
           img.src = '/static/img/loading.gif';
@@ -156,7 +158,7 @@
 
           btn.textContent = '';
           btn.style = '';
-          btn.classList = 'btn btn-success';
+          btn.classList = 'btn-standard-lg mr-2 text-danger';
 
           text.textContent = 'SAFETY FUNCTIONS HEALTH ';
           btn.appendChild(text);

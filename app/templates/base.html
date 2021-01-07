@@ -100,12 +100,14 @@
     </div>
   </header>
 
+  <div id="newNotifications" style="position: relative;top: 0; left: 0;"></div>
+
   <!-- main -->
   <div class="main" id="main">
     {% block main %} {% endblock %}
-
-    <div id="newNotifications" style="position: relative;bottom: 0; left: 0;"></div>
   </div>
+
+
 
   <!-- footer -->
   {% include 'partials/_footer.html' %}

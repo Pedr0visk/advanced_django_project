@@ -10480,7 +10480,8 @@ h3 {
   font-size: 13px;
 }
 
-.btn-primary, .btn-secondary {
+.btn-primary,
+.btn-secondary {
   color: white;
 }
 
@@ -10491,7 +10492,7 @@ h3 {
   background: #277aa2;
 }
 
-.btn-standard {
+.btn-standard, .btn-standard-lg {
   line-height: 16px;
   border-radius: 4px;
   border: 1px solid #ccc;
@@ -10504,24 +10505,28 @@ h3 {
   cursor: pointer;
   color: #333;
 }
-.btn-standard:hover {
+.btn-standard:hover, .btn-standard-lg:hover, .btn-standard.disabled, .disabled.btn-standard-lg {
   background-color: #f1f1f1;
   text-decoration: none;
   color: inherit;
+}
+
+.btn-standard-lg {
+  padding: 8px 16px;
 }
 
 .btn-group {
   border-radius: 4px;
   border: 1px solid #ccc;
 }
-.btn-group > .btn-standard {
+.btn-group > .btn-standard, .btn-group > .btn-standard-lg {
   border-radius: 0;
   border: 0;
 }
-.btn-group > .btn-standard:first-child {
+.btn-group > .btn-standard:first-child, .btn-group > .btn-standard-lg:first-child {
   border-right: inherit;
 }
-.btn-group > .btn-standard.active {
+.btn-group > .btn-standard.active, .btn-group > .active.btn-standard-lg {
   background-color: #f1f1f1;
 }
 
@@ -10892,6 +10897,38 @@ hr {
 .selector .selector-chooser a.active i.fa,
 .selector .selector-chooser a.active i.fa {
   color: #277aa2;
+}
+
+.notification {
+  background: #ffdb9b;
+  padding: 20px 40px;
+  min-width: 420px;
+  position: absolute;
+  right: 0px;
+  top: 10px;
+  border-radius: 4px;
+  border-left: 4px solid #ffa502;
+}
+.notification .fa-exclamation-circle {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ce8500;
+  font-size: 30px;
+}
+.notification .msg {
+  padding: 0 20px;
+  font-size: 18px;
+  color: #ce8500;
+}
+.notification .close-btn {
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ffd080;
+  padding: 20px 18px;
 }
 
 #login {
