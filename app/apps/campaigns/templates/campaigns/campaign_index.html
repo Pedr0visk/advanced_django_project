@@ -23,8 +23,8 @@
       </div>
 
       <div>
-        <a href="{% url 'campaigns:run' campaign.pk %}" class="btn btn-success mr-2">
-          <small>RUN <i class="fa fa-cogs"></i></small>
+        <a id="btnRun" href="{% url 'campaigns:run' campaign.pk %}" class="btn btn-success mr-2">
+          <small>SAFETY FUNCTIONS HEALTH <i class="fas fa-heartbeat"></i></small>
         </a>
         <a href="{% url 'campaigns:planner' campaign.pk %}" class="btn btn-sm btn-primary mr-2">
           <small>CAMPAIGN PLANNER <i class="fa fa-chart-area"></i></small>
@@ -109,4 +109,69 @@
   </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.addEventListener('load', function (e) {
+    const userId = JSON.parse(document.getElementById('userId').textContent);
+
+    const chatSocket = new WebSocket(
+      'ws://'
+      + window.location.host
+      + '/ws/notifications/'
+      + userId
+      + '/'
+    );
+
+    chatSocket.onmessage = async function (e) {
+      const data = JSON.parse(e.data);
+
+      let unreaded_notifications = JSON.parse(data.unreaded_notifications);
+
+      unreaded_notifications.map(notification => {
+        if (notification.fields.group == 'c') {
+          let btn = document.getElementById('btnRun');
+          let img = document.createElement('img');
+          let text = document.createElement('small');
+
+          btn.textContent = '';
+          btn.classList = 'btn btn-info';
+          btn.style = 'cursor: not-allowed';
+
+          img.src = '/static/img/loading.gif';
+          img.width = '15';
+          btn.appendChild(img);
+
+          text.textContent = 'CALCULATING NEW RESULTS...';
+          btn.appendChild(text);
+
+          $('#task_alert').addClass('d-flex')
+        }
+
+        if (notification.fields.group == 'd') {
+          let btn = document.getElementById('btnRun');
+          let text = document.createElement('small');
+          let icon = document.createElement('i')
+
+          btn.textContent = '';
+          btn.style = '';
+          btn.classList = 'btn btn-success';
+
+          text.textContent = 'SAFETY FUNCTIONS HEALTH ';
+          btn.appendChild(text);
+
+          icon.classList = 'fas fa-heartbeat';
+          btn.appendChild(icon)
+
+          $('#task_alert').removeClass('d-flex')
+        }
+      });
+    };
+
+    chatSocket.onclose = function (e) {
+      console.error('Chat socket closed unexpectedly');
+    };
+  });
+</script>
 {% endblock %}

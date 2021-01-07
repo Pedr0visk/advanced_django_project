@@ -29,6 +29,7 @@
             <thead class="bg-white-50">
               <tr>
                 <th scope="col">campaign name</th>
+                <th scope="col">active</th>
                 <th scope="col">last result created at</th>
                 <th></th>
               </tr>
@@ -37,7 +38,14 @@
               {% for campaign in bop.campaigns.all %}
               <tr>
                 <td>{{campaign.name}}</td>
-                <td>{{campaign.result.created_at}}</td>
+                <td>
+                  {% if campaign.active %}
+                  <img src="{% static 'img/icon-yes.svg' %}" alt="">
+                  {% else %}
+                  <img src="{% static 'img/icon-no.svg' %}" alt="">
+                  {% endif %}
+                </td>
+                <td>{{campaign.get_schema_active.last_result.created_at}}</td>
                 <td width="10%" align="center">
                   <a href="{% url 'campaigns:run' campaign.pk %}" class="btn-standard" data-toggle="tooltip"
                     data-placement="left" title="click to see the last result">

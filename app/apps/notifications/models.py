@@ -35,4 +35,4 @@ class Notification(models.Model):
     )
 
     def __str__(self):
-        return f"Task for bop: {self.assigned_to.username} // id: {self.id}"
+        return f"Task number {self.id} created by: {self.assigned_to.username}"

@@ -13,7 +13,7 @@
       <p>Change Event</p>
       {% else %}
       <div class="d-flex flex-column">
-        <a href="{% url 'campaigns:index' campaign_pk %}" class="mb-3">
+        <a href="{% url 'campaigns:index' campaign.pk %}" class="mb-3">
           <i class="fa fa-arrow-left"></i> back to campaign
         </a>
         <p>Add new event</p>
@@ -31,11 +31,9 @@
                 <select name="" disabled>
                   <option value="" selected>{{ campaign.bop }}</option>
                 </select>
-                <small class="form-text text-muted">
-                  Required.
-                </small>
               </div>
             </div>
+            <hr>
 
             <div class="form-group row">
               <label class="col-sm-1 col-form-label col-form-label-sm">Campaign:</label>
@@ -43,26 +41,16 @@
                 <select name="" disabled>
                   <option value="" selected>{{ campaign.name }}</option>
                 </select>
-                <small class="form-text text-muted">
-                  Required.
-                </small>
               </div>
             </div>
             <hr />
 
             <div class="form-group row">
               <label class="col-sm-1 col-form-label col-form-label-sm">Type:</label>
-              <div class="col-sm-3">
+              <div class="col-sm-2">
                 {{ form.type }}
-                <small class="form-text text-muted">
-                  Required.
-                </small>
               </div>
-            </div>
-            <hr />
 
-            <div class="form-group row">
-              <label class="col-sm-1 col-form-label col-form-label-sm">Select Code:</label>
               <div class="col-sm-5">
                 {{form.object_code}}
                 <select name="failure_mode_code" id="failure_mode_codes" class="objects">
@@ -82,9 +70,6 @@
                   <option value="{{subsystem.code}}">{{ subsystem.code }} - {{ subsystem.name }}</option>
                   {% endfor %}
                 </select>
-                <small class="form-text text-muted">
-                  Failure Mode list.
-                </small>
               </div>
             </div>
             <hr />
@@ -155,6 +140,9 @@
     form_fields[field].className += 'form-control form-control-sm'
   }
 
+  document.getElementById('id_object_code').classList = 'd-none';
+
+
   function hideElements() {
     for (let index in arguments) {
       let el = document.getElementById(arguments[index])
@@ -177,31 +165,27 @@
     switch (type) {
       case 'WAW':
       case 'RLL':
-        return null;
-        break;
+        return '';
       case 'CRIR':
       case 'CRCE':
       case 'CIL':
-        return $('#component_codes').val()
-        break;
+        return $('#component_codes').val();
       case 'SRIR':
       case 'SRCE':
       case 'SIL':
-        return $('#subsystem_codes').val()
-        break;
+        return $('#subsystem_codes').val();
       case 'FIL':
-        return $('#failure_mode_codes').val()
-        break;
+        return $('#failure_mode_codes').val();
       default:
-        break
+        return '';
     }
   }
 
-  const type = document.getElementById('id_type')
-  const form = document.getElementById('eventForm')
-  const submitBtn = document.getElementById('submitBtn')
+  const type = document.getElementById('id_type');
+  const form = document.getElementById('eventForm');
+  const submitBtn = document.getElementById('submitBtn');
 
-  hideElements('failure_mode_codes', 'component_codes', 'subsystem_codes')
+  hideElements('failure_mode_codes', 'component_codes', 'subsystem_codes');
 
   type.addEventListener('change', function () {
     switch (this.value) {
@@ -226,14 +210,14 @@
         hideElements('component_codes', 'subsystem_codes')
         break;
       default:
-        break
+        break;
     }
   })
 
   submitBtn.addEventListener('click', function (e) {
-    e.preventDefault()
-    form.object_code.value = getObjectId(form.type.value)
-    form.submit()
+    e.preventDefault();
+    form.object_code.value = getObjectId(form.type.value);
+    form.submit();
   })
 </script>
 

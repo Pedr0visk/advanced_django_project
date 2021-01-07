@@ -12,16 +12,21 @@ import os
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
+from django.urls import path
 
-from apps.notifications import routing
+from apps.campaigns.consumer import CampaignConsumer
+from apps.notifications.consumer import NotificationConsumer
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bop.settings')
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": AuthMiddlewareStack(
-        URLRouter(
-            routing.websocket_urlpatterns
-        )
+        URLRouter([
+            path('ws/notifications/<int:user_id>/',
+                 NotificationConsumer.as_asgi()),
+            path('ws/campaigns/<int:campaign_id>/',
+                 CampaignConsumer.as_asgi()),
+        ]),
     ),
 })

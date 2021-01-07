@@ -13,7 +13,6 @@ def compare_schemas_for_campaign(*args, **kwargs):
     in order to loop throught them and calculate new results for 
     schema comparison
     """
-    print('[LOGGER]', 'initing compare schemas')
     campaign = Campaign.objects.get(pk=kwargs['campaign_id'])
 
     # emit event to create a new notification of task initiated
@@ -36,10 +35,14 @@ def compare_schemas_for_campaign(*args, **kwargs):
 
 @shared_task
 def create_new_result_for_schema_base(*args, **kwargs):
-    pass
-    schema = Schema.objects.get(pk=kwargs['campaign_id'])
+    """
+    Creates a new result for a single schema
+    """
+    campaign = Campaign.objects.get(pk=kwargs['campaign_id'])
+    schema = campaign.get_schema_active()
 
     task_initiated.send(sender=Campaign.__class__,
+                        completed=False,
                         instance=campaign,
                         user_id=kwargs['user_id'])
 
@@ -47,5 +50,6 @@ def create_new_result_for_schema_base(*args, **kwargs):
     Result.objects.create(schema=schema, values=values)
 
     task_completed.send(sender=Campaign.__class__,
-                        instance=schema,
+                        completed=True,
+                        instance=campaign,
                         user_id=kwargs['user_id'])

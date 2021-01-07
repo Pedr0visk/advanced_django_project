@@ -1,18 +1,22 @@
 import ast
 import datetime
-from . import metrics
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+
 from apps.bops.models import *
 from apps.cuts.models import *
+
+from . import metrics
 from .models import Campaign, Phase, Schema, Event, Result
 from .forms import CampaignForm, PhaseForm, EventForm
 from .filters import campaign_filter
-from django.shortcuts import get_object_or_404
-from ..test_groups.models import TestGroup
 from .metrics import Fail_line
+from .tasks import create_new_result_for_schema_base
+
+from ..test_groups.models import TestGroup
 
 
 def campaign_update(request, campaign_pk):
@@ -198,10 +202,7 @@ def campaign_run(request, campaign_pk):
     campaign = get_object_or_404(Campaign, pk=campaign_pk)
     schema = campaign.get_schema_active()
 
-    # updating results
-    values = metrics.run(schema)
-    new_result = Result.objects.create(schema=schema, values=values)
-    results = new_result.values
+    results = ast.literal_eval(schema.last_result.values)
 
     time = []
     number_Sf = len(results[0])
@@ -383,11 +384,10 @@ def schema_compare(request, campaign_pk):
 def event_create(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
     bop = campaign.bop
-
-    form = EventForm(request.POST or None)
     failure_modes = bop.failure_modes
     components = bop.components
     subsystems = bop.subsystems.order_by('code')
+    form = EventForm(request.POST or None)
 
     if request.method == 'POST':
         if form.is_valid():
@@ -395,14 +395,18 @@ def event_create(request, campaign_pk):
             new_event.created_by = request.user
             new_event.campaign_id = campaign_pk
             new_event.save()
-            messages.success(
-                request, 'Event created successfully!')
+
+            # creates a new results for schema base
+            # due the changes made on campaign
+            create_new_result_for_schema_base.delay(user_id=request.user.id,
+                                                    campaign_id=campaign.id)
+
+            messages.success(request, 'Event created successfully!')
             return redirect(new_event.success_url())
 
     context = {
         'form': form,
         'campaign': campaign,
-        'campaign_pk': campaign_pk,
         'failure_modes': failure_modes,
         'components': components,
         'subsystems': subsystems
@@ -437,7 +441,7 @@ def event_delete(request, event_pk):
     if request.method == 'POST':
         event.delete()
         messages.success(
-            request, f'Schema "{event.name}" deleted successfully')
+            request, f'Event deleted successfully')
         return redirect('campaigns:index', campaign_pk)
 
 

@@ -21,9 +21,6 @@ class PhaseForm(ModelForm):
 
 
 class EventForm(ModelForm):
-    object_code = CharField(widget=TextInput(attrs={'class': 'd-none ',
-                                                    'id': 'object_code'}))
-
     class Meta:
         model = Event
         fields = ['type', 'object_code', 'description', 'date']

@@ -127,7 +127,7 @@
 {% block scripts %}
 <script>
   window.addEventListener('load', function (e) {
-    const userId = JSON.parse(document.getElementById('userId').textContent);
+    const campaignId = JSON.parse(document.getElementById('userId').textContent);
 
     const chatSocket = new WebSocket(
       'ws://'
@@ -140,9 +140,7 @@
     chatSocket.onmessage = async function (e) {
       const data = JSON.parse(e.data);
 
-      let old_notifications = JSON.parse(data.old_notifications);
       let unreaded_notifications = JSON.parse(data.unreaded_notifications);
-      let unreaded_notification_count = JSON.parse(data.unreaded_notification_count);
 
       unreaded_notifications.map(notification => {
         if (notification.fields.group == 'c') {

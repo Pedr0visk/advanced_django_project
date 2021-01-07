@@ -10,22 +10,22 @@ from .signals import *
 
 @receiver(task_initiated)
 @receiver(task_completed)
-def create_notification(sender, *args, **kwargs):
+def create_notification(sender, instance, *args, **kwargs):
     user = User.objects.get(pk=kwargs['user_id'])
 
     if kwargs['completed']:
         Notification.objects.create(
             assigned_to=user,
             group='d',
-            body='Task initiated',
-            pk_relation=user.id
+            body=f'Task completed! You can check the new results generated.',
+            pk_relation=instance.pk
         )
     else:
         Notification.objects.create(
             assigned_to=user,
             group='c',
-            body='Task completed',
-            pk_relation=user.id
+            body=f'A task has been created by user {user.username}, that may take a few seconds.',
+            pk_relation=instance.pk
         )
 
 

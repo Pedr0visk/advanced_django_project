@@ -161,8 +161,8 @@ class Event(models.Model):
                                    related_name='events_created',
                                    null=True,
                                    on_delete=models.SET_NULL)
-    description = models.TextField(blank=True, null=True)
-    object_code = models.CharField(blank=True, max_length=255)
+    description = models.TextField(blank=True, default='')
+    object_code = models.CharField(blank=True, default='', max_length=255)
     campaign = models.ForeignKey(Campaign,
                                  on_delete=models.CASCADE,
                                  null=True,

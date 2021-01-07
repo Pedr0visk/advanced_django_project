@@ -59,6 +59,7 @@ class SchemaSerializer(serializers.ModelSerializer):
         instance.save()
         instance.phases.all().delete()
 
+        # getting user from request
         user = None
         request = self.context.get("request")
         if request and hasattr(request, "user"):
@@ -70,15 +71,20 @@ class SchemaSerializer(serializers.ModelSerializer):
             if phase.has_test:
                 phase.test_groups.set(test_groups)
 
-        compare_schemas_for_campaign.delay(campaign_id=instance.campaign.id,
-                                           user_id=user.pk)
+        # if campaign is active we have to calculate
+        # new results for schema's comparison,else,
+        # we have to calculate new results just for the schema base
+        if instance.campaign.active:
+            create_new_result_for_schema_base.delay(campaign_id=instance.campaign.pk,
+                                                    user_id=user.pk)
+        else:
+            compare_schemas_for_campaign.delay(campaign_id=instance.campaign.id,
+                                               user_id=user.pk)
 
         # toggle default in schemas table
+        # whenever the schema is set as default schema
         if instance.is_default:
             Schema.toggle_schema_default(instance.name)
-            # create new result for schema base
-            create_new_result_for_schema_base.delay(
-                campaign_id=instance.campaign.pk)
 
         return instance
 
