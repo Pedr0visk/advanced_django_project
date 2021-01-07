@@ -287,14 +287,6 @@ def schema_update(request, schema_pk):
     return render(request, 'schemas/schema_form.html', context)
 
 
-def schema_index(request, schema_pk):
-    schema = Schema.objects.prefetch_related(
-        'phases', 'phases__test_groups').get(pk=schema_pk)
-    campaign_pk = schema.campaign.pk
-    context = {'schema': schema, 'campaign_pk': campaign_pk}
-    return render(request, 'schemas/schema_index.html', context)
-
-
 def schema_delete(request, schema_pk):
     schema = Schema.objects.get(pk=schema_pk)
     campaign_pk = schema.campaign.pk

@@ -34,6 +34,8 @@
 
         <h2>Campaign Planner</h2>
         <p>Bop name: <b>{{ campaign.bop }}</b> > Campaign name: <b>{{ campaign }}</b></p>
+        <small></small>
+        <small class="text-warning"><b>WARNING:</b>NOTE THIS CAMPAIGN IS CURRENT ACTIVE</small>
       </div>
       <div>
         <a id="btnCompare" href="{% url 'campaigns:compare' campaign.pk %}" id="toggleLoading"
@@ -51,7 +53,7 @@
 
     <!-- section content -->
     <div class="row">
-      <div class="col-sm-4 col-12">
+      <div class="col-sm-5 col-12">
         <div class="results">
           <div class="d-flex  px-1">
             <h4 class="title-1 mr-auto">Schemas</h4>
@@ -63,9 +65,8 @@
             <thead class="bg-white-50">
               <tr>
                 <th scope="col">name</th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th style="text-align: center;">schema base</th>
+                <th style="text-align: center;">actions</th>
               </tr>
             </thead>
             <tbody>
@@ -74,18 +75,26 @@
                 <td>
                   <a href="{% url 'campaigns:update_schema' schema.pk %}">{{ schema.name }}</a>
                 </td>
-                <td>
+
+                <td align="center">
                   {% if schema.is_default %}
-                  <small><b>DEFAULT</b></small>
+                  <img src="{% static 'img/icon-yes.svg' %}" />
                   {% endif %}
                 </td>
-                <td>
+
+                <td align="center">
+                  <!-- see results -->
+                  <a class="btn-standard" href="{% url 'campaigns:schema_run' schema.pk %}">
+                    <i class="fa fa-file text-secondary"></i> results</a>
+                  <!-- delete -->
                   <a class="btn-standard" href="{% url 'campaigns:delete_schema' schema.pk %}"><i
                       class="fa fa-times text-danger"></i> delete</a>
+                  <!-- clone schema -->
+                  <a href="#" class="btn-standard">
+                    <i class="fas fa-clone text-warning"> </i> clone
+                  </a>
                 </td>
-                <td>
-                  <a href="{% url 'campaigns:schema_run' schema.pk %}">see graphs</a>
-                </td>
+
               </tr>
               {% endfor %}
             </tbody>
