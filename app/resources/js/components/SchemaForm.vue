@@ -189,7 +189,7 @@
             <td width="5%">
               <a
                   @click.prevent="remove(item._id)"
-                  href="" class="px-2"><i class="fa fa-times text-danger"></i></a>
+                  href="" class="btn-standard px-2"><i class="fa fa-times text-danger"></i> remove</a>
             </td>
           </tr>
           </tbody>

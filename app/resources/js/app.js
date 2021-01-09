@@ -4,17 +4,21 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import {uuid} from 'vue-uuid';
 import Axios from "axios";
 import VueSweetalert2 from 'vue-sweetalert2';
-import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
+import {BootstrapVue, IconsPlugin} from 'bootstrap-vue';
+import helpers from './utils';
 
 // Install BootstrapVue
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
-Vue.use(IconsPlugin)
+Vue.use(IconsPlugin);
+Vue.use(helpers);
 
 Vue.prototype.$http = Axios;
 Vue.prototype.$uuid = uuid;
 
 Vue.use(VueSweetalert2);
+
+Vue.component('form-schemas', require('./components/FormSchemas.vue').default);
 
 // setup axios interceptor
 window.axios.interceptors.response.use(function (response) {
@@ -64,6 +68,11 @@ Vue.component(
     "test-group-form",
     require("./components/TestGroupForm.vue").default
 );
+Vue.component(
+  "failure-mode-list",
+  require("./components/FailureModeList.vue").default
+);
+
 Vue.component(
   "failure-mode-list",
   require("./components/FailureModeList.vue").default
