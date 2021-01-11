@@ -10,14 +10,15 @@
     <td>{{ phase.duration }}h</td>
     <td><img v-if="phase.has_test" src="/static/img/icon-yes.svg" alt=""></td>
     <td><img v-if="phase.is_drilling" src="/static/img/icon-yes.svg" alt=""></td>
-    <td><a href="">show</a></td>
+    <td><a href="" v-show="phase._id">show <i class="fas fa-external-link-alt"></i></a></td>
 
     <td align="center">
+      <div v-show="phase._id != this.$parent.selectedItem._id">
       <a
         @click.prevent="addItemBefore(index)"
         href="" class="btn-standard px-2"><i class="fas fa-arrow-circle-up text-success"></i> insert up</a>
       <a
-        @click.prevent="onSelect(index)"
+        @click.prevent="addItemAfter(index)"
         href="" class="btn-standard px-2"><i class="fas fa-arrow-circle-down text-success"></i> insert down</a>
       <a
         @click.prevent="onSelect(index)"
@@ -25,6 +26,7 @@
       <a
         @click.prevent="deleteItem(phase)"
         href="" class="btn-standard px-2"><i class="fa fa-times text-danger"></i> remove</a>
+      </div>
     </td>
   </tr>
 </template>
@@ -38,6 +40,12 @@ export default {
   methods: {
     addItemBefore(index) {
       this.$bus.$emit("phaseAddedBefore", {
+        index
+      });
+    },
+
+    addItemAfter(index) {
+      this.$bus.$emit("phaseAddedAfter", {
         index
       });
     },
@@ -58,14 +66,9 @@ export default {
     },
 
     activeClass(item) {
-      if (this.$parent.selectedItem)
-        return {
-          active: this.$parent.selectedItem._id === item._id
-        };
-
       return {
-        active: false
-      }
+        active: this.$parent.selectedItem._id == item._id
+      };
     }
   }
 }
@@ -73,6 +76,6 @@ export default {
 
 <style>
 tr.active {
-  background-color: #ffdb9b;
+  background-color: #ffdb9b!important;
 }
 </style>

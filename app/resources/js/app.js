@@ -16,6 +16,9 @@ Vue.use(helpers);
 Vue.prototype.$http = Axios;
 Vue.prototype.$uuid = uuid;
 
+import SchemaObj from "./models/schema";
+Vue.prototype.$schema = SchemaObj,
+
 Vue.use(VueSweetalert2);
 
 Vue.component('form-schemas', require('./components/FormSchemas.vue').default);

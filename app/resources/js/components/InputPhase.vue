@@ -12,13 +12,15 @@
       <div class="form-group col-auto">
         <label>Start Time</label>
         <select v-model="form.start.time" class="form-control form-control-sm">
-          <option value="1">1h</option>
-          <option value="2">2h</option>
+          <option :key="hour" v-for="hour in 24" :value="hour-1">{{ ("0" + (hour - 1)).slice(-2) }}:00</option>
         </select>
       </div>
       <div class="form-group col-auto" style="max-width: 7rem;">
         <label>Duration</label>
-        <input v-model="form.duration" type="number" class="form-control form-control-sm" />
+        <input 
+        v-model="form.duration" 
+        type="number" 
+        class="form-control form-control-sm" />
       </div>
       <div class="form-group col-auto">
         <label>Finish at</label>
@@ -28,6 +30,7 @@
       <div class="form-group col-12">
         <div class="form-check">
           <input
+            v-model="form.is_drilling"
             class="form-check-input"
             type="checkbox" />
           <label class="form-check-label">
@@ -38,6 +41,7 @@
       <div class="form-group col-12">
         <div class="form-check">
           <input
+            v-model="form.has_test"
             class="form-check-input"
             type="checkbox">
           <label class="form-check-label">
@@ -68,20 +72,12 @@ export default {
   props: ['test-groups', 'phase'],
   data() {
     return {
-      form: {
-        _id: null,
-        name: '',
-        has_test: false,
-        is_drilling: false,
-        duration: null,
-        start: {date: '', time: 12},
-        end: {date: '', time: 0},
-        test_groups: []
-      }
+      form: {...this.$schema}
     }
   },
   methods: {
     submit() {
+      console.log()
       if (!this.form._id) {
         this.$bus.$emit("phaseAdded", {
           phase: this.form
@@ -157,7 +153,7 @@ export default {
     },
 
     phase: function(newItem, oldItem) {
-      if (newItem) this.form = newItem
+      if (newItem._id) this.form = Object.assign({...this.form}, newItem)
     }
   },
 }

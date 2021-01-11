@@ -78,28 +78,7 @@ export default {
         name: '',
         is_default: false,
       },
-      phases: [
-        {
-          _id: this.$uuid.v1(),
-          name: 'phase 1',
-          has_test: true,
-          is_drilling: true,
-          duration: 24,
-          start: {date: '2021-01-01', time: 2},
-          end: {date: '2021-01-02', time: 2},
-          test_groups: []
-        },
-        {
-          _id: this.$uuid.v1(),
-          name: 'phase 2',
-          has_test: true,
-          is_drilling: true,
-          duration: 24,
-          start: {date: '2021-01-02', time: 2},
-          end: {date: '2021-01-03', time: 2},
-          test_groups: []
-        }
-      ],
+      phases: [],
       selectedItem: {}
     };
   },
@@ -113,8 +92,8 @@ export default {
       this.phases[index] = item;
 
       // Deselect item
-      this.selectedItem = null;
-
+      this.selectedItem = {};
+      console.log('logging index at', index)
       // Update all phase's datetime
       this.resetDatetimeItems(index);
     },
@@ -123,22 +102,15 @@ export default {
 
       if (index > 0) {
         prevPhase = this.phases[index - 1];
-        this.phases.splice(index, 0, {
+        this.phases.splice(index, 0, Object.assign({...this.$schema}, {
           _id: this.$uuid.v1(),
-          name: '',
-          has_test: false,
-          is_drilling: false,
-          duration: 24,
-          start: prevPhase.end,
-          end: {date: '', time: 0},
-          test_groups: []
-        });
+          start: prevPhase.end
+        }));
       } else {
-        this.phases.splice(index, 0, {
+        console.log('logging schema', this.$schema)
+        this.phases.splice(index, 0, Object.assign({...this.$schema}, {
           _id: this.$uuid.v1(),
-          start: {date: '', time: 0},
-          end: {date: '', time: 0},
-        });
+        }));
       }
 
       this.selectItem(index);
@@ -148,11 +120,12 @@ export default {
 
       prevPhase = this.phases[index];
 
-      this.phases.splice(index, 0, {
+      this.phases.splice(index + 1, 0, Object.assign({...this.$schema}, {
         _id: this.$uuid.v1(),
         start: prevPhase.end
-      });
+      })); 
 
+      this.selectItem(index + 1);
     },
     selectItem(index) {
       this.selectedItem = this.phases[index];
@@ -209,8 +182,12 @@ export default {
       this.addItemBefore(index);
     });
 
+    this.$bus.$on("phaseAddedAfter", event => {
+      let index = event.index;
+      this.addItemAfter(index);
+    });
+
     this.$bus.$on("phaseSelected", event => {
-      console.log('chegou aq', event.index)
       this.selectItem(event.index);
     });
 
