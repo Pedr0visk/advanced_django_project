@@ -24,7 +24,7 @@
 
    <fieldset class="form-fieldset">
     <h4>Phases</h4>
-    <input-phase :phase="selectedItem"></input-phase>
+    <input-phase :phase="selectedItem" :testGroups="testGroupsOptions"></input-phase>
     <hr>
     <table class="phase-list table m-0 dnv-table">
       <thead>
@@ -51,8 +51,11 @@
     <div class="card p-2 bg-light text-right">
       <div class="d-flex">
         <div class="ml-auto">
-          <button @click.prevent="" type="submit" class="btn btn-primary">
+          <button v-show="!form.id" @click.prevent="store" type="submit" class="btn btn-primary">
             SAVE
+          </button>
+          <button v-show="form.id" @click.prevent="update" type="submit" class="btn btn-primary">
+            UPDATE
           </button>
         </div>
       </div>
@@ -74,7 +77,8 @@ export default {
       errors: [],
       testGroupsOptions: [],
       form: {
-        campaign: {},
+        id: null,
+        campaign: null,
         name: '',
         is_default: false,
       },
@@ -93,7 +97,7 @@ export default {
 
       // Deselect item
       this.selectedItem = {};
-      console.log('logging index at', index)
+      console.log('logging index at', item, index);
       // Update all phase's datetime
       this.resetDatetimeItems(index);
     },
@@ -102,17 +106,16 @@ export default {
 
       if (index > 0) {
         prevPhase = this.phases[index - 1];
-        this.phases.splice(index, 0, Object.assign({...this.$schema}, {
+        this.phases.splice(index, 0, Object.assign({...this.$defaultSchema()}, {
           _id: this.$uuid.v1(),
           start: prevPhase.end
         }));
       } else {
-        console.log('logging schema', this.$schema)
-        this.phases.splice(index, 0, Object.assign({...this.$schema}, {
+        console.log('equal 0')
+        this.phases.splice(index, 0, Object.assign({...this.$defaultSchema()}, {
           _id: this.$uuid.v1(),
         }));
       }
-
       this.selectItem(index);
     },
     addItemAfter(index) {
@@ -120,7 +123,7 @@ export default {
 
       prevPhase = this.phases[index];
 
-      this.phases.splice(index + 1, 0, Object.assign({...this.$schema}, {
+      this.phases.splice(index + 1, 0, Object.assign({...this.$defaultSchema()}, {
         _id: this.$uuid.v1(),
         start: prevPhase.end
       })); 
@@ -136,30 +139,95 @@ export default {
       let phase;
       let prevPhase;
 
-      if (length <= 1) return;
-
       index += 1
       for (index; index < length; index++) {
-        prevPhase = this.phases[index - 1]
-        phase = this.phases[index]
+        prevPhase = this.phases[index - 1];
+        phase = this.phases[index];
 
-        let {date, time} = prevPhase.start
-        let d = this.calcDateTime(date, time, prevPhase.duration)
+        phase.start = prevPhase.end;
 
-        phase.start.date = this.toDateString(d)
-        phase.start.time = d.getHours()
+        let d = this.calcDateTime(phase.start.date, phase.start.time, phase.duration);
+        phase.end.date = this.toDateString(d);
+        phase.end.time = d.getHours();
 
-        d = this.calcDateTime(phase.start.date, phase.start.time, phase.duration)
-        phase.end.date = this.toDateString(d)
-        phase.end.time = d.getHours()
-
-        this.phases[index] = phase
+        this.phases[index] = phase;
+      }
+    },
+    clearForm() {
+      this.phases = [];
+      this.form = {
+        campaign: null,
+        name: '',
+        is_default: false,
       }
     },
     // main action
     store() {
       const that = this;
+      const config = {
+        headers: {'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value},
+      }
+
       let formRequest = this.form;
+      
+      formRequest.phases = this.phases.map(phase => {
+        let start_date = this.formatDate(phase.start.date, phase.start.time),
+            end_date = this.formatDate(phase.end.date, phase.end.time);
+
+        return {...phase, start_date, end_date}
+      });
+
+      axios.post('/api/schemas/', formRequest, config)
+        .then(response => {
+          that
+            .$swal({
+              title: "Schema created successfully!",
+              text: 'go to campaign dashboard to see it',
+              type: "success",
+              showConfirmButton: false,
+              timer: 1500
+            })
+            .then(swalRes => {
+              this.clearForm();
+              window.location.href = '/';
+            });
+          })
+    },
+    update() {
+      const that = this;
+
+      let formRequest = this.form;
+      
+      formRequest.phases = this.phases.map(phase => {
+        let start_date = this.formatDate(phase.start.date, phase.start.time),
+            end_date = this.formatDate(phase.end.date, phase.end.time);
+
+        return {...phase, start_date, end_date}
+      });
+
+      const config = {
+        method: 'put',
+        url: `/api/schemas/${this.form.id}/`,
+        headers: {'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value},
+        data: formRequest
+      }
+
+      this.$http(config)
+        .then(response => {
+          console.log(response)
+          that
+            .$swal({
+              title: "Schema successfully updated!",
+              text: 'go to campaign list to see it',
+              type: "success",
+              showConfirmButton: false,
+              timer: 1500
+            })
+            .then(swalRes => {
+
+            });
+        })
+
     }
   },
   mounted() {
@@ -194,6 +262,55 @@ export default {
     this.$bus.$on("phaseListChanged", event => {
       this.resetDatetimeItems(event.index);
     });
+
+
+    //
+    const bopId = document.getElementById('bopId').value;
+    const schemaId = document.getElementById('schemaId').value;
+    const campaignId = document.getElementById('campaignId').value;
+
+    this.form.id = schemaId;
+    this.form.campaign = campaignId;
+    
+    axios
+        .get(`/api/bops/${bopId}/test-groups/`)
+        .then(response => {
+          this.testGroupsOptions = response.data
+        });
+
+    if (schemaId) {
+      this.$http
+        .get(`/api/schemas/${schemaId}/`)
+        .then(response => {
+          this.form.name = response.data.name
+          this.form.is_default = response.data.is_default
+          this.phases = response.data.phases.map(phase => {
+            let start = {
+              date: this.toDateString(new Date(phase.start_date)),
+              time: new Date(phase.start_date).getHours()
+            }
+
+            let d = this.calcDateTime(start.date, start.time, phase.duration)
+
+            let end = {
+              date: this.toDateString(d),
+              time: d.getHours()
+            }
+
+            return {
+              _id: this.$uuid.v1(),
+              name: phase.name,
+              has_test: phase.has_test,
+              is_drilling: phase.is_drilling,
+              duration: phase.duration,
+              start: start,
+              end: end,
+              test_groups: phase.test_groups
+            }
+          })
+        })
+    }
+    
   },
 }
 </script>

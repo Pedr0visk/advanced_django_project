@@ -59,12 +59,8 @@
             </div>
             <hr />
 
-            {% if '/change/' in request.path %}
             <input type="hidden" id="schemaId" value="{{ schema.pk }}" name="schema">
-            <schema-update></schema-update>
-            {% else %}
             <form-schemas></form-schemas>
-            {% endif %}
 
           </form>
         </div>

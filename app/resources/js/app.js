@@ -16,8 +16,9 @@ Vue.use(helpers);
 Vue.prototype.$http = Axios;
 Vue.prototype.$uuid = uuid;
 
-import SchemaObj from "./models/schema";
-Vue.prototype.$schema = SchemaObj,
+import schema from "./models/schema.js";
+
+Vue.prototype.$defaultSchema = schema;
 
 Vue.use(VueSweetalert2);
 

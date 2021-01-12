@@ -38,6 +38,21 @@
           </label>
         </div>
       </div>
+      <div class="col-6" v-show="form.has_test">
+        <label for="">Select one or more Test Groups bellow.</label>
+        <select
+            v-model="form.test_groups"
+            multiple
+            class="form-control form-control-sm">
+          <option
+              v-for="group in testGroups"
+              :key="group.id"
+              :value="group.id"
+          >{{ group.name }}
+          </option>
+        </select>
+        <small>test groups</small>
+      </div>
       <div class="form-group col-12">
         <div class="form-check">
           <input
@@ -63,21 +78,20 @@
       @click.prevent="submit">
       <i class="fa fa-pencil-alt text-warning"></i> Update
     </button>
-    <button class="btn-standard">Cancel</button>
+    <button @click.prevent="cancel(form)" class="btn-standard">Cancel</button>
   </form>
 </template>
 
 <script>
 export default {
-  props: ['test-groups', 'phase'],
+  props: ['testGroups', 'phase'],
   data() {
     return {
-      form: {...this.$schema}
+      form: {...this.$defaultSchema()}
     }
   },
   methods: {
     submit() {
-      console.log()
       if (!this.form._id) {
         this.$bus.$emit("phaseAdded", {
           phase: this.form
@@ -89,6 +103,10 @@ export default {
       }
 
       this.clearForm();
+    },
+    cancel(item) {
+      this.clearForm();
+      this.$parent.selectedItem = {};
     },
     clearForm() {
       // clear data input and set some default
