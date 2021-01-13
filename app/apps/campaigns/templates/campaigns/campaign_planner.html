@@ -39,9 +39,9 @@
       </div>
       <div>
         <a id="btnCompare" href="{% url 'campaigns:compare' campaign.pk %}" id="toggleLoading"
-          class="btn-standard-lg mr-2">
-          <small>SEE SCHEMAS COMPARISON</small>
-          <i class="fab fa-buffer  text-primary"></i>
+          class="btn-standard-lg mr-2 ">
+          <small>SCHEMAS COMPARISON</small>
+          <i class="fas fa-clipboard-check text-danger"></i>
         </a>
         <a href="{% url 'campaigns:update' campaign.pk %}" class="btn-standard-lg mr-2">
           <small>EDIT
@@ -180,11 +180,11 @@
           btn.style = '';
           btn.classList = 'btn-standard-lg mr-2';
 
-          text.textContent = 'SEE SCHEMAS COMPARISON ';
+          text.textContent = 'SCHEMAS COMPARISON ';
           btn.appendChild(text);
 
           let icon = document.createElement('i');
-          icon.classList = 'fab fa-buffer text-primary';
+          icon.classList = 'fas fa-clipboard-check text-danger';
           btn.appendChild(icon)
 
           $('#task_alert').removeClass('d-flex')
