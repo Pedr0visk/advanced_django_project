@@ -90,7 +90,7 @@
                   <a class="btn-standard" href="{% url 'campaigns:delete_schema' schema.pk %}"><i
                       class="fa fa-times text-danger"></i> delete</a>
                   <!-- clone schema -->
-                  <a href="#" class="btn-standard">
+                  <a href="{% url 'campaigns:clone_schema' schema.pk %}" class="btn-standard">
                     <i class="fas fa-clone text-warning"> </i> clone
                   </a>
                 </td>

@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.db import transaction
 
 from apps.bops.models import *
 from apps.cuts.models import *
@@ -288,7 +289,7 @@ def schema_update(request, schema_pk):
 
 
 def schema_delete(request, schema_pk):
-    schema = Schema.objects.get(pk=schema_pk)
+    schema = get_object_or_404(Schema, pk=schema_pk)
     campaign_pk = schema.campaign.pk
     schema.delete()
     messages.success(request, f'Schema "{schema.name}" deleted successfully')
@@ -371,6 +372,30 @@ def schema_compare(request, campaign_pk):
     }
     print(datetime.datetime.today(), "Fim ")
     return render(request, 'schemas/schema_compare.html', context)
+
+
+@transaction.atomic
+def schema_clone(request, schema_pk):
+    schema = get_object_or_404(Schema, pk=schema_pk)
+
+    clone = Schema.objects.create(name=f'{schema.name} clone',
+                                  is_default=False,
+                                  campaign=schema.campaign)
+
+    for p in schema.phases.all():
+        phase = Phase.objects.create(name=p.name,
+                                     schema=clone,
+                                     duration=p.duration,
+                                     has_test=p.has_test,
+                                     start_date=p.start_date,
+                                     is_drilling=p.is_drilling)
+
+        phase.test_groups.set(p.test_groups.values_list('id', flat=True).all())
+
+    messages.success(request, f'Schema "{schema.name}" cloned successfully')
+    return redirect('campaigns:planner', schema.campaign.pk)
+
+# EVENTS
 
 
 def event_create(request, campaign_pk):

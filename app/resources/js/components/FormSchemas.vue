@@ -275,6 +275,7 @@ export default {
     axios
         .get(`/api/bops/${bopId}/test-groups/`)
         .then(response => {
+          console.log(response.data)
           this.testGroupsOptions = response.data
         });
 

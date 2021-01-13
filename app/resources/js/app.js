@@ -86,17 +86,17 @@ Vue.component(
  * we can easily access our global event bus from any child component.
  */
 Object.defineProperty(Vue.prototype, '$bus', {
-    get() {
-        return this.$root.bus;
-    }
+  get() {
+    return this.$root.bus;
+  }
 });
 
 window.bus = new Vue({});
 
 let vue = new Vue({
-    data() {
-        return {
-            bus: bus
-        }
+  data() {
+    return {
+      bus: bus
     }
+  }
 }).$mount("#app");

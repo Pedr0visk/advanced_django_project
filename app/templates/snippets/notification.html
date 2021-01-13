@@ -12,8 +12,22 @@
 {% load static %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="{% static 'js/NotificationObj.js' %}"></script>
+
 <script>
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 10000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
+
   $('#navbarDropdownMenuLink').click(function () {
     const tmpObjsHTML = $('#newNotifications').html()
     $.ajax({
@@ -53,9 +67,15 @@
     let unreaded_notification_count = JSON.parse(data.unreaded_notification_count);
 
     unreaded_notifications.forEach(element => {
-      $('#newNotifications').html('');
-      var obj = new NotificationObj(element.fields)
-      $('#newNotifications').append(obj.drawNotification())
+      // $('#newNotifications').html('');
+      // var obj = new NotificationObj(element.fields)
+      // $('#newNotifications').append(obj.drawNotification())
+
+      Toast.fire({
+        icon: 'success',
+        title: element.fields.body
+      })
+
     });
 
     $('#dropdownNotifications').html('');
@@ -67,7 +87,7 @@
       $('#dropdownNotifications').append(obj)
     });
 
-    $('.toast').toast('show');
+    // $('.toast').toast('show');
 
     if (parseInt(unreaded_notification_count) > 0) {
       $('#newNotificationCount').text(unreaded_notification_count);

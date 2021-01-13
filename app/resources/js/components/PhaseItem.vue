@@ -10,7 +10,7 @@
     <td>{{ phase.duration }}h</td>
     <td><img v-if="phase.has_test" src="/static/img/icon-yes.svg" alt=""></td>
     <td><img v-if="phase.is_drilling" src="/static/img/icon-yes.svg" alt=""></td>
-    <td><a href="" v-show="phase._id">show <i class="fas fa-external-link-alt"></i></a></td>
+    <td><a href="" v-show="phase._id" @click.prevent="displayTestGroups(phase)">show <i class="fas fa-external-link-alt"></i></a></td>
 
     <td align="center">
       <div v-show="phase._id != this.$parent.selectedItem._id">
@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import Modal from "./Modal.vue";
+
 export default {
   props: ['index', 'phase'],
   data() {
@@ -69,6 +71,54 @@ export default {
       return {
         active: this.$parent.selectedItem._id == item._id
       };
+    },
+
+    displayTestGroups(item) {
+      let body = '';
+
+      this.$parent.testGroupsOptions.map(i => {
+        let items = JSON.parse(JSON.stringify(item.test_groups))
+        if (items.includes(i.id)) {
+          body = `
+            <table class="table m-0 table-hover dnv-table dnv-table-admin">
+              <thead>
+              <tr>
+                <th scope="col">name</th>
+                <th scope="col">start date</th>
+                <th scope="col">failure modes</th>
+                <th scope="col">tests <small>(interval, coverage)</small></th>
+                <td></td>
+                <td></td>
+              </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>test group 1</td>
+                  <td width="10%"></td>
+                  <td width="50%">
+                    
+                  </td>
+                  <td align="left">
+                    level 1 <b>168, 0.2</b><br>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          `
+        }
+      });
+
+      this.$swal.fire({
+        title: '<strong>Showing Test Groups</strong>',
+        width: 1200,
+        padding: '0.5rem',
+        html: body,
+        showCloseButton: true,
+        showCancelButton: false,
+        confirmButtonText:
+          '<i class="fa fa-thumbs-up"></i> Okay!',
+        confirmButtonAriaLabel: 'Thumbs up, great!',
+      })
     }
   }
 }
