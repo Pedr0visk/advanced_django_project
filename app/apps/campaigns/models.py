@@ -130,7 +130,7 @@ class Phase(models.Model):
                                on_delete=models.CASCADE,
                                related_name='phases')
 
-    test_groups = models.ManyToManyField(TestGroup, related_name='test_groups')
+    test_groups = models.ManyToManyField(TestGroup)
     start_date = models.DateTimeField()
     duration = models.FloatField()
     has_test = models.BooleanField(default=False)
@@ -182,10 +182,11 @@ class Event(models.Model):
     def clean(self):
         # Don't allow creates a event before
         # the last event created
-        if Event.objects.latest('date').date > self.date:
-            raise ValidationError({
-                'date': ValidationError(_('Invalid date'), code='invalid')
-            })
+        print("self", self)
+        #if Event.objects.latest('date').date < self.date:
+         #   raise ValidationError({
+          #      'date': ValidationError(_('Invalid date'), code='invalid')
+           # })
 
     def __str__(self):
         return f'Event created by {self.created_by.username} at {self.date}'
@@ -198,3 +199,4 @@ class Result(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     values = models.TextField(blank=True, null=True)
+

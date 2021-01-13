@@ -580,7 +580,7 @@
      <div>
                 {% for sf in safety_functions %}
             <a class="btn btn-secondary" style="float: right; color: white" role="button"
-                           href="{% url 'campaigns:cut_list' schema.pk sf.pk %}"> view cutlist - SF {{forloop.counter}}
+                           href="{% url 'campaigns:cut_list' schema sf.pk %}"> view cutlist - SF {{forloop.counter}}
             </a>
             {% endfor %}
             </div>
@@ -629,8 +629,8 @@
 
 
                         type: 'logarithmic',
-                        min: 0.000001,
-                        max: 0.5,
+                        min: 0.0000001,
+                        max: 0.3,
 
                         labels: {
                             formatter: function () {
@@ -640,15 +640,9 @@
 
                         plotLines: [
 
-                            {value: {{0.01}}, width: 1, color: 'red', dashStyle: 'ShortDash', label: {text: "SIL 1"}},
-                            {
-                                value: {{0.001}},
-                                width: 1,
-                                color: 'orange',
-                                dashStyle: 'ShortDash',
-                                label: {text: "SIL 2"}
-                            },
-                            {value: {{0.0001}}, width: 1, dashStyle: 'ShortDash', label: {text: "SIL 3"}},
+                            {value: {{0.1}}, width: 1, color: 'red', dashStyle: 'ShortDash', label: {text: "SIL 0"}},
+                            {value: {{0.01}}, width: 1, color: 'Green', dashStyle: 'ShortDash', label: {text: "SIL 1"}},
+                            {value: {{0.001}}, width: 1, color: 'Green', dashStyle: 'ShortDash', label: {text: "SIL 2"}},
 
                         ]
                     },
@@ -686,19 +680,36 @@
                     },
 
                     series: [{
-                        color: '#337ab7',
+                        color: '#1c588f',
                         name: 'Normal',
                         tooltip: {},
-                        dashStyle: 'shortdash',
+                        dashStyle: 'solid',
                         data: {{data.result | safe}},
-
-
                     },
+
                     {
-                        color: 'black',
-                        name: 'Normal Average',
-                        data: {{data.average_to_chart}},
-                        dashStyle: 'ShortDot'
+                        color: '#74a1d0',
+                        name: 'Testing',
+                        tooltip: {},
+                        dashStyle: 'ShortDot',
+                        data: {{data.result_teste_sf | safe}},
+                    },
+
+                    {
+                        color: '#ff2424',
+                        name: 'Degraded',
+                        tooltip: {},
+                        dashStyle: 'Solid',
+                        data: {{data.result_sf_falho | safe}},
+                    },
+
+
+                    {
+                        color: '#010101',
+                        name: 'Average',
+                        tooltip: {},
+                        dashStyle: 'LongDash',
+                        data: {{data.average_to_chart | safe}},
                     },
 
 

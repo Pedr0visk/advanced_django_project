@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Campaign, Phase, Schema
-
+from .models import Campaign, Phase, Schema, Event
 
 class CampaignAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'status', 'active')
@@ -12,4 +11,5 @@ class CampaignAdmin(admin.ModelAdmin):
 admin.site.register(Campaign, CampaignAdmin)
 admin.site.register(Phase)
 admin.site.register(Schema)
+admin.site.register(Event)
 

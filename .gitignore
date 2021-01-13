@@ -1,7 +1,0 @@
-app/node_modules/
-.idea/workspace.xml
-app/.idea/
-.idea/
-.env.dev
-.env.prod
-.vscode/

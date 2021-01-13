@@ -20,10 +20,10 @@ from ..failuremodes.models import FailureMode
 from asgiref.sync import sync_to_async
 
 
-@transaction.atomic
-@allowed_users(allowed_roles=['Admin'])
+
 def bop_upload(request):
     """
+@transaction.atomic
     Add a new bop from a built-in bop.text
     :param request:
     :return:
@@ -56,14 +56,14 @@ def bop_upload(request):
     return render(request, 'bops/bop_form.html', context)
 
 
-@allowed_users(allowed_roles=['Admin'])
+
 def bop_list(request):
     bop_queryset = Bop.objects.all()
     context = {'bops': bop_queryset}
     return render(request, 'bops/bop_list.html', context)
 
 
-@allowed_users(allowed_roles=['Admin'])
+
 def bop_update(request, pk):
     bop = Bop.objects.get(pk=pk)
     form = BopForm(request.POST or None, instance=bop)
@@ -88,7 +88,7 @@ def bop_update(request, pk):
     return render(request, 'bops/bop_form.html', context)
 
 
-@allowed_users(allowed_roles=['Admin'])
+
 def bop_delete(request, pk):
     bop = Bop.objects.get(pk=pk)
     context = {'bop': bop}

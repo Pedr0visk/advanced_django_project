@@ -13,7 +13,7 @@ from . import metrics
 from .models import Campaign, Phase, Schema, Event, Result
 from .forms import CampaignForm, PhaseForm, EventForm
 from .filters import campaign_filter
-from .metrics import Fail_line
+from .metrics import Fail_line, run
 from .tasks import create_new_result_for_schema_base
 
 from ..test_groups.models import TestGroup
@@ -110,10 +110,25 @@ def phase_update(request, pk):
 def campaign_metrics(request, schema_pk):
     print("campaing _metrics")
     schema = Schema.objects.get(pk=schema_pk)
-    results = schema.result
+    results, result_falho = run(schema)
+
+    t_start_camp = schema.start_date
+    t_end_camp = schema.end_date
+    camp_period = t_end_camp - t_start_camp
+
+    time_now = datetime.datetime.now()
+    time_now = time_now.replace(tzinfo=None)
+    t_start_camp = t_start_camp.replace(tzinfo=None)
+
+
+    steps = int(camp_period.total_seconds() / 60 ** 2)
+    past = time_now - t_start_camp
+    past = int(past.total_seconds() / 60 ** 2)
+
+
     campaign = schema.campaign
 
-    results = ast.literal_eval(results)
+    #results = ast.literal_eval(results)
     time = []
 
     number_Sf = len(results[0])
@@ -123,25 +138,44 @@ def campaign_metrics(request, schema_pk):
     average = []
     maxi = []
 
+    f = 0
+    fail_events = Event.objects.filter(campaign=schema.campaign)
+    for fail in fail_events:
+        if f == 0:
+            tempo_falha = fail.date
+            tempo_falha = tempo_falha.replace(tzinfo=None)
+            print("fails", tempo_falha, t_start_camp)
+
+            inicio = (tempo_falha - t_start_camp)
+            inicio = int(inicio.total_seconds() / 60 ** 2)
+            f = 1
+
     for j in range(1, number_Sf):
 
         result_sf = []
+        result_sf_to_chart = []
+        result_fail = []
+        result_fail_to_chart = []
+
         average_to_chart = []
-        # result_sf_falho = []
+        result_sf_falho = []
         soma = 0
         avg = 0
-        for i in range(1, tempo):
+
+
+        for i in range(0, tempo):
             if j == 1:
                 time.append(results[i][0])
 
             result_sf.append(results[i][j])
-            soma = soma + results[i][j]
-            # if i+2 > inicio:
-            #    result_sf_falho.append(result_falho[i][j])
-            # else:
-            #    result_sf_falho.append("null")
+            if i > past:
+                soma = soma + results[i][j]
+            if i+2 > inicio:
+                result_sf_falho.append(result_falho[i][j])
+            else:
+                result_sf_falho.append("null")
 
-        avg = soma / tempo
+        avg = soma / (tempo-past)
 
         desc = "safety Function" + " " + str(j)
         average.append(avg)
@@ -150,24 +184,34 @@ def campaign_metrics(request, schema_pk):
         cont = 0
         result_teste_sf = []
         phases = schema.phases.all().order_by('start_date')
+
         for phase in phases:
             if phase.has_test:
                 for i in range(0, int(phase.duration)):
-                    result_teste_sf.append(result_sf[cont - 1])
+
+                    result_teste_sf.append(result_sf[cont])
+                    result_sf_to_chart.append(0)
                     cont = cont + 1
+                result_teste_sf.append(result_sf[cont])
             else:
                 for i in range(0, int(phase.duration)):
                     result_teste_sf.append(0)
+                    result_sf_to_chart.append(result_sf[cont])
                     cont = cont + 1
 
         for i in range(0, tempo):
-            average_to_chart.append(avg)
+            if i > past:
+                average_to_chart.append(avg)
+            else:
+                average_to_chart.append('Null')
+
 
         data_to_charts.append({
             'average': avg,
             'average_to_chart': average_to_chart,
             'result_teste_sf': result_teste_sf,
-            'result': result_sf,
+            'result': result_sf_to_chart,
+            'result_sf_falho':result_sf_falho,
             'max': maximo,
             'desc': desc,
         })
@@ -198,11 +242,12 @@ def campaign_delete(request, campaign_pk):
     return render(request, 'campaigns/campaign_confirm_delete.html', context)
 
 
-def campaign_run(request, campaign_pk):
-    campaign = get_object_or_404(Campaign, pk=campaign_pk)
-    schema = campaign.get_schema_active()
+def campaign_run(request, schema_pk):
+    #campaign = get_object_or_404(Campaign, pk=campaign_pk)
 
-    results = ast.literal_eval(schema.last_result.values)
+    schema = Schema.objects.get(pk=schema_pk)
+
+    results = run(schema_pk)
 
     time = []
     number_Sf = len(results[0])
@@ -211,7 +256,7 @@ def campaign_run(request, campaign_pk):
     data_to_charts = []
     average = []
     maxi = []
-
+    print("chegou ka views")
     for j in range(1, number_Sf):
 
         result_sf = []
@@ -307,6 +352,9 @@ def schema_compare(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
     schemas = campaign.schemas.order_by('-name')
     print(schemas)
+
+
+
     if not campaign.get_schema_active():
         messages.error(
             request, 'You need create a base schema before comparing results')
@@ -318,7 +366,9 @@ def schema_compare(request, campaign_pk):
     final = []
     final_max = []
     for s in schemas:
-        print(s.last_result)
+
+        result, result_falho = run(s)
+
         t = []
         t_max = []
         t.append(s.name)
@@ -326,7 +376,7 @@ def schema_compare(request, campaign_pk):
         average_schema = []
         max_schema = []
 
-        result = ast.literal_eval(s.last_result.values)
+        #result = ast.literal_eval(s.last_result.values)
         tempo = len(result) - 1
         number_sf = len(result[0])
 
@@ -343,6 +393,7 @@ def schema_compare(request, campaign_pk):
                 m.append(float(result[i][j]))
 
             avg = soma / tempo
+            print("m", m)
             maximo = max(m)
 
             if fl == 0:
@@ -460,12 +511,13 @@ def compare_sf(request, campaign_pk):
     average = []
     maxi = []
     for s in schemas:
-        results = s.last_result.values
+        results, result_falho = run(s)
 
-        results = ast.literal_eval(results)
         time = []
 
         tempo = len(results) - 1
+
+
 
         # for j in range(1, number_Sf):
         result_sf = []

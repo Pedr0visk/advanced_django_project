@@ -166,7 +166,7 @@ class Bop(models.Model):
             elif m[index][23] == 'Step':
                 dist['cycle'] = {}
                 m[index][27] = dist['initial_failure_rate']
-                m[index][28] = 0
+                m[index][28] = dist['value']
                 m[index][29] = 0
                 m[index][30] = 0
 
