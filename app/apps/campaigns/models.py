@@ -82,6 +82,10 @@ class Campaign(models.Model):
             objs) for model, objs in collector.model_objs.items()}
         return model_count.items()
 
+    def activate(self):
+        self.active = True
+        self
+
     def __str__(self):
         return self.name
 

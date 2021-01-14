@@ -69,18 +69,13 @@ def campaign_index(request, campaign_pk):
         schema.save()
         Schema.toggle_schema_default(schema_name=schema.name)
 
-        campaign.created = True
-        campaign.active = True
         campaign.save()
         messages.success(
             request, f'Schema "{schema.name}" has been choosen for the f{campaign.name}')
 
     context = {'campaign': campaign, 'bop': campaign.bop}
 
-    if campaign.created:
-        return render(request, 'campaigns/campaign_index.html', context)
-    else:
-        return render(request, 'campaigns/campaign_planner.html', context)
+    return render(request, 'campaigns/campaign_index.html', context)
 
 
 def campaign_planner(request, campaign_pk):
@@ -398,6 +393,7 @@ def schema_clone(request, schema_pk):
     messages.success(request, f'Schema "{schema.name}" cloned successfully')
     return redirect('campaigns:planner', schema.campaign.pk)
 
+
 # EVENTS
 
 
@@ -532,7 +528,6 @@ def compare_sf(request, campaign_pk):
 
 
 def cut_list(request, schema_pk, sf_pk):
-
     schema = Schema.objects.get(pk=schema_pk)
     safety = SafetyFunction.objects.prefetch_related('cuts').get(id=sf_pk)
     cuts = safety.cuts.all()

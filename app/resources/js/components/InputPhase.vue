@@ -7,7 +7,12 @@
       </div>
       <div class="form-group col-md-2">
         <label>Start Date</label>
-        <input v-model="form.start.date" type="date" class="form-control form-control-sm" />
+        <input
+            :min="this.toDateString(new Date())"
+            v-model="form.start.date"
+            type="date"
+            class="form-control form-control-sm"
+        />
       </div>
       <div class="form-group col-auto">
         <label>Start Time</label>
