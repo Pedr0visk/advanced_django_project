@@ -1,5 +1,5 @@
 <template>
-  <tr :class="activeClass(phase)">
+  <tr :class="[activeClass(phase), inactiveClass(editable)]">
     <td>{{ phase.name }}</td>
     <td>
       {{ this.formatDate(phase.start.date, phase.start.time) }}
@@ -10,10 +10,17 @@
     <td>{{ phase.duration }}h</td>
     <td><img v-if="phase.has_test" src="/static/img/icon-yes.svg" alt=""></td>
     <td><img v-if="phase.is_drilling" src="/static/img/icon-yes.svg" alt=""></td>
-    <td><a href="" v-show="phase._id" @click.prevent="displayTestGroups(phase)">show <i class="fas fa-external-link-alt"></i></a></td>
+    <td>
+      <a
+          href=""
+          v-show="phase._id"
+          @click.prevent="displayTestGroups(phase)">
+        show <i class="fas fa-external-link-alt"></i>
+      </a>
+    </td>
 
     <td align="center">
-      <div v-show="phase._id != this.$parent.selectedItem._id">
+      <div v-show="phase._id != this.$parent.selectedItem._id && editable">
       <a
         @click.prevent="addItemBefore(index)"
         href="" class="btn-standard px-2"><i class="fas fa-arrow-circle-up text-success"></i> insert up</a>
@@ -32,12 +39,13 @@
 </template>
 
 <script>
-import Modal from "./Modal.vue";
 
 export default {
   props: ['index', 'phase'],
   data() {
-    return {};
+    return {
+      editable: true
+    };
   },
   methods: {
     addItemBefore(index) {
@@ -71,6 +79,12 @@ export default {
       return {
         active: this.$parent.selectedItem._id == item._id
       };
+    },
+
+    inactiveClass() {
+      return {
+        disabled: !this.editable
+      }
     },
 
     displayTestGroups(item) {
@@ -120,6 +134,12 @@ export default {
         confirmButtonAriaLabel: 'Thumbs up, great!',
       })
     }
+  },
+  mounted() {
+    let date = new Date(this.formatDate(this.phase.end.date, this.phase.end.time)),
+        currDate = new Date();
+
+    if (currDate > date) this.editable = false;
   }
 }
 </script>
@@ -127,5 +147,8 @@ export default {
 <style>
 tr.active {
   background-color: #ffdb9b!important;
+}
+tr.disabled {
+  background-color: #e3e3e3!important;
 }
 </style>

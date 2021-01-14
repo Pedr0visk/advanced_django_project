@@ -15,7 +15,7 @@ from .models import Campaign, Phase, Schema, Event, Result
 from .forms import CampaignForm, PhaseForm, EventForm
 from .filters import campaign_filter
 from .metrics import Fail_line
-from .tasks import create_new_result_for_schema_base
+from .tasks import *
 
 from ..test_groups.models import TestGroup
 
@@ -391,6 +391,9 @@ def schema_clone(request, schema_pk):
                                      is_drilling=p.is_drilling)
 
         phase.test_groups.set(p.test_groups.values_list('id', flat=True).all())
+
+    compare_schemas_for_campaign.delay(campaign_id=clone.campaign.id,
+                                       user_id=request.user.pk)
 
     messages.success(request, f'Schema "{schema.name}" cloned successfully')
     return redirect('campaigns:planner', schema.campaign.pk)

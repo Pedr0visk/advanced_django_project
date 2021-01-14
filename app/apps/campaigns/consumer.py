@@ -1,8 +1,4 @@
-from asgiref.sync import async_to_sync
-from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
-
-from django.core import serializers
 
 
 class CampaignConsumer(AsyncJsonWebsocketConsumer):
@@ -10,7 +6,7 @@ class CampaignConsumer(AsyncJsonWebsocketConsumer):
         print("CONNECTED CAMPAIGN", event)
 
         await self.channel_layer.group_add(
-            f"notification_group_{self.scope['url_route']['kwargs']['campaign_id']}",
+            f"campaign_group_{self.scope['url_route']['kwargs']['user_id']}",
             self.channel_name
         )
 
@@ -20,8 +16,12 @@ class CampaignConsumer(AsyncJsonWebsocketConsumer):
         print("DISCONNECTED", event)
 
     async def websocket_receive(self, event):
-        print("RECEIVE", event)
+        print("RECEIVE CAMPAIGN", event)
         await self.send(text_data='HELLO')
 
     async def campaign_info(self, event):
         print('[LOGGER]', 'campaign_info', event)
+        await self.send_json({
+            'type': event['group'],
+            'message': event['body']
+        })

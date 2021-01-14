@@ -25,7 +25,7 @@ application = ProtocolTypeRouter({
         URLRouter([
             path('ws/notifications/<int:user_id>/',
                  NotificationConsumer.as_asgi()),
-            path('ws/campaigns/<int:campaign_id>/',
+            path('ws/campaigns/<int:user_id>/',
                  CampaignConsumer.as_asgi()),
         ]),
     ),

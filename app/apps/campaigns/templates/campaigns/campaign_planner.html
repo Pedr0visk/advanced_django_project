@@ -32,16 +32,17 @@
         </a>
         {% endif %}
 
-        <h2>Campaign Planner</h2>
+        <h2>Campaign Planner <i id="spin" class="fas fa-sync-alt fa-spin d-none"></i></h2>
         <p>Bop name: <b>{{ campaign.bop }}</b> > Campaign name: <b>{{ campaign }}</b></p>
         <small></small>
+        {% if campaign.active %}
         <small class="text-warning"><b>WARNING:</b>NOTE THIS CAMPAIGN IS CURRENT ACTIVE</small>
+        {% endif %}
       </div>
       <div>
         <a id="btnCompare" href="{% url 'campaigns:compare' campaign.pk %}" id="toggleLoading"
           class="btn-standard-lg mr-2 ">
-          <small>SCHEMAS COMPARISON</small>
-          <i class="fas fa-clipboard-check text-danger"></i>
+          Schema Comparison
         </a>
         <a href="{% url 'campaigns:update' campaign.pk %}" class="btn-standard-lg mr-2">
           <small>EDIT
@@ -65,7 +66,7 @@
             <thead class="bg-white-50">
               <tr>
                 <th scope="col">name</th>
-                <th style="text-align: center;">schema base</th>
+                <th style="text-align: center;">base case</th>
                 <th style="text-align: center;">actions</th>
               </tr>
             </thead>
@@ -136,10 +137,22 @@
 
 {% block scripts %}
 <script>
-  window.addEventListener('load', function (e) {
-    const campaignId = JSON.parse(document.getElementById('userId').textContent);
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 4000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
 
-    const chatSocket = new WebSocket(
+  window.addEventListener('load', function (e) {
+    const userId = JSON.parse(document.getElementById('userId').textContent);
+
+    const notificationSocket = new WebSocket(
       'ws://'
       + window.location.host
       + '/ws/notifications/'
@@ -147,54 +160,54 @@
       + '/'
     );
 
-    chatSocket.onmessage = async function (e) {
+    notificationSocket.onmessage = async function (e) {
       const data = JSON.parse(e.data);
 
       let unreaded_notifications = JSON.parse(data.unreaded_notifications);
 
       unreaded_notifications.map(notification => {
         if (notification.fields.group == 'c') {
+          $('#btnCompare').addClass('disabled');
           let btn = document.getElementById('btnCompare');
-          let img = document.createElement('img');
-          let text = document.createElement('small');
-
-          btn.textContent = '';
-          btn.classList = 'btn btn-success';
+          btn.text = 'Comparing Schemas...';
           btn.style = 'cursor: not-allowed';
 
-          img.src = '/static/img/loading.gif';
-          img.width = '15';
-          btn.appendChild(img);
-
-          text.textContent = 'COMPARING SCHEMAS...';
-          btn.appendChild(text);
-
-          $('#task_alert').addClass('d-flex')
+          $('#spin').removeClass('d-none')
         }
 
         if (notification.fields.group == 'd') {
+          $('#btnCompare').removeClass('disabled');
           let btn = document.getElementById('btnCompare');
-          let text = document.createElement('small');
-
-          btn.textContent = '';
+          btn.text = 'Schema Comparison';
           btn.style = '';
-          btn.classList = 'btn-standard-lg mr-2';
 
-          text.textContent = 'SCHEMAS COMPARISON ';
-          btn.appendChild(text);
-
-          let icon = document.createElement('i');
-          icon.classList = 'fas fa-clipboard-check text-danger';
-          btn.appendChild(icon)
-
-          $('#task_alert').removeClass('d-flex')
+          $('#spin').addClass('d-none')
         }
       });
     };
 
-    chatSocket.onclose = function (e) {
+    notificationSocket.onclose = function (e) {
       console.error('Chat socket closed unexpectedly');
     };
+
+    const campaignSocket = new WebSocket(
+      'ws://'
+      + window.location.host
+      + '/ws/campaigns/'
+      + userId
+      + '/'
+    );
+
+    campaignSocket.onmessage = async function (e) {
+      const data = JSON.parse(e.data);
+
+      Toast.fire({
+        icon: 'success',
+        title: data.message
+      }).then(() => {
+        console.log('finished')
+      })
+    }
   });
 </script>
 {% endblock %}

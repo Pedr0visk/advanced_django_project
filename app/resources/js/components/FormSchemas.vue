@@ -308,7 +308,9 @@ export default {
               end: end,
               test_groups: phase.test_groups
             }
-          })
+          });
+
+          this.$bus.$emit("schemaLoaded", {});
         })
     }
     

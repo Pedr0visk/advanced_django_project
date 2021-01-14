@@ -125,6 +125,11 @@ export default {
       }
     }
   },
+  mounted() {
+    this.$bus.$on("schemaLoaded", event => {
+      this.clearForm();
+    });
+  },
   // validations
   watch: {
     'form.duration': function (val, oldVal) {

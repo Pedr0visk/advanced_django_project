@@ -16,18 +16,6 @@
 <script src="{% static 'js/NotificationObj.js' %}"></script>
 
 <script>
-  const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-start',
-    showConfirmButton: false,
-    timer: 4000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.addEventListener('mouseenter', Swal.stopTimer)
-      toast.addEventListener('mouseleave', Swal.resumeTimer)
-    }
-  })
-
   $('#navbarDropdownMenuLink').click(function () {
     const tmpObjsHTML = $('#newNotifications').html()
     $.ajax({
@@ -70,11 +58,6 @@
       // $('#newNotifications').html('');
       // var obj = new NotificationObj(element.fields)
       // $('#newNotifications').append(obj.drawNotification())
-
-      Toast.fire({
-        icon: 'success',
-        title: element.fields.body
-      })
 
     });
 
