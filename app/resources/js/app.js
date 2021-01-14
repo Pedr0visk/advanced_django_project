@@ -4,17 +4,25 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import {uuid} from 'vue-uuid';
 import Axios from "axios";
 import VueSweetalert2 from 'vue-sweetalert2';
-import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
+import {BootstrapVue, IconsPlugin} from 'bootstrap-vue';
+import helpers from './utils';
 
 // Install BootstrapVue
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
-Vue.use(IconsPlugin)
+Vue.use(IconsPlugin);
+Vue.use(helpers);
 
 Vue.prototype.$http = Axios;
 Vue.prototype.$uuid = uuid;
 
+import schema from "./models/schema.js";
+
+Vue.prototype.$defaultSchema = schema;
+
 Vue.use(VueSweetalert2);
+
+Vue.component('form-schemas', require('./components/FormSchemas.vue').default);
 
 // setup axios interceptor
 window.axios.interceptors.response.use(function (response) {
@@ -68,22 +76,27 @@ Vue.component(
   "failure-mode-list",
   require("./components/FailureModeList.vue").default
 );
+
+Vue.component(
+  "failure-mode-list",
+  require("./components/FailureModeList.vue").default
+);
 /*
  * By extending the Vue prototype with a new '$bus' property
  * we can easily access our global event bus from any child component.
  */
 Object.defineProperty(Vue.prototype, '$bus', {
-    get() {
-        return this.$root.bus;
-    }
+  get() {
+    return this.$root.bus;
+  }
 });
 
 window.bus = new Vue({});
 
 let vue = new Vue({
-    data() {
-        return {
-            bus: bus
-        }
+  data() {
+    return {
+      bus: bus
     }
+  }
 }).$mount("#app");

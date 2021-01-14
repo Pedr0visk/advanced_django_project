@@ -5,17 +5,14 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-
+from django.db import transaction
 from apps.bops.models import *
 from apps.cuts.models import *
-
-from . import metrics
+from .metrics import Fail_line, run
 from .models import Campaign, Phase, Schema, Event, Result
 from .forms import CampaignForm, PhaseForm, EventForm
 from .filters import campaign_filter
-from .metrics import Fail_line, run
-from .tasks import create_new_result_for_schema_base
-
+from .tasks import *
 from ..test_groups.models import TestGroup
 
 
@@ -68,18 +65,13 @@ def campaign_index(request, campaign_pk):
         schema.save()
         Schema.toggle_schema_default(schema_name=schema.name)
 
-        campaign.created = True
-        campaign.active = True
         campaign.save()
         messages.success(
             request, f'Schema "{schema.name}" has been choosen for the f{campaign.name}')
 
     context = {'campaign': campaign, 'bop': campaign.bop}
 
-    if campaign.created:
-        return render(request, 'campaigns/campaign_index.html', context)
-    else:
-        return render(request, 'campaigns/campaign_planner.html', context)
+    return render(request, 'campaigns/campaign_index.html', context)
 
 
 def campaign_planner(request, campaign_pk):
@@ -332,16 +324,8 @@ def schema_update(request, schema_pk):
     return render(request, 'schemas/schema_form.html', context)
 
 
-def schema_index(request, schema_pk):
-    schema = Schema.objects.prefetch_related(
-        'phases', 'phases__test_groups').get(pk=schema_pk)
-    campaign_pk = schema.campaign.pk
-    context = {'schema': schema, 'campaign_pk': campaign_pk}
-    return render(request, 'schemas/schema_index.html', context)
-
-
 def schema_delete(request, schema_pk):
-    schema = Schema.objects.get(pk=schema_pk)
+    schema = get_object_or_404(Schema, pk=schema_pk)
     campaign_pk = schema.campaign.pk
     schema.delete()
     messages.success(request, f'Schema "{schema.name}" deleted successfully')
@@ -430,6 +414,34 @@ def schema_compare(request, campaign_pk):
     }
     print(datetime.datetime.today(), "Fim ")
     return render(request, 'schemas/schema_compare.html', context)
+
+
+@transaction.atomic
+def schema_clone(request, schema_pk):
+    schema = get_object_or_404(Schema, pk=schema_pk)
+
+    clone = Schema.objects.create(name=f'{schema.name} clone',
+                                  is_default=False,
+                                  campaign=schema.campaign)
+
+    for p in schema.phases.all():
+        phase = Phase.objects.create(name=p.name,
+                                     schema=clone,
+                                     duration=p.duration,
+                                     has_test=p.has_test,
+                                     start_date=p.start_date,
+                                     is_drilling=p.is_drilling)
+
+        phase.test_groups.set(p.test_groups.values_list('id', flat=True).all())
+
+    compare_schemas_for_campaign.delay(campaign_id=clone.campaign.id,
+                                       user_id=request.user.pk)
+
+    messages.success(request, f'Schema "{schema.name}" cloned successfully')
+    return redirect('campaigns:planner', schema.campaign.pk)
+
+
+# EVENTS
 
 
 def event_create(request, campaign_pk):
@@ -564,7 +576,6 @@ def compare_sf(request, campaign_pk):
 
 
 def cut_list(request, schema_pk, sf_pk):
-
     schema = Schema.objects.get(pk=schema_pk)
     safety = SafetyFunction.objects.prefetch_related('cuts').get(id=sf_pk)
     cuts = safety.cuts.all()

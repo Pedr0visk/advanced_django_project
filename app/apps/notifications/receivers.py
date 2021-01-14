@@ -31,9 +31,16 @@ def create_notification(sender, instance, *args, **kwargs):
 
 @receiver(post_save, sender=Notification)
 def send_notification_info(*args, **kwargs):
-
     if kwargs['created']:
         channel_layer = get_channel_layer()
+
+        async_to_sync(channel_layer.group_send)(
+            f"campaign_group_{kwargs['instance'].assigned_to.id}", {
+                'type': 'campaign_info',
+                'group': kwargs['instance'].group,
+                'body': kwargs['instance'].body
+            }
+        )
         async_to_sync(channel_layer.group_send)(
             f"notification_group_{kwargs['instance'].assigned_to.id}", {
                 'type': 'notification_info'

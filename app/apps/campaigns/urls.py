@@ -31,6 +31,8 @@ urlpatterns = [
          views.schema_delete, name="delete_schema"),
     path('schemas/<int:schema_pk>/<int:sf_pk>/cut_list/',
          views.cut_list, name="cut_list"),
+    path('schemas/clone/<int:schema_pk>/',
+         views.schema_clone, name="clone_schema"),
 
     # events
     path('events/add/<int:campaign_pk>/',

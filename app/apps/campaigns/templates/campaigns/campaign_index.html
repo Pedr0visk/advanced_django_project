@@ -25,8 +25,9 @@
       <div>
         <a id="btnRun" href="{% url 'campaigns:run' campaign.pk %}" class="btn-standard-lg text-danger mr-2">
           <small>
-            SAFETY FUNCTIONS HEALTH <i class="fas fa-heartbeat"></i>
+            RUN
           </small>
+          <i class="fas fa-cogs"></i>
         </a>
         <a href="{% url 'campaigns:planner' campaign.pk %}" class="btn-standard-lg mr-2">
           <small>CAMPAIGN PLANNER <i class="fa fa-chart-area"></i></small>
@@ -158,12 +159,12 @@
 
           btn.textContent = '';
           btn.style = '';
-          btn.classList = 'btn-standard-lg mr-2 text-danger';
+          btn.classList = 'btn-standard-lg mr-2';
 
-          text.textContent = 'SAFETY FUNCTIONS HEALTH ';
+          text.textContent = 'RUN ';
           btn.appendChild(text);
 
-          icon.classList = 'fas fa-heartbeat';
+          icon.classList = 'fas fa-cogs';
           btn.appendChild(icon)
 
           $('#task_alert').removeClass('d-flex')

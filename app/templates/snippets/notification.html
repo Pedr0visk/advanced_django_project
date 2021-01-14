@@ -12,7 +12,9 @@
 {% load static %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="{% static 'js/NotificationObj.js' %}"></script>
+
 <script>
   $('#navbarDropdownMenuLink').click(function () {
     const tmpObjsHTML = $('#newNotifications').html()
@@ -53,9 +55,10 @@
     let unreaded_notification_count = JSON.parse(data.unreaded_notification_count);
 
     unreaded_notifications.forEach(element => {
-      $('#newNotifications').html('');
-      var obj = new NotificationObj(element.fields)
-      $('#newNotifications').append(obj.drawNotification())
+      // $('#newNotifications').html('');
+      // var obj = new NotificationObj(element.fields)
+      // $('#newNotifications').append(obj.drawNotification())
+
     });
 
     $('#dropdownNotifications').html('');
@@ -67,7 +70,7 @@
       $('#dropdownNotifications').append(obj)
     });
 
-    $('.toast').toast('show');
+    // $('.toast').toast('show');
 
     if (parseInt(unreaded_notification_count) > 0) {
       $('#newNotificationCount').text(unreaded_notification_count);

@@ -82,6 +82,10 @@ class Campaign(models.Model):
             objs) for model, objs in collector.model_objs.items()}
         return model_count.items()
 
+    def activate(self):
+        self.active = True
+        self
+
     def __str__(self):
         return self.name
 
@@ -114,8 +118,8 @@ class Schema(models.Model):
         return self.results.latest('created_at')
 
     @staticmethod
-    def toggle_schema_default(schema_name):
-        objects = Schema.objects.exclude(name=schema_name)
+    def toggle_schema_default(schema):
+        objects = Schema.objects.filter(campaign=schema.campaign).exclude(id=schema.id)
         for obj in objects:
             obj.is_default = False
             obj.save()

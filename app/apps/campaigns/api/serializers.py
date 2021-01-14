@@ -30,7 +30,7 @@ class SchemaSerializer(serializers.ModelSerializer):
 
         # toggle default in schemas table
         if schema.is_default:
-            Schema.toggle_schema_default(schema.name)
+            Schema.toggle_schema_default(schema)
 
         if not schema.campaign.get_schema_active():
             schema.is_default = True
@@ -84,7 +84,7 @@ class SchemaSerializer(serializers.ModelSerializer):
         # toggle default in schemas table
         # whenever the schema is set as default schema
         if instance.is_default:
-            Schema.toggle_schema_default(instance.name)
+            Schema.toggle_schema_default(instance)
 
         return instance
 
