@@ -23,8 +23,8 @@ def compare_schemas_for_campaign(*args, **kwargs):
 
     # initing calc results and calling schema compare
     for schema in campaign.schemas.all():
-        values = metrics.run(schema)
-        Result.objects.create(schema=schema, values=values)
+        values, failures = metrics.run(schema)
+        Result.objects.create(schema=schema, values=values, failures=failures)
 
     # emit event to create a new notification of task completed
     task_completed.send(sender=Campaign.__class__,
@@ -46,8 +46,8 @@ def create_new_result_for_schema_base(*args, **kwargs):
                         instance=campaign,
                         user_id=kwargs['user_id'])
 
-    values = metrics.run(schema)
-    Result.objects.create(schema=schema, values=values)
+    values, failures = metrics.run(schema)
+    Result.objects.create(schema=schema, values=values, failures=failures)
 
     task_completed.send(sender=Campaign.__class__,
                         completed=True,

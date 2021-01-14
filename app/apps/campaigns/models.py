@@ -119,7 +119,8 @@ class Schema(models.Model):
 
     @staticmethod
     def toggle_schema_default(schema):
-        objects = Schema.objects.filter(campaign=schema.campaign).exclude(id=schema.id)
+        objects = Schema.objects.filter(
+            campaign=schema.campaign).exclude(id=schema.id)
         for obj in objects:
             obj.is_default = False
             obj.save()
@@ -187,10 +188,10 @@ class Event(models.Model):
         # Don't allow creates a event before
         # the last event created
         print("self", self)
-        #if Event.objects.latest('date').date < self.date:
-         #   raise ValidationError({
-          #      'date': ValidationError(_('Invalid date'), code='invalid')
-           # })
+        # if Event.objects.latest('date').date < self.date:
+        #   raise ValidationError({
+        #      'date': ValidationError(_('Invalid date'), code='invalid')
+        # })
 
     def __str__(self):
         return f'Event created by {self.created_by.username} at {self.date}'
@@ -201,6 +202,6 @@ class Result(models.Model):
                                on_delete=models.CASCADE,
                                related_name='results')
 
-    created_at = models.DateTimeField(auto_now_add=True)
     values = models.TextField(blank=True, null=True)
-
+    failures = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
