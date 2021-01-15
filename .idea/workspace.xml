@@ -20,34 +20,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8aa1bbde-32e4-44cd-a9f8-6b37721daf50" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/apps/campaigns/management/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/apps/campaigns/management/commands/activatecampaigns.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/schemas/schema_manager.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/resources/js/components/FormSchemas.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/resources/js/components/InputPhase.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/resources/js/components/Modal.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/resources/js/components/PhaseItem.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/resources/js/models/schema.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/resources/js/utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/bops/load_bop.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/bops/load_bop.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/bops/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/bops/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/apps/campaigns/api/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/api/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/consumer.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/consumer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/metrics.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/apps/campaigns/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_charts.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_charts.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_planner.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_planner.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/schemas/schema_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/schemas/schema_form.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/schemas/schema_index.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/apps/campaigns/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/apps/campaigns/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/apps/notifications/receivers.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/notifications/receivers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/bop/asgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/bop/asgi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/manage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/resources/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/resources/js/components/DatetimePicker.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/resources/js/components/SchemaForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/resources/js/components/SchemaForm.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/static/build/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/build/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/static/img/loading.gif" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/img/loading.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/snippets/notification.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/snippets/notification.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +40,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="lastshot" />
+        <entry key="$PROJECT_DIR$" value="develop" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -141,7 +124,9 @@
       <workItem from="1610528523878" duration="2035000" />
       <workItem from="1610533438553" duration="6135000" />
       <workItem from="1610552889146" duration="13298000" />
-      <workItem from="1610658898247" duration="414000" />
+      <workItem from="1610658898247" duration="13240000" />
+      <workItem from="1610692869276" duration="2825000" />
+      <workItem from="1610697023286" duration="22383000" />
     </task>
     <servers />
   </component>
@@ -197,6 +182,10 @@
       <screen x="0" y="0" width="1600" height="860" />
     </state>
     <state x="0" y="0" key="SettingsEditor/0.0.1600.860@0.0.1600.860" timestamp="1606936414371" />
+    <state x="92" y="92" width="1416" height="676" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1610733244110">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="92" y="92" width="1416" height="676" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1600.860@0.0.1600.860" timestamp="1610733244110" />
     <state x="507" y="163" width="585" height="534" key="find.popup" timestamp="1608962803723">
       <screen x="0" y="0" width="1600" height="860" />
     </state>

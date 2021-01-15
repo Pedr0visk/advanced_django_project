@@ -187,7 +187,7 @@ class Event(models.Model):
     def clean(self):
         # Don't allow creates a event before
         # the last event created
-        print("self", self)
+        print("evento")
         # if Event.objects.latest('date').date < self.date:
         #   raise ValidationError({
         #      'date': ValidationError(_('Invalid date'), code='invalid')

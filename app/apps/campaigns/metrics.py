@@ -6,7 +6,6 @@ from apps.cuts.models import *
 from .models import *
 from django.db.models import Max
 import datetime
-from datetime import timedelta
 import string
 import math
 import json
@@ -140,9 +139,7 @@ def calculate_SF_PFDS(schema, m):
             reduzida = matriz_index
             print(datetime.datetime.today(), "fim da redução: ")
             for i in range(1, steps):
-
                 if i == time_fail[cont]:
-
                     if cont < len(matriz_reduzida):
                         reduzida = matriz_reduzida[cont]
                         cont = cont + 1
@@ -150,14 +147,17 @@ def calculate_SF_PFDS(schema, m):
                     if cont == len(matriz_reduzida):
                         reduzida = matriz_index
 
-                result_each_sf_integrate_falho[i][0] = i * dt
-                result_each_sf_integrate_falho[i][fl] = calc_PFD_this_timestep(i, v_falho,
+                if i+2>time_fail[0]:
+                    result_each_sf_integrate_falho[i][0] = i * dt
+                    result_each_sf_integrate_falho[i][fl] = calc_PFD_this_timestep(i, v_falho,
                                                                                             reduzida)
+                else:
+                    result_each_sf_integrate_falho[i][0] = i * dt
+                    result_each_sf_integrate_falho[i][fl] = 0
+
                 result_each_sf_integrate[i][0] = i * dt
                 result_each_sf_integrate[i][fl] = calc_PFD_this_timestep(i, v_integrate,
                                                                                       matriz_index)
-
-
         else:
             for i in range(1, steps):
                 result_each_sf_integrate[i][0] = i * dt
@@ -811,16 +811,34 @@ def calculate_failure_modes_falho(vetor_falha, v_integrate, t_start_recert, t_en
 
     return v_integrate_falho
 
-def fail_op_day(vetor, start_camp, t_end_camp):
+def fail_op_day(vetor, start_camp, end_camp):
     v = []
+    t_start_camp = start_camp.replace(tzinfo=None)
+    t_end_camp = end_camp.replace(tzinfo=None)
+    steps = t_end_camp - t_start_camp
+    steps = int(steps.total_seconds() / 60 ** 2)
     for fail in vetor:
+        time_now = fail[1].replace(tzinfo=None)
+        past = time_now - t_start_camp
+        past = int(past.total_seconds() / 60 ** 2)
+        if past not in v:
+            v.append(past)
 
-        if abs((fail[1] - start_camp).days) not in v:
-            v.append(abs((fail[1] - start_camp).days))
-
-        if abs((t_end_camp- start_camp).days) not in v:
-            v.append(abs((t_end_camp - start_camp).days))
+    if steps not in v:
+        v.append(steps)
 
     v = sorted(v)
 
     return v
+
+
+def actual_step(schema):
+
+    t_start_camp = schema.start_date
+    time_now = datetime.datetime.now()
+    time_now = time_now.replace(tzinfo=None)
+    t_start_camp = t_start_camp.replace(tzinfo=None)
+    past = time_now - t_start_camp
+    past = int(past.total_seconds() / 60 ** 2)
+
+    return past

@@ -23,7 +23,7 @@
       </div>
 
       <div>
-        <a id="btnRun" href="{% url 'campaigns:run' campaign.pk %}" class="btn-standard-lg text-danger mr-2">
+        <a id="btnRun" href="{% url 'campaigns:metrics' campaign.pk %}" class="btn-standard-lg text-danger mr-2">
           <small>
             RUN
           </small>
@@ -47,11 +47,7 @@
           <h4>Info</h4>
           <ul class="info-list">
             <li>name: <b>{{ campaign.name }}</b></li>
-            <li class="d-flex align-items-center">
-              base schema: <b>{{ campaign.get_schema_active.name }}</b>
-              <a href="{% url 'campaigns:update_schema' campaign.get_schema_active.pk %}"
-                class="ml-auto btn btn-standard"><small>edit</small></a>
-            </li>
+
             <li>
               status:
               {% if campaign.active %}

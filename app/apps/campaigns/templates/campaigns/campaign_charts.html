@@ -669,7 +669,7 @@
 
       labels: {
         formatter: function () {
-          return this.value.toExponential(1);
+          return this.value.toExponential(2);
         }
       },
 
@@ -677,8 +677,10 @@
 
         { value: {{ 0.1}}, width: 1, color: 'red', dashStyle: 'ShortDash', label: { text: "SIL 0" }
   },
-    { value: {{ 0.01}}, width: 1, color: 'Green', dashStyle: 'ShortDash', label: { text: "SIL 1" }},
-    { value: {{ 0.001}}, width: 1, color: 'Green', dashStyle: 'ShortDash', label: { text: "SIL 2" }},
+          { value: {{ 0.01}}, width: 1, color: 'Orange', dashStyle: 'ShortDash', label: { text: "SIL 0" }
+  },
+  { value: {{ 0.001}}, width: 1, color: 'green', dashStyle: 'ShortDash', label: { text: "SIL 0" }
+  },
 
                         ]
                     },
@@ -711,14 +713,16 @@
 
 
       pointStart: Date.UTC({{ campaign.start_date.year }}, {{ campaign.start_date.month }} -1, {{ campaign.start_date.day }}), // start date
-    pointInterval: 3600 * 1000 // one hour in miliseconds
+      pointInterval: 3600 * 1000 // one hour in miliseconds
                         }
                     },
 
   series: [{
     color: '#1c588f',
     name: 'Normal',
-    tooltip: {},
+      tooltip: {
+        pointFormat: "Normal: {point.y:.6f}"
+    },
     dashStyle: 'solid',
     data: {{ data.result | safe }},
                     },
@@ -734,18 +738,33 @@
   {
     color: '#ff2424',
     name: 'Degraded',
-    tooltip: {},
+    tooltip: {
+          },
     dashStyle: 'Solid',
     data: {{ data.result_sf_falho | safe }},
                     },
 
+  {
+    type: 'scatter',
+    color: '#1c588f',
+    name: 'Today',
+    marker: {
+            radius: 6
+
+        },
+    data: {{ data.today_result | safe }}
+    },
+
 
   {
+
+
     color: '#010101',
     name: 'Average',
-    tooltip: {},
+    tooltip: {pointFormat: "Average: {point.y:.6f}"},
     dashStyle: 'LongDash',
     data: {{ data.average_to_chart | safe }},
+
                     },
 
 
