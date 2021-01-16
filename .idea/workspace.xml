@@ -21,21 +21,21 @@
   <component name="ChangeListManager">
     <list default="true" id="8aa1bbde-32e4-44cd-a9f8-6b37721daf50" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/apps/bops/load_bop.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/bops/load_bop.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/apps/bops/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/bops/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/apps/campaigns/api/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/api/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/metrics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_charts.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_charts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_planner.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_planner.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -144,55 +144,5 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="392" y="100" key="#Docker" timestamp="1610472701032">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="392" y="100" key="#Docker/0.0.1600.860@0.0.1600.860" timestamp="1610472701032" />
-    <state x="254" y="85" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1610493362789">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="254" y="85" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1600.860@0.0.1600.860" timestamp="1610493362789" />
-    <state x="563" y="232" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1610502310023">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="563" y="232" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1600.860@0.0.1600.860" timestamp="1610502310023" />
-    <state x="530" y="177" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1610502257562">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="530" y="177" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1600.860@0.0.1600.860" timestamp="1610502257562" />
-    <state x="547" y="285" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1610475811977">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="547" y="285" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1600.860@0.0.1600.860" timestamp="1610475811977" />
-    <state x="638" y="310" key="DockerComposeFileDialog" timestamp="1610472776224">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="638" y="310" key="DockerComposeFileDialog/0.0.1600.860@0.0.1600.860" timestamp="1610472776224" />
-    <state x="667" y="192" key="EnvironmentVariablesDialog" timestamp="1610472662884">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="667" y="192" key="EnvironmentVariablesDialog/0.0.1600.860@0.0.1600.860" timestamp="1610472662884" />
-    <state x="580" y="185" key="FileChooserDialogImpl" timestamp="1610558195591">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="580" y="185" key="FileChooserDialogImpl/0.0.1600.860@0.0.1600.860" timestamp="1610558195591" />
-    <state x="0" y="0" key="SettingsEditor" timestamp="1606936414371">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="0" y="0" key="SettingsEditor/0.0.1600.860@0.0.1600.860" timestamp="1606936414371" />
-    <state x="92" y="92" width="1416" height="676" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1610733244110">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="92" y="92" width="1416" height="676" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1600.860@0.0.1600.860" timestamp="1610733244110" />
-    <state x="507" y="163" width="585" height="534" key="find.popup" timestamp="1608962803723">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="507" y="163" width="585" height="534" key="find.popup/0.0.1600.860@0.0.1600.860" timestamp="1608962803723" />
-    <state x="456" y="83" width="672" height="678" key="search.everywhere.popup" timestamp="1610556984967">
-      <screen x="0" y="0" width="1600" height="860" />
-    </state>
-    <state x="456" y="83" width="672" height="678" key="search.everywhere.popup/0.0.1600.860@0.0.1600.860" timestamp="1610556984967" />
   </component>
 </project>

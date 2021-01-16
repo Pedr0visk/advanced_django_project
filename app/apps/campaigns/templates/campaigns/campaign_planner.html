@@ -162,7 +162,7 @@
 
     notificationSocket.onmessage = async function (e) {
       const data = JSON.parse(e.data);
-
+      console.log(data)
       let unreaded_notifications = JSON.parse(data.unreaded_notifications);
 
       unreaded_notifications.map(notification => {
