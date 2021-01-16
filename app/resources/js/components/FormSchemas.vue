@@ -189,7 +189,6 @@ export default {
             })
             .then(swalRes => {
               this.clearForm();
-              window.location.href = '/';
             });
           })
     },

@@ -270,4 +270,5 @@ def list_subsystems(request, pk):
 def bop_result(request, pk):
     bop = Bop.objects.get(pk=pk)
     context = {'bop': bop}
+
     return render(request, 'bops/bop_results.html', context)

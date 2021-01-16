@@ -71,7 +71,10 @@ def campaign_index(request, campaign_pk):
 
     context = {'campaign': campaign, 'bop': campaign.bop}
 
-    return render(request, 'campaigns/campaign_index.html', context)
+    if campaign.active:
+        return render(request, 'campaigns/campaign_index.html', context)
+
+    return render(request, 'campaigns/campaign_planner.html', context)
 
 
 def campaign_planner(request, campaign_pk):

@@ -121,9 +121,12 @@ class Schema(models.Model):
     def toggle_schema_default(schema):
         objects = Schema.objects.filter(
             campaign=schema.campaign).exclude(id=schema.id)
+
         for obj in objects:
+            print('[LOGGER] obj name', obj.name)
             obj.is_default = False
             obj.save()
+            print('[LOGGER] obj is default', obj.is_default)
 
     def __str__(self):
         return self.name
