@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="8aa1bbde-32e4-44cd-a9f8-6b37721daf50" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/bops/load_bop.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/bops/load_bop.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/bops/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/bops/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/api/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/api/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/metrics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_charts.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_charts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_planner.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_planner.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/views.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="develop" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JupyterTrust" id="d091c8e8-7acd-4355-99b5-36969c75698c" />
+  <component name="ProjectId" id="1l76qKdS2T0mVaCINyUPsnCrd70" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Administrator\www\mybarrier-bop" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Bop" type="docker-deploy" factoryName="docker-compose.yml" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="app" />
+              <option value="db" />
+              <option value="cache" />
+              <option value="celery" />
+              <option value="celery-beat" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8aa1bbde-32e4-44cd-a9f8-6b37721daf50" name="Default Changelist" comment="" />
+      <created>1606935974284</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1606935974284</updated>
+      <workItem from="1606935975452" duration="2107000" />
+      <workItem from="1607025544201" duration="3367000" />
+      <workItem from="1607090924060" duration="11139000" />
+      <workItem from="1607543329285" duration="1407000" />
+      <workItem from="1607545898528" duration="588000" />
+      <workItem from="1607547688113" duration="9136000" />
+      <workItem from="1607992828257" duration="566000" />
+      <workItem from="1608039991378" duration="3860000" />
+      <workItem from="1608216871731" duration="814000" />
+      <workItem from="1608247338113" duration="1094000" />
+      <workItem from="1608578959522" duration="4597000" />
+      <workItem from="1608616081558" duration="6626000" />
+      <workItem from="1608752260033" duration="3965000" />
+      <workItem from="1608960590895" duration="5123000" />
+      <workItem from="1609870117384" duration="1498000" />
+      <workItem from="1610050187110" duration="2193000" />
+      <workItem from="1610402969344" duration="4699000" />
+      <workItem from="1610425772826" duration="4805000" />
+      <workItem from="1610435626007" duration="2158000" />
+      <workItem from="1610469456325" duration="256000" />
+      <workItem from="1610471120667" duration="9445000" />
+      <workItem from="1610483964209" duration="2762000" />
+      <workItem from="1610490700644" duration="5169000" />
+      <workItem from="1610499583682" duration="1814000" />
+      <workItem from="1610504143264" duration="18378000" />
+      <workItem from="1610528523878" duration="2035000" />
+      <workItem from="1610533438553" duration="6135000" />
+      <workItem from="1610552889146" duration="13298000" />
+      <workItem from="1610658898247" duration="13240000" />
+      <workItem from="1610692869276" duration="2825000" />
+      <workItem from="1610697023286" duration="22383000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="392" y="100" key="#Docker" timestamp="1610472701032">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="392" y="100" key="#Docker/0.0.1600.860@0.0.1600.860" timestamp="1610472701032" />
+    <state x="254" y="85" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1610493362789">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="254" y="85" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1600.860@0.0.1600.860" timestamp="1610493362789" />
+    <state x="563" y="232" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1610502310023">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="563" y="232" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1600.860@0.0.1600.860" timestamp="1610502310023" />
+    <state x="530" y="177" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1610502257562">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="530" y="177" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1600.860@0.0.1600.860" timestamp="1610502257562" />
+    <state x="547" y="285" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1610475811977">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="547" y="285" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1600.860@0.0.1600.860" timestamp="1610475811977" />
+    <state x="638" y="310" key="DockerComposeFileDialog" timestamp="1610472776224">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="638" y="310" key="DockerComposeFileDialog/0.0.1600.860@0.0.1600.860" timestamp="1610472776224" />
+    <state x="667" y="192" key="EnvironmentVariablesDialog" timestamp="1610472662884">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="667" y="192" key="EnvironmentVariablesDialog/0.0.1600.860@0.0.1600.860" timestamp="1610472662884" />
+    <state x="580" y="185" key="FileChooserDialogImpl" timestamp="1610558195591">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="580" y="185" key="FileChooserDialogImpl/0.0.1600.860@0.0.1600.860" timestamp="1610558195591" />
+    <state x="0" y="0" key="SettingsEditor" timestamp="1606936414371">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="0" y="0" key="SettingsEditor/0.0.1600.860@0.0.1600.860" timestamp="1606936414371" />
+    <state x="92" y="92" width="1416" height="676" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1610733244110">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="92" y="92" width="1416" height="676" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1600.860@0.0.1600.860" timestamp="1610733244110" />
+    <state x="507" y="163" width="585" height="534" key="find.popup" timestamp="1608962803723">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="507" y="163" width="585" height="534" key="find.popup/0.0.1600.860@0.0.1600.860" timestamp="1608962803723" />
+    <state x="456" y="83" width="672" height="678" key="search.everywhere.popup" timestamp="1610556984967">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="456" y="83" width="672" height="678" key="search.everywhere.popup/0.0.1600.860@0.0.1600.860" timestamp="1610556984967" />
+  </component>
+</project>

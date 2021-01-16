@@ -21,8 +21,8 @@ urlpatterns = [
     path('campaigns/<int:campaign_pk>/run/', views.campaign_run, name="run"),
 
     # schemas
-    path('schemas/<int:schema_pk>/run/',
-         views.campaign_metrics, name="schema_run"),
+    path('schemas/<int:campaign_pk>/run/',
+         views.campaign_metrics, name="metrics"),
     path('schemas/<int:schema_pk>/change/',
          views.schema_update, name="update_schema"),
     path('schemas/add/<int:campaign_pk>/',
