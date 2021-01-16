@@ -376,7 +376,6 @@ def schema_delete(request, schema_pk):
 def schema_compare(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
     schemas = campaign.schemas.order_by('-name')
-    print(schemas)
 
     if not campaign.get_schema_active():
         messages.error(
@@ -389,8 +388,8 @@ def schema_compare(request, campaign_pk):
     final = []
     final_max = []
     for s in schemas:
-
-        result, result_falho = run(s)
+        result = ast.literal_eval(s.last_result.values)
+        result_falho = ast.literal_eval(s.last_result.failures)
 
         t = []
         t_max = []

@@ -57,9 +57,16 @@ INSTALLED_APPS = [
     'corsheaders',
     'debug_toolbar',
     'django_celery_results',
-    'channels'
+    'channels',
+    'django_crontab',
 ]
 
+# CRON JOBS
+CRONJOBS = [
+    ('*/1 * * * *', 'apps.campaigns.cron.activate_campaigns')
+]
+
+# MIDDLEWARES
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
