@@ -81,11 +81,6 @@ class SchemaSerializer(serializers.ModelSerializer):
             compare_schemas_for_campaign.delay(campaign_id=instance.campaign.id,
                                               user_id=user.pk)
 
-        # toggle default in schemas table
-        # whenever the schema is set as default schema
-        if instance.is_default:
-            Schema.toggle_schema_default(instance)
-
         return instance
 
 

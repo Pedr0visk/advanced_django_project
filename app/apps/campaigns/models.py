@@ -119,14 +119,19 @@ class Schema(models.Model):
 
     @staticmethod
     def toggle_schema_default(schema):
-        objects = Schema.objects.filter(
-            campaign=schema.campaign).exclude(id=schema.id)
+        objects = Schema.objects.filter(campaign=schema.campaign, is_default=True).exclude(id=schema.id)
 
         for obj in objects:
-            print('[LOGGER] obj name', obj.name)
             obj.is_default = False
             obj.save()
-            print('[LOGGER] obj is default', obj.is_default)
+
+        print('saiu do for')
+        objects = Schema.objects.filter(campaign=schema.campaign, is_default=True).exclude(id=schema.id)
+        for obj in objects:
+            print(obj.name, obj.is_default)
+
+    def clean(self, *args, **kwargs):
+        return super(Schema, self).save()
 
     def __str__(self):
         return self.name

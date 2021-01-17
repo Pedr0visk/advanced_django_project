@@ -596,7 +596,7 @@
   window.addEventListener('load', () => {
     const dataChart = JSON.parse(document.getElementById('data_chart').textContent);
     const startDate = JSON.parse(document.getElementById('start_date').textContent);
-    console.log(dataChart)
+
     dataChart.map((item, index) => {
       console.log(item);
       Highcharts.stockChart(`container${index + 1}`, {
@@ -638,25 +638,10 @@
           },
 
           plotLines: [
-            {value: 0.1, width: 1, color: 'red', dashStyle: 'ShortDash', label: {text: "SIL 0"}},
-            {value: 0.01, width: 1, color: 'Orange', dashStyle: 'ShortDash', label: {text: "SIL 0"}},
-            {value: 0.001, width: 1, color: 'green', dashStyle: 'ShortDash', label: {text: "SIL 0"}}
+            {value: 0.1, width: 2, color: 'red', dashStyle: 'ShortDash', label: {text: "SIL 0"}},
+            {value: 0.01, width: 2, color: 'orange', dashStyle: 'ShortDash', label: {text: "SIL 1"}},
+            {value: 0.001, width: 2, color: 'green', dashStyle: 'ShortDash', label: {text: "SIL 2"}}
           ],
-
-          xAxis: {
-            type: 'datetime',
-            dateTimeLabelFormats: { // don't display the dummy year
-              month: '%e. %b',
-            },
-            accessibility: {
-              rangeDescription: 'operational days'
-            }
-          },
-
-          legend: {
-            enabled: true,
-            align: 'left'
-          },
 
           plotOptions: {
             series: {
@@ -665,6 +650,19 @@
             }
           },
         },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+              month: '%e. %b',
+            },
+            accessibility: {
+              rangeDescription: 'operational days'
+            }
+          },
+        legend: {
+            enabled: true,
+            align: 'left'
+          },
         series: [
           {
             color: '#1c588f',
@@ -693,7 +691,7 @@
             type: 'scatter',
             color: '#1c588f',
             name: 'Today',
-            marker: {radius: 6},
+            marker: {symbol: 'cross'},
             data: item.today_result
           },
           {

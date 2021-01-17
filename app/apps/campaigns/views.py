@@ -63,9 +63,12 @@ def campaign_index(request, campaign_pk):
         schema = Schema.objects.get(name=request.POST.get('schema_name'))
         schema.is_default = True
         schema.save()
-        Schema.toggle_schema_default(schema_name=schema.name)
 
+        # activating campaign temporaly here
+        # cause we need to have access to the dashboard
+        campaign.active = True
         campaign.save()
+
         messages.success(
             request, f'Schema "{schema.name}" has been choosen for the f{campaign.name}')
 
@@ -103,16 +106,16 @@ def phase_update(request, pk):
 
 
 def campaign_metrics(request, campaign_pk):
-
-    campaign = get_object_or_404(Campaign,pk=campaign_pk)
+    campaign = get_object_or_404(Campaign, pk=campaign_pk)
     schema = campaign.get_schema_active()
     safety_functions = campaign.bop.safety_functions.all()
 
-    results, result_falho = run(schema)
+    results = ast.literal_eval(schema.last_result.values)
+    result_falho = ast.literal_eval(schema.last_result.failures)
     today = metrics.actual_step(schema)
     campaign = schema.campaign
 
-    #results = ast.literal_eval(results)
+    # results = ast.literal_eval(results)
 
     time = []
     number_Sf = len(results[0])
@@ -144,24 +147,22 @@ def campaign_metrics(request, campaign_pk):
 
         soma = 0
 
-
-
         for i in range(0, tempo):
             if j == 1:
                 time.append(results[i][0])
 
             result_sf.append(results[i][j])
 
-            if i+2 > inicio:
-                if results[inicio+2][j] == result_falho[inicio+2][j]:
+            if i + 2 > inicio and inicio != tempo:
+                if results[inicio + 2][j] == result_falho[inicio + 2][j]:
                     result_sf_falho.append(0)
                 else:
                     result_sf_falho.append(result_falho[i][j])
             else:
                 result_sf_falho.append(0)
 
-            if i+1 > today:
-                if i+1 > inicio and result_sf_falho[i] > result_sf[i] :
+            if i + 1 > today:
+                if i + 1 > inicio and result_sf_falho[i] > result_sf[i]:
                     soma = soma + result_sf_falho[i]
                 else:
                     soma = soma + result_sf[i]
@@ -178,14 +179,13 @@ def campaign_metrics(request, campaign_pk):
         result_teste_sf = []
         phases = schema.phases.all().order_by('start_date')
 
-
         for phase in phases:
             if phase.has_test:
                 for i in range(0, int(phase.duration)):
                     result_teste_sf.append(result_sf[cont])
                     result_sf_to_chart.append("null")
                     cont = cont + 1
-                #result_teste_sf.append(result_sf[cont])
+                result_teste_sf.append(result_sf[cont])
             else:
                 for i in range(0, int(phase.duration)):
                     result_teste_sf.append(0)
@@ -204,8 +204,6 @@ def campaign_metrics(request, campaign_pk):
             else:
                 average_to_chart.append('Null')
 
-
-        print("today", today_result, today)
         data_to_charts.append({
             'average': avg,
             'average_to_chart': average_to_chart,
@@ -223,7 +221,7 @@ def campaign_metrics(request, campaign_pk):
         'schema': schema,
         'average': average,
         'maxi': list_max,
-        'maxi_fail':list_fail_max,
+        'maxi_fail': list_fail_max,
         'data_to_charts': data_to_charts,
         'safety_functions': safety_functions
     }
@@ -251,7 +249,7 @@ def campaign_run(request, campaign_pk):
     schema = campaign.get_schema_active()
     results = ast.literal_eval(schema.last_result.values)
     result_falho = ast.literal_eval(schema.last_result.failures)
-
+    today = metrics.actual_step(schema)
 
     t_start_camp = schema.start_date
     t_end_camp = schema.end_date
@@ -267,7 +265,7 @@ def campaign_run(request, campaign_pk):
 
     campaign = schema.campaign
 
-    #results = ast.literal_eval(results)
+    # results = ast.literal_eval(results)
     time = []
 
     number_Sf = len(results[0])
@@ -302,6 +300,8 @@ def campaign_run(request, campaign_pk):
         soma = 0
         avg = 0
 
+        today_result = []
+
         for i in range(0, tempo):
             if j == 1:
                 time.append(results[i][0])
@@ -309,12 +309,12 @@ def campaign_run(request, campaign_pk):
             result_sf.append(results[i][j])
             if i > past:
                 soma = soma + results[i][j]
-            if i+2 > inicio:
+            if i + 2 > inicio:
                 result_sf_falho.append(result_falho[i][j])
             else:
                 result_sf_falho.append("null")
 
-        avg = soma / (tempo-past)
+        avg = soma / (tempo - past)
 
         desc = "safety Function" + " " + str(j)
         average.append(avg)
@@ -327,7 +327,6 @@ def campaign_run(request, campaign_pk):
         for phase in phases:
             if phase.has_test:
                 for i in range(0, int(phase.duration)):
-
                     result_teste_sf.append(result_sf[cont])
                     result_sf_to_chart.append(0)
                     cont = cont + 1
@@ -337,6 +336,18 @@ def campaign_run(request, campaign_pk):
                     result_teste_sf.append(0)
                     result_sf_to_chart.append(result_sf[cont])
                     cont = cont + 1
+
+        for i in range(0, tempo):
+            if i == today:
+                today_result.append(result_sf[i])
+                today_result.append(avg)
+            else:
+                today_result.append(0)
+
+            if i > today:
+                average_to_chart.append(avg)
+            else:
+                average_to_chart.append('Null')
 
         for i in range(0, tempo):
             if i > past:
@@ -352,6 +363,7 @@ def campaign_run(request, campaign_pk):
             'result_sf_falho': result_sf_falho,
             'max': maximo,
             'desc': desc,
+            'today_result': today_result
         })
 
     context = {
@@ -413,7 +425,7 @@ def schema_compare(request, campaign_pk):
         average_schema = []
         max_schema = []
 
-        #result = ast.literal_eval(s.last_result.values)
+        # result = ast.literal_eval(s.last_result.values)
         tempo = len(result) - 1
         number_sf = len(result[0])
 

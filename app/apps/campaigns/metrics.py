@@ -160,6 +160,8 @@ def calculate_SF_PFDS(schema, m):
                                                                                       matriz_index)
         else:
             for i in range(1, steps):
+                result_each_sf_integrate_falho[i][0] = i * dt
+                result_each_sf_integrate_falho[i][fl] = 0
                 result_each_sf_integrate[i][0] = i * dt
                 result_each_sf_integrate[i][fl] = calc_PFD_this_timestep(i, v_integrate, matriz_index)
 
