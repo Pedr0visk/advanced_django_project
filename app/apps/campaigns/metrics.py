@@ -11,8 +11,9 @@ import math
 import json
 import copy
 
-def run(schema, **kwargs):
 
+def run(schema, **kwargs):
+    print('WARNNING LOGGER', 'algo mais', schema, schema.start_date)
     bop = schema.campaign.bop
     m = bop.matrix
     sf_pfds = calculate_SF_PFDS(schema, m)
@@ -25,6 +26,7 @@ def gerar_matriz(n_linhas, n_colunas):
 
 def getTotalFailMode(bop):
     return FailureMode.objects.filter(component__subsystem__bop__exact=bop).count()
+
 
 def get_dates(schema):
     flag = 0
@@ -67,18 +69,21 @@ def calculate_SF_PFDS(schema, m):
 
     t_op = get_t_op(steps, schema, dt, m)
     contagem_pressao = get_pressure_cont(schema, m, steps)
-    v_integrate = calculate_failure_modes(m, failure_modes, contagem_pressao, dt, False, steps, t_op)
+    v_integrate = calculate_failure_modes(
+        m, failure_modes, contagem_pressao, dt, False, steps, t_op)
 
     schema.cuts_contribution = v_integrate
     schema.save()
 
     sf = SafetyFunction.objects.filter(bop=schema.campaign.bop)
-    safety_function_numbers = SafetyFunction.objects.filter(bop=schema.campaign.bop).count()
+    safety_function_numbers = SafetyFunction.objects.filter(
+        bop=schema.campaign.bop).count()
     result_each_sf_integrate = gerar_matriz(
         steps + 1, safety_function_numbers + 1)
     result_each_sf_integrate_falho = gerar_matriz(
         steps + 1, safety_function_numbers + 1)
-    result_each_sf_integrate_falho = gerar_matriz(steps + 1, safety_function_numbers + 1)
+    result_each_sf_integrate_falho = gerar_matriz(
+        steps + 1, safety_function_numbers + 1)
     fl = 0
 
     events = Event.objects.filter(campaign=schema.campaign).count()
@@ -113,16 +118,16 @@ def calculate_SF_PFDS(schema, m):
         if events > 0:
             print(datetime.datetime.today(), "inicio da redução: ", fail_events)
 
-
             vetor_falha = list_fail(v_integrate, fail_events, t_end_camp)
 
             print(" vetor falha", vetor_falha)
-            v_falho = calculate_failure_modes_falho(vetor_falha, v_integrate, t_start_camp, t_end_camp, steps)
+            v_falho = calculate_failure_modes_falho(
+                vetor_falha, v_integrate, t_start_camp, t_end_camp, steps)
 
             time_fail = fail_op_day(vetor_falha, t_start_camp, t_end_camp)
 
-            matriz_reduzida = reduction_matrix(time_fail, vetor_falha, matriz_index, t_start_camp, safety_function)
-
+            matriz_reduzida = reduction_matrix(
+                time_fail, vetor_falha, matriz_index, t_start_camp, safety_function)
 
             code_final = []
             for item in matriz_reduzida:
@@ -130,10 +135,10 @@ def calculate_SF_PFDS(schema, m):
                 for i in range(0, len(item)):
                     for j in range(0, 4):
                         if item[i][j] != ' ':
-                            code_reduction[i][j] = v_integrate[int(item[i][j])][0]
+                            code_reduction[i][j] = v_integrate[int(
+                                item[i][j])][0]
 
                 code_final.append(code_reduction)
-
 
             cont = 0
             reduzida = matriz_index
@@ -147,26 +152,27 @@ def calculate_SF_PFDS(schema, m):
                     if cont == len(matriz_reduzida):
                         reduzida = matriz_index
 
-                if i+2>time_fail[0]:
+                if i+2 > time_fail[0]:
                     result_each_sf_integrate_falho[i][0] = i * dt
                     result_each_sf_integrate_falho[i][fl] = calc_PFD_this_timestep(i, v_falho,
-                                                                                            reduzida)
+                                                                                   reduzida)
                 else:
                     result_each_sf_integrate_falho[i][0] = i * dt
                     result_each_sf_integrate_falho[i][fl] = 0
 
                 result_each_sf_integrate[i][0] = i * dt
                 result_each_sf_integrate[i][fl] = calc_PFD_this_timestep(i, v_integrate,
-                                                                                      matriz_index)
+                                                                         matriz_index)
         else:
             for i in range(1, steps):
                 result_each_sf_integrate_falho[i][0] = i * dt
                 result_each_sf_integrate_falho[i][fl] = 0
                 result_each_sf_integrate[i][0] = i * dt
-                result_each_sf_integrate[i][fl] = calc_PFD_this_timestep(i, v_integrate, matriz_index)
+                result_each_sf_integrate[i][fl] = calc_PFD_this_timestep(
+                    i, v_integrate, matriz_index)
 
-
-        print(datetime.datetime.today(), "Fim do calculo da Sf: ", safety_function)
+        print(datetime.datetime.today(),
+              "Fim do calculo da Sf: ", safety_function)
 
     return result_each_sf_integrate, result_each_sf_integrate_falho
 
@@ -187,14 +193,12 @@ def get_t(t_op):
 
 
 def calculate_failure_modes(m, failure_modes, pressure_test, dt, falha, step_max, t_op):
-    print("m",m[0])
+    print("m", m[0])
     cont_component_step = 0
     v_integrate = gerar_matriz(failure_modes, step_max)
 
     # calculates PFD(t) for all listed failure modes
     # t = time_per_op_mode_cert(m, failure_modes, t_op, step_max)
-
-
 
     # else:
     # t = time_per_op_mode(delay)
@@ -202,7 +206,6 @@ def calculate_failure_modes(m, failure_modes, pressure_test, dt, falha, step_max
 
     for i in range(0, len(m)):
         v_integrate[i][0] = m[i][7]
-
 
     for j in range(0, failure_modes):
         t = t_op[j]
@@ -262,8 +265,6 @@ def calculate_failure_modes(m, failure_modes, pressure_test, dt, falha, step_max
                 pressure = pressure_test[cont_component_step]
                 cont_component_step = cont_component_step + 1
 
-
-
             # get test time for each test
 
             for i in range(1, step_max):
@@ -273,7 +274,8 @@ def calculate_failure_modes(m, failure_modes, pressure_test, dt, falha, step_max
                     if m[j][23] == "Exponential":
 
                         try:
-                            pol_falha = 1 - math.exp((-1) * xlambda * tempo * coverage)
+                            pol_falha = 1 - \
+                                math.exp((-1) * xlambda * tempo * coverage)
                         except:
                             pol_falha = 0
 
@@ -292,7 +294,8 @@ def calculate_failure_modes(m, failure_modes, pressure_test, dt, falha, step_max
                         p3 = (t_op_ltk - t_op_replace) ** eta
                         lambda_effetivo = p1 * (abs(p2 - p3))
 
-                        pol_falha = 1 - math.exp(((-1) * coverage * (lambda_effetivo)))
+                        pol_falha = 1 - \
+                            math.exp(((-1) * coverage * (lambda_effetivo)))
 
                     if m[j][23] == "Step":
                         l_ = xlambda
@@ -301,7 +304,9 @@ def calculate_failure_modes(m, failure_modes, pressure_test, dt, falha, step_max
                         i_ = increase
                         Cin_ = (pressure[i]-1)
 
-                        pol_falha = 1 - math.exp(c_ * ((((-1) * l_) * i_ * Cin_ ) + (((-1) * l_) * t_)))
+                        pol_falha = 1 - \
+                            math.exp(
+                                c_ * ((((-1) * l_) * i_ * Cin_) + (((-1) * l_) * t_)))
 
                     v_integrate[j][i] = 1 - (1 - pol_falha)
 
@@ -435,53 +440,49 @@ def get_t_op(steps, schema, dt, failmodes_matrix):
     count_ext = 0
     for phase in phases:
 
-            if phase.is_drilling:
+        if phase.is_drilling:
 
-                for t_op in t_op_total:
-                    count_int = count_ext
+            for t_op in t_op_total:
+                count_int = count_ext
+                for i in range(0, int(phase.duration)):
+                    count_int = count_int + 1
+                    t_op[count_int][0] = count_int
+                    t_op[count_int][1] = t_op[count_int - 1][1] + dt
+
+        elif phase.has_test:
+
+            tested_failmodes = get_tested_failmodes(phase, failmodes_matrix)
+
+            for failmode in range(0, fm):
+
+                count_int = count_ext
+                if failmode in tested_failmodes:
+
                     for i in range(0, int(phase.duration)):
                         count_int = count_int + 1
-                        t_op[count_int][0] = count_int
-                        t_op[count_int][1] = t_op[count_int - 1][1] + dt
+                        t_op_total[failmode][count_int][0] = count_int
+                        t_op_total[failmode][count_int][1] = t_op_total[failmode][count_int - 1][1] + dt
 
-            elif phase.has_test:
-
-                tested_failmodes = get_tested_failmodes(phase,failmodes_matrix)
-
-                for failmode in range(0, fm):
-
-                    count_int = count_ext
-                    if failmode in tested_failmodes:
-
-                        for i in range(0, int(phase.duration)):
-                            count_int = count_int + 1
+                        if i == int(phase.duration) - 1:
                             t_op_total[failmode][count_int][0] = count_int
-                            t_op_total[failmode][count_int][1] = t_op_total[failmode][count_int - 1][1] + dt
+                            t_op_total[failmode][count_int][1] = 0
 
-                            if i == int(phase.duration) - 1:
-                                t_op_total[failmode][count_int][0] = count_int
-                                t_op_total[failmode][count_int][1] = 0
+                else:
 
-
-                    else:
-
-                        for i in range(0, int(phase.duration)):
-                            count_int = count_int + 1
-                            t_op_total[failmode][count_int][0] = count_int
-                            t_op_total[failmode][count_int][1] = t_op_total[failmode][count_int - 1][1] + dt
-
-
-
-
-            else:
-                for t_op in t_op_total:
-                    count_int = count_ext
                     for i in range(0, int(phase.duration)):
                         count_int = count_int + 1
-                        t_op[count_int][0] = count_int
-                        t_op[count_int][1] = t_op[count_int - 1][1]
+                        t_op_total[failmode][count_int][0] = count_int
+                        t_op_total[failmode][count_int][1] = t_op_total[failmode][count_int - 1][1] + dt
 
-            count_ext = count_ext + int(phase.duration)
+        else:
+            for t_op in t_op_total:
+                count_int = count_ext
+                for i in range(0, int(phase.duration)):
+                    count_int = count_int + 1
+                    t_op[count_int][0] = count_int
+                    t_op[count_int][1] = t_op[count_int - 1][1]
+
+        count_ext = count_ext + int(phase.duration)
 
     return t_op_total
 
@@ -590,7 +591,6 @@ def calc_cuts_contribuition_this_timestep(step, v_integrate, matriz_index):
     return matriz_index
 
 
-
 def list_fail(v_integrate, fails, t_end_camp):
 
     vector_falha = []
@@ -599,7 +599,8 @@ def list_fail(v_integrate, fails, t_end_camp):
         print("entrou no list fail", fail.type, fail.description)
         if fail.type == 'FIL':
 
-            v_falha = v_failmode(v_integrate, fail, fail.object_code, t_end_camp)
+            v_falha = v_failmode(
+                v_integrate, fail, fail.object_code, t_end_camp)
 
             vector_falha.append(v_falha)
 
@@ -607,7 +608,7 @@ def list_fail(v_integrate, fails, t_end_camp):
 
             if fail.type == 'CIL':
 
-                v_falha = fail_comp(v_integrate, fail,t_end_camp )
+                v_falha = fail_comp(v_integrate, fail, t_end_camp)
 
             else:
 
@@ -621,7 +622,7 @@ def list_fail(v_integrate, fails, t_end_camp):
 
 def fail_sub(v_integrate, fail):
     sub = fail.object_code
-    components = Component.objects.filter(subsystem_id=sub)
+    components = Component.objects.filter(subsystem__code=sub)
     vector_falha = []
     for comp in components:
         v_falha = fail_comp(v_integrate, fail, comp)
@@ -632,7 +633,7 @@ def fail_sub(v_integrate, fail):
 def fail_comp(v_integrate, fail, t_end_camp):
 
     component = fail.object_code
-    fails_mode = FailureMode.objects.filter(component_id=component)
+    fails_mode = FailureMode.objects.filter(component__code=component)
     vetor_falha = []
 
     for failmode in fails_mode:
@@ -647,8 +648,10 @@ def fail_comp(v_integrate, fail, t_end_camp):
 def v_failmode(v_integrate, fail, failmode, t_end_camp):
 
     startfail = fail.date
+    vetor_falha = []
 
     flag = 0
+    position = 0
     for i in range(0, len(v_integrate)):
         if failmode == v_integrate[i][0]:
             position = i
@@ -659,6 +662,7 @@ def v_failmode(v_integrate, fail, failmode, t_end_camp):
     vetor_falha = [position, startfail, endfail]
 
     return vetor_falha
+
 
 def get_tested_failmodes(phase, failmodes_matrix):
 
@@ -673,8 +677,8 @@ def get_tested_failmodes(phase, failmodes_matrix):
 
                     tested_failmodes.append(failmode)
 
-
     return tested_failmodes
+
 
 def get_pressure_cont(schema, m, tmax):
     print("vai procurar teste de pressao")
@@ -702,21 +706,16 @@ def get_pressure_cont(schema, m, tmax):
 
                                 if failmode[7] == fail.code:
 
-
                                     for i in range(cont, (cont + int(phase.duration))):
                                         contagem[i] = teste
-
 
                 else:
                     for i in range(cont, (cont + int(phase.duration))):
                         contagem[i] = teste
 
-
                 cont = cont + int(phase.duration)
 
             contagem_total.append(contagem)
-
-
 
     return contagem_total
 
@@ -735,7 +734,7 @@ def reduction_matrix(time_fail, fails, matriz_index, start_camp, safety):
         cod_cut = []
 
         for fail in fails:
-
+            print('[WARNING LOGGER]', start_camp, fail[2])
             fail_step_start = abs((fail[1] - start_camp).days)
             fail_step_end = abs((fail[2] - start_camp).days)
             print("teste", time_fail, i)
@@ -743,11 +742,13 @@ def reduction_matrix(time_fail, fails, matriz_index, start_camp, safety):
             if fail_step_start <= time_fail[i] and fail_step_end > time_fail[i]:
                 sub_element = fail[0]
 
-                for j in range(0, len(new_index)):  # com ordenação if i > modo de falha stop o for
+                # com ordenação if i > modo de falha stop o for
+                for j in range(0, len(new_index)):
 
                     if sub_element in new_index[j]:
                         reduction.append(new_index[j])
-                        reduction[cont][reduction[cont].index(sub_element)] = ' '
+                        reduction[cont][reduction[cont].index(
+                            sub_element)] = ' '
 
                         cont = cont + 1
 
@@ -779,7 +780,7 @@ def reduction_matrix(time_fail, fails, matriz_index, start_camp, safety):
 
         m_reduzida.append(reduzida)
         saf = str(safety)
-        #with open('Codigos da redução - sf-' + saf + '.csv', 'w') as output:
+        # with open('Codigos da redução - sf-' + saf + '.csv', 'w') as output:
         #    writer = csv.writer(output)
         #    writer.writerow(cod_cut)
         #    writer.writerow(str('next safety'))
@@ -812,6 +813,7 @@ def calculate_failure_modes_falho(vetor_falha, v_integrate, t_start_recert, t_en
             v_integrate_falho[indice][j] = 1
 
     return v_integrate_falho
+
 
 def fail_op_day(vetor, start_camp, end_camp):
     v = []
