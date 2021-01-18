@@ -47,7 +47,7 @@
           <h4>Info</h4>
           <ul class="info-list">
             <li>name: <b>{{ campaign.name }}</b></li>
-
+            <li><b>schema active</b>: {{campaign.get_schema_active}}</li>
             <li>
               status:
               {% if campaign.active %}

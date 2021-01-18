@@ -60,7 +60,7 @@ def campaign_index(request, campaign_pk):
 
     # activate campaign and set a base schema
     if request.method == 'POST':
-        schema = Schema.objects.get(name=request.POST.get('schema_name'))
+        schema = Schema.objects.get(pk=request.POST.get('id_schema'))
         schema.is_default = True
         schema.save()
 
@@ -420,8 +420,8 @@ def schema_compare(request, campaign_pk):
 
         t = []
         t_max = []
-        t.append(s.name)
-        t_max.append(s.name)
+        t.append({'id': s.id, 'name': s.name})
+        t_max.append({'id': s.id, 'name': s.name})
         average_schema = []
         max_schema = []
 
@@ -524,8 +524,8 @@ def event_create(request, campaign_pk):
 
             # creates a new results for schema base
             # due the changes made on campaign
-            # create_new_result_for_schema_base.delay(user_id=request.user.id,
-            #                                         campaign_id=campaign.id)
+            create_new_result_for_schema_base.delay(user_id=request.user.id,
+                                                    campaign_id=campaign.id)
 
             messages.success(request, 'Event created successfully!')
             return redirect(new_event.success_url())
