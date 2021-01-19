@@ -413,7 +413,7 @@ def schema_compare(request, campaign_pk):
     final = []
     final_max = []
     for s in schemas:
-        results, result_falho = metrics.run(s)
+        result, result_falho = metrics.run(s)
 
         t = []
         t_max = []
