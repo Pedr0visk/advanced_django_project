@@ -52,7 +52,7 @@ class Loader:
             distribution['exponential_failure_rate'] = row[23]
 
         elif row[22] == 'Probability':
-            distribution['probability'] = self.get_column(row, 23)
+            distribution['probability'] = self.get_column(row, 30)
 
         elif row[22] == 'Weibull':
             distribution['scale'] = row[24]
