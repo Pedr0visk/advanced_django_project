@@ -255,7 +255,7 @@ def calculate_failure_modes(m, failure_modes, pressure_test, dt, falha, step_max
 
             elif m[j][23] == "Weibull":
 
-                xlambda = 1 / int(m[j][25])
+                xlambda = 1 / float(m[j][25])
                 eta = float(m[j][26])
 
             elif m[j][23] == "Step":
