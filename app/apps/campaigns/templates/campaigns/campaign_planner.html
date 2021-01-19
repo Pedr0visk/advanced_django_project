@@ -154,11 +154,11 @@
     const userId = JSON.parse(document.getElementById('userId').textContent);
 
     const notificationSocket = new WebSocket(
-      'ws://'
-      + window.location.host
-      + '/ws/notifications/'
-      + userId
-      + '/'
+            (location.protocol !== 'https:' ? 'ws://' : 'wss://')
+            + window.location.host
+            + '/ws/notifications/'
+            + userId
+            + '/'
     );
 
     notificationSocket.onmessage = async function (e) {
@@ -192,11 +192,11 @@
     };
 
     const campaignSocket = new WebSocket(
-      'ws://'
-      + window.location.host
-      + '/ws/campaigns/'
-      + userId
-      + '/'
+            (location.protocol !== 'https:' ? 'ws://' : 'wss://')
+            + window.location.host
+            + '/ws/campaigns/'
+            + userId
+            + '/'
     );
 
     campaignSocket.onmessage = async function (e) {
