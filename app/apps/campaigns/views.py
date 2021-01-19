@@ -108,10 +108,12 @@ def phase_update(request, pk):
 def campaign_metrics(request, campaign_pk):
     campaign = get_object_or_404(Campaign, pk=campaign_pk)
     schema = campaign.get_schema_active()
+    results, result_falho = run(schema)
     safety_functions = campaign.bop.safety_functions.all()
 
-    results = ast.literal_eval(schema.last_result.values)
-    result_falho = ast.literal_eval(schema.last_result.failures)
+    #results = ast.literal_eval(schema.last_result.values)
+    #result_falho = ast.literal_eval(schema.last_result.failures)
+
     today = metrics.actual_step(schema)
     campaign = schema.campaign
 
@@ -124,6 +126,7 @@ def campaign_metrics(request, campaign_pk):
     average = []
     list_max = []
     list_fail_max = []
+    td = []
     inicio = len(results) - 1
     f = 0
     fail_events = Event.objects.filter(campaign=schema.campaign)
@@ -196,6 +199,7 @@ def campaign_metrics(request, campaign_pk):
             if i == today:
                 today_result.append(result_sf[i])
                 today_result.append(avg)
+                td.append(result_sf[i])
             else:
                 today_result.append(0)
 
@@ -213,19 +217,21 @@ def campaign_metrics(request, campaign_pk):
             'max': max(result_sf),
             'max_fail': max(result_sf_falho),
             'desc': desc,
-            'today_result': today_result,
+            'today_result': today_result
         })
-
+    start_date = campaign.start_date.replace(tzinfo=None)
     context = {
         'campaign': campaign,
+        'start_date':start_date,
         'schema': schema,
         'average': average,
         'maxi': list_max,
         'maxi_fail': list_fail_max,
         'data_to_charts': data_to_charts,
+        'today': td,
         'safety_functions': safety_functions
     }
-
+    print("campanha metris", campaign.start_date)
     return render(request, 'campaigns/campaign_charts.html', context)
 
 
@@ -247,8 +253,9 @@ def campaign_run(request, campaign_pk):
     campaign = get_object_or_404(Campaign, pk=campaign_pk)
 
     schema = campaign.get_schema_active()
-    results = ast.literal_eval(schema.last_result.values)
-    result_falho = ast.literal_eval(schema.last_result.failures)
+    result, result_falho = run(schema)
+    #results = ast.literal_eval(schema.last_result.values)
+    #result_falho = ast.literal_eval(schema.last_result.failures)
     today = metrics.actual_step(schema)
 
     t_start_camp = schema.start_date
@@ -374,7 +381,7 @@ def campaign_run(request, campaign_pk):
         'data_to_charts': data_to_charts,
         'safety_functions': campaign.bop.safety_functions.all()
     }
-
+    print("campanha run", campaign.start_date)
     return render(request, 'campaigns/campaign_charts.html', context)
 
 
@@ -415,9 +422,9 @@ def schema_compare(request, campaign_pk):
     final = []
     final_max = []
     for s in schemas:
-        result = ast.literal_eval(s.last_result.values)
-        result_falho = ast.literal_eval(s.last_result.failures)
-
+        #result = ast.literal_eval(s.last_result.values)
+        #result_falho = ast.literal_eval(s.last_result.failures)
+        result, result_falho = run(s)
         t = []
         t_max = []
         t.append({'id': s.id, 'name': s.name})

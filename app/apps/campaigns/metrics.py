@@ -16,6 +16,8 @@ def run(schema, **kwargs):
     print('WARNNING LOGGER', 'algo mais', schema, schema.start_date)
     bop = schema.campaign.bop
     m = bop.matrix
+    print("estamos no ", bop, schema)
+    print("matriz de dados", m)
     sf_pfds = calculate_SF_PFDS(schema, m)
     return sf_pfds
 
@@ -52,6 +54,7 @@ def log(*args, **kwargs):
 
 def calculate_SF_PFDS(schema, m):
     print(datetime.datetime.today(), "Entrou no calculo ")
+
     # number_fails = getUserInputTotalFailures(bop)  # contagem de falhas
     t_start_recert = 0
 
@@ -82,8 +85,6 @@ def calculate_SF_PFDS(schema, m):
         steps + 1, safety_function_numbers + 1)
     result_each_sf_integrate_falho = gerar_matriz(
         steps + 1, safety_function_numbers + 1)
-    result_each_sf_integrate_falho = gerar_matriz(
-        steps + 1, safety_function_numbers + 1)
     fl = 0
 
     events = Event.objects.filter(campaign=schema.campaign).count()
@@ -96,16 +97,13 @@ def calculate_SF_PFDS(schema, m):
               "Inicio do calculo da Sf: ", safety_function)
         cuts = safety_function.cuts.all()
         max_cuts = len(cuts)
-
-        corte = 0
-        # matriz_index = gerar_matriz(max_cuts, 4)
         matriz_index = [[' ' for i in range(4)] for j in range(max_cuts)]
         # print(datetime.datetime.today(), "Inicio da organização da sf ")
-
+        corte = 0
         for cut in cuts:
-
             fails = cut.failure_modes.split(",")
             falha = 0
+
             for fail in fails:
                 if fail:
                     fail_line = Fail_line(fail, v_integrate)
@@ -114,13 +112,12 @@ def calculate_SF_PFDS(schema, m):
                     matriz_index[corte][falha] = ' '
                 falha = falha + 1
             corte = corte + 1
-
         if events > 0:
             print(datetime.datetime.today(), "inicio da redução: ", fail_events)
 
             vetor_falha = list_fail(v_integrate, fail_events, t_end_camp)
 
-            print(" vetor falha", vetor_falha)
+
             v_falho = calculate_failure_modes_falho(
                 vetor_falha, v_integrate, t_start_camp, t_end_camp, steps)
 
@@ -167,9 +164,11 @@ def calculate_SF_PFDS(schema, m):
             for i in range(1, steps):
                 result_each_sf_integrate_falho[i][0] = i * dt
                 result_each_sf_integrate_falho[i][fl] = 0
+
                 result_each_sf_integrate[i][0] = i * dt
                 result_each_sf_integrate[i][fl] = calc_PFD_this_timestep(
                     i, v_integrate, matriz_index)
+
 
         print(datetime.datetime.today(),
               "Fim do calculo da Sf: ", safety_function)
@@ -236,6 +235,7 @@ def calculate_failure_modes(m, failure_modes, pressure_test, dt, falha, step_max
 
             for i in range(step_min, step_max):
                 v_integrate[j][i] = m[j][31]
+            print("end", j, m[j][31])
 
         else:
             # cc test coverage factor
@@ -254,8 +254,7 @@ def calculate_failure_modes(m, failure_modes, pressure_test, dt, falha, step_max
                 xlambda = float(m[j][24])
 
             elif m[j][23] == "Weibull":
-
-                xlambda = 1 / int(m[j][25])
+                xlambda = 1 / float(m[j][25])
                 eta = float(m[j][26])
 
             elif m[j][23] == "Step":
@@ -274,8 +273,7 @@ def calculate_failure_modes(m, failure_modes, pressure_test, dt, falha, step_max
                     if m[j][23] == "Exponential":
 
                         try:
-                            pol_falha = 1 - \
-                                math.exp((-1) * xlambda * tempo * coverage)
+                            pol_falha = 1 - math.exp((-1) * xlambda * tempo * coverage)
                         except:
                             pol_falha = 0
 
@@ -294,8 +292,7 @@ def calculate_failure_modes(m, failure_modes, pressure_test, dt, falha, step_max
                         p3 = (t_op_ltk - t_op_replace) ** eta
                         lambda_effetivo = p1 * (abs(p2 - p3))
 
-                        pol_falha = 1 - \
-                            math.exp(((-1) * coverage * (lambda_effetivo)))
+                        pol_falha = 1 - math.exp(((-1) * coverage * (lambda_effetivo)))
 
                     if m[j][23] == "Step":
                         l_ = xlambda
@@ -304,9 +301,7 @@ def calculate_failure_modes(m, failure_modes, pressure_test, dt, falha, step_max
                         i_ = increase
                         Cin_ = (pressure[i]-1)
 
-                        pol_falha = 1 - \
-                            math.exp(
-                                c_ * ((((-1) * l_) * i_ * Cin_) + (((-1) * l_) * t_)))
+                        pol_falha = 1 -  math.exp(c_ * ((((-1) * l_) * i_ * Cin_) + (((-1) * l_) * t_)))
 
                     v_integrate[j][i] = 1 - (1 - pol_falha)
 
@@ -543,20 +538,17 @@ def Fail_line(failmode, v_integrate):
 
 def calc_PFD_this_timestep(step, v_integrate, matriz_index):
     prod_sf = 1
-
-    for corte in range(0, len(matriz_index)):
+    lista = []
+    for corte in matriz_index:
         produtorio = 1
-        for falha in range(0, 4):  # travado em ordem 4, fazer o for em len do corte
-
-            if matriz_index[corte][falha] != ' ':
+        for falha in corte:  # travado em ordem 4, fazer o for em len do corte
+            if falha != ' ':
                 try:
-                    produtorio = produtorio * \
-                        float(v_integrate[matriz_index[corte][falha]][step])
+                    produtorio = produtorio * float(v_integrate[falha][step])
                 except:
                     print("v_integrate[matriz_index[corte][falha]][step]",
-                          v_integrate[matriz_index[corte][falha]][step], matriz_index[corte][falha], corte, falha, step)
+                          v_integrate[falha][step], matriz_index[corte][falha], corte, falha, step)
         try:
-
             prod_sf = prod_sf * (1.0 - produtorio)
         except:
             print("prod", prod_sf, produtorio)

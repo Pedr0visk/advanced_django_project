@@ -192,14 +192,6 @@ class Event(models.Model):
     def success_url(self):
         return reverse('campaigns:index', args=[self.campaign.pk])
 
-    def clean(self):
-        # Don't allow creates a event before
-        # the last event created
-        print("evento")
-        # if Event.objects.latest('date').date < self.date:
-        #   raise ValidationError({
-        #      'date': ValidationError(_('Invalid date'), code='invalid')
-        # })
 
     def __str__(self):
         return f'Event created by {self.created_by.username} at {self.date}'

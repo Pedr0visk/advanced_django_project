@@ -29,7 +29,7 @@ class Loader:
         infile = csv.reader(StringIO(file), delimiter=',')
         # read file from line 1
         rows = [line for line in infile][1:]
-
+        cont = 0
         for row in rows:
             s, created = Subsystem.objects.get_or_create(code=row[2],
                                                          name=row[1],
@@ -42,6 +42,8 @@ class Loader:
                                               distribution=self.get_distribution_attr(row),
                                               diagnostic_coverage=self.get_column(row, 17),
                                               component=c)
+            print("adcionou", cont, row)
+            cont = cont+1
         return True
 
     def get_distribution_attr(self, row):
@@ -52,7 +54,8 @@ class Loader:
             distribution['exponential_failure_rate'] = row[23]
 
         elif row[22] == 'Probability':
-            distribution['probability'] = self.get_column(row, 23)
+            print("achou prob", row[30])
+            distribution['probability'] = self.get_column(row, 30)
 
         elif row[22] == 'Weibull':
             distribution['scale'] = row[24]

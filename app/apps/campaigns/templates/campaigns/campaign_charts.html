@@ -42,6 +42,7 @@
       <div class="col-6 mb-3">
         <div class="card">
           <div class="card-header bg-primary">
+            <a>Today PFD:  {{today.0 | stringformat:".2e" }} </a>
             <a href="" class="btn-standard" data-toggle="modal" data-target="#result1">View Max and Averages</a>
           </div>
           <div id="container1"></div>
@@ -580,13 +581,7 @@
     </div>
 
   </div>
-  <div>
-    {% for sf in safety_functions %}
-    <a class="btn btn-secondary" style="float: right; color: white" role="button"
-      href="{% url 'campaigns:cut_list' schema.pk sf.pk %}"> view cutlist - SF {{forloop.counter}}
-    </a>
-    {% endfor %}
-  </div>
+
 </div>
 <!-- main -->
   {{ data_to_charts|json_script:"data_chart" }}
@@ -596,13 +591,12 @@
   window.addEventListener('load', () => {
     const dataChart = JSON.parse(document.getElementById('data_chart').textContent);
     const startDate = JSON.parse(document.getElementById('start_date').textContent);
-
     dataChart.map((item, index) => {
       console.log(item);
       Highcharts.stockChart(`container${index + 1}`, {
         chart: {
           type: 'spline',
-          height: '450',
+          height: '550',
         },
         rangeSelector: {
           buttons: [
@@ -624,7 +618,7 @@
           },
         },
         title: {
-          text: item.desc
+          text: startDate
         },
         yAxis: {
           type: 'logarithmic',
@@ -638,14 +632,14 @@
           },
 
           plotLines: [
-            {value: 0.1, width: 2, color: 'red', dashStyle: 'ShortDash', label: {text: "SIL 0"}},
-            {value: 0.01, width: 2, color: 'orange', dashStyle: 'ShortDash', label: {text: "SIL 1"}},
-            {value: 0.001, width: 2, color: 'green', dashStyle: 'ShortDash', label: {text: "SIL 2"}}
+            {value: 0.1, width: 2, color: 'red', dashStyle: 'dot', label: {text: "SIL 0"}},
+            {value: 0.01, width: 2, color: 'orange', dashStyle: 'dot', label: {text: "SIL 1"}},
+            {value: 0.001, width: 2, color: 'green', dashStyle: 'dot', label: {text: "SIL 2"}}
           ],
 
           plotOptions: {
             series: {
-              pointStart: new Date(startDate), // start date
+              pointStart: Date.UTC(startDate.year , startDate.month, startDate.day), // start date
               pointInterval: 3600 * 1000 // one hour in miliseconds
             }
           },
@@ -709,162 +703,5 @@
 </script>
 {% endblock %}
 {% endblock %}
-<script>
 
-  {% for data in data_to_charts %}
-  Highcharts.stockChart('container{{ forloop.counter }}', {
-
-
-    chart: {
-      type: 'spline',
-      height: '450',
-    },
-
-    rangeSelector: {
-
-      buttons: [
-        {
-          type: 'all',
-          text: 'Op. Limit',
-
-        },
-        {
-          type: 'year',
-          count: 1,
-          text: '1y'
-        }, {
-          type: 'all',
-          text: 'All'
-        }
-      ],
-      buttonTheme: {
-        width: 60
-      },
-    },
-    title: {
-      text: `{{ data.desc | safe }}`
-    },
-    yAxis: {
-      type: 'logarithmic',
-      min: 0.0000001,
-      max: 0.3,
-
-      labels: {
-        formatter: function () {
-          return this.value.toExponential(2);
-        }
-      },
-
-      plotLines: [
-        { value: 0.1, width: 1, color: 'red', dashStyle: 'ShortDash', label: { text: "SIL 0" }},
-        { value: 0.01, width: 1, color: 'Orange', dashStyle: 'ShortDash', label: { text: "SIL 0" }},
-        {value: {{ 0.001}}, width: 1, color: 'green', dashStyle: 'ShortDash', label: { text: "SIL 0" }},
-
-          ]
-                    },
-
-    xAxis: {
-
-      type: 'datetime',
-      dateTimeLabelFormats: { // don't display the dummy year
-        month: '%e. %b',
-      },
-      accessibility: {
-        rangeDescription: 'operational days'
-      }
-    },
-
-    legend: {
-      enabled: true,
-      align: 'left'
-    },
-
-
-    plotOptions: {
-
-
-
-    series: {
-
-
-      pointStart: Date.UTC({{ campaign.start_date.year }}, {{ campaign.start_date.month }} -1, {{ campaign.start_date.day }}), // start date
-      pointInterval: 3600 * 1000 // one hour in miliseconds
-                        }
-                    },
-
-  series: [{
-    color: '#1c588f',
-    name: 'Normal',
-      tooltip: {
-        pointFormat: "Normal: {point.y:.6f}"
-    },
-    dashStyle: 'solid',
-    data: {{ data.result | safe }},
-                    },
-
-  {
-    color: '#74a1d0',
-    name: 'Testing',
-    tooltip: {},
-    dashStyle: 'ShortDot',
-    data: {{ data.result_teste_sf | safe }},
-  },
-
-  {
-    color: '#ff2424',
-    name: 'Degraded',
-    tooltip: {
-          },
-    dashStyle: 'Solid',
-    data: {{ data.result_sf_falho | safe }},
-                    },
-
-  {
-    type: 'scatter',
-    color: '#1c588f',
-    name: 'Today',
-    marker: {
-            radius: 6
-
-        },
-    data: {{ data.today_result | safe }}
-    },
-
-// a1q
-  {
-
-
-    color: '#010101',
-    name: 'Average',
-    tooltip: {pointFormat: "Average: {point.y:.6f}"},
-    dashStyle: 'LongDash',
-    data: {{ data.average_to_chart | safe }},
-
-                    },
-
-
-  ],
-
-
-    responsive: {
-    rules: [{
-      condition: {
-        maxWidth: 400
-      },
-      chartOptions: {
-        legend: {
-          layout: 'horizontal',
-          align: 'center',
-          verticalAlign: 'bottom'
-        }
-      }
-    }]
-
-
-  }
-
-
-                });
-  {% endfor %}
-</script>
 
