@@ -111,9 +111,13 @@ def campaign_metrics(request, campaign_pk):
     results, result_falho = run(schema)
     safety_functions = campaign.bop.safety_functions.all()
 
+<<<<<<< HEAD
     #results = ast.literal_eval(schema.last_result.values)
     #result_falho = ast.literal_eval(schema.last_result.failures)
 
+=======
+    results, result_falho = metrics.run(schema)
+>>>>>>> master
     today = metrics.actual_step(schema)
     campaign = schema.campaign
 
@@ -256,6 +260,7 @@ def campaign_run(request, campaign_pk):
     result, result_falho = run(schema)
     #results = ast.literal_eval(schema.last_result.values)
     #result_falho = ast.literal_eval(schema.last_result.failures)
+
     today = metrics.actual_step(schema)
 
     t_start_camp = schema.start_date
@@ -422,9 +427,11 @@ def schema_compare(request, campaign_pk):
     final = []
     final_max = []
     for s in schemas:
+
         #result = ast.literal_eval(s.last_result.values)
         #result_falho = ast.literal_eval(s.last_result.failures)
-        result, result_falho = run(s)
+        result, result_falho = metrics.run(s)
+
         t = []
         t_max = []
         t.append({'id': s.id, 'name': s.name})
