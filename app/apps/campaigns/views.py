@@ -108,27 +108,26 @@ def phase_update(request, pk):
 def campaign_metrics(request, campaign_pk):
     campaign = get_object_or_404(Campaign, pk=campaign_pk)
     schema = campaign.get_schema_active()
-
     safety_functions = campaign.bop.safety_functions.all()
-
     results, result_falho = metrics.run(schema)
-
     today = metrics.actual_step(schema)
     campaign = schema.campaign
 
     # results = ast.literal_eval(results)
 
-    time = []
+
     number_Sf = len(results[0])
     tempo = len(results) - 1
     data_to_charts = []
+    data_to_table = []
     average = []
     list_max = []
     list_fail_max = []
-    td = []
     inicio = len(results) - 1
     f = 0
+
     fail_events = Event.objects.filter(campaign=schema.campaign)
+
     for fail in fail_events:
         if f == 0:
             tempo_falha = fail.date
@@ -137,24 +136,21 @@ def campaign_metrics(request, campaign_pk):
             inicio = (tempo_falha - schema.start_date.replace(tzinfo=None))
             inicio = int(inicio.total_seconds() / 60 ** 2)
             f = 1
+    j = 0
+    for sf in safety_functions:
+        j = j + 1
 
-    time_now = datetime.datetime.today()
-
-    for j in range(1, number_Sf):
         result_sf = []
         result_sf_falho = []
         result_sf_to_chart = []
         average_to_chart = []
         today_result = []
 
-        soma = 0
+        soma_total = 0
+        soma_no_fail = 0
 
         for i in range(0, tempo):
-            if j == 1:
-                time.append(results[i][0])
-
             result_sf.append(results[i][j])
-
             if i + 2 > inicio and inicio != tempo:
                 if results[inicio + 2][j] == result_falho[inicio + 2][j]:
                     result_sf_falho.append(0)
@@ -164,30 +160,40 @@ def campaign_metrics(request, campaign_pk):
                 result_sf_falho.append(0)
 
             if i + 1 > today:
-                if i + 1 > inicio and result_sf_falho[i] > result_sf[i]:
-                    soma = soma + result_sf_falho[i]
-                else:
-                    soma = soma + result_sf[i]
+                soma_no_fail = soma_no_fail + result_sf[i]
 
-        avg = soma / (tempo - today)
-        desc = "safety Function" + " " + str(j)
+                if i + 1 > inicio and result_sf_falho[i] != result_sf[i]:
+                    soma_total = soma_total + result_sf_falho[i]
+                else:
+                    soma_total = soma_total + result_sf[i]
+
+        avg = soma_total / (tempo - today)
+        avg_no_fail = soma_no_fail / (tempo - today)
+        print("avg", avg, avg_no_fail)
         average.append(avg)
+
         list_max.append(max(result_sf))
+
         if max(result_sf_falho):
             list_fail_max.append(max(result_sf_falho))
         else:
             list_fail_max.append(0)
+
+        desc = '123'
         cont = 0
+
         result_teste_sf = []
+
         phases = schema.phases.all().order_by('start_date')
 
         for phase in phases:
             if phase.has_test:
                 for i in range(0, int(phase.duration)):
                     result_teste_sf.append(result_sf[cont])
-                    result_sf_to_chart.append("null")
+                    result_sf_to_chart.append(0)
                     cont = cont + 1
-                result_teste_sf.append(result_sf[cont])
+                if result_sf[cont]:
+                    result_teste_sf.append(result_sf[cont])
             else:
                 for i in range(0, int(phase.duration)):
                     result_teste_sf.append(0)
@@ -198,7 +204,7 @@ def campaign_metrics(request, campaign_pk):
             if i == today:
                 today_result.append(result_sf[i])
                 today_result.append(avg)
-                td.append(result_sf[i])
+                td = result_sf[i]
             else:
                 today_result.append(0)
 
@@ -208,17 +214,24 @@ def campaign_metrics(request, campaign_pk):
                 average_to_chart.append('Null')
 
         data_to_charts.append({
-            'average': avg,
             'average_to_chart': average_to_chart,
             'result_teste_sf': result_teste_sf,
             'result': result_sf_to_chart,
             'result_sf_falho': result_sf_falho,
-            'max': max(result_sf),
-            'max_fail': max(result_sf_falho),
             'desc': desc,
             'today_result': today_result
         })
+
+        data_to_table.append({
+            'safety_functions': safety_functions,
+            'today': td,
+            'average_fail': avg_no_fail,
+            'average': avg,
+            'max': max(result_sf)
+        })
+
     start_date = campaign.start_date.replace(tzinfo=None)
+
     context = {
         'campaign': campaign,
         'start_date':start_date,
@@ -227,10 +240,10 @@ def campaign_metrics(request, campaign_pk):
         'maxi': list_max,
         'maxi_fail': list_fail_max,
         'data_to_charts': data_to_charts,
+        'data_to_table':data_to_table,
         'today': td,
-        'safety_functions': safety_functions
     }
-    print("campanha metris", campaign.start_date)
+
     return render(request, 'campaigns/campaign_charts.html', context)
 
 

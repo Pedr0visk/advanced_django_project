@@ -16,8 +16,6 @@ def run(schema, **kwargs):
     print('WARNNING LOGGER', 'algo mais', schema, schema.start_date)
     bop = schema.campaign.bop
     m = bop.matrix
-    print("estamos no ", bop, schema)
-    print("matriz de dados", m)
     sf_pfds = calculate_SF_PFDS(schema, m)
     return sf_pfds
 
@@ -115,11 +113,10 @@ def calculate_SF_PFDS(schema, m):
         if events > 0:
             print(datetime.datetime.today(), "inicio da redução: ", fail_events)
 
-            vetor_falha = list_fail(v_integrate, fail_events, t_end_camp)
+            vetor_falha = list_fail(v_integrate, fail_events, t_end_camp,bop=schema.campaign.bop)
 
-
-            v_falho = calculate_failure_modes_falho(
-                vetor_falha, v_integrate, t_start_camp, t_end_camp, steps)
+            print("vetor falha", vetor_falha)
+            v_falho = calculate_failure_modes_falho(vetor_falha, v_integrate, t_start_camp, t_end_camp, steps)
 
             time_fail = fail_op_day(vetor_falha, t_start_camp, t_end_camp)
 
@@ -192,7 +189,8 @@ def get_t(t_op):
 
 
 def calculate_failure_modes(m, failure_modes, pressure_test, dt, falha, step_max, t_op):
-    print("m", m[0])
+
+
     cont_component_step = 0
     v_integrate = gerar_matriz(failure_modes, step_max)
 
@@ -235,7 +233,6 @@ def calculate_failure_modes(m, failure_modes, pressure_test, dt, falha, step_max
 
             for i in range(step_min, step_max):
                 v_integrate[j][i] = m[j][31]
-            print("end", j, m[j][31])
 
         else:
             # cc test coverage factor
@@ -584,7 +581,7 @@ def calc_cuts_contribuition_this_timestep(step, v_integrate, matriz_index):
     return matriz_index
 
 
-def list_fail(v_integrate, fails, t_end_camp):
+def list_fail(v_integrate, fails, t_end_camp, bop):
 
     vector_falha = []
 
@@ -601,40 +598,43 @@ def list_fail(v_integrate, fails, t_end_camp):
 
             if fail.type == 'CIL':
 
-                v_falha = fail_comp(v_integrate, fail, t_end_camp)
+                v_falha = fail_comp(v_integrate, fail, t_end_camp, bop)
 
             else:
 
-                v_falha = fail_sub(v_integrate, fail)
+                v_falha = fail_sub(v_integrate, fail, t_end_camp, bop)
 
             for i in range(0, len(v_falha)):
-                vector_falha.append(v_falha[i][0])
+                vector_falha.append(v_falha[i])
 
     return vector_falha
 
 
-def fail_sub(v_integrate, fail):
-    sub = fail.object_code
-    components = Component.objects.filter(subsystem__code=sub)
+def fail_sub(v_integrate, fail, t_end_camp, bop):
+
+    sub = Subsystem.objects.filter(code=fail.object_code, bop=bop)
+    components = Component.objects.filter(subsystem__code=sub.code)
     vector_falha = []
     for comp in components:
-        v_falha = fail_comp(v_integrate, fail, comp)
+        v_falha = fail_comp(v_integrate, fail, t_end_camp, bop)
         vector_falha.append(v_falha)
     return vector_falha
 
 
-def fail_comp(v_integrate, fail, t_end_camp):
-
-    component = fail.object_code
-    fails_mode = FailureMode.objects.filter(component__code=component)
+def fail_comp(v_integrate, fail, t_end_camp, bop):
+    print("entramos no componente falho", fail, fail.object_code)
+    component = Component.objects.get(code=fail.object_code, subsystem__bop=bop)
+    print("achou comp", component, component.code)
+    fails_mode = FailureMode.objects.filter(component=component)
     vetor_falha = []
+    print("fails", fails_mode)
 
     for failmode in fails_mode:
 
         v_falha = v_failmode(v_integrate, fail, failmode, t_end_camp)
-
         vetor_falha.append(v_falha)
 
+    print("vetor de saida do componente")
     return vetor_falha
 
 
@@ -648,7 +648,7 @@ def v_failmode(v_integrate, fail, failmode, t_end_camp):
     for i in range(0, len(v_integrate)):
         if failmode == v_integrate[i][0]:
             position = i
-            print("achou a posição", i)
+
 
     endfail = t_end_camp
 
@@ -772,16 +772,9 @@ def reduction_matrix(time_fail, fails, matriz_index, start_camp, safety):
             new_index = copy.deepcopy(reduzida)
 
         m_reduzida.append(reduzida)
-        saf = str(safety)
-        # with open('Codigos da redução - sf-' + saf + '.csv', 'w') as output:
-        #    writer = csv.writer(output)
-        #    writer.writerow(cod_cut)
-        #    writer.writerow(str('next safety'))
+
         cod.append(cod_cut)
 
-    # print("reduzida", cortes_reduzir)
-    # print("redução", reduction)
-    # print("matriz original", matriz_index)
 
     return m_reduzida
 
@@ -790,7 +783,7 @@ def calculate_failure_modes_falho(vetor_falha, v_integrate, t_start_recert, t_en
     v_integrate_falho = copy.deepcopy(v_integrate)
 
     for i in range(0, len(vetor_falha)):
-        print("vetor_falha[i][1]", vetor_falha[i][1], t_start_recert)
+        print("vetor_falha[i][1]", vetor_falha, t_start_recert)
 
         start = vetor_falha[i][1] - t_start_recert
         start = int(start.total_seconds() / 60 ** 2)
