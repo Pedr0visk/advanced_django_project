@@ -108,16 +108,11 @@ def phase_update(request, pk):
 def campaign_metrics(request, campaign_pk):
     campaign = get_object_or_404(Campaign, pk=campaign_pk)
     schema = campaign.get_schema_active()
-    results, result_falho = run(schema)
+
     safety_functions = campaign.bop.safety_functions.all()
 
-<<<<<<< HEAD
-    #results = ast.literal_eval(schema.last_result.values)
-    #result_falho = ast.literal_eval(schema.last_result.failures)
-
-=======
     results, result_falho = metrics.run(schema)
->>>>>>> master
+
     today = metrics.actual_step(schema)
     campaign = schema.campaign
 
