@@ -148,7 +148,7 @@ def campaign_metrics(request, campaign_pk):
 
         soma_total = 0
         soma_no_fail = 0
-
+        peso = 0
         for i in range(0, tempo):
             result_sf.append(results[i][j])
             if i + 2 > inicio and inicio != tempo:
@@ -160,15 +160,19 @@ def campaign_metrics(request, campaign_pk):
                 result_sf_falho.append(0)
 
             if i + 1 > today:
+                peso = peso + 1
                 soma_no_fail = soma_no_fail + result_sf[i]
 
                 if i + 1 > inicio and result_sf_falho[i] != result_sf[i]:
+                    print("somou o result falho", inicio, i, soma_total, result_sf_falho[i])
                     soma_total = soma_total + result_sf_falho[i]
                 else:
+                    print("somou o result normal", inicio, i, soma_total, result_sf[i])
                     soma_total = soma_total + result_sf[i]
 
         avg = soma_total / (tempo - today)
         avg_no_fail = soma_no_fail / (tempo - today)
+        print("peso", peso, (tempo - today))
         print("avg", avg, avg_no_fail)
         average.append(avg)
 

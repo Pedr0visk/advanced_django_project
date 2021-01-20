@@ -21,9 +21,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8aa1bbde-32e4-44cd-a9f8-6b37721daf50" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/metrics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_charts.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_charts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/schemas/schema_compare.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/schemas/schema_compare.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/apps/campaigns/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -128,7 +125,7 @@
       <workItem from="1610658898247" duration="13240000" />
       <workItem from="1610692869276" duration="2825000" />
       <workItem from="1610697023286" duration="22383000" />
-      <workItem from="1611141425350" duration="12451000" />
+      <workItem from="1611141425350" duration="14361000" />
     </task>
     <servers />
   </component>
