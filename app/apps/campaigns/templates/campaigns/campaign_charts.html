@@ -19,7 +19,7 @@
 <script src="https://code.highcharts.com/highcharts-more.js"></script>
 <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 
-<!-- section 2 -->
+<!-- section -->
 <div class="section">
   <div class="container-fluid px-5">
     <!-- section title -->
@@ -39,19 +39,26 @@
 
     <!-- section content -->
     <div class="row">
-      <div class="col-6 mb-3">
+      {% for item in data_to_table %}
+      <div class="col-md-6 col-12 mb-3">
         <div class="card">
+          <!-- Header -->
           <div class="card-header bg-primary">
-            <a>Today PFD:  {{today.0 | stringformat:".3e" }} </a>
-            <a href="" class="btn-standard" data-toggle="modal" data-target="#result1">View Max and Averages</a>
+            <a 
+            href="" 
+            class="btn-standard" 
+            data-toggle="modal" 
+            data-target="#result{{forloop.counter}}">View Max and Averages</a>
           </div>
-          <div id="container1"></div>
+
+          <!-- Chart -->
+          <div id="container{{forloop.counter}}"></div>
+
           <!-- Modal -->
-          <div class="modal fade" id="result1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="result{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Maximo Value Analysis</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -66,13 +73,13 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td scope="col"> {{ maxi.0 | stringformat:".2e" }} </td>
-                        {% if maxi.0 > 0.1 %}
+                        <td scope="col"> {{ item.max | stringformat:".2e" }} </td>
+                        {% if item.max > 0.1 %}
                         <td
                           style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
                           SIL 1
                         </td>
-                        {% elif maxi.0 > 0.001 %}
+                        {% elif item.max > 0.001 %}
                         <td
                           style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
                           SIL 2
@@ -89,219 +96,36 @@
                     </tbody>
 
                   </table>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <div class="col-6 mb-3">
-        <div class="card">
-          <div class="card-header bg-primary">
-            <a href="" class="btn-standard" data-toggle="modal" data-target="#result2">View Max and Averages</a>
-          </div>
-        </div>
-        <div id="container2"></div>
-        <!-- Modal -->
-        <div class="modal fade" id="result2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Maximo Value Analysis</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <table class="table thead-dark table-striped " style="border:1px solid black; background-color: #FFFFFF">
-              <thead class="thead-dark">
-                <h6 class="text-light bg-dark" style="text-align: center; padding: 0.5rem">Average Value
-                  Analysis</h6>
-                <tr>
-
-                  <th scope="col text-light"> Average PFD</th>
-                  <th scope="col text-light"> Sil/Condition</th>
-                </tr>
-              </thead>
-
-              <tbody>
-
-                <tr>
-
-                  <td scope="col"> {{ average.1 | stringformat:".2e" }} </td>
-                  {% if average.1 > 0.01 %}
-                  <td
-                    style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
-                    SIL 1
-                  </td>
-                  {% elif average.1 > 0.001 %}
-                  <td
-                    style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
-                    SIL 2
-                  </td>
-                  {% else %}
-                  <td
-                    style="color:black;font-weight: bold; background-color:  lime;opacity: 0.6; text-align: center; padding: 0.5rem">
-                    Under Sil2
-                  </td>
-
-                  {% endif %}
-                </tr>
-
-
-              </tbody>
-
-            </table>
-                <table class="table thead-dark table-striped "
-            style="width: 45%;border:1px solid black; background-color: #FFFFFF">
-            <thead class="thead-dark">
-              <h6 class="text-light bg-dark" style="width: 45%;text-align: center; padding: 0.5rem">Maximo
-                Value Analysis</h6>
-              <tr>
-
-                <th scope="col text-light"> Maximo PFD</th>
-                <th scope="col text-light"> Sil/Condition</th>
-              </tr>
-            </thead>
-
-            <tbody>
-
-              <tr>
-
-                <td scope="col"> {{ maxi.1 | stringformat:".2e" }} </td>
-                {% if maxi.1 > 0.01 %}
-                <td
-                  style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
-                  SIL 1
-                </td>
-                {% elif maxi.1 > 0.001 %}
-                <td
-                  style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
-                  SIL 2
-                </td>
-                {% else %}
-                <td
-                  style="color:black;font-weight: bold; background-color:  lime;opacity: 0.6; text-align: center; padding: 0.5rem">
-                  Under Sil2
-                </td>
-
-                {% endif %}
-              </tr>
-
-            </tbody>
-
-          </table>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="row">
-      <div class="col-6">
-        <div class="card">
-          <div class="card-header bg-primary">
-            <a href="" class="btn-standard" data-toggle="modal" data-target="#result3">View Max and Averages</a>
-          </div>
-          <div id="container3"></div>
-          <!-- Modal -->
-          <div class="modal fade" id="result3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Maximo Value Analysis</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
+  
                   <table class="table thead-dark table-striped " style="border:1px solid black; background-color: #FFFFFF">
-              <thead class="thead-dark">
-                <h6 class="text-light bg-dark" style="text-align: center; padding: 0.5rem">Average Value
-                  Analysis</h6>
-                <tr>
-
-                  <th scope="col text-light"> Average PFD</th>
-                  <th scope="col text-light"> Sil/Condition</th>
-                </tr>
-              </thead>
-
-              <tbody>
-
-                <tr>
-
-                  <td scope="col"> {{ average.2 | stringformat:".2e" }} </td>
-                  {% if average.2 > 0.01 %}
-                  <td
-                    style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
-                    SIL 1
-                  </td>
-                  {% elif average.2 > 0.001 %}
-                  <td
-                    style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
-                    SIL 2
-                  </td>
-                  {% else %}
-                  <td
-                    style="color:black;font-weight: bold; background-color:  lime;opacity: 0.6; text-align: center; padding: 0.5rem">
-                    Under Sil2
-                  </td>
-
-                  {% endif %}
-                </tr>
-
-              </tbody>
-
-            </table>
-                  <table class="table thead-dark table-striped "
-            style="width: 45%;border:1px solid black; background-color: #FFFFFF">
-            <thead class="thead-dark">
-              <h6 class="text-light bg-dark" style="width: 45%;text-align: center; padding: 0.5rem">Maximo
-                Value Analysis</h6>
-              <tr>
-
-                <th scope="col text-light"> Maximo PFD</th>
-                <th scope="col text-light"> Sil/Condition</th>
-              </tr>
-            </thead>
-
-            <tbody>
-
-              <tr>
-
-                <td scope="col"> {{ maxi.2 | stringformat:".2e" }} </td>
-                {% if maxi.2 > 0.01 %}
-                <td
-                  style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
-                  SIL 1
-                </td>
-                {% elif maxi.2 > 0.001 %}
-                <td
-                  style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
-                  SIL 2
-                </td>
-                {% else %}
-                <td
-                  style="color:black;font-weight: bold; background-color:  lime;opacity: 0.6; text-align: center; padding: 0.5rem">
-                  Under Sil2
-                </td>
-
-                {% endif %}
-              </tr>
-
-            </tbody>
-
-          </table>
+                    <thead class="thead-dark">
+                      <tr>
+                        <th scope="col text-light"> Average PFD</th>
+                        <th scope="col text-light"> Sil/Condition</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td scope="col"> {{ item.average | stringformat:".2e" }} </td>
+                        {% if item.average > 0.01 %}
+                        <td
+                          style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
+                          SIL 1
+                        </td>
+                        {% elif item.average > 0.001 %}
+                        <td
+                          style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
+                          SIL 2
+                        </td>
+                        {% else %}
+                        <td
+                          style="color:black;font-weight: bold; background-color:  lime;opacity: 0.6; text-align: center; padding: 0.5rem">
+                          Under Sil2
+                        </td>
+                        {% endif %}
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -309,283 +133,18 @@
               </div>
             </div>
           </div>
+          <!-- ./Modal -->
         </div>
+        <!-- ./Card -->
       </div>
-
-      <div class="col-6">
-        <div id="result3" ; style="display: none;">
-          <div style="width: 45%;float:right;">
-            <table class="table thead-dark table-striped " style="border:1px solid black; background-color: #FFFFFF">
-              <thead class="thead-dark">
-                <h6 class="text-light bg-dark" style="text-align: center; padding: 0.5rem">Average Value
-                  Analysis</h6>
-                <tr>
-
-                  <th scope="col text-light"> Average PFD</th>
-                  <th scope="col text-light"> Sil/Condition</th>
-                </tr>
-              </thead>
-
-              <tbody>
-
-                <tr>
-
-                  <td scope="col"> {{ average.3 | stringformat:".2e" }} </td>
-                  {% if average.3 > 0.01 %}
-                  <td
-                    style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
-                    SIL 1
-                  </td>
-                  {% elif average.3 > 0.001 %}
-                  <td
-                    style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
-                    SIL 2
-                  </td>
-                  {% else %}
-                  <td
-                    style="color:black;font-weight: bold; background-color:  lime;opacity: 0.6; text-align: center; padding: 0.5rem">
-                    Under Sil2
-                  </td>
-
-                  {% endif %}
-                </tr>
-
-              </tbody>
-
-            </table>
-          </div>
-          <table class="table thead-dark table-striped "
-            style="width: 45%;border:1px solid black; background-color: #FFFFFF">
-            <thead class="thead-dark">
-              <h6 class="text-light bg-dark" style="width: 45%;text-align: center; padding: 0.5rem">Maximo
-                Value Analysis</h6>
-              <tr>
-
-                <th scope="col text-light"> Maximo PFD</th>
-                <th scope="col text-light"> Sil/Condition</th>
-              </tr>
-            </thead>
-
-            <tbody>
-
-              <tr>
-
-                <td scope="col"> {{ maxi.3 | stringformat:".2e" }} </td>
-                {% if maxi.3 > 0.01 %}
-                <td
-                  style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
-                  SIL 1
-                </td>
-                {% elif maxi.3 > 0.001 %}
-                <td
-                  style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
-                  SIL 2
-                </td>
-                {% else %}
-                <td
-                  style="color:black;font-weight: bold; background-color:  lime;opacity: 0.6; text-align: center; padding: 0.5rem">
-                  Under Sil2
-                </td>
-
-                {% endif %}
-              </tr>
-
-            </tbody>
-
-          </table>
-        </div>
-      </div>
+      {% endfor %}
     </div>
-
-    <div class="row">
-      <div class="col-6">
-        <div id="container5"></div>
-        <div id="result3" ; style="display: none;">
-          <div style="width: 45%;float:right;">
-
-            <table class="table thead-dark table-striped " style="border:1px solid black; background-color: #FFFFFF">
-              <thead class="thead-dark">
-                <h6 class="text-light bg-dark" style="text-align: center; padding: 0.5rem">Average Value
-                  Analysis</h6>
-                <tr>
-
-                  <th scope="col text-light"> Average PFD</th>
-                  <th scope="col text-light"> Sil/Condition</th>
-                </tr>
-              </thead>
-
-              <tbody>
-
-                <tr>
-
-                  <td scope="col"> {{ average.5 | stringformat:".2e" }} </td>
-                  {% if average.5 > 0.01 %}
-                  <td
-                    style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
-                    SIL 1
-                  </td>
-                  {% elif average.5 > 0.001 %}
-                  <td
-                    style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
-                    SIL 2
-                  </td>
-                  {% else %}
-                  <td
-                    style="color:black;font-weight: bold; background-color:  lime;opacity: 0.6; text-align: center; padding: 0.5rem">
-                    Under Sil2
-                  </td>
-
-                  {% endif %}
-                </tr>
-
-              </tbody>
-
-            </table>
-          </div>
-          <table class="table thead-dark table-striped "
-            style="width: 45%;border:1px solid black; background-color: #FFFFFF">
-            <thead class="thead-dark">
-              <h6 class="text-light bg-dark" style="width: 45%;text-align: center; padding: 0.5rem">Maximo
-                Value Analysis</h6>
-              <tr>
-
-                <th scope="col text-light"> Maximo PFD</th>
-                <th scope="col text-light"> Sil/Condition</th>
-              </tr>
-            </thead>
-
-            <tbody>
-
-              <tr>
-
-                <td scope="col"> {{ maxi.5 | stringformat:".2e" }} </td>
-                {% if maxi.5 > 0.01 %}
-                <td
-                  style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
-                  SIL 1
-                </td>
-                {% elif maxi.5 > 0.001 %}
-                <td
-                  style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
-                  SIL 2
-                </td>
-                {% else %}
-                <td
-                  style="color:black;font-weight: bold; background-color:  lime;opacity: 0.6; text-align: center; padding: 0.5rem">
-                  Under Sil2
-                </td>
-
-                {% endif %}
-              </tr>
-
-            </tbody>
-
-          </table>
-        </div>
-
-
-      </div>
-      <div class="col-6">
-
-        <div id="container6"></div>
-        <p>
-          <a class="btn btn-secondary" style="float: right; color: white" role="button" onclick="showresults3()">View
-            Max and Averages &#8650; </a>
-        </p>
-        <div id="result3" ; style="display: none;">
-          <div style="width: 45%;float:right;">
-
-
-            <table class="table thead-dark table-striped " style="border:1px solid black; background-color: #FFFFFF">
-              <thead class="thead-dark">
-                <h6 class="text-light bg-dark" style="text-align: center; padding: 0.5rem">Average Value
-                  Analysis</h6>
-                <tr>
-
-                  <th scope="col text-light"> Average PFD</th>
-                  <th scope="col text-light"> Sil/Condition</th>
-                </tr>
-              </thead>
-
-              <tbody>
-
-                <tr>
-
-                  <td scope="col"> {{ average.5 | stringformat:".2e" }} </td>
-                  {% if average.5 > 0.01 %}
-                  <td
-                    style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
-                    SIL 1
-                  </td>
-                  {% elif average.5 > 0.001 %}
-                  <td
-                    style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
-                    SIL 2
-                  </td>
-                  {% else %}
-                  <td
-                    style="color:black;font-weight: bold; background-color:  lime;opacity: 0.6; text-align: center; padding: 0.5rem">
-                    Under Sil2
-                  </td>
-
-                  {% endif %}
-                </tr>
-
-              </tbody>
-
-            </table>
-          </div>
-          <table class="table thead-dark table-striped "
-            style="width: 45%;border:1px solid black; background-color: #FFFFFF">
-            <thead class="thead-dark">
-              <h6 class="text-light bg-dark" style="width: 45%;text-align: center; padding: 0.5rem">Maximo
-                Value Analysis</h6>
-              <tr>
-
-                <th scope="col text-light"> Maximo PFD</th>
-                <th scope="col text-light"> Sil/Condition</th>
-              </tr>
-            </thead>
-
-            <tbody>
-
-              <tr>
-
-                <td scope="col"> {{ maxi.5 | stringformat:".2e" }} </td>
-                {% if maxi.5 > 0.01 %}
-                <td
-                  style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
-                  SIL 1
-                </td>
-                {% elif maxi.5 > 0.001 %}
-                <td
-                  style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
-                  SIL 2
-                </td>
-                {% else %}
-                <td
-                  style="color:black;font-weight: bold; background-color:  lime;opacity: 0.6; text-align: center; padding: 0.5rem">
-                  Under Sil2
-                </td>
-
-                {% endif %}
-              </tr>
-
-            </tbody>
-
-          </table>
-        </div>
-
-
-      </div>
-    </div>
-
   </div>
-
 </div>
-<!-- main -->
-  {{ data_to_charts|json_script:"data_chart" }}
-  {{ start_date|json_script:"start_date" }}
+
+{{ data_to_charts|json_script:"data_chart" }}
+{{ start_date|json_script:"start_date" }}
+
 {% block script %}
 <script>
   window.addEventListener('load', () => {

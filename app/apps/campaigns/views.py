@@ -109,7 +109,8 @@ def campaign_metrics(request, campaign_pk):
     campaign = get_object_or_404(Campaign, pk=campaign_pk)
     schema = campaign.get_schema_active()
     safety_functions = campaign.bop.safety_functions.all()
-    results, result_falho = metrics.run(schema)
+    results = ast.literal_eval(schema.last_result.values)
+    result_falho = ast.literal_eval(schema.last_result.failures)
     today = metrics.actual_step(schema)
     campaign = schema.campaign
 
@@ -227,7 +228,7 @@ def campaign_metrics(request, campaign_pk):
         })
 
         data_to_table.append({
-            'safety_functions': safety_functions,
+            'safety_function': sf,
             'today': td,
             'average_fail': avg_no_fail,
             'average': avg,

@@ -124,6 +124,7 @@
     );
 
     chatSocket.onmessage = async function (e) {
+      return;
       const data = JSON.parse(e.data);
 
       let unreaded_notifications = JSON.parse(data.unreaded_notifications);
