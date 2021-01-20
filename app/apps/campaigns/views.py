@@ -109,12 +109,12 @@ def campaign_metrics(request, campaign_pk):
     campaign = get_object_or_404(Campaign, pk=campaign_pk)
     schema = campaign.get_schema_active()
     safety_functions = campaign.bop.safety_functions.all()
-    results = ast.literal_eval(schema.last_result.values)
-    result_falho = ast.literal_eval(schema.last_result.failures)
+    #results = ast.literal_eval(schema.last_result.values)
+    #result_falho = ast.literal_eval(schema.last_result.failures)
     today = metrics.actual_step(schema)
     campaign = schema.campaign
 
-    # results = ast.literal_eval(results)
+    results, result_falho = metrics.run(schema)
 
 
     number_Sf = len(results[0])
@@ -184,7 +184,7 @@ def campaign_metrics(request, campaign_pk):
         else:
             list_fail_max.append(0)
 
-        desc = '123'
+        desc =  sf.name
         cont = 0
 
         result_teste_sf = []

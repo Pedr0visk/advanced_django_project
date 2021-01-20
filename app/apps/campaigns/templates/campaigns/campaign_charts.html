@@ -44,11 +44,19 @@
         <div class="card">
           <!-- Header -->
           <div class="card-header bg-primary">
-            <a 
-            href="" 
-            class="btn-standard" 
-            data-toggle="modal" 
-            data-target="#result{{forloop.counter}}">View Max and Averages</a>
+            <div class="d-flex justify-content-between">
+              <p class="text-left text-white"> Today Result: {{ item.today | stringformat:".2e" }}</p>
+              <a
+                  href=""
+                class="btn-standard mr-2"
+
+                data-toggle="modal"
+                data-target="#result{{forloop.counter}}">View Max and Averages</a>
+
+              <a class="btn-standard " role="button"
+                href="{% url 'campaigns:cut_list' schema.pk item.safety_function.pk %}"> view cutlist - SF {{forloop.counter}}
+              </a>
+            </div>
           </div>
 
           <!-- Chart -->
@@ -77,17 +85,17 @@
                         {% if item.max > 0.1 %}
                         <td
                           style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
-                          SIL 1
+                          SIL 0
                         </td>
-                        {% elif item.max > 0.001 %}
+                        {% elif item.max > 0.01 %}
                         <td
                           style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
-                          SIL 2
+                          SIL 1
                         </td>
                         {% else %}
                         <td
                           style="color:black;font-weight: bold; background-color:  lime;opacity: 0.6; text-align: center; padding: 0.5rem">
-                          Under Sil2
+                          SIL 2 or below
                         </td>
 
                         {% endif %}
@@ -107,20 +115,20 @@
                     <tbody>
                       <tr>
                         <td scope="col"> {{ item.average | stringformat:".2e" }} </td>
-                        {% if item.average > 0.01 %}
+                        {% if item.average > 0.1 %}
                         <td
                           style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
-                          SIL 1
+                          SIL 0
                         </td>
-                        {% elif item.average > 0.001 %}
+                        {% elif item.average > 0.01 %}
                         <td
                           style="color:black;font-weight: bold;background-color: orange;opacity: 0.6; text-align: center; padding: 0.5rem">
-                          SIL 2
+                          SIL 1
                         </td>
                         {% else %}
                         <td
                           style="color:black;font-weight: bold; background-color:  lime;opacity: 0.6; text-align: center; padding: 0.5rem">
-                          Under Sil2
+                          SIL 2 or below
                         </td>
                         {% endif %}
                       </tr>
