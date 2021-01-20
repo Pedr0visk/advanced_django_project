@@ -39,6 +39,27 @@
 
     <!-- section content -->
     <div class="row">
+      {% for item in safety_functions %}
+      <div class="col-md-6 col-12 mb-3">
+        <div class="card">
+          <div class="card-header bg-primary">
+            <a 
+            href="" 
+            class="btn-standard" 
+            data-toggle="modal" 
+            data-target="#result{{forloop.counter}}">View Max and Averages</a>
+          </div>
+          <div id="container{{forloop.counter}}"></div>
+        </div>
+        <!-- ./card -->
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="py-5"></div>
+    <div class="py-5"></div>
+
+    <div class="row">
       <div class="col-6 mb-3">
         <div class="card">
           <div class="card-header bg-primary">
