@@ -63,7 +63,7 @@
       <div class="col-6 mb-3">
         <div class="card">
           <div class="card-header bg-primary">
-            <a>Today PFD:  {{today.0 | stringformat:".2e" }} </a>
+            <a>Today PFD:  {{today.0 | stringformat:".3e" }} </a>
             <a href="" class="btn-standard" data-toggle="modal" data-target="#result1">View Max and Averages</a>
           </div>
           <div id="container1"></div>
@@ -88,7 +88,7 @@
                     <tbody>
                       <tr>
                         <td scope="col"> {{ maxi.0 | stringformat:".2e" }} </td>
-                        {% if maxi.0 > 0.01 %}
+                        {% if maxi.0 > 0.1 %}
                         <td
                           style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
                           SIL 1
@@ -639,7 +639,7 @@
           },
         },
         title: {
-          text: startDate
+          text: item.desc
         },
         yAxis: {
           type: 'logarithmic',

@@ -79,7 +79,7 @@
                 <tr>
                   <th colspan="3"></th>
                   {% for sf in safety_functions %}
-                  <td class="cell">Maximo</td>
+                  <td class="cell">Max PFD</td>
                   <td class="cell" align="center">SIL Value</td>
                   <td class="cell" align="center">Rel. Compar</td>
                   <td></td>
@@ -110,19 +110,19 @@
                   <td>
                     {{ coluna.0 | stringformat:".2e" }}
                   </td>
-                  <td style="color:black;background-color: red;opacity: 0.3; text-align: center;"> 1</td>
+                  <td style="color:black;background-color: red;opacity: 0.6; text-align: center;"> Over SIL 1</td>
                   {% elif coluna.0 > 0.01 %}
                   <td>
                     {{ coluna.0 | stringformat:".2e" }}
                   </td>
-                  <td style="color:black;background-color: orange;opacity: 0.3; text-align: center;"> 2
+                  <td style="color:black;background-color: orange;opacity: 0.6; text-align: center;"> 1
                   </td>
                   {% else %}
                   <td>
                     {{ coluna.0 | stringformat:".2e" }}
                   </td>
-                  <td style="color:black; background-color:  lime;opacity: 0.3; text-align: center">
-                    Below Sil 2
+                  <td style="color:black; background-color:  lime;opacity: 0.6; text-align: center">
+                    SIL 2 or below
                   </td>
                   {% endif %}
 
@@ -182,23 +182,23 @@
                   </td>
 
                   {% for coluna in schema.1 %}
-                  {% if coluna.0 > 0.01 %}
+                  {% if coluna.0 > 0.1 %}
                   <td>
                     {{ coluna.0 | stringformat:".2e" }}
                   </td>
-                  <td style="color:black;background-color: red;opacity: 0.6; text-align: center;"> 1</td>
+                  <td style="color:black;background-color: red;opacity: 0.6; text-align: center;"> Over SIL 1</td>
                   {% elif coluna.0 > 0.001 %}
                   <td>
                     {{ coluna.0 | stringformat:".2e" }}
                   </td>
-                  <td style="color:black;background-color: orange;opacity: 0.6; text-align: center;"> 2
+                  <td style="color:black;background-color: orange;opacity: 0.6; text-align: center;"> 1
                   </td>
                   {% else %}
                   <td>
                     {{ coluna.0 | stringformat:".2e" }}
                   </td>
                   <td style="color:black; background-color:  lime;opacity: 0.6; text-align: center">
-                    3
+                    SIL 2 or below
                   </td>
                   {% endif %}
 
