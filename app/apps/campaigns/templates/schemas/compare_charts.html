@@ -25,13 +25,12 @@
     <!-- section title -->
     <div class="section-title">
       <div class="d-flex flex-column">
-        <a href="{% url 'campaigns:index' campaign.pk %}" class="mb-3">
-          <i class="fa fa-arrow-left"></i> back to campaign
+        <a href="{% url 'campaigns:compare' campaign.pk %}" class="mb-3">
+          <i class="fa fa-arrow-left"></i> back to schemas comparasion
         </a>
         <p>
           Bop name: <b>{{ campaign.bop }}</b>
           > Campaign name: <b>{{ campaign }}</b>
-          > Schema name: <b>{{ schema.name }}</b>
         </p>
       </div>
     </div>
@@ -45,23 +44,17 @@
           <!-- Header -->
           <div class="card-header bg-primary">
             <div class="d-flex justify-content-between">
-              <p class="text-left text-white"> Today PFD = {{ item.today | stringformat:".2e" }}</p>
               <a
                   href=""
                 class="btn-standard mr-2"
 
                 data-toggle="modal"
                 data-target="#result{{forloop.counter}}">View Max and Averages</a>
-
-              <a class="btn-standard " role="button"
-                href="{% url 'campaigns:cut_list' schema.pk item.safety_function.pk %}"> view cutlist - SF {{forloop.counter}}
-              </a>
             </div>
           </div>
 
           <!-- Chart -->
           <div id="container{{forloop.counter}}"></div>
-
           <!-- Modal -->
           <div class="modal fade" id="result{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -173,7 +166,6 @@
 
 {{ data_to_charts|json_script:"data_chart" }}
 {{ start_date|json_script:"start_date" }}
-
 {% block script %}
 <script>
   window.addEventListener('load', () => {
@@ -222,7 +214,6 @@
           plotLines: [
             {value: 0.1, width: 2, color: 'red', dashStyle: 'dash', label: {text: "SIL 0"}},
             {value: 0.01, width: 2, color: 'orange', dashStyle: 'dash', label: {text: "SIL 1"}},
-
           ],
 
           plotOptions: {
@@ -263,21 +254,7 @@
             data: item.result_teste_sf,
           },
           {
-            color: '#ff2424',
-            name: 'Degraded',
-            tooltip: {},
-            dashStyle: 'Solid',
-            data: item.result_sf_falho,
-          },
-          {
-            type: 'scatter',
-            color: '#013872',
-            name: 'Today',
-            marker: {symbol: 'cross'},
-            data: item.today_result
-          },
-          {
-            color: '#010101',
+            color: '#000000',
             name: 'Average',
             tooltip: {pointFormat: "Average: {point.y:.6f}"},
             dashStyle: 'LongDash',
