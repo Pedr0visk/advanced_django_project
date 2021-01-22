@@ -1,0 +1,10 @@
+root = true
+
+# 2 space indentation
+[*.html]
+indent_style = space
+indent_size = 2
+
+[*.vue]
+indent_style = space
+indent_size = 2

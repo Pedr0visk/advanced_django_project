@@ -138,7 +138,17 @@ export default {
   // validations
   watch: {
     'form.duration': function (val, oldVal) {
-      if (val !== null && oldVal !== null) {
+      if (val !== null || oldVal !== null) {
+        if (!val) {
+          this.form.end = {
+            date: '',
+            time: ''
+          }
+          return;
+        };
+
+        console.log('[LOGGER] out of if', val)
+
         let {date, time} = this.form.start;
         let d = this.calcDateTime(date, time, this.form.duration);
 

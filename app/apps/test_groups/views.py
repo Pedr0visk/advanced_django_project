@@ -5,7 +5,7 @@ from .forms import TestGroupDummyForm
 from .models import TestGroupHistory, TestGroupDummy
 from ..failuremodes.models import FailureMode
 from ..tests.models import Test
-from datetime import date as dt
+from datetime import datetime, date as dt
 
 
 def test_group_list(request):
@@ -24,7 +24,8 @@ def test_group_create(request, bop_pk):
             fm_set = list(dict.fromkeys(fm_set))
             date_set = list(TestGroupDummy.objects.filter(bop=bop_pk).values_list('start_date', flat=True))
             date = dt(*list(map(int, request.POST['start_date'].split('-'))))
-
+            
+            # need to put this blocks of code into clean class method
             count = 0
             for _id in fm_ids:
                 if int(_id) in fm_set:
@@ -68,17 +69,18 @@ def test_group_update(request, tg_pk):
 
 
 def test_group_delete(request, tg_pk):
-    test_group_raw = TestGroupDummy.objects.select_related('bop').get(pk=tg_pk)
-    bop_pk = test_group_raw.bop.pk
+    dummy = TestGroupDummy.objects.select_related('bop').get(pk=tg_pk)
+    bop_pk = dummy.bop.pk
 
     if request.method == 'POST':
-        test_group_id = test_group_raw.id
-        test_group_raw.delete()
+        test_group_id = dummy.id
+        dummy.deleted_at = dt.today()
+        dummy.save()
 
         messages.success(request, f'Test Group "{test_group_id}" deleted successfully!')
         return redirect('bops:test_planner_raw', bop_pk)
 
-    context = {'test_group': test_group_raw}
+    context = {'test_group': dummy}
     return render(request, 'test_groups/test_group_confirm_delete.html', context)
 
 

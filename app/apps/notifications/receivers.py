@@ -29,6 +29,18 @@ def create_notification(sender, instance, *args, **kwargs):
         )
 
 
+@receiver(system_error)
+def create_system_notification(sender, instance, *args, **kwargs):
+    user = User.objects.get(pk=kwargs['user_id'])
+
+    Notification.objects.create(
+        assigned_to=user,
+        group='s',
+        body=f'An error occurred while running this task.',
+        pk_relation=instance.pk
+    )
+
+
 @receiver(post_save, sender=Notification)
 def send_notification_info(*args, **kwargs):
     if kwargs['created']:

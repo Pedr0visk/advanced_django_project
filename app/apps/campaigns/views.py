@@ -164,11 +164,10 @@ def campaign_metrics(request, campaign_pk):
                 peso = peso + 1
                 soma_no_fail = soma_no_fail + result_sf[i]
 
-                if i + 1 > inicio and result_sf_falho[i] != result_sf[i]:
-                    print("somou o result falho", inicio, i, soma_total, result_sf_falho[i])
+                if i + 1 > inicio and result_sf_falho[i] > result_sf[i]:
+                    peso = peso + 1
                     soma_total = soma_total + result_sf_falho[i]
                 else:
-                    print("somou o result normal", inicio, i, soma_total, result_sf[i])
                     soma_total = soma_total + result_sf[i]
 
         avg = soma_total / (tempo - today)
@@ -268,85 +267,89 @@ def campaign_delete(request, campaign_pk):
 
 def campaign_run(request, campaign_pk):
     campaign = get_object_or_404(Campaign, pk=campaign_pk)
-
+    safety_functions = campaign.bop.safety_functions.all()
     schema = campaign.get_schema_active()
-    result, result_falho = run(schema)
-    #results = ast.literal_eval(schema.last_result.values)
-    #result_falho = ast.literal_eval(schema.last_result.failures)
-
     today = metrics.actual_step(schema)
+    
+    if schema.last_result is None:
+        messages.error(request, 'There is no results created on database.')
+        return redirect('campaigns:index', campaign.pk)
 
-    t_start_camp = schema.start_date
-    t_end_camp = schema.end_date
-    camp_period = t_end_camp - t_start_camp
-
-    time_now = datetime.datetime.now()
-    time_now = time_now.replace(tzinfo=None)
-    t_start_camp = t_start_camp.replace(tzinfo=None)
-
-    steps = int(camp_period.total_seconds() / 60 ** 2)
-    past = time_now - t_start_camp
-    past = int(past.total_seconds() / 60 ** 2)
-
-    campaign = schema.campaign
-
-    # results = ast.literal_eval(results)
-    time = []
+    results = ast.literal_eval(schema.last_result.values)
+    result_falho = ast.literal_eval(schema.last_result.failures)
 
     number_Sf = len(results[0])
-
     tempo = len(results) - 1
     data_to_charts = []
+    data_to_table = []
     average = []
-    maxi = []
-
-    inicio = 0
+    list_max = []
+    list_fail_max = []
+    inicio = len(results) - 1
     f = 0
+
     fail_events = Event.objects.filter(campaign=schema.campaign)
+
     for fail in fail_events:
         if f == 0:
             tempo_falha = fail.date
             tempo_falha = tempo_falha.replace(tzinfo=None)
-            print("fails", tempo_falha, t_start_camp)
 
-            inicio = (tempo_falha - t_start_camp)
+            inicio = (tempo_falha - schema.start_date.replace(tzinfo=None))
             inicio = int(inicio.total_seconds() / 60 ** 2)
             f = 1
-
-    for j in range(1, number_Sf):
+    j = 0
+    for sf in safety_functions:
+        j = j + 1
 
         result_sf = []
-        result_sf_to_chart = []
-        result_fail = []
-        result_fail_to_chart = []
-
-        average_to_chart = []
         result_sf_falho = []
-        soma = 0
-        avg = 0
-
+        result_sf_to_chart = []
+        average_to_chart = []
         today_result = []
 
+        soma_total = 0
+        soma_no_fail = 0
+        peso = 0
         for i in range(0, tempo):
-            if j == 1:
-                time.append(results[i][0])
-
             result_sf.append(results[i][j])
-            if i > past:
-                soma = soma + results[i][j]
-            if i + 2 > inicio:
-                result_sf_falho.append(result_falho[i][j])
+            if i + 2 > inicio and inicio != tempo:
+                if results[inicio + 2][j] == result_falho[inicio + 2][j]:
+                    result_sf_falho.append(0)
+                else:
+                    result_sf_falho.append(result_falho[i][j])
             else:
-                result_sf_falho.append("null")
+                result_sf_falho.append(0)
 
-        avg = soma / (tempo - past)
+            if i + 1 > today:
+                peso = peso + 1
+                soma_no_fail = soma_no_fail + result_sf[i]
 
-        desc = "safety Function" + " " + str(j)
+                if i + 1 > inicio and result_sf_falho[i] != result_sf[i]:
+                    print("somou o result falho", inicio, i, soma_total, result_sf_falho[i])
+                    soma_total = soma_total + result_sf_falho[i]
+                else:
+                    print("somou o result normal", inicio, i, soma_total, result_sf[i])
+                    soma_total = soma_total + result_sf[i]
+
+        avg = soma_total / (tempo - today)
+        avg_no_fail = soma_no_fail / (tempo - today)
+        print("peso", peso, (tempo - today))
+        print("avg", avg, avg_no_fail)
         average.append(avg)
-        maximo = max(result_sf)
-        maxi.append(maximo)
+
+        list_max.append(max(result_sf))
+
+        if max(result_sf_falho):
+            list_fail_max.append(max(result_sf_falho))
+        else:
+            list_fail_max.append(0)
+
+        desc =  sf.name
         cont = 0
+
         result_teste_sf = []
+
         phases = schema.phases.all().order_by('start_date')
 
         for phase in phases:
@@ -355,7 +358,8 @@ def campaign_run(request, campaign_pk):
                     result_teste_sf.append(result_sf[cont])
                     result_sf_to_chart.append(0)
                     cont = cont + 1
-                result_teste_sf.append(result_sf[cont])
+                if result_sf[cont]:
+                    result_teste_sf.append(result_sf[cont])
             else:
                 for i in range(0, int(phase.duration)):
                     result_teste_sf.append(0)
@@ -366,6 +370,7 @@ def campaign_run(request, campaign_pk):
             if i == today:
                 today_result.append(result_sf[i])
                 today_result.append(avg)
+                td = result_sf[i]
             else:
                 today_result.append(0)
 
@@ -374,32 +379,37 @@ def campaign_run(request, campaign_pk):
             else:
                 average_to_chart.append('Null')
 
-        for i in range(0, tempo):
-            if i > past:
-                average_to_chart.append(avg)
-            else:
-                average_to_chart.append('Null')
-
         data_to_charts.append({
-            'average': avg,
             'average_to_chart': average_to_chart,
             'result_teste_sf': result_teste_sf,
             'result': result_sf_to_chart,
             'result_sf_falho': result_sf_falho,
-            'max': maximo,
             'desc': desc,
             'today_result': today_result
         })
 
+        data_to_table.append({
+            'safety_function': sf,
+            'today': td,
+            'average_fail': avg_no_fail,
+            'average': avg,
+            'max': max(result_sf)
+        })
+
+    start_date = campaign.start_date.replace(tzinfo=None)
+
     context = {
         'campaign': campaign,
+        'start_date':start_date,
         'schema': schema,
         'average': average,
-        'maxi': maxi,
+        'maxi': list_max,
+        'maxi_fail': list_fail_max,
         'data_to_charts': data_to_charts,
-        'safety_functions': campaign.bop.safety_functions.all()
+        'data_to_table':data_to_table,
+        'today': td,
     }
-    print("campanha run", campaign.start_date)
+
     return render(request, 'campaigns/campaign_charts.html', context)
 
 

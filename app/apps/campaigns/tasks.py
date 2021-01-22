@@ -21,10 +21,18 @@ def compare_schemas_for_campaign(*args, **kwargs):
                         instance=campaign,
                         user_id=kwargs['user_id'])
 
-    # initing calc results and calling schema compare
-    for schema in campaign.schemas.all():
-        values, failures = metrics.run(schema)
-        Result.objects.create(schema=schema, values=values, failures=failures)
+    try:
+        # initing calc results and calling schema compare
+        for schema in campaign.schemas.all():
+            values, failures = metrics.run(schema)
+            Result.objects.create(schema=schema, values=values, failures=failures)
+    except RuntimeError:
+        print('catching error')
+        system_error.send(sender=Campaign.__class__,
+                          completed=True,
+                          instance=campaign,
+                          user_id=kwargs['user_id'])
+        return
 
     # emit event to create a new notification of task completed
     task_completed.send(sender=Campaign.__class__,
@@ -38,6 +46,7 @@ def create_new_result_for_schema_base(*args, **kwargs):
     """
     Creates a new result for a single schema
     """
+    print('creating new result for schema')
     campaign = Campaign.objects.get(pk=kwargs['campaign_id'])
     schema = campaign.get_schema_active()
 
@@ -46,9 +55,16 @@ def create_new_result_for_schema_base(*args, **kwargs):
                         instance=campaign,
                         user_id=kwargs['user_id'])
 
-    values, failures = metrics.run(schema)
-    Result.objects.create(schema=schema, values=values, failures=failures)
-
+    try:
+        values, failures = metrics.run(schema)
+        Result.objects.create(schema=schema, values=values, failures=failures)
+    except:
+        system_error.send(sender=Campaign.__class__,
+                          completed=True,
+                          instance=campaign,
+                          user_id=kwargs['user_id'])
+        return
+    
     task_completed.send(sender=Campaign.__class__,
                         completed=True,
                         instance=campaign,

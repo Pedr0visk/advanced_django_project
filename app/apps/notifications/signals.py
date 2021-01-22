@@ -5,3 +5,6 @@ task_initiated = django.dispatch.Signal(
 
 task_completed = django.dispatch.Signal(
     providing_args=["instance", "completed", "user_id"])
+
+system_error = django.dispatch.Signal(
+    providing_args=["instance", "completed", "user_id"])
