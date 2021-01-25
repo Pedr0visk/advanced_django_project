@@ -18,7 +18,7 @@
       <a href="{% url 'campaigns:index' campaign.pk %}" class="mb-3">
         <i class="fa fa-arrow-left"></i> back to campaign planner
       </a>
-      <h2>Schema Compare</h2>
+      <h2>Schema Comparasion</h2>
       <p>Comparing schemas for campaign <b>{{ campaign }}</b></p>
     </div>
     <div>
@@ -39,7 +39,7 @@
             <select name="sf_number" id="" class="form-control form-control-sm mr-2">
               <option value="">--</option>
               {% for sf in safety_functions %}
-              <option value="1">{{ sf.name }}</option>
+              <option value="{{forloop.counter}}">{{ sf.name }}</option>
               {% endfor %}
             </select>
             <button class="" type="submit">
@@ -110,19 +110,31 @@
                   <td>
                     {{ coluna.0 | stringformat:".2e" }}
                   </td>
-                  <td style="color:black;background-color: red;opacity: 0.6; text-align: center;"> Over SIL 1</td>
+                  <td style="color:black;background-color: red;opacity: 0.6; text-align: center;"> SIL 0</td>
                   {% elif coluna.0 > 0.01 %}
                   <td>
                     {{ coluna.0 | stringformat:".2e" }}
                   </td>
-                  <td style="color:black;background-color: orange;opacity: 0.6; text-align: center;"> 1
+                  <td style="color:black;background-color: orange;opacity: 0.6; text-align: center;"> SIL 1
+                  </td>
+                  {% elif coluna.0 > 0.001 %}
+                  <td>
+                    {{ coluna.0 | stringformat:".2e" }}
+                  </td>
+                  <td style="color:black;background-color: orange;opacity: 0.6; text-align: center;"> SIL 2
+                  </td>
+                  {% elif coluna.0 > 0.0001 %}
+                  <td>
+                    {{ coluna.0 | stringformat:".2e" }}
+                  </td>
+                  <td style="color:black;background-color: orange;opacity: 0.6; text-align: center;"> SIL 3
                   </td>
                   {% else %}
                   <td>
                     {{ coluna.0 | stringformat:".2e" }}
                   </td>
                   <td style="color:black; background-color:  lime;opacity: 0.6; text-align: center">
-                    SIL 2 or below
+                    SIL 4 or below
                   </td>
                   {% endif %}
 
@@ -182,23 +194,36 @@
                   </td>
 
                   {% for coluna in schema.1 %}
+
                   {% if coluna.0 > 0.1 %}
                   <td>
                     {{ coluna.0 | stringformat:".2e" }}
                   </td>
-                  <td style="color:black;background-color: red;opacity: 0.6; text-align: center;"> Over SIL 1</td>
+                  <td style="color:black;background-color: red;opacity: 0.6; text-align: center;"> SIL 0</td>
+                  {% elif coluna.0 > 0.01 %}
+                  <td>
+                    {{ coluna.0 | stringformat:".2e" }}
+                  </td>
+                  <td style="color:black;background-color: orange;opacity: 0.6; text-align: center;"> SIL 1
+                  </td>
                   {% elif coluna.0 > 0.001 %}
                   <td>
                     {{ coluna.0 | stringformat:".2e" }}
                   </td>
-                  <td style="color:black;background-color: orange;opacity: 0.6; text-align: center;"> 1
+                  <td style="color:black;background-color: limegreen;opacity: 0.6; text-align: center;"> SIL 2
+                  </td>
+                  {% elif coluna.0 > 0.0001 %}
+                  <td>
+                    {{ coluna.0 | stringformat:".2e" }}
+                  </td>
+                  <td style="color:black;background-color: limegreen;opacity: 0.6; text-align: center;"> SIL 3
                   </td>
                   {% else %}
                   <td>
                     {{ coluna.0 | stringformat:".2e" }}
                   </td>
-                  <td style="color:black; background-color:  lime;opacity: 0.6; text-align: center">
-                    SIL 2 or below
+                  <td style="color:black; background-color:  limegreen;opacity: 0.6; text-align: center">
+                    SIL 4 or below
                   </td>
                   {% endif %}
 

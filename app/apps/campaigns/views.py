@@ -150,6 +150,7 @@ def campaign_metrics(request, campaign_pk):
         soma_total = 0
         soma_no_fail = 0
         peso = 0
+        td = 0
         for i in range(0, tempo):
             result_sf.append(results[i][j])
             if i + 2 > inicio and inicio != tempo:
@@ -161,10 +162,10 @@ def campaign_metrics(request, campaign_pk):
                 result_sf_falho.append(0)
 
             if i + 1 > today:
-                peso = peso + 1
+
                 soma_no_fail = soma_no_fail + result_sf[i]
 
-                if i + 1 > inicio and result_sf_falho[i] > result_sf[i]:
+                if i + 1 > inicio and result_sf_falho[i] != 0:
                     peso = peso + 1
                     soma_total = soma_total + result_sf_falho[i]
                 else:
@@ -618,59 +619,79 @@ def compare_sf(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
     schemas = campaign.schemas.order_by('-name')
     sf_number = int(request.GET.get('sf_number'))
+    print("sf o q veio", sf_number)
 
     data_to_charts = []
+    data_to_table = []
     average = []
     maxi = []
     for s in schemas:
         results, result_falho = run(s)
-
-        time = []
-
-        tempo = len(results) - 1
-
-        # for j in range(1, number_Sf):
         result_sf = []
+        tempo = len(results) - 1
+        result_sf_to_chart = []
         average_to_chart = []
-        # result_sf_falho = []
-        soma = 0
-        avg = 0
-        for i in range(1, tempo):
-            if i == 1:
-                time.append(results[i][0])
 
-            result_sf.append(results[i][sf_number])
-            soma = soma + results[i][sf_number]
+        today_result = []
 
-        avg = soma / tempo
-
-        desc = s.name + " - Safety Functions" + str(sf_number)
-        average.append(avg)
-        cont = 0
-        result_teste_sf = []
-        maximo = max(result_sf)
-        maxi.append(maximo)
+        soma_total = 0
+        soma_no_fail = 0
+        peso = 0
+        td = 0
 
         for i in range(0, tempo):
-            average_to_chart.append(avg)
+            result_sf.append(results[i][sf_number])
+            soma_no_fail = soma_no_fail + result_sf[i]
+
+        avg = soma_no_fail / (tempo)
+
+
+        desc = "Schema: " + s.name +" - Safety Function: " + str(sf_number)
+        cont = 0
+
+        result_teste_sf = []
+
+        phases = s.phases.all().order_by('start_date')
+
+        for phase in phases:
+            if phase.has_test:
+                for i in range(0, int(phase.duration)):
+                    result_teste_sf.append(result_sf[cont])
+                    result_sf_to_chart.append(0)
+                    cont = cont + 1
+                if result_sf[cont]:
+                    result_teste_sf.append(result_sf[cont])
+            else:
+                for i in range(0, int(phase.duration)):
+                    result_teste_sf.append(0)
+                    result_sf_to_chart.append(result_sf[cont])
+                    cont = cont + 1
+
+        for i in range(0, tempo):
+                average_to_chart.append(avg)
 
         data_to_charts.append({
-            'average': avg,
             'average_to_chart': average_to_chart,
             'result_teste_sf': result_teste_sf,
-            'result': result_sf,
+            'result': result_sf_to_chart,
             'desc': desc,
         })
 
+        data_to_table.append({
+            'average': avg,
+            'max': max(result_sf)
+        })
+
+    start_date = campaign.start_date.replace(tzinfo=None)
+
     context = {
         'campaign': campaign,
-        'schema': Schema,
-        'average': average,
+        'start_date':start_date,
         'data_to_charts': data_to_charts,
-        'maxi': maxi, 'average': average
+        'data_to_table': data_to_table,
     }
 
-    return render(request, 'campaigns/campaign_charts.html', context)
+    return render(request, 'schemas/compare_charts.html', context)
 
 
 def cut_list(request, schema_pk, sf_pk):

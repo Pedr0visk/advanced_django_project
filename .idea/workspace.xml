@@ -20,8 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8aa1bbde-32e4-44cd-a9f8-6b37721daf50" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/schemas/compare_charts.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_charts.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_charts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/schemas/schema_compare.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/schemas/schema_compare.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/apps/campaigns/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -33,6 +35,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -51,6 +54,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -126,7 +130,8 @@
       <workItem from="1610658898247" duration="13240000" />
       <workItem from="1610692869276" duration="2825000" />
       <workItem from="1610697023286" duration="22383000" />
-      <workItem from="1611141425350" duration="15990000" />
+      <workItem from="1611141425350" duration="28827000" />
+      <workItem from="1611286950912" duration="5129000" />
     </task>
     <servers />
   </component>
@@ -144,5 +149,16 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/apps/campaigns/views.py</url>
+          <line>254</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
