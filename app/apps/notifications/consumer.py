@@ -44,11 +44,9 @@ class NotificationConsumer(AsyncJsonWebsocketConsumer):
 
             return context
 
-        notifications = scope['user'].notifications_assigned_to_user.order_by(
-            '-creation_date')
-        old_notifications = notifications.filter(is_read=True)
-        unreaded_notifications = notifications.filter(
-            is_read=False).order_by('creation_date')
+        notifications = scope['user'].notifications_assigned_to_user.order_by('-creation_date')
+        old_notifications = notifications.filter(is_read=True).order_by('-creation_date')
+        unreaded_notifications = notifications.filter(is_read=False).order_by('-creation_date')
 
         context = {
             'unreaded_notification_count': unreaded_notifications.count(),

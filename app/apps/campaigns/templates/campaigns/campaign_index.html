@@ -36,6 +36,11 @@
           <small>EDIT CAMPAIGN
             <i class="fa fa-pencil-alt text-warning"></i></small>
         </a>
+        <a href="{% url 'campaigns:update' campaign.pk %}" class="btn-standard-lg mr-2">
+          <small>EDIT BASE SCHEMA
+            <i class="fa fa-pencil-alt text-warning"></i></small>
+        </a>
+        
       </div>
     </div>
     <hr>
@@ -124,65 +129,72 @@
     }
   })
 
+  function runningTask(is_running) {
+    if (is_running) {
+      let btn = document.getElementById('btnRun');
+      let icon = document.createElement('i');
+      let text = document.createElement('small');
+
+      btn.textContent = '';
+      btn.classList = 'btn-standard-lg mr-2 disabled';
+      btn.style = 'cursor: not-allowed';
+
+      icon.classList = 'fas fa-sync-alt fa-spin';
+      btn.appendChild(icon)
+
+      text.textContent = ' CALCULATING NEW RESULTS...';
+      btn.appendChild(text);
+
+      $('#spin').removeClass('d-none')
+
+      // $('#task_alert').addClass('d-flex')
+    } else {
+      let btn = document.getElementById('btnRun');
+      let text = document.createElement('small');
+      let icon = document.createElement('i')
+
+      btn.textContent = '';
+      btn.style = '';
+      btn.classList = 'btn-standard-lg mr-2';
+
+      text.textContent = 'RUN ';
+      btn.appendChild(text);
+
+      icon.classList = 'fas fa-cogs';
+      btn.appendChild(icon);
+
+      $('#spin').addClass('d-none')
+
+      // $('#task_alert').removeClass('d-flex')
+    }
+  }
+
   window.addEventListener('load', function (e) {
     const userId = JSON.parse(document.getElementById('userId').textContent);
 
     const chatSocket = new WebSocket(
-            (location.protocol !== 'https:' ? 'ws://' : 'wss://')
-            + window.location.host
-            + '/ws/notifications/'
-            + userId
-            + '/'
+      (location.protocol !== 'https:' ? 'ws://' : 'wss://')
+      + window.location.host
+      + '/ws/notifications/'
+      + userId
+      + '/'
     );
 
     chatSocket.onmessage = async function (e) {
       const data = JSON.parse(e.data);
-      console.log(data);
+
       let unreaded_notifications = JSON.parse(data.unreaded_notifications);
+      let old_notifications = JSON.parse(data.old_notifications);
 
-      unreaded_notifications.map(notification => {
-        let { group } = notification.fields;
+      if (!old_notifications.length) return;
 
-        if (group == 'c') {
-          let btn = document.getElementById('btnRun');
-          let icon = document.createElement('i');
-          let text = document.createElement('small');
+      console.log('here');
 
-          btn.textContent = '';
-          btn.classList = 'btn-standard-lg mr-2 disabled';
-          btn.style = 'cursor: not-allowed';
-
-          icon.classList = 'fas fa-sync-alt fa-spin';
-          btn.appendChild(icon)
-
-          text.textContent = ' CALCULATING NEW RESULTS...';
-          btn.appendChild(text);
-
-          $('#spin').removeClass('d-none')
-
-          // $('#task_alert').addClass('d-flex')
-        }
-
-        if (group == 'd' || group == 's') {
-          let btn = document.getElementById('btnRun');
-          let text = document.createElement('small');
-          let icon = document.createElement('i')
-
-          btn.textContent = '';
-          btn.style = '';
-          btn.classList = 'btn-standard-lg mr-2';
-
-          text.textContent = 'RUN ';
-          btn.appendChild(text);
-
-          icon.classList = 'fas fa-cogs';
-          btn.appendChild(icon);
-
-          $('#spin').addClass('d-none')
-
-          // $('#task_alert').removeClass('d-flex')
-        }
-      });
+      if (unreaded_notifications.length > 0) {
+        runningTask(unreaded_notifications[0].fields.group == 'c')
+      } else {
+        runningTask(old_notifications[0].fields.group == 'c')
+      }
     };
 
     chatSocket.onclose = function (e) {
@@ -190,11 +202,11 @@
     };
 
     const campaignSocket = new WebSocket(
-            (location.protocol !== 'https:' ? 'ws://' : 'wss://')
-            + window.location.host
-            + '/ws/campaigns/'
-            + userId
-            + '/'
+      (location.protocol !== 'https:' ? 'ws://' : 'wss://')
+      + window.location.host
+      + '/ws/campaigns/'
+      + userId
+      + '/'
     );
 
     campaignSocket.onmessage = async function (e) {

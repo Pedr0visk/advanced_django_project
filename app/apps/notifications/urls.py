@@ -3,7 +3,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index),
+    path('', views.index, name='AJAXGetNotifications'),
     path(
         'ajax/mark_notification_as_readed',
         views.mark_notification_as_readed,
