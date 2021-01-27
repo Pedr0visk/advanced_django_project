@@ -414,6 +414,14 @@ def campaign_run(request, campaign_pk):
     return render(request, 'campaigns/campaign_charts.html', context)
 
 
+def base_case_schema_manager(request, campaign_pk):
+    campaign = Campaign.objects.get(pk=campaign_pk)
+    context = {
+        'campaign': campaign, 
+        'base_schema': campaign.get_schema_active
+    }
+    return render(request, 'campaigns/base_case_schema_manger.html', context)
+
 # SCHEMAS
 def schema_create(request, campaign_pk):
     campaign = Campaign.objects.get(pk=campaign_pk)
@@ -525,6 +533,7 @@ def schema_clone(request, schema_pk):
 
     clone = Schema.objects.create(name=f'{schema.name} clone',
                                   is_default=False,
+                                  schema=schema,
                                   campaign=schema.campaign)
 
     for p in schema.phases.all():
@@ -541,7 +550,7 @@ def schema_clone(request, schema_pk):
                                        user_id=request.user.pk)
 
     messages.success(request, f'Schema "{schema.name}" cloned successfully')
-    return redirect('campaigns:planner', schema.campaign.pk)
+    return redirect('campaigns:schema_active_dashboard', schema.campaign.pk)
 
 
 # EVENTS

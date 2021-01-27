@@ -36,11 +36,6 @@
           <small>EDIT CAMPAIGN
             <i class="fa fa-pencil-alt text-warning"></i></small>
         </a>
-        <a href="{% url 'campaigns:update' campaign.pk %}" class="btn-standard-lg mr-2">
-          <small>EDIT BASE SCHEMA
-            <i class="fa fa-pencil-alt text-warning"></i></small>
-        </a>
-        
       </div>
     </div>
     <hr>
@@ -52,7 +47,10 @@
           <h4>Info</h4>
           <ul class="info-list">
             <li>name: <b>{{ campaign.name }}</b></li>
-            <li><b>schema active</b>: {{campaign.get_schema_active}}</li>
+            <li class="d-flex justify-content-between align-items-center">
+              <b>schema active: {{campaign.get_schema_active}}</b>
+              <a href="{% url 'campaigns:schema_active_dashboard' campaign.pk %}" class="btn-standard">edit</a>
+            </li>
             <li>
               status:
               {% if campaign.active %}
@@ -187,8 +185,6 @@
       let old_notifications = JSON.parse(data.old_notifications);
 
       if (!old_notifications.length) return;
-
-      console.log('here');
 
       if (unreaded_notifications.length > 0) {
         runningTask(unreaded_notifications[0].fields.group == 'c')

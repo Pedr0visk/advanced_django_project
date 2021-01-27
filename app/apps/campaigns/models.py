@@ -97,9 +97,16 @@ class Schema(models.Model):
     name = models.CharField(max_length=255)
     is_default = models.BooleanField(default=False)
     cuts_contribution = models.TextField(blank=True, null=True)
+
     campaign = models.ForeignKey(Campaign,
                                  on_delete=models.CASCADE,
                                  related_name='schemas')
+
+    schema = models.ForeignKey('self', 
+                               blank=True,
+                               null=True,    
+                               on_delete=models.CASCADE,
+                               related_name='schema_clones')
 
     @property
     def start_date(self):
@@ -125,8 +132,10 @@ class Schema(models.Model):
             obj.is_default = False
             obj.save()
 
-        print('saiu do for')
-        objects = Schema.objects.filter(campaign=schema.campaign, is_default=True).exclude(id=schema.id)
+        objects = Schema.objects.filter(
+            campaign=schema.campaign, 
+            is_default=True).exclude(id=schema.id)
+            
         for obj in objects:
             print(obj.name, obj.is_default)
 
@@ -134,7 +143,10 @@ class Schema(models.Model):
         return super(Schema, self).save()
 
     def __str__(self):
-        return self.name
+        if self.schema:
+            return f'{self.schema.name} clone ({self.pk})'
+        else:
+            return self.name
 
 
 class Phase(models.Model):

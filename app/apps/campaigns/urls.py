@@ -20,6 +20,10 @@ urlpatterns = [
          views.compare_sf, name="compare_sf"),
     path('campaigns/<int:campaign_pk>/run/', views.campaign_run, name="run"),
 
+    path('campaigns/<int:campaign_pk>/base-case-schema-manager/', 
+         views.base_case_schema_manager, 
+         name="schema_active_dashboard"),
+
     # schemas
     path('schemas/<int:campaign_pk>/run/',
          views.campaign_metrics, name="metrics"),
