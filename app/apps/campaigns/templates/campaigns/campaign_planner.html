@@ -148,7 +148,25 @@
       toast.addEventListener('mouseenter', Swal.stopTimer)
       toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
-  })
+  });
+
+  function runningTask(is_running) {
+    if (is_running) {
+      $('#btnCompare').addClass('disabled');
+      let btn = document.getElementById('btnCompare');
+      btn.text = 'Comparing Schemas...';
+      btn.style = 'cursor: not-allowed';
+
+      $('#spin').removeClass('d-none');
+    } else {
+      $('#btnCompare').removeClass('disabled');
+      let btn = document.getElementById('btnCompare');
+      btn.text = 'Schema Comparison';
+      btn.style = '';
+
+      $('#spin').addClass('d-none');
+    }
+  }
 
   window.addEventListener('load', function (e) {
     const userId = JSON.parse(document.getElementById('userId').textContent);
@@ -163,28 +181,18 @@
 
     notificationSocket.onmessage = async function (e) {
       const data = JSON.parse(e.data);
-      console.log(data)
+
       let unreaded_notifications = JSON.parse(data.unreaded_notifications);
+      let old_notifications = JSON.parse(data.old_notifications);
 
-      unreaded_notifications.map(notification => {
-        if (notification.fields.group == 'c') {
-          $('#btnCompare').addClass('disabled');
-          let btn = document.getElementById('btnCompare');
-          btn.text = 'Comparing Schemas...';
-          btn.style = 'cursor: not-allowed';
+      if (!old_notifications.length) return;
 
-          $('#spin').removeClass('d-none')
-        }
-
-        if (notification.fields.group == 'd') {
-          $('#btnCompare').removeClass('disabled');
-          let btn = document.getElementById('btnCompare');
-          btn.text = 'Schema Comparison';
-          btn.style = '';
-
-          $('#spin').addClass('d-none')
-        }
-      });
+      if (unreaded_notifications.length > 0) {
+        runningTask(unreaded_notifications[0].fields.group == 'c')
+      } else {
+        runningTask(old_notifications[0].fields.group == 'c')
+      }
+      
     };
 
     notificationSocket.onclose = function (e) {

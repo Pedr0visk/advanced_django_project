@@ -109,12 +109,14 @@ def campaign_metrics(request, campaign_pk):
     campaign = get_object_or_404(Campaign, pk=campaign_pk)
     schema = campaign.get_schema_active()
     safety_functions = campaign.bop.safety_functions.all()
-    #results = ast.literal_eval(schema.last_result.values)
-    #result_falho = ast.literal_eval(schema.last_result.failures)
+    
     today = metrics.actual_step(schema)
-    campaign = schema.campaign
+    if schema.last_result is None:
+        messages.error(request, 'There is no results created on database.')
+        return redirect('campaigns:index', campaign.pk)
 
-    results, result_falho = metrics.run(schema)
+    results = ast.literal_eval(schema.last_result.values)
+    result_falho = ast.literal_eval(schema.last_result.failures)
 
 
     number_Sf = len(results[0])
@@ -449,8 +451,7 @@ def schema_compare(request, campaign_pk):
     schemas = campaign.schemas.order_by('-name')
 
     if not campaign.get_schema_active():
-        messages.error(
-            request, 'You need create a base schema before comparing results')
+        messages.error(request, 'You need create a base schema before comparing results')
         return redirect('campaigns:index', campaign.pk)
 
     relative_comp = []
@@ -458,11 +459,13 @@ def schema_compare(request, campaign_pk):
     fl = 0
     final = []
     final_max = []
-    for s in schemas:
 
-        #result = ast.literal_eval(s.last_result.values)
-        #result_falho = ast.literal_eval(s.last_result.failures)
-        result, result_falho = metrics.run(s)
+    for s in schemas:
+        if s.last_result is None:
+            result, result_falho = metrics.run(s)
+        else:  
+            result = ast.literal_eval(s.last_result.values)
+            result_falho = ast.literal_eval(s.last_result.failures)
 
         t = []
         t_max = []
