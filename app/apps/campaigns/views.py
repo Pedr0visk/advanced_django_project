@@ -278,8 +278,7 @@ def campaign_run(request, campaign_pk):
         messages.error(request, 'There is no results created on database.')
         return redirect('campaigns:index', campaign.pk)
 
-    results = ast.literal_eval(schema.last_result.values)
-    result_falho = ast.literal_eval(schema.last_result.failures)
+    result_falho, results = metrics.run(schema)
 
     number_Sf = len(results[0])
     tempo = len(results) - 1
@@ -619,9 +618,15 @@ def event_list(request):
 def event_delete(request, event_pk):
     event = Event.objects.get(pk=event_pk)
     campaign_pk = event.campaign.pk
-
+    
     if request.method == 'POST':
         event.delete()
+
+        # creates a new results for schema base
+        # due the changes made on campaign
+        create_new_result_for_schema_base.delay(user_id=request.user.id,
+                                                campaign_id=campaign_pk)
+                                                
         messages.success(
             request, f'Event deleted successfully')
         return redirect('campaigns:index', campaign_pk)
