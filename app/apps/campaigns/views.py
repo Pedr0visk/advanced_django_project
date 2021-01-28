@@ -72,7 +72,11 @@ def campaign_index(request, campaign_pk):
         messages.success(
             request, f'Schema "{schema.name}" has been choosen for the f{campaign.name}')
 
-    context = {'campaign': campaign, 'bop': campaign.bop}
+    context = {
+        'campaign': campaign, 
+        'bop': campaign.bop,
+        'recent_results': campaign.get_schema_active().results.all()[:5]
+    }
 
     if campaign.active:
         return render(request, 'campaigns/campaign_index.html', context)
