@@ -4,7 +4,6 @@ from apps.campaigns.models import Campaign, Phase, Schema
 from apps.test_groups.models import TestGroup
 from ..tasks import *
 
-
 class PhaseSerializer(serializers.ModelSerializer):
     test_groups = serializers.PrimaryKeyRelatedField(
         many=True, queryset=TestGroup.objects.all())
@@ -71,15 +70,9 @@ class SchemaSerializer(serializers.ModelSerializer):
             if phase.has_test:
                 phase.test_groups.set(test_groups)
 
-        # if campaign is active we have to calculate
-        # new results for schema's comparison,else,
-        # we have to calculate new results just for the schema base
-        if instance.campaign.active:
-            create_new_result_for_schema_base.delay(campaign_id=instance.campaign.pk,
-                                                   user_id=user.pk)
-        else:
+        if not instance.campaign.active:
             compare_schemas_for_campaign.delay(campaign_id=instance.campaign.id,
-                                              user_id=user.pk)
+                                               user_id=user.pk)
 
         return instance
 

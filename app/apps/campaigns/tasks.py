@@ -62,3 +62,6 @@ def create_new_result_for_schema_base(*args, **kwargs):
                         completed=True,
                         instance=campaign,
                         user_id=kwargs['user_id'])
+
+    bop = campaign.bop
+    bop.results_updated()

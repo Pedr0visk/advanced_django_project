@@ -13,6 +13,9 @@ class Bop(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # flag to indicate if a bop has changed made on it
+    is_outdated = models.BooleanField(default=False)
+
     def __str__(self):
         return self.name
 
@@ -29,6 +32,10 @@ class Bop(models.Model):
 
     def active_campaign(self):
         return self.campaigns.filter(active=True).first()
+
+    def results_updated(self):
+        self.is_outdated = False
+        self.save()
 
     def with_counts(self):
         collector = NestedObjects(using='default')

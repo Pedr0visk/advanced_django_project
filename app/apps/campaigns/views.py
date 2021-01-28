@@ -282,12 +282,10 @@ def campaign_run(request, campaign_pk):
     Creates a new result for campaign base case
     via ajax call
     """
-    campaign = get_object_or_404(Campaign, pk=campaign_pk)
-
     if request.method == 'POST':
         create_new_result_for_schema_base.delay(user_id=request.user.id,
                                                 campaign_id=campaign_pk)
-
+        
         return JsonResponse({'message': 'Task successfully created!'})
     
     if schema.last_result is None:
@@ -587,11 +585,6 @@ def event_create(request, campaign_pk):
             new_event.created_by = request.user
             new_event.campaign_id = campaign_pk
             new_event.save()
-
-            # creates a new results for schema base
-            # due the changes made on campaign
-            create_new_result_for_schema_base.delay(user_id=request.user.id,
-                                                    campaign_id=campaign.id)
 
             messages.success(request, 'Event created successfully!')
             return redirect(new_event.success_url())

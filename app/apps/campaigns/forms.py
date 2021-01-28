@@ -30,3 +30,7 @@ class EventForm(ModelForm):
                               attrs={'class': 'form-control datetimepicker-input',
                                      'data-target': '#datetimepicker1'}),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        # logic to validate if the object code has changed

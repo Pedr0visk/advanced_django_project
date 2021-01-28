@@ -9,6 +9,7 @@ from datetime import timedelta
 
 from ..bops.models import Bop
 from ..test_groups.models import TestGroup
+from .signals import schema_created_or_updated
 
 
 class Campaign(models.Model):
@@ -131,16 +132,6 @@ class Schema(models.Model):
         for obj in objects:
             obj.is_default = False
             obj.save()
-
-        objects = Schema.objects.filter(
-            campaign=schema.campaign, 
-            is_default=True).exclude(id=schema.id)
-            
-        for obj in objects:
-            print(obj.name, obj.is_default)
-
-    def clean(self, *args, **kwargs):
-        return super(Schema, self).save()
 
     def __str__(self):
         if self.schema:

@@ -9,6 +9,15 @@
 
 {% include 'snippets/messages.html' with messages=messages %}
 
+{% if bop.is_outdated %}
+<div class="alert alert-warning" role="alert">
+  <b><i class="fas fa-exclamation-triangle"></i> Warning</b> You've made significant changes on this campaign, to see updated results, please, run it again.
+</div>
+{% else %}
+<div>
+  tudo ok 
+</div>
+{% endif %}
 <!-- section 2 -->
 <div class="section">
   <div class="container-fluid px-5">
