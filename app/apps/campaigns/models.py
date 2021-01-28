@@ -85,7 +85,7 @@ class Campaign(models.Model):
     def activate(self):
         self.active = True
         self.save()
-
+    
     def __str__(self):
         return self.name
 

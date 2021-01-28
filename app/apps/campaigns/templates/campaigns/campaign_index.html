@@ -28,14 +28,14 @@
             <i class="fas fa-cog"></i> Manage Base Case Schema
           </a>
           <span class="mx-2">|</span>
-          <a href=""><i class="fas fa-poll"></i> Results</a>
+          <a href="{% url 'campaigns:run' campaign.pk %}"><i class="fas fa-poll"></i> Results</a>
           <span class="mx-2">|</span>
           <a href="{% url 'campaigns:update' campaign.pk %}"><i class="fa fa-pencil-alt"></i> Edit Campaign</a>
         </nav>
       </div>
 
       <div>
-        <a id="btnRun" href="{% url 'campaigns:run' campaign.pk %}" class="btn-standard-lg">
+        <a id="runTaskBtn" class="btn-standard-lg">
           <small>
             RUN
           </small>
@@ -148,7 +148,7 @@
 
   function runningTask(is_running) {
     if (is_running) {
-      let btn = document.getElementById('btnRun');
+      let btn = document.getElementById('runTaskBtn');
       let icon = document.createElement('i');
       let text = document.createElement('small');
 
@@ -166,7 +166,7 @@
 
       // $('#task_alert').addClass('d-flex')
     } else {
-      let btn = document.getElementById('btnRun');
+      let btn = document.getElementById('runTaskBtn');
       let text = document.createElement('small');
       let icon = document.createElement('i')
 
@@ -187,6 +187,25 @@
   }
 
   window.addEventListener('load', function (e) {
+
+    const runTaskBtn = document.getElementById('runTaskBtn');
+
+    runTaskBtn.addEventListener('click', function () {
+      $.ajax({
+        method: 'post',
+        url: '{% url "campaigns:run" campaign.pk %}',
+        data: {
+          csrfmiddlewaretoken: '{{csrf_token}}'
+        },
+        success: function (data) {
+          console.log(data)
+        },
+        error: function (data) {
+          console.log('ERR', data)
+        }
+      })
+    });
+
     const userId = JSON.parse(document.getElementById('userId').textContent);
 
     const chatSocket = new WebSocket(

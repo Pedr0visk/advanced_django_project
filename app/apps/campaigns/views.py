@@ -2,7 +2,7 @@ import ast
 import datetime
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.db import transaction
@@ -75,7 +75,7 @@ def campaign_index(request, campaign_pk):
     context = {
         'campaign': campaign, 
         'bop': campaign.bop,
-        'recent_results': campaign.get_schema_active().results.all()[:5]
+        'recent_results': campaign.get_schema_active().results.order_by('-created_at')[:5]
     }
 
     if campaign.active:
@@ -277,12 +277,25 @@ def campaign_run(request, campaign_pk):
     safety_functions = campaign.bop.safety_functions.all()
     schema = campaign.get_schema_active()
     today = metrics.actual_step(schema)
+
+    """
+    Creates a new result for campaign base case
+    via ajax call
+    """
+    campaign = get_object_or_404(Campaign, pk=campaign_pk)
+
+    if request.method == 'POST':
+        create_new_result_for_schema_base.delay(user_id=request.user.id,
+                                                campaign_id=campaign_pk)
+
+        return JsonResponse({'message': 'Task successfully created!'})
     
     if schema.last_result is None:
         messages.error(request, 'There is no results created on database.')
         return redirect('campaigns:index', campaign.pk)
 
-    result_falho, results = metrics.run(schema)
+    results = ast.literal_eval(schema.last_result.values)
+    result_falho = ast.literal_eval(schema.last_result.failures)
 
     number_Sf = len(results[0])
     tempo = len(results) - 1
@@ -757,3 +770,21 @@ def cut_list(request, schema_pk, sf_pk):
     }
 
     return render(request, 'schemas/cut_list.html', context)
+
+
+# RESULTS
+def campaign_results(request, campaign_pk):
+    """
+    Creates a new result for campaign base case
+    via ajax call
+    """
+    campaign = get_object_or_404(Campaign, pk=campaign_pk)
+
+    if request.method == 'POST':
+        create_new_result_for_schema_base.delay(user_id=request.user.id,
+                                            campaign_id=campaign_pk)
+
+        return JsonResponse({'message': 'Task successfully created!'})
+
+    return redirect('campaigns:campaign_run', campaign_pk)
+
