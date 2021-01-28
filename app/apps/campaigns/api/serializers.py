@@ -69,10 +69,9 @@ class SchemaSerializer(serializers.ModelSerializer):
             phase = Phase.objects.create(schema=instance, **phase_data)
             if phase.has_test:
                 phase.test_groups.set(test_groups)
-
-        if not instance.campaign.active:
-            compare_schemas_for_campaign.delay(campaign_id=instance.campaign.id,
-                                               user_id=user.pk)
+        
+        # compare_schemas_for_campaign.delay(campaign_id=instance.campaign.id,
+        #                                    user_id=user.pk)
 
         return instance
 

@@ -10,12 +10,8 @@
 {% include 'snippets/messages.html' with messages=messages %}
 
 {% if bop.is_outdated %}
-<div class="alert alert-warning" role="alert">
+<div class="alert alert-warning" role="alert" id="outdatedMessage">
   <b><i class="fas fa-exclamation-triangle"></i> Warning</b> You've made significant changes on this campaign, to see updated results, please, run it again.
-</div>
-{% else %}
-<div>
-  tudo ok 
 </div>
 {% endif %}
 <!-- section 2 -->
@@ -234,7 +230,12 @@
       if (!old_notifications.length) return;
 
       if (unreaded_notifications.length > 0) {
-        runningTask(unreaded_notifications[0].fields.group == 'c')
+        runningTask(unreaded_notifications[0].fields.group == 'c');
+        
+        if (unreaded_notifications[0].field.group == 'd') {
+          $('#outdatedMessage').addClass('d-none');
+        }
+
       } else {
         runningTask(old_notifications[0].fields.group == 'c')
       }
