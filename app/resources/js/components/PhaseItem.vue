@@ -88,45 +88,55 @@ export default {
     },
 
     displayTestGroups(item) {
-      let body = '';
+      let tbody = ''
 
       this.$parent.testGroupsOptions.map(i => {
-        let items = JSON.parse(JSON.stringify(item.test_groups))
-        if (items.includes(i.id)) {
-          body = `
-            <table class="table m-0 table-hover dnv-table dnv-table-admin">
-              <thead>
-              <tr>
-                <th scope="col">name</th>
-                <th scope="col">start date</th>
-                <th scope="col">failure modes</th>
-                <th scope="col">tests <small>(interval, coverage)</small></th>
-                <td></td>
-                <td></td>
-              </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>test group 1</td>
-                  <td width="10%"></td>
-                  <td width="50%">
-                    
-                  </td>
-                  <td align="left">
-                    level 1 <b>168, 0.2</b><br>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          `
+        let failureModesPack = '';
+
+        if (item.test_groups.includes(i.id)) {
+          let fmList = i.failure_modes.slice(0, 99);
+          fmList.map(el => {
+            failureModesPack += `<small>${el.code}, </small>`
+          });
         }
+
+        tbody += `<tr>
+          <td>${i.name}</td>
+          <td width="10%">${i.start_date}</td>
+          <td width="50%">
+          ${failureModesPack}
+          </td>
+          <td align="left">
+          ${JSON.stringify(i.tests)}
+          </td>
+        </tr>`
       });
 
+      let table = `
+      <div class="table-responsive table-scroll">
+        <table class="table m-0 table-hover dnv-table dnv-table-admin" id="campaignsTable">
+          <thead>
+            <tr>
+              <th scope="col">name</th>
+              <th scope="col">start date</th>
+              <th scope="col">failure modes</th>
+              <th scope="col">tests <small>(interval, coverage)</small></th>
+              <td></td>
+              <td></td>
+            </tr>
+          </thead>
+          
+          <tbody>
+            ${tbody}
+          </tbody>
+        </table>
+      </div>`;
+
       this.$swal.fire({
-        title: '<strong>Showing Test Groups</strong>',
+        title: '<strong>Test Groups</strong>',
         width: 1200,
-        padding: '0.5rem',
-        html: body,
+        padding: '1rem',
+        html: table,
         showCloseButton: true,
         showCancelButton: false,
         confirmButtonText:

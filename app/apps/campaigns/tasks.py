@@ -40,6 +40,9 @@ def compare_schemas_for_campaign(*args, **kwargs):
                         instance=campaign,
                         user_id=kwargs['user_id'])
 
+    bop = campaign.bop
+    bop.results_updated()
+
 
 @shared_task(base=LogErrorsTask)
 def create_new_result_for_schema_base(*args, **kwargs):

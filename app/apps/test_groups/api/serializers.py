@@ -9,5 +9,5 @@ class TestGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = TestGroup
         fields = (
-            'id', 'name', 'tests', 'failure_modes'
+            'id', 'name', 'tests', 'failure_modes', 'start_date'
         )
