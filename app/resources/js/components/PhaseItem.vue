@@ -121,8 +121,6 @@ export default {
               <th scope="col">start date</th>
               <th scope="col">failure modes</th>
               <th scope="col">tests <small>(interval, coverage)</small></th>
-              <td></td>
-              <td></td>
             </tr>
           </thead>
           
