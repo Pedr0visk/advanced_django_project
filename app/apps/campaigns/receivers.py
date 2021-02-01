@@ -27,3 +27,11 @@ def outdate_bop_on_phase_created_or_updated(sender, instance, **kwargs):
         bop.is_outdated = True
         bop.save()
 
+@receiver(post_save, sender=Event)
+def outdate_bop_on_phase_created_or_updated(sender, instance, **kwargs):
+    bop = instance.campaign.bop
+    bop.is_outdated = True
+    bop.save()
+    
+        
+

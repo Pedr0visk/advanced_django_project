@@ -328,6 +328,7 @@ def campaign_run(request, campaign_pk):
         soma_total = 0
         soma_no_fail = 0
         peso = 0
+        td = 0
         for i in range(0, tempo):
             result_sf.append(results[i][j])
             if i + 2 > inicio and inicio != tempo:

@@ -27,7 +27,7 @@
         <p>Bop name: <b>{{ campaign.bop }}</b> > Campaign name: <b>{{ campaign }}</b></p>
         <br>
         <nav>
-          <a href=""><i class="fas fa-lightbulb"></i> Campaign Planner</a>
+          <a href="{% url 'campaigns:planner' campaign.pk %}"><i class="fas fa-lightbulb"></i> Campaign Planner</a>
           <span class="mx-2">|</span>
           <a href="{% url 'campaigns:schema_active_dashboard' campaign.pk %}">
             <i class="fas fa-cog"></i> Manage Base Case Schema

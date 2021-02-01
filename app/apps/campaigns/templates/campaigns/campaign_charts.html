@@ -41,21 +41,56 @@
     <div class="row">
       {% for item in data_to_table %}
       <div class="col-md-6 col-12 mb-3">
+        <nav>
+          <a href="{% url 'campaigns:cut_list' schema.pk item.safety_function.pk %}">
+            <i class="fa fa-list"></i>
+            SF's ({{forloop.counter}}) Cut List
+          </a>
+        </nav>
         <div class="card">
           <!-- Header -->
           <div class="card-header bg-primary">
             <div class="d-flex justify-content-between">
-              <p class="text-left text-white"> Today PFD = {{ item.today | stringformat:".2e" }}</p>
-              <a
-                  href=""
-                class="btn-standard mr-2"
+              <div class="d-flex">
+                <div class="badge-chart mr-2">
+                  <div class="desc">Today PFD: {{ item.today | stringformat:".2e" }}</div>
+                </div>
 
-                data-toggle="modal"
-                data-target="#result{{forloop.counter}}">View Max and Averages</a>
+                <div class="badge-chart mr-2">
+                  <div class="desc">Max PFD: {{ item.max | stringformat:".2e" }}</div>
 
-              <a class="btn-standard " role="button"
-                href="{% url 'campaigns:cut_list' schema.pk item.safety_function.pk %}"> view cutlist - SF {{forloop.counter}}
-              </a>
+                    <div class="info">
+                      {% if item.max > 0.1 %}
+                      SIL 0
+                      {% elif item.max > 0.01 %}
+                      SIL 1
+                      {% elif item.max > 0.001 %}
+                      SIL 2
+                      {% elif item.max > 0.0001 %}
+                      SIL 3
+                      {% else %}
+                      SIL 4 or below
+                      {% endif %}
+                    </div>
+                </div>
+
+                <div class="badge-chart">
+                  <div class="desc">Avg PFD: {{ item.average | stringformat:".2e" }}</div>
+                  <div class="info">
+                    {% if item.average > 0.1 %}
+                    SIL 0
+                    {% elif item.average > 0.01 %}
+                    SIL 1
+                    {% elif item.average > 0.001 %}
+                    SIL 2
+                    {% elif item.average > 0.0001 %}
+                    SIL 3
+                    {% else %}
+                    SIL 4 or below
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -84,7 +119,7 @@
                         <td scope="col"> {{ item.max | stringformat:".2e" }} </td>
                         {% if item.max > 0.1 %}
                         <td
-                          style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
+                          
                           SIL 0
                         </td>
                         {% elif item.max > 0.01 %}
@@ -127,7 +162,7 @@
                         <td scope="col"> {{ item.average | stringformat:".2e" }} </td>
                         {% if item.average > 0.1 %}
                         <td
-                          style="color:black;font-weight: bold;background-color: #ec3633;opacity: 0.6; text-align: center; padding: 0.5rem">
+                          
                           SIL 0
                         </td>
                         {% elif item.average > 0.01 %}

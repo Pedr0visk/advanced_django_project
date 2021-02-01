@@ -11271,4 +11271,24 @@ table.table-results tbody tr td {
   color: #999;
 }
 
+.badge-chart {
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 -15px 20px -10px rgba(0, 0, 0, 0.15) inset;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+}
+.badge-chart > div {
+  color: #495057;
+  padding: 4px 6px;
+}
+.badge-chart .info {
+  border: 1px solid #70bf2b;
+  background-color: rgba(112, 191, 43, 0.8);
+  border-radius: inherit;
+  color: white;
+}
+
 /*# sourceMappingURL=main.css.map */
