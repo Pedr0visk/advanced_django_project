@@ -2,18 +2,14 @@
 {% load manager_extras %}
 
 {% block main %}
-{% for message in messages %}
-<ul class="messagelist">
-  <li class="success">{{ message }}</li>
-</ul>
-{% endfor %}
+{% include 'snippets/messages.html' with messages=messages %}
 <!-- section bop list -->
 <div class="section" id="home">
   <div class="container-fluid px-5">
     <!-- section title -->
     <div class="section-title mb-3">
       <div class="d-flex flex-column">
-        <a href="" class="mb-3">
+        <a href="{% url 'bops:index' request.GET.bop %}" class="mb-3">
           <i class="fa fa-arrow-left"></i> back to bop
         </a>
         <h2>Failure Mode List</h2>
