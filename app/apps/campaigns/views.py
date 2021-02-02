@@ -455,10 +455,11 @@ def schema_update(request, schema_pk):
 
 def schema_delete(request, schema_pk):
     schema = get_object_or_404(Schema, pk=schema_pk)
-    campaign_pk = schema.campaign.pk
+    success_url = schema.success_url
     schema.delete()
+
     messages.success(request, f'Schema "{schema.name}" deleted successfully')
-    return redirect('campaigns:index', campaign_pk)
+    return success_url()
 
 
 def schema_compare(request, campaign_pk):

@@ -109,6 +109,11 @@ class Schema(models.Model):
                                on_delete=models.CASCADE,
                                related_name='schema_clones')
 
+    def success_url(self):
+        if self.schema:
+            return reverse('campaigns:schema_active_dashboard', args=[self.pk])
+        return reverse('campaigns:index', args=[self.pk])
+
     @property
     def start_date(self):
         return self.phases.first().start_date
