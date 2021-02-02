@@ -633,12 +633,6 @@ def event_delete(request, event_pk):
     
     if request.method == 'POST':
         event.delete()
-
-        # creates a new results for schema base
-        # due the changes made on campaign
-        create_new_result_for_schema_base.delay(user_id=request.user.id,
-                                                campaign_id=campaign_pk)
-                                                
         messages.success(
             request, f'Event deleted successfully')
         return redirect('campaigns:index', campaign_pk)

@@ -231,11 +231,6 @@
 
       if (unreaded_notifications.length > 0) {
         runningTask(unreaded_notifications[0].fields.group == 'c');
-        
-        if (unreaded_notifications[0].field.group == 'd') {
-          $('#outdatedMessage').addClass('d-none');
-        }
-
       } else {
         runningTask(old_notifications[0].fields.group == 'c')
       }
@@ -255,6 +250,10 @@
 
     campaignSocket.onmessage = async function (e) {
       const data = JSON.parse(e.data);
+
+      if (data.type == 'd')
+        $('#outdatedMessage').addClass('d-none');
+
       let icon = data.type == 's' ? 'error' : 'success'
       Toast.fire({
         icon,

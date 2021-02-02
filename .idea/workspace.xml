@@ -20,11 +20,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8aa1bbde-32e4-44cd-a9f8-6b37721daf50" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/schemas/compare_charts.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_charts.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_charts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/schemas/schema_compare.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/schemas/schema_compare.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/receivers.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/receivers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/tasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/templates/campaigns/campaign_index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/apps/campaigns/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/campaigns/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/failuremodes/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/failuremodes/apps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps/test_groups/signals.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps/test_groups/signals.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/bop/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/bop/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +40,7 @@
       <list>
         <option value="JavaScript File" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>

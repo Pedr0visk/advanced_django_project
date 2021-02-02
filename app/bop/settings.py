@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'apps.subsystems',
     'apps.components',
     'apps.cuts',
-    'apps.failuremodes',
+    'apps.failuremodes.apps.FailuremodesConfig',
     'apps.test_groups',
     'apps.tests',
     'apps.managers',
