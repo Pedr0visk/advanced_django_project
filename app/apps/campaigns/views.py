@@ -66,7 +66,7 @@ def campaign_index(request, campaign_pk):
 
         # activating campaign temporaly here
         # cause we need to have access to the dashboard
-        campaign.active = True
+        campaign.created = True
         campaign.save()
 
         messages.success(
@@ -78,7 +78,7 @@ def campaign_index(request, campaign_pk):
         'recent_results': campaign.get_schema_active().results.order_by('-created_at')[:5]
     }
 
-    if campaign.active:
+    if campaign.created:
         return render(request, 'campaigns/campaign_index.html', context)
 
     return render(request, 'campaigns/campaign_planner.html', context)

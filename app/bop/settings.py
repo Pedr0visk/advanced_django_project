@@ -63,7 +63,7 @@ INSTALLED_APPS = [
 
 # CRON JOBS
 CRONJOBS = [
-    ('*/1 * * * *', 'apps.campaigns.cron.activate_campaigns')
+    ('0 8 * * *', 'apps.campaigns.cron.check_active_campaigns', '>> /tmp/scheduled_job.log'),
 ]
 
 # MIDDLEWARES

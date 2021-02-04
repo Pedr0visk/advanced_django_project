@@ -12,7 +12,10 @@ ENV PYTHONUNBUFFERED 1
 
 # install psycopg2 dependencies
 RUN apk update \
-  && apk add postgresql-dev gcc python3-dev musl-dev libffi-dev
+  && apk add postgresql-dev gcc python3-dev musl-dev libffi-dev dcron \
+  && rm -rf /var/cache/apk/*
+
+RUN mkdir -p /var/log/cron && mkdir -m 0644 -p /var/spool/cron/crontabs && touch /var/log/cron/cron.log && mkdir -m 0644 -p /etc/cron.d
 
 # install dependencies
 RUN pip install --upgrade pip
@@ -26,9 +29,7 @@ COPY ./static ./static
 COPY ./templates ./templates
 COPY ./manage.py .
 
-
 COPY ./scripts /scripts
 RUN chmod +x /scripts/*
-
 
 ENTRYPOINT ["entrypoint.sh"]

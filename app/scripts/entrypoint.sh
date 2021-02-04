@@ -13,4 +13,9 @@ then
     echo "PostgreSQL started"
 fi
 
+crond -s /var/spool/cron/crontabs -b -L /var/log/cron/cron.log "$@"
+
+python manage.py migrate
+python manage.py crontab add
+
 exec "$@"

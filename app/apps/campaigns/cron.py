@@ -2,9 +2,8 @@ from .models import Campaign
 from django.utils import timezone
 
 
-def activate_campaigns():
-    for campaign in Campaign.objects.filter(created=True, active=False):
+def check_active_campaigns():
+    print('***** running cron *******')
+    for campaign in Campaign.objects.filter(created=True, active=False).all():
         if campaign.start_date <= timezone.now():
-            print('activating campaign', campaign.name)
             campaign.activate()
-
