@@ -15,7 +15,8 @@ RUN apk update \
   && apk add postgresql-dev gcc python3-dev musl-dev libffi-dev dcron \
   && rm -rf /var/cache/apk/*
 
-RUN mkdir -p /var/log/cron && mkdir -m 0644 -p /var/spool/cron/crontabs && touch /var/log/cron/cron.log && mkdir -m 0644 -p /etc/cron.d
+RUN mkdir -p /var/log/cron && mkdir -m 0644 -p /var/spool/cron/crontabs \
+    && touch /var/log/cron/cron.log && mkdir -m 0644 -p /etc/cron.d
 
 # install dependencies
 RUN pip install --upgrade pip
